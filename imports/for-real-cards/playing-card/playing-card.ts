@@ -1,24 +1,16 @@
 /**
  * Created by kenono on 2016-05-06.
  */
-import 'angular';
+
 import {Meteor} from 'meteor/meteor';
-import {Component} from '../../common/ui-twbs_ng15/util';
+import { Component, Input } from '@angular/core';
 import {Card} from '../api/models/card.model'
-import {Tools} from "../../common/api/services/tools";
 
 @Component(
   {
-    module: 'fastcards',
-    selector: 'playingCard',
-    controller: PlayingCard,
+    selector: 'playing-card',
     controllerAs: 'vm',
-    bindings: {
-      card: '<',
-      gameId: '@',
-      imgClass: '@'
-    },
-    template: 
+    template:
 `
 <img 
   src="{{vm.imageURL()}}"
@@ -30,9 +22,9 @@ import {Tools} from "../../common/api/services/tools";
 `
 })
 export class PlayingCard {
-  private card:Card;
-  imgClass:string;
-  imageURL():string {
+  @Input() private card:Card;
+  @Input() imgClass:string;
+  @Input() imageURL():string {
     if (this.card) {
 //      return Meteor.absoluteUrl() + "decks/standard2/" + this.card.encode() + ".svg#svgView(preserveAspectRatio(none))";
       return Meteor.absoluteUrl() + "decks/default/" + this.card.encode() + ".jpg";

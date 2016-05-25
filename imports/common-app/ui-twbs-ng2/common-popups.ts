@@ -2,10 +2,11 @@
  * Created by kenono on 2016-04-16.
  */
 
-import {Observable, Rx, Subject} from 'rx'
-import {Modal} from '../../common/ui-twbs_ng15/modal';
-import {Component} from '../../common/ui-twbs_ng15/util';
+import {Observable, Subject, Subscription} from 'rxjs'
+import { Component, Input } from '@angular/core';
 import * as log from 'loglevel';
+
+import {Modal} from '../../common-app/ui-twbs-ng2/modal';
 
 export class CommonPopups {
 
@@ -57,17 +58,10 @@ export class CommonPopups {
 
 @Component(
   {
-    module: 'common',
     selector: 'confirmModal',
     controller: ConfirmModal,
     controllerAs: 'vm',
-    bindings: {
-      titleText: '@',
-      cancelText: '@',
-      okText: '@',
-      messageText: '@'
-    },
-    template: 
+    template:
 `
 <form role="form" class="form-horizontal">
     <div class="panel-heading">
@@ -82,10 +76,10 @@ export class CommonPopups {
 `
 })
 class ConfirmModal extends Modal {
-  titleText:string;
-  cancelText:string;
-  okText:string;
-  messageText:string;
+  @Input() titleText:string;
+  @Input() cancelText:string;
+  @Input() okText:string;
+  @Input() messageText:string;
 
   constructor() {
     super();

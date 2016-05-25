@@ -1,13 +1,14 @@
-import {SimpleSchema} from 'meteor/aldeed:simple-schema';
-import {Mongo} from 'meteor/mongo';
-import {Meteor} from 'meteor/meteor';
+import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import { Mongo } from 'meteor/mongo';
+import { Meteor } from 'meteor/meteor';
+import * as log from 'loglevel';
+import moment = require('moment');
+import {AccountTools} from '../../../common-app/api';
+
 import {Hand, HandCollection} from './hand.model.ts'
 import {Card} from './card.model'
 import {GameConfig} from './game-config';
 import {Deck} from './deck.model';
-import * as log from 'loglevel';
-import moment = require('moment');
-import {AccountTools} from '../../../common/api/services/account-tools';
 
 export let ActionCollection = new Mongo.Collection("actions", {transform: decode});
 

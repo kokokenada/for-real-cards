@@ -1,6 +1,4 @@
-import {Card, CardRank, SUITED_YES, CardSuit} from './card.model.ts';
-import {_} from 'meteor/underscore'
-import * as log from 'loglevel';
+import {Card, CardRank, CardSuit} from './card.model.ts';
 import 'seedrandom';
 
 /*

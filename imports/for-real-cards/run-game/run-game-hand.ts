@@ -1,12 +1,13 @@
+import { Component, Input } from '@angular/core';
+
+import {CommonPopups} from "../../common-app/ui-twbs-ng2";
+
 import {RunGame} from './run-game.ts';
-import {Component} from "../../common/ui-twbs_ng15/util";
-import {DealModal} from "./deal-modal"
-import * as log from 'loglevel';
-import {CommonPopups} from "../../common/ui-twbs_ng15/common-popups";
-import {PlayingCard} from "./playing-card"; {PlayingCard}
-import {GameConfig, CardLocation, CardCountAllowed} from "../api/models/game-config";
+import {DealModal} from "../deal-modal/deal-modal"
+import {PlayingCard} from "../playing-card/playing-card"; {PlayingCard}
+import {GameConfig, CardLocation, CardCountAllowed} from "../api";
 import {DeckView} from "./deck-view"; (DeckView)
-import {Tools} from "../../common/api/services/tools";
+import {Tools} from "../../common-app/api";
 import {PileView} from "./pile-view"; (PileView)
 import {Action, ActionFormatted} from "../api/models/action.model";
 //import {timeoutApply} from "../../common/ui-twbs_ng15/util";
@@ -15,8 +16,7 @@ import {Hand} from "../api/models/hand.model";
 
 @Component(
   {
-    module: 'fastcards',
-    selector: 'runGameHand',
+    selector: 'run-game-hand',
     template: `
   <div>
     <button class="btn btn-primary" ng-click="vm.deal()">Deal</button>
@@ -109,16 +109,11 @@ import {Hand} from "../api/models/hand.model";
 //    templateUrl: '/imports/fastcards/ui/run-game-hand/run-game-hand.html',
     controller: RunGameHand,
     controllerAs: 'vm',
-    bindings: {
-      gameId: '@',
-      showTableProxy: '@'
-    },
     require: {topFrame: '^fastCardsTopFrame'}
   }
 )
 export class RunGameHand extends RunGame {
-  gameId:string;
-  showTableProxy:string;
+  @Input() showTableProxy:string;
   undoAction:Action;
   constructor($log, $scope) {
     super($log, $scope);

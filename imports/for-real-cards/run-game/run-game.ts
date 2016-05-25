@@ -1,20 +1,12 @@
-import {Deck} from '../api/models/deck.model.ts';
-import {Hand, HandCollection} from  '../api/models/hand.model.ts';
 import {Meteor} from 'meteor/meteor';
 import {Tracker, Computation} from 'meteor/tracker';
 import {Mongo, Cursor} from 'meteor/mongo'
 import {Session} from 'meteor/session';
-import {GameStreams} from '../api/services/game-streams';
-import {Card} from '../api/models/card.model.ts'
-import {Action} from '../api/models/action.model.ts'
-import {CommonPopups} from "../../common/ui-twbs_ng15/common-popups";
 import * as log from 'loglevel';
-import {GameRenderingTools} from "../api/services/game-rendering-tools";
-import {Card, CardSuit, CardRank} from "../api/models/card.model";
-import {Action, VisibilityType, ActionType} from "../api/models/action.model"
-import {DeckLocation, GameConfig, CardLocation, CardCountAllowed} from "../api/models/game-config";
-import {FastCardsTopFrame} from './top-frame.ts';
-import {DragAndDrop} from "../api/services/drag-and-drop";
+import { Input } from '@angular/core';
+import {CommonPopups} from "../../common-app/ui-twbs-ng2";
+
+import {Action, ActionType, Card, CardCountAllowed, CardLocation, Deck, DeckLocation, DragAndDrop, GameConfig, GameStreams, GameRenderingTools, Hand} from '../api';
 
 let dragula = require("dragula");
 
@@ -24,7 +16,7 @@ export class RunGame {
   protected $log:any;
   protected $scope:any;
   topFrame:FastCardsTopFrame;
-  gameId:string;
+  @Input() gameId:string;
   userPassword:string;
   protected static gameStreams:GameStreams;
   private static gameStreamInitializedToId:string;

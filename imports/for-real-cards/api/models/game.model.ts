@@ -1,7 +1,6 @@
-import {SimpleSchema} from 'meteor/aldeed:simple-schema';
-import {Mongo} from 'meteor/mongo';
-import {Meteor} from 'meteor/meteor';
-import {GameConfig} from "./game-config";
+import { SimpleSchema} from 'meteor/aldeed:simple-schema';
+import { Mongo } from 'meteor/mongo';
+import { Meteor } from 'meteor/meteor';
 
 export let GameCollection = new Mongo.Collection("games");
 

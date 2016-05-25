@@ -1,9 +1,12 @@
-import {Game, GameCollection} from './game.model.ts';
-import {HandCollection, Hand} from './hand.model.ts';
+
 import { Meteor } from 'meteor/meteor';
-import {getNextSequence} from '../../../common/api/models/counter.model.ts';
 import * as log from 'loglevel';
-import {ActionCollection, Action, ActionType} from "./action.model";
+
+import { getNextSequence } from '../../../common-app/api';
+
+import { Game, GameCollection } from './game.model.ts';
+import { HandCollection, Hand } from './hand.model.ts';
+import { ActionCollection, Action, ActionType } from "./action.model";
 
 if (Meteor.isServer) {
   Meteor.methods({

@@ -1,10 +1,11 @@
+const SNAKE_CASE_REGEXP = /[A-Z]/g;
 
 export class Tools {
-  static deepCopyNoHash (source) {
+  static deepCopyNoHash(source) {
     throw 'to implement'
   };
 
-  static deepCopy (source) {
+  static deepCopy(source) {
     return Object.assign({}, source);
   };
 
@@ -37,8 +38,31 @@ export class Tools {
 
   static stringToBool(stringValue:string):boolean {
     if (typeof stringValue === 'string') {
-      return !(stringValue.toLowerCase()==='false' || stringValue.toLocaleLowerCase()==="no");
+      return !(stringValue.toLowerCase() === 'false' || stringValue.toLocaleLowerCase() === "no");
     }
     return false;
   }
+
+
+  static ucFirst(word:string):string {
+    return `${word.charAt(0).toUpperCase()}${word.substring(1)}`;
+  }
+
+  static dashToCamel(dash:string):string {
+    let words = dash.split('-');
+    return `${words.shift()}${words.map(Tools.ucFirst).join('')}`;
+  }
+
+  static dasherize(name:string, separator:string = '-'):string {
+    return name.replace(SNAKE_CASE_REGEXP, (letter:string, pos:number) => {
+      return `${(pos ? separator : '')}${letter.toLowerCase()}`;
+    });
+  }
+
+  static snakeCase(name:string, separator:string = '-'):string {
+    return name.replace(SNAKE_CASE_REGEXP, (letter:string, pos:number) => {
+      return `${(pos ? separator : '')}${letter.toLowerCase()}`;
+    });
+  }
+
 }

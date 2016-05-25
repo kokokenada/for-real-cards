@@ -5,7 +5,7 @@ import {Meteor} from 'meteor/meteor';
 import {Mongo, Cursor} from 'meteor/mongo'
 import {Tracker, Computation} from 'meteor/tracker';
 import {GAME_SUBSCRPTION_NAME, GameSubscriptionOptions} from "../models/game.publications.ts";
-import {Observable, Rx, Subject} from 'rx'
+import {Observable, Subject} from 'rxjs'
 import {Action, ActionCollection, ActionType, VisibilityType, ActionFormatted} from '../models/action.model'
 import {GameConfig} from '../models/game-config';
 import {Hand, HandCollection} from '../models/hand.model';
@@ -28,7 +28,7 @@ export class GameStreams {
 
   constructor(gameId:string) {
     this.gameId = gameId;
-    this.subject = new Rx.Subject();
+    this.subject = new Subject();
     this.hands = [];
     this.tableFaceDown = [];
     this.tablePile = [];
@@ -78,14 +78,14 @@ export class GameStreams {
           action.cards.forEach((card:Card)=> {
             let index:number = Deck.indexOf(this.tableFaceDown, card)
             if (index === -1) {
-              this.subject.onError(new Meteor.Error('internal-error', 'Could not find card in deck'));
+              this.subject.error(new Meteor.Error('internal-error', 'Could not find card in deck'));
               log.error(card)
               log.error(this.tableFaceDown);
               log.error(action);
             } else {
               let hand:Hand = this.getHandFromUserId(action.toPlayerId);
               if (!hand) {
-                this.subject.onError(new Meteor.Error('internal-error', 'toPlayerId is missing from action'))
+                this.subject.error(new Meteor.Error('internal-error', 'toPlayerId is missing from action'))
                 log.error(action);
               } else {
                 let cardToDeal:Card = this.tableFaceDown[index];
@@ -100,7 +100,7 @@ export class GameStreams {
                     hand.cardsFaceDown.push(cardToDeal);
                     break;
                   default:
-                    this.subject.onError(new Meteor.Error('internal-error', 'Unexpected VisbilityType'));
+                    this.subject.error(new Meteor.Error('internal-error', 'Unexpected VisbilityType'));
                     log.error('unexpected VisbilityType')
                     log.error(action);
                 }
@@ -449,11 +449,11 @@ export class GameStreams {
       // Find server hand on display
       let handDisplayed = _.find(this.hands, (searchHand:Hand)=>{
         return searchHand._id===handOnServer._id
-      })
+      });
       if (!handDisplayed) { // There isn't so add it
         this.hands.push(new Hand(handOnServer));
       }
-    })
+    });
 
     // Maybe one support people leaving game (doesn't have that behavior now)
   }
@@ -466,7 +466,7 @@ export class GameStreams {
           if (error) {
             log.error("Error returned from Meteor.subscribe");
             log.error(error);
-            this.subject.onError(error);
+            this.subject.error(error);
           }
         },
         onReady: ()=> {
@@ -495,7 +495,7 @@ export class GameStreams {
 //            log.debug('date created:'  + this.formatDebugTime(action.dateCreated) + ", lastNotified:" + this.formatDebugTime(this.lastNotified) + ", oldest:" + this.formatDebugTime(latest))
             try {
               this.processAction(this.actions, i);
-              this.subject.onNext(action);
+              this.subject.next(action);
               if (action.dateCreated>latest) {
                 latest= action.dateCreated;
               }
@@ -525,7 +525,7 @@ export class GameStreams {
   pushAction(action:Action):void {
     Meteor.call('fastcards.NewAction', action, (error)=> {
       if (error) {
-        this.subject.onError(error);
+        this.subject.error(error);
         log.error(error);
       }
     });
@@ -533,7 +533,7 @@ export class GameStreams {
   pushActions(actions:Action[]):void {
     Meteor.call('fastcards.NewActions', actions, (error)=> {
       if (error) {
-        this.subject.onError(error);
+        this.subject.error(error);
         log.error(error);
       }
     });
@@ -753,8 +753,7 @@ export class GameStreams {
 
   undo(actionId:string) {
     this.pushAction(
-      new Action({actionType: ActionType.UNDO, gameId:this.gameId, creatorId: Meteor.userId(), relatedActionId:actionId)
+      new Action({actionType: ActionType.UNDO, gameId:this.gameId, creatorId: Meteor.userId(), relatedActionId:actionId})
     );
   }
-
 }

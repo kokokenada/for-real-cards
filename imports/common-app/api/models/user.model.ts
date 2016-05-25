@@ -1,9 +1,8 @@
 /**
  * Created by kenono on 2016-04-21.
  */
-import {SimpleSchema} from 'meteor/aldeed:simple-schema';
-import {Mongo} from 'meteor/mongo';
-import {Meteor} from 'meteor/meteor';
+import { Meteor } from 'meteor/meteor';
+import 'meteor/aldeed:simple-schema';
 import * as log from 'loglevel';
 
 export class User {

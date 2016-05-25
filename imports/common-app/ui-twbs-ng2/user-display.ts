@@ -1,19 +1,17 @@
 /**
  * Created by kenono on 2016-05-04.
  */
-import {Component} from "./util";
-import {Tracker, Computation} from 'meteor/tracker';
-import {Meteor} from 'meteor/meteor';
-import {User} from '../api/models/user.model';
-import {AccountTools} from '../api/services/account-tools';
-import {Avatar} from './avatar'; (Avatar)
+import { Component, Input } from '@angular/core';
+import { Tracker } from 'meteor/tracker';
+import { Meteor} from 'meteor/meteor';
+import { User} from '../api/models/user.model';
+import { AccountTools} from '../api/services/account-tools';
+import { Avatar } from './avatar'; (Avatar)
 
 @Component({
-  module: 'common',
-  selector: 'userDisplay',
+  selector: 'user-display',
   controllerAs: 'vm',
   controller: UserDisplay,
-  bindings: {userId: '@'},
   template: `
 
 <style>
@@ -48,13 +46,13 @@ import {Avatar} from './avatar'; (Avatar)
 
 export class UserDisplay {
   private user:User;
-  userId:string;
-  private computation:Computation;
+  @Input() userId:string;
+  private computation:Tracker.Computation;
   $onChanges(changesObj) {
     this.computation.invalidate();
   }
   constructor() {
-    Tracker.autorun((computation:Computation)=>{
+    Tracker.autorun((computation:Tracker.Computation)=>{
       this.computation = computation;
 
       this.user = Meteor.users.findOne({_id: this.userId});

@@ -2,15 +2,12 @@
  * Created by kenono on 2016-04-16.
  */
 
-import {Menus, MenuItemDefintion, MenuItem} from '../api/services/menus'
-import {Component} from "./util"
+import {Menus, MenuItem} from '../api/services/menus'
+import { Component, Input } from '@angular/core';
 
 @Component({
-  module: 'common',
-  selector: 'popoverMenu',
+  selector: 'popover-menu',
   controllerAs: 'vm',
-  controller: PopoverMenu,
-  bindings: {menuId: '@'},
   template: `
 
     <span uib-dropdown>
@@ -29,7 +26,7 @@ import {Component} from "./util"
 })
 
 export class PopoverMenu {
-  private menuId: string;
+  @Input() private menuId: string;
   private $rootScope;
   constructor($rootScope) {
     this.$rootScope = $rootScope;

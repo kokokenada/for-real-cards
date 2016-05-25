@@ -1,11 +1,13 @@
 /**
  * Created by kenono on 2016-04-21.
  */
+import { Meteor } from 'meteor/meteor';
+import 'meteor/cfs:standard-packages'
 import * as log from 'loglevel';
-import {Meteor} from 'meteor/meteor';
-//import 'meteor/cfs:standard-packages'
-import 'underscore'
-import {AccountTools} from "../services/account-tools";
+
+import { AccountTools } from "../services/account-tools";
+
+
 
 export let AvatarCollection:any = {};
 AvatarCollection = new FS.Collection("avatars", {

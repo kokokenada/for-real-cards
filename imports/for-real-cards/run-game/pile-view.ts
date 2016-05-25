@@ -1,10 +1,11 @@
 /**
  * Created by kenono on 2016-05-13.
  */
-import {RunGame} from './run-game.ts';
-import {Component} from "../../common/ui-twbs_ng15/util";
-import {Tools} from "../../common/api/services/tools";
-import {PlayingCard} from "./playing-card"; {PlayingCard}
+
+import { Component, Input } from '@angular/core';
+
+import {RunGame } from './run-game.ts';
+import { PlayingCard } from "../playing-card/playing-card"; {PlayingCard}
 
 @Component(
   {
@@ -12,11 +13,6 @@ import {PlayingCard} from "./playing-card"; {PlayingCard}
     selector: 'pileView',
     controller: PileView,
     controllerAs: 'vm',
-    bindings: {
-      gameId: '@',
-      imgClass: '@',
-    },
-
     template: `
 
 <playing-card 
@@ -37,7 +33,7 @@ import {PlayingCard} from "./playing-card"; {PlayingCard}
   }
 )
 export class PileView extends RunGame {
-  imgClass:string;
+  @Input() imgClass:string;
   constructor($log, $scope) {
     super($log, $scope);
   }

@@ -1,7 +1,8 @@
-import {SimpleSchema} from 'meteor/aldeed:simple-schema';
-import {Mongo} from 'meteor/mongo';
-import {Meteor} from 'meteor/meteor';
-import {Card} from './card.model'
+import { Meteor } from 'meteor/meteor';
+import { Mongo } from 'meteor/mongo';
+import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+
+import { Card} from './card.model'
 
 export let HandCollection = new Mongo.Collection("hands");
 

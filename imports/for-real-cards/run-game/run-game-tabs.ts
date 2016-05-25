@@ -2,14 +2,13 @@
  * Created by kenono on 2016-05-08.
  */
 
-import {Component} from "../../common/ui-twbs_ng15/util";
-import {RunGameHandAndTable} from "./run-game-hand-and-table"; (RunGameHandAndTable)
-import {RunGameHand} from "./run-game-hand"; (RunGameHand)
-import {RunGameTable} from "./run-game-table"; (RunGameTable);
+import { Component, Input } from '@angular/core';
+import { RunGameHandAndTable} from "./run-game-hand-and-table"; (RunGameHandAndTable)
+import { RunGameHand } from "./run-game-hand"; (RunGameHand)
+import { RunGameTable } from "./run-game-table"; (RunGameTable);
 
 @Component(
   {
-    module: 'fastcards',
     selector: 'runGameTabs',
     template: `
   <uib-tabset active="active">
@@ -27,14 +26,11 @@ import {RunGameTable} from "./run-game-table"; (RunGameTable);
           `,
     controller: RunGameTabs,
     controllerAs: 'vm',
-    bindings: {
-      gameId: '@'
-    }
   }
 )
 
 export class RunGameTabs {
-  gameId:string;
+  @Input() gameId:string;
   $routerOnActivate(next) {
     this.gameId = next.params.gameId;
   }

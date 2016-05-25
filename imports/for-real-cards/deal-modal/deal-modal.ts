@@ -1,16 +1,16 @@
 /**
  * Created by kenono on 2016-04-23.
  */
-import {Modal} from '../../common/ui-twbs_ng15/modal';
-import {Component} from '../../common/ui-twbs_ng15/util';
-import * as log from 'loglevel';
-import {GameConfig, defaultGames, DeckLocation, UserCommand} from "../api/models/game-config";
-import {Deck, DeckId} from "../api/models/deck.model";
-import {Subject, Rx} from 'rx';
+import { Component } from '@angular/core';
+import {Subject} from 'rxjs';
+
+import {Modal} from '../../common-app/ui-twbs-ng2/modal';
+
+import {Deck, DeckId, GameConfig, defaultGames, DeckLocation, UserCommand} from "../api";
+
 @Component(
   {
-    module: 'common',
-    selector: 'dealModal',
+    selector: 'deal-modal',
     controller: DealModal,
     controllerAs: 'vm',
     template: `

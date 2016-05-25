@@ -1,12 +1,11 @@
 /**
  * Created by kenono on 2016-05-08.
  */
-import {Component} from "../../common/ui-twbs_ng15/util";
-import {RunGameTable} from "./run-game-table"; (RunGameTable)
+import { Component, Input } from '@angular/core';
+import { RunGameTable } from "./run-game-table"; (RunGameTable)
 
 @Component(
   {
-    module: 'fastcards',
     selector: 'runGameTableContainer',
     template: `
 
@@ -14,13 +13,10 @@ import {RunGameTable} from "./run-game-table"; (RunGameTable)
           `,
     controller: RunGameTableContainer,
     controllerAs: 'vm',
-    bindings: {
-      gameId: '@'
-    }
   }
 )
 export class RunGameTableContainer {
-  gameId:string;
+  @Input() gameId:string;
 
   $routerOnActivate(next) {
     this.gameId = next.params.gameId;

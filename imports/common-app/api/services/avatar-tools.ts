@@ -1,15 +1,13 @@
 /**
  * Created by kenono on 2016-05-16.
  */
-import {Uploader, UploadFileInfo} from "./uploader";
-import {AvatarCollection} from "../models/avatar.model";
-import {AccountTools, UserEvent, UserEventType} from "./account-tools";
-
+import { Uploader, UploadFileInfo } from "./uploader";
+import { AvatarCollection } from "../models/avatar.model";
+import { AccountTools } from "./account-tools";
 import * as log from 'loglevel';
+import { Meteor } from 'meteor/meteor';
 
 export class AvatarTools {
-
-
 
   static imageFromCamere():void {
     if (Meteor.isCordova) {

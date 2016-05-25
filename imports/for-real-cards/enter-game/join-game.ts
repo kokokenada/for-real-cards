@@ -1,18 +1,13 @@
-import 'angular';
+import { Component, Input } from '@angular/core';
 import {Meteor} from 'meteor/meteor';
 import {FastCardsTopFrame} from './top-frame.ts';
-import {Component} from '../../common/ui-twbs_ng15/util';
+
 
 @Component(
   {
-    module: 'fastcards',
     selector: 'joinGame',
     controller: JoinGame,
     controllerAs: 'vm',
-    bindings: {
-      password: '@',
-      gameId: '@'
-    },
     require: {
       topFrame: '^fastCardsTopFrame'
     },

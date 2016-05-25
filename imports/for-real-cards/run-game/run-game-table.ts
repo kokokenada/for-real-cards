@@ -1,18 +1,18 @@
 /**
  * Created by kenono on 2016-05-14.
  */
+import { Component, Input } from '@angular/core';
+
+import {Tools} from "../../common-app/api";
+
 import {RunGame} from './run-game.ts';
-import {Component} from "../../common/ui-twbs_ng15/util";
-import {Player} from "./player"; (Player)
-import {GameRenderingTools} from "../api/services/game-rendering-tools";
+import {Player} from "../player/player"; (Player)
+import {Card, GameRenderingTools} from "../api";
 import {Card} from "../api/models/card.model";
-import {PlayingCard} from "./playing-card"; (PlayingCard);
+import {PlayingCard} from "../playing-card/playing-card"; (PlayingCard);
 import {Hand} from "../api/models/hand.model";
 import {DeckView} from "./deck-view"; (DeckView)
 import {Deck} from "../api/models/deck.model";
-import {Tools} from "../../common/api/services/tools";
-import {PileView} from "./pile-view";
-import {CardLocation} from "../api/models/game-config"; (PileView)
 
 const TABLE_ZONE_CENTER_RADIUS = 20;
 const TABLE_ZONE_OUTER_RADIUS = 30;
@@ -147,21 +147,15 @@ const TABLE_ZONE_OUTER_RADIUS = 30;
           `,
     controller: RunGameTable,
     controllerAs: 'vm',
-    bindings: {
-      width: '@',
-      height: '@',
-      gameId: '@',
-      forPlayer: '@'
-    },
     require: {topFrame: '^fastCardsTopFrame'}
   }
 )
 
 
 export class RunGameTable extends RunGame {
-  width:string;
-  height:string;
-  forPlayer:string;
+  @Input() width:string;
+  @Input() height:string;
+  @Input() forPlayer:string;
   constructor($log, $scope) {
     super($log, $scope);
   }

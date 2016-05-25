@@ -1,12 +1,12 @@
-import {Meteor} from 'meteor/meteor';
-import {Accounts} from 'meteor/accounts-base'
-import {Cursor} from 'meteor/mongo'
-import {Tools} from "./tools"
+import { Meteor } from 'meteor/meteor';
+import { Accounts } from 'meteor/accounts-base'
+import { Mongo } from 'meteor/mongo'
+import {Observable, Subject, Subscription} from 'rxjs'
 import * as log from 'loglevel';
-import {Observable, Rx, Subject, Disposable} from 'rx'
-import {Uploader, UploadFileInfo} from "./uploader"
+
 import {AvatarCollection} from '../models/avatar.model'
 import {User} from '../models/user.model';
+import {Tools} from "./tools"
 
 export interface Credentials {
   username?:string;
@@ -36,8 +36,8 @@ export class UserEvent {
 }
 
 export class AccountTools {
-  private static loginStatusSubject:Subject = new Rx.Subject();
-  private static userCursor:Cursor;
+  private static loginStatusSubject:Subject = new Subject();
+  private static userCursor:Mongo.Cursor;
   static editUserObject:any;
 
 
@@ -55,7 +55,7 @@ export class AccountTools {
   }
 
   static login($scope, credentials:Credentials):Observable {
-    let observable:Observable = Rx.Observable.create(observer=> {
+    let observable:Observable = Observable.create(observer=> {
       AccountTools.saveCredentials(credentials);
       Meteor.loginWithPassword(
         credentials.email ? credentials.email : credentials.username, credentials.password,
@@ -75,7 +75,7 @@ export class AccountTools {
   }
 
   static register($scope, credentials:Credentials):Observable {
-    let observable:Observable = Rx.Observable.create(observer=> {
+    let observable:Observable = Observable.create(observer=> {
       AccountTools.saveCredentials(credentials);
       Accounts.createUser({
         username: credentials.username,
@@ -99,7 +99,7 @@ export class AccountTools {
   };
 
   static createTempUser($scope):Observable {
-    let observable:Observable = Rx.Observable.create(observer=> {
+    let observable:Observable = Observable.create(observer=> {
       Meteor.call('CommonGetNextSequence', 'temp_user', (error, result)=> {
         if (error) {
           observer.onError(error);
@@ -126,7 +126,7 @@ export class AccountTools {
   }
 
   static saveCurrentUser():Observable {
-    let observable:Observable = Rx.Observable.create(observer=> {
+    let observable:Observable = Observable.create(observer=> {
       Meteor.call('commonUpdateUser',
         AccountTools.editUserObject,
         function (error, numberAffected:number) {
@@ -141,7 +141,7 @@ export class AccountTools {
             } else {
               let errorDescription:string = 'Unexpected number of records affected. (' + numberAffected + ')';
               log.error(errorDescription);
-              observer.onError(Meteor.Error('error-updating-user', errorDescription));
+              observer.onError(new Meteor.Error('error-updating-user', errorDescription));
             }
           }
         }
@@ -215,10 +215,10 @@ export class AccountTools {
   }
 
   static pushEvent(userEvent:UserEvent):void {
-    return AccountTools.loginStatusSubject.onNext(userEvent);
+    return AccountTools.loginStatusSubject.next(userEvent);
   }
 
-  static subscribe(onNext:(event:UserEvent)=>void, onError:(error:any)=>void=null, onComplete:()=>void=null):Disposable {
+  static subscribe(onNext:(event:UserEvent)=>void, onError:(error:any)=>void=null, onComplete:()=>void=null):Subscription {
     return AccountTools.loginStatusSubject.subscribe(onNext, onError, onComplete)
   }
 
@@ -252,8 +252,8 @@ export class AccountTools {
   }
 
 
-  static startObserving(onNext:(event:UserEvent)=>void, onError:(error:any)=>void=null, onComplete:()=>void=null):Disposable {
-    let returnValue:Disposable = AccountTools.loginStatusSubject.subscribe(onNext, onError, onComplete); 
+  static startObserving(onNext:(event:UserEvent)=>void, onError:(error:any)=>void=null, onComplete:()=>void=null):Subscription {
+    let returnValue:Subscription = AccountTools.loginStatusSubject.subscribe(onNext, onError, onComplete); 
     Tracker.autorun(
       ()=>{
         if (!AccountTools.userCursor) {

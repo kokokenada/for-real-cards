@@ -1,8 +1,7 @@
-import {Deck} from '../api/models/deck.model.ts';
-import 'angular';
+
 import {Meteor} from 'meteor/meteor';
-import {FastCardsTopFrame} from './top-frame.ts'
-import {Component} from '../../common/ui-twbs_ng15/util';
+//import {FastCardsTopFrame} from './top-frame.ts'
+import { Component } from '@angular/core';
 
 @Component(
   {

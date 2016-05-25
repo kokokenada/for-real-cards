@@ -1,10 +1,11 @@
 /**
  * Created by kenono on 2016-04-23.
  */
-import {Meteor} from 'meteor/meteor';
-import {HandCollection, Hand} from './hand.model.ts';
-import {ActionCollection} from "./action.model.ts";
+import { Meteor } from 'meteor/meteor';
 import * as log from 'loglevel';
+
+import { HandCollection, Hand } from './hand.model.ts';
+import { ActionCollection } from "./action.model.ts";
 
 export interface GameSubscriptionOptions {
   gameId:string

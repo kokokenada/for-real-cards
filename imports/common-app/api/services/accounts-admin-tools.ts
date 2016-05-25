@@ -1,13 +1,14 @@
 /**
  * Created by kenono on 2016-05-01.
  */
-import {Roles} from 'meteor/alanning:roles'
-import {Meteor} from 'meteor/meteor';
-import {Cursor} from 'meteor/mongo';
-import {User} from '../models/user.model';
+import { Roles } from 'meteor/alanning:roles'
+import { Meteor } from 'meteor/meteor';
+import { Mongo } from 'meteor/mongo';
+import { User} from '../models/user.model';
 import { check, Match } from 'meteor/check'
-import {PagingTools, FilterDefinition} from "./page-tools"
-import * as log from 'loglevel';
+
+import { PagingTools, FilterDefinition} from "./page-tools"
+
 
 const SUBSCRIPTION_NAME = 'common-AccountsAdminTools';
 
@@ -117,9 +118,9 @@ export class AccountsAdminTools {
 //  filter - alphanumeric string to search users name and email for
 //  skip - skip the first n values
 //  sort - return the users in the order specified by this sort object
-  static filteredUserQuery(userId, options:FilterDefinition):Cursor {
+  static filteredUserQuery(userId, options:FilterDefinition):Mongo.Cursor {
 
-    let cursor:Cursor;
+    let cursor:Mongo.Cursor;
     // if not an admin user don't show any other user
     if (!Roles.userIsInRole(userId, ['admin'])) {
       cursor = Meteor.users.find(userId, {reactive: false, fields: {username:1}});
@@ -363,7 +364,7 @@ if (Meteor.isServer) {
 
     PagingTools.check(options);
 
-    let cursorUsers:Cursor = AccountsAdminTools.filteredUserQuery(this.userId, options);
+    let cursorUsers:Mongo.Cursor = AccountsAdminTools.filteredUserQuery(this.userId, options);
 
     return [
       cursorUsers,

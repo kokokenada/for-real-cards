@@ -1,9 +1,9 @@
 /**
  * Created by kenono on 2016-04-21.
  */
-import {Mongo} from 'meteor/mongo'
-import {Meteor} from 'meteor/meteor';
-import {Subject, Rx} from 'rx';
+import { Mongo } from 'meteor/mongo'
+import { Meteor } from 'meteor/meteor';
+import { Observable, Subject, Subscription } from 'rxjs'
 import * as log from 'loglevel';
 
 export interface UploadFileInfo { 
@@ -13,7 +13,7 @@ export interface UploadFileInfo {
 }
 
 export class Uploader {
-  private fsCollection:Collection;
+  private fsCollection:Mongo.Collection;
   private properties;
   private subscription:string;
   private intervalHandle;
@@ -22,7 +22,7 @@ export class Uploader {
   private subject:Subject;
 
   constructor() {
-    this.subject = new Rx.Subject();
+    this.subject = new Subject();
   }
 
   private checkIfDone() {
@@ -35,7 +35,7 @@ export class Uploader {
           onStop: (error)=> {
             if (error) {
               log.error(error);
-              this.subject.onError(error);
+              this.subject.error(error);
             }
           },
           onReady: ()=> {
@@ -68,8 +68,8 @@ export class Uploader {
 
             });
             if (!retrying) {
-              this.subject.onNext(result);
-              this.subject.onCompleted();
+              this.subject.next(result);
+              this.subject.complete();
             }
           }
         }
@@ -77,7 +77,7 @@ export class Uploader {
     }
   }
 
-  upload(files, fsCollection:Collection, subscription:string, properties = undefined):Subject {
+  upload(files, fsCollection:Mongo.Collection, subscription:string, properties = undefined):Subject {
     this.ids = [];
     this.fsCollection = fsCollection;
     this.properties = properties | {};
@@ -93,7 +93,7 @@ export class Uploader {
       let fileObj = fsCollection.insert(newFile, (error, fileResult)=> {
         if (error) {
           log.error(error);
-          this.subject.onError(error);
+          this.subject.error(error);
           return;
         } else {
           // async upload kicked off

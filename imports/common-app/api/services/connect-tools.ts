@@ -2,7 +2,7 @@
  * Created by kenono on 2016-05-17.
  */
 import {Meteor} from 'meteor/meteor';
-import {Observable, Rx, Subject, Disposable} from 'rx'
+import {Observable, Subject, Subscription} from 'rxjs'
 
 export enum ConnectEventType {
   CONNECTION_ATTEMPT,
@@ -21,14 +21,14 @@ export class ConnectEvent {
 export class ConnectTools {
   private static retryPromise:any;
   private static connectionAttempCount = 0;
-  private static connectStatusSubject:Subject = new Rx.Subject();
+  private static connectStatusSubject:Subject = new Subject();
   
-  static subscribe(onNext:(event:ConnectEvent)=>void, onError:(error:any)=>void=null, onComplete:()=>void=null):Disposable {
+  static subscribe(onNext:(event:ConnectEvent)=>void, onError:(error:any)=>void=null, onComplete:()=>void=null):Subscription {
     return ConnectTools.connectStatusSubject.subscribe(onNext, onError, onComplete);
   }
 
   private static pushEvent(event:ConnectEvent):void {
-    return ConnectTools.connectStatusSubject.onNext(event);
+    return ConnectTools.connectStatusSubject.next(event);
   }
 
   private static pushConnectionAttempt(message:string):void {

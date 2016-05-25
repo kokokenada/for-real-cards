@@ -2,17 +2,13 @@
  * Created by kenono on 2016-04-17.
  */
 
-import {Component} from "../../common/ui-twbs_ng15/util"
-import {AccountTools, Credentials} from "../../common/api/services/account-tools"
-import {CommonPopups} from "../../common/ui-twbs_ng15/common-popups"
-import {Uploader, UploadFileInfo} from "../../common/api/services/uploader"
+import { Component } from '@angular/core';
+import {Subscription} from 'rxjs'
 import * as log from 'loglevel';
-import {AvatarCollection} from '../../common/api/models/avatar.model.ts'
-import {AvatarTools} from "../../common/api/services/avatar-tools";
-import {AccountTools, UserEvent, UserEventType} from "../../common/api/services/account-tools"
-import {AvatarTools} from "../../common/api/services/avatar-tools";
-import {timeoutApply} from "../../common/ui-twbs_ng15/util"
-import Disposable = Rx.Disposable;
+
+import {AccountTools, AvatarCollection, AvatarTools, AccountTools, Credentials, Uploader, UploadFileInfo, UserEvent, UserEventType} from "../../common-app/api"
+import {CommonPopups} from "../../common-app/ui-twbs-ng2"
+
 
 @Component({
   module: 'fastcards',
@@ -68,12 +64,11 @@ import Disposable = Rx.Disposable;
 
 export class EditUserProfile {
   avatarURL:string;
-  disposable:Disposable;
+  disposable:Subscription;
   constructor($scope) {
     this.disposable = AccountTools.startObserving((event:UserEvent)=> {
       if (event.eventType === UserEventType.AVATAR_UPDATE && event.userId === Meteor.userId()) {
         this.avatarURL = event.imageURL;
-        timeoutApply($scope)
       }
     });
   }
@@ -89,10 +84,9 @@ export class EditUserProfile {
   }
   $onDestroy() {
     if (this.disposable) {
-      this.disposable.dispose();
+      this.disposable.unsubscribe();
     }
   }
-
 
   addImages(files) {
     log.debug(files);

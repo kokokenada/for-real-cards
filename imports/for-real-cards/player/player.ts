@@ -1,17 +1,16 @@
 /**
  * Created by kenono on 2016-05-08.
  */
-import {Component, timeoutApply} from "../../common/ui-twbs_ng15/util";
-import {Avatar} from '../../common/ui-twbs_ng15/avatar'; (Avatar);
-import {Hand, HandCollection} from  '../api/models/hand.model.ts';
-import {Card} from "../api/models/card.model"
-import {AccountTools, UserEvent, UserEventType} from "../../common/api/services/account-tools";
-import {GameRenderingTools} from "../api/services/game-rendering-tools";
-import Disposable = Rx.Disposable;
+import { Component, Input } from '@angular/core';
+import {Subscription} from 'rxjs'
+
+import { Avatar } from '../../common-app/ui-twbs-ng2'; (Avatar);
+import { AccountTools, UserEvent, UserEventType } from "../../common-app/api";
+
+import {Card, Hand, GameRenderingTools} from  '../api';
 
 @Component(
   {
-    module: 'fastcards',
     selector: 'player',
     template: `
 
@@ -75,15 +74,12 @@ import Disposable = Rx.Disposable;
           `,
     controller: Player,
     controllerAs: 'vm',
-    bindings: {
-      hand: '<'
-    }
   }
 )
 export class Player {
-  hand:Hand;
+  @Input() hand:Hand;
   $scope:any;
-  disposable:Disposable;
+  disposable:Subscription;
   private _displayName:string;
 
   constructor($scope) {
@@ -94,13 +90,12 @@ export class Player {
     this.disposable = AccountTools.startObserving((event:UserEvent)=>{
       if (event.eventType===UserEventType.DISPLAY_NAME_UPDATE && event.userId===this.hand.userId) {
         this._displayName = event.displayName;
-        timeoutApply(this.$scope)
       }
     });
   }
   $onDestroy() {
     if (this.disposable) {
-      this.disposable.dispose();
+      this.disposable.unsubscribe();
     }
   }
 
