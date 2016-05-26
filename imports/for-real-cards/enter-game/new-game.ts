@@ -5,13 +5,7 @@ import { Component } from '@angular/core';
 
 @Component(
   {
-    module: 'fastcards',
-    selector: 'newGame',
-    controller: NewGame,
-    controllerAs: 'vm',
-    require: {
-      topFrame: '^fastCardsTopFrame'
-    },
+    selector: 'new-game',
     template: `
 <div class="panel panel-default">
   <form class="form-horizontal">
@@ -36,13 +30,7 @@ import { Component } from '@angular/core';
   }
 )
 export class NewGame{
-  $log:any;
-  $scope:any;
-  topFrame:FastCardsTopFrame;
-  selectedDeck = 0;
-  constructor($log, $scope) {
-    this.$log = $log;
-    this.$scope = $scope;
+  constructor() {
   }
   password: string;
   newGame() {

@@ -97,7 +97,7 @@ export class ForRealCardsTopFrame {
 
   ngOnInit() {
     console.log("On Init")
-//    this.router.navigate(['/start']);
+    this.router.navigate(['/start']);
     this.disposable = AccountTools.startObserving((event:UserEvent)=> {
         if (event.eventType === UserEventType.LOGOUT) {
           this.navigateToStart();

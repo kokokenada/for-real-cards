@@ -1,16 +1,9 @@
 import { Component, Input } from '@angular/core';
-import {Meteor} from 'meteor/meteor';
-import {FastCardsTopFrame} from './top-frame.ts';
-
+import { Meteor } from 'meteor/meteor';
 
 @Component(
   {
-    selector: 'joinGame',
-    controller: JoinGame,
-    controllerAs: 'vm',
-    require: {
-      topFrame: '^fastCardsTopFrame'
-    },
+    selector: 'join-game',
     template: `
  
  <div class="panel panel-default">
@@ -46,14 +39,9 @@ import {FastCardsTopFrame} from './top-frame.ts';
     `
 })
 export class JoinGame{
-  $log:any;
-  $scope:any;
   password:string;
   gameId:string;
-  topFrame:FastCardsTopFrame;
-  constructor($log, $scope) {
-    this.$log = $log;
-    this.$scope = $scope;
+  constructor() {
   }
   joinGame() {
     this.topFrame.constructor.navigateToHand(this.$scope, this.gameId, this.password);
