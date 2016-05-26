@@ -2,21 +2,19 @@
  * Created by kenono on 2016-04-16.
  */
 
-import {Menus, MenuItem} from '../api/services/menus'
+import { Menus, MenuItem } from '../api/services/menus'
 import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'popover-menu',
-  controllerAs: 'vm',
   template: `
 
-    <span uib-dropdown>
-      <span class="glyphicon glyphicon-menu-hamburger" uib-dropdown-toggle aria-hidden="true"></span>
-      <ul class="dropdown-menu dropdown-menu-right" uib-dropdown-menu>
+    <span>
+      <span class="glyphicon glyphicon-menu-hamburger"  aria-hidden="true"></span>
+      <ul class="dropdown-menu dropdown-menu-right" >
         <li
-            ng-repeat="item in vm.menuItems()"
-            ng-if="item.shouldRender()"
-            ng-click="vm.itemSelected(item)"
+            *ngFor="let item of getMenuItems()"
+            (click)="itemSelected(item)"
         >
           <p>{{item.title}}</p>
         </li>      
@@ -24,26 +22,34 @@ import { Component, Input } from '@angular/core';
     </span>
 `,
 })
-
 export class PopoverMenu {
-  @Input() private menuId: string;
-  private $rootScope;
-  constructor($rootScope) {
-    this.$rootScope = $rootScope;
+  @Input() menuId: string;
+  private menuItems:MenuItem[];
+  constructor() {
   }
 
-  menuItems():MenuItem[] {
-    let menuItem:MenuItem = Menus.getMenuFromId(this.menuId);
+  getMenuItems():MenuItem[] {
+    if (!this.menuItems) {
+      let menuItem:MenuItem = Menus.getMenuFromId(this.menuId);
+
 //    console.log('menuId: ' + this.menuId + ' menuItem:');
 //    console.log(menuItem);
-    if (menuItem)
-      return menuItem.items;
+      if (menuItem){
+        this.menuItems = [];
+        menuItem.items.forEach((subMenuItem:MenuItem)=>{
+          if (subMenuItem.shouldRender()) {
+            this.menuItems.push(subMenuItem);
+          }
+        });
+      }
+    }
+    return this.menuItems;
   }
 
   itemSelected(menuItem:MenuItem) {
     console.log(menuItem);
     if (menuItem.event) {
-      this.$rootScope.$broadcast(menuItem.event);
+//      this.$rootScope.$broadcast(menuItem.event);
     }
     if (menuItem.callback) {
       menuItem.callback(menuItem);

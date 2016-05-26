@@ -3,14 +3,18 @@
  */
 import 'reflect-metadata';
 import 'zone.js/dist/zone';
-import { Component } from '@angular/core';
+import { Component, provide } from '@angular/core';
+import { ROUTER_PROVIDERS } from '@angular/router';
+import { LocationStrategy, HashLocationStrategy, APP_BASE_HREF } from '@angular/common';
 import { bootstrap } from '@angular/platform-browser-dynamic';
-import {ForRealCardsTopFrame} from "../imports/for-real-cards"; (ForRealCardsTopFrame)
 
-@Component({
-  selector: 'app',
-  template: '<for-real-cards-top-frame></for-real-cards-top-frame>'
-})
-class ForRealCards { }
+import {ForRealCardsTopFrame} from "../imports/for-real-cards";
 
-bootstrap(ForRealCards);
+bootstrap(ForRealCardsTopFrame,
+    [
+      provide(APP_BASE_HREF, { useValue: '/' }),
+      ROUTER_PROVIDERS,
+      provide(LocationStrategy,
+        {useClass: HashLocationStrategy})
+    ]
+);

@@ -1,51 +1,51 @@
 import { Component } from '@angular/core';
-import { Session } from 'meteor/session';
+import { Routes, Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from '@angular/router'
 
+
+import { Session } from 'meteor/session';
 import {Subscription} from 'rxjs'
+
 import { Menus, MenuItem, AccountTools, UserEventType, UserEvent} from '../../common-app/api';
 
-import {PopoverMenu} from '../../common-app/ui-twbs-ng2'; (PopoverMenu)
+import {PopoverMenu} from '../../common-app/ui-twbs-ng2';
 import {EditUserProfile} from '../edit-user-profile/edit-user-profile'; (EditUserProfile)
 import {RunGameTabs} from "../run-game/run-game-tabs"; (RunGameTabs)
 import {RunGameTableContainer} from "../run-game/run-game-table-container"; {RunGameTableContainer}
 //import {AccountsAdmin} from '../../common-app/ui-twbs_ng15/accounts-admin/accounts-admin'; (AccountsAdmin)
-import {EnterGame} from '../enter-game/enter-game'; (EnterGame)
+import {EnterGame} from '../enter-game/enter-game';
 //import {GameActionList} from './game-action-list'; (GameActionList)
 import "../scss/fastcards.scss";
+import {Start} from "../start/start";
 
 @Component(
   {
     selector: 'for-real-cards-top-frame',
+    directives: [PopoverMenu, ROUTER_DIRECTIVES],
     template: `
 <div class="row">
-  <label class="col-xs-5">For Real Cards ({{vm.getUserDisplayName()}})</label>
-  <label class="col-xs-5">{{vm.getGameDescription()}}</label>
+  <label class="col-xs-5">For Real Cards ({{getUserDisplayName()}})</label>
+  <label class="col-xs-5">{{getGameDescription()}}</label>
   
-  <popover-menu class="pull-right col-xs-1" menu-id="topbar"></popover-menu>
+  <popover-menu class="pull-right col-xs-1" [menuId]="'topbar'"></popover-menu>
 </div>
-<ng-outlet></ng-outlet>
+<router-outlet></router-outlet>
       `,
-    $routeConfig: [
-      {path: '/start/', name: 'Start', component: 'start', useAsDefault: true},
-      {path: '/welcome/', name: 'Welcome', component: 'welcome'},
-      {path: '/game-hand/', name: 'GameHand', component: 'runGameTabs'},
-      {path: '/game-table/', name: 'GameTable', component: 'runGameTableContainer' },
-      {path: '/edit-profile/', name: 'EditUserProfile', component: 'editUserProfile'},
-      {path: '/accounts-admin/', name: 'AccountsAdmin', component: 'accountsAdmin'},
-      {path: '/game-action-list/', name: 'GameActionList', component: 'gameActionList'}
-    ],
-    controller: ForRealCardsTopFrame,
-    controllerAs: 'vm'
   }
 )
+@Routes([
+  {path: '/start', component: Start},
+  {path: '/enter-game', component: EnterGame}
+/*  {path: '/game-hand/', component: 'runGameTabs'},
+  {path: '/game-table/', component: 'runGameTableContainer' },
+  {path: '/edit-profile/', component: 'editUserProfile'},
+  {path: '/accounts-admin/',  component: 'accountsAdmin'},
+  {path: '/game-action-list/',  component: 'gameActionList'} */
+])
 export class ForRealCardsTopFrame {
-  $scope: any;
   private gameDescription:string;
-  static $rootRouter: any;
+  private displayName:string;
   disposable:Subscription;
-  constructor($rootRouter) {
-
-    ForRealCardsTopFrame.$rootRouter = $rootRouter;
+  constructor(private router: Router) {
 
     Menus.addMenu({id: 'topbar'});
 
@@ -55,7 +55,7 @@ export class ForRealCardsTopFrame {
       title: 'User Admin',
       roles: ['admin'],
       callback: ()=>{
-        ForRealCardsTopFrame.$rootRouter.navigate(['AccountsAdmin']);
+        this.router.navigate(['AccountsAdmin']);
       }
     });
 
@@ -64,7 +64,7 @@ export class ForRealCardsTopFrame {
       title: 'Game Action List',
       roles: ['admin'],
       callback: ()=>{
-        ForRealCardsTopFrame.$rootRouter.navigate(['GameActionList']);
+        this.router.navigate(['GameActionList']);
       }
     });
 
@@ -95,14 +95,20 @@ export class ForRealCardsTopFrame {
     });
   }
 
-  $onInit() {
+  ngOnInit() {
+    console.log("On Init")
+//    this.router.navigate(['/start']);
     this.disposable = AccountTools.startObserving((event:UserEvent)=> {
-        if (event.eventType === UserEventType.LOGOUT)
+        if (event.eventType === UserEventType.LOGOUT) {
           ForRealCardsTopFrame.navigateToStart();
+        } else if (event.eventType===UserEventType.DISPLAY_NAME_UPDATE) {
+          this.displayName = event.displayName;
+        }
       }
     );
   }
-  $onDestroy() {
+  ngOnDestroy() {
+    console.log("On Destroy")
     if (this.disposable) {
       this.disposable.unsubscribe();
     }
@@ -128,7 +134,7 @@ export class ForRealCardsTopFrame {
 
 
   getUserDisplayName():string  {
-    return AccountTools.getDisplayName();
+    return this.displayName;
   }
 
   getGameDescription():string {
