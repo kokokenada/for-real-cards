@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { Session } from 'meteor/session';
-import { Menus, MenuItem, AccountTools, UserEventType, UserEvent} from '../../common-app/api';
+
 import {Subscription} from 'rxjs'
+import { Menus, MenuItem, AccountTools, UserEventType, UserEvent} from '../../common-app/api';
+
 import {PopoverMenu} from '../../common-app/ui-twbs-ng2'; (PopoverMenu)
 import {EditUserProfile} from '../edit-user-profile/edit-user-profile'; (EditUserProfile)
 import {RunGameTabs} from "../run-game/run-game-tabs"; (RunGameTabs)
