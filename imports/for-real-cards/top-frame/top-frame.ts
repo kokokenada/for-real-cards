@@ -72,7 +72,7 @@ export class ForRealCardsTopFrame {
       id: 'launch-pad',
       title: 'Start or Join Game',
       callback: ()=>{
-        ForRealCardsTopFrame.navigateToWelcome();
+        this.navigateToEnter();
       }
     });
 
@@ -81,7 +81,7 @@ export class ForRealCardsTopFrame {
       id: 'edit-user-profile',
       title: 'Profile',
       callback: ()=>{
-        ForRealCardsTopFrame.navigateToProfile();
+        this.navigateToProfile();
       }
     });
 
@@ -100,7 +100,9 @@ export class ForRealCardsTopFrame {
 //    this.router.navigate(['/start']);
     this.disposable = AccountTools.startObserving((event:UserEvent)=> {
         if (event.eventType === UserEventType.LOGOUT) {
-          ForRealCardsTopFrame.navigateToStart();
+          this.navigateToStart();
+        } else if (event.eventType === UserEventType.LOGIN) {
+            this.navigateToEnter();
         } else if (event.eventType===UserEventType.DISPLAY_NAME_UPDATE) {
           this.displayName = event.displayName;
         }
@@ -114,22 +116,22 @@ export class ForRealCardsTopFrame {
     }
   }
 
-  static navigateToHand($scope:any, gameId:string, userPassword:string) {
+  navigateToHand($scope:any, gameId:string, userPassword:string) {
     Session.set('password', userPassword);
-    ForRealCardsTopFrame.$rootRouter.navigate(['GameHand', {gameId: gameId}]);
+    this.router.navigate(['GameHand', {gameId: gameId}]);
   }
-  static navigateToTable($scope:any, gameId:string, userPassword:string) {
+  navigateToTable($scope:any, gameId:string, userPassword:string) {
     Session.set('password', userPassword);
-    ForRealCardsTopFrame.$rootRouter.navigate(['GameTable', {gameId: gameId}]);
+    this.router.navigate(['GameTable', {gameId: gameId}]);
   }
-  static navigateToWelcome() {
-    ForRealCardsTopFrame.$rootRouter.navigate(['Welcome']);
+  navigateToEnter() {
+    this.router.navigate(['/enter-game']);
   }
-  static navigateToProfile() {
-    ForRealCardsTopFrame.$rootRouter.navigate(['EditUserProfile']);
+  navigateToProfile() {
+    this.router.navigate(['EditUserProfile']);
   }
-  static navigateToStart() {
-    ForRealCardsTopFrame.$rootRouter.navigate(['Start']);
+  navigateToStart() {
+    this.router.navigate(['/start']);
   }
 
 
@@ -144,3 +146,4 @@ export class ForRealCardsTopFrame {
     this.gameDescription = newDescription;
   }
 }
+  

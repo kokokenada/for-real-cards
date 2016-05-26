@@ -7,12 +7,7 @@ import * as log from 'loglevel';
 import {AvatarCollection} from '../models/avatar.model'
 import {User} from '../models/user.model';
 import {Tools} from "./tools"
-
-export interface Credentials {
-  username?:string;
-  email?:string;
-  password:string
-}
+import {Credentials} from "./credentials";
 
 export enum UserEventType {
   LOGIN,                // 0 
@@ -39,44 +34,30 @@ export class AccountTools {
   private static loginStatusSubject:Subject = new Subject();
   private static userCursor:Mongo.Cursor;
   static editUserObject:any;
-
-
-  private static saveCredentials(credentials:Credentials) {
-    localStorage.setItem("account-tools.last_email", credentials.email);
-    localStorage.setItem("account-tools.last_username", credentials.username);
-  }
-
-  static getLastCredentials():Credentials {
-    return {
-      username: localStorage.getItem('account-tools.last_username'),
-      email: localStorage.getItem('account-tools.last_email'),
-      password: null
-    }
-  }
-
-  static login($scope, credentials:Credentials):Observable {
+  
+  static login(credentials:Credentials):Observable {
     let observable:Observable = Observable.create(observer=> {
-      AccountTools.saveCredentials(credentials);
+      credentials.saveCredentials();
       Meteor.loginWithPassword(
         credentials.email ? credentials.email : credentials.username, credentials.password,
         (error)=> {
           if (error) {
             log.error(error);
-            observer.onError(error);
+            observer.error(error);
           } else {
             log.info('Login successful.');
             AccountTools.pushEvent(new UserEvent(UserEventType.LOGIN, {userId: Meteor.userId()}));
-            observer.onNext(Meteor.user());
-            observer.onCompleted();
+            observer.next(Meteor.user());
+            observer.complete();
           }
         });
     });
     return observable;
   }
 
-  static register($scope, credentials:Credentials):Observable {
+  static register(credentials:Credentials):Observable {
     let observable:Observable = Observable.create(observer=> {
-      AccountTools.saveCredentials(credentials);
+      credentials.saveCredentials();
       Accounts.createUser({
         username: credentials.username,
         email: credentials.email,
@@ -87,36 +68,36 @@ export class AccountTools {
       }, (error)=> {
         if (error) {
           log.error(error);
-          observer.onError(error);
+          observer.error(error);
         } else {
           AccountTools.pushEvent(new UserEvent(UserEventType.LOGIN, {userId: Meteor.userId()}));
-          observer.onNext(Meteor.user());
-          observer.onCompleted();
+          observer.next(Meteor.user());
+          observer.complete();
         }
       })
     });
     return observable;
   };
 
-  static createTempUser($scope):Observable {
+  static createTempUser():Observable {
     let observable:Observable = Observable.create(observer=> {
       Meteor.call('CommonGetNextSequence', 'temp_user', (error, result)=> {
         if (error) {
           observer.onError(error);
         } else {
           let userId = 'tmp_' + result.toString();
-          let credentials:Credentials = {
-            email: "",
-            username: userId,
-            password: Math.random().toString()
-          };
-          AccountTools.register($scope, credentials).subscribe(
+          let credentials:Credentials = new Credentials(
+            "",
+            userId,
+            Math.random().toString()
+          );
+          AccountTools.register(credentials).subscribe(
             (user) => {
               AccountTools.pushEvent(new UserEvent(UserEventType.LOGIN, {userId: Meteor.userId()}));
-              observer.onNext(user);
-              observer.onCompleted();
+              observer.next(user);
+              observer.complete();
             }, (error)=> {
-              observer.onError(error);
+              observer.error(error);
             }
           );
         }
@@ -132,16 +113,16 @@ export class AccountTools {
         function (error, numberAffected:number) {
           if (error) {
             log.error(error);
-            observer.onError(error);
+            observer.error(error);
           } else {
             if (numberAffected === 1) {
-              observer.onNext(AccountTools.editUserObject);
-              observer.onCompleted();
+              observer.next(AccountTools.editUserObject);
+              observer.complete();
               AccountTools.pushDisplayNameValue(Meteor.user());
             } else {
               let errorDescription:string = 'Unexpected number of records affected. (' + numberAffected + ')';
               log.error(errorDescription);
-              observer.onError(new Meteor.Error('error-updating-user', errorDescription));
+              observer.error(new Meteor.Error('error-updating-user', errorDescription));
             }
           }
         }
