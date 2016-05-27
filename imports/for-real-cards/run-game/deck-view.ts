@@ -31,9 +31,7 @@ import {Card, Deck} from "../api";
 )
 export class DeckView extends RunGame {
   @Input() imgClass:string;
-  constructor($log, $scope) {
-    super($log, $scope);
-  }
+
   URL():string {
     return this.cardBackURL();
   }

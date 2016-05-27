@@ -33,7 +33,6 @@ export class CommonPopups {
     let html:string = '<p>' + message + '</p>' + '<button class="btn btn-primary"> ng-click="vm.ok()"' + ok + '</button>';
 
     /*      let modalInstance = this.$uibModal.open({
-     //      animation: $scope.animationsEnabled,
      template: html,
      controller: CommonPopups,
      controllerAs: 'vm'

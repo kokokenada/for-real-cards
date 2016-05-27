@@ -19,13 +19,13 @@ import {Hand} from "../api/models/hand.model";
     selector: 'run-game-hand',
     template: `
   <div>
-    <button class="btn btn-primary" ng-click="vm.deal()">Deal</button>
-    <button ng-show="vm.canShowHand()" class="btn btn-primary" ng-click="vm.showHand()">Show Hand</button>
-    <button ng-show="vm.shouldShowTakeTrick()" class="btn btn-primary" ng-click="vm.takeTrick()">Take Trick</button>
-    <button ng-show="vm.shouldShowSort()" class="btn btn-primary" ng-click="vm.sort()">Sort Hand</button>
-    <button ng-show="vm.shouldShowUndo()" class="btn btn-default pull-right" ng-click="vm.undo()">Undo</button>
+    <button class="btn btn-primary" (click)="deal()">Deal</button>
+    <button [hidden]="!canShowHand()" class="btn btn-primary" (click)="showHand()">Show Hand</button>
+    <button [hidden]="!shouldShowTakeTrick()" class="btn btn-primary" (click)="takeTrick()">Take Trick</button>
+    <button [hidden]="!shouldShowSort()" class="btn btn-primary" (click)="sort()">Sort Hand</button>
+    <button [hidden]="!shouldShowUndo()" class="btn btn-default pull-right" (click)="undo()">Undo</button>
   </div>
-  <div ng-show="vm.shouldShowTableProxy()" 
+  <div [hidden]="!shouldShowTableProxy()" 
         style="height:15vh" 
         class="row"
       >
@@ -40,34 +40,34 @@ import {Hand} from "../api/models/hand.model";
     </style>
     <!-- DECK -->
     <deck-view 
-      ng-show="vm.shouldShowDeck()" 
-      class="drag-and-drop-container col-xs-{{vm.numberOfColumns()}}"
+      [hidden]="!shouldShowDeck()" 
+      class="drag-and-drop-container col-xs-{{numberOfColumns()}}"
       style="height:15vh;"  
       data-drag-source="DECK"
       data-drop-target="DECK"
       img-class="playing-card-landscape"
-      game-id="{{vm.gameId}}"
+      game-id="{{gameId}}"
       >
     </deck-view>
     <!-- PILE -->
     <pile-view 
-      ng-show="vm.shouldShowPile()" 
-      class="drag-and-drop-container col-xs-{{vm.numberOfColumns()}}"
+      [hidden]="!shouldShowPile()" 
+      class="drag-and-drop-container col-xs-{{numberOfColumns()}}"
       style="height:15vh;"
       img-class="playing-card-landscape"
-      card="vm.topCardInPile()" 
-      game-id="{{vm.gameId}}"
-      data-card-rank="{{vm.topCardInPile().rank}}"
-      data-card-suit="{{vm.topCardInPile().suit}}"
+      card="topCardInPile()" 
+      game-id="{{gameId}}"
+      data-card-rank="{{topCardInPile().rank}}"
+      data-card-suit="{{topCardInPile().suit}}"
       data-drag-source="PILE"
       data-drop-target="PILE"
     >
     </pile-view>      
     <!-- TABLE DROP -->
-    <div ng-show="vm.shouldShowTableDrop()" 
+    <div [hidden]="!shouldShowTableDrop()" 
           data-drop-target="TABLE"
           style="height:15vh;"
-          class="well drag-and-drop-container col-xs-{{vm.numberOfColumns()}}" style="text-align: center">
+          class="well drag-and-drop-container col-xs-{{numberOfColumns()}}" style="text-align: center">
           Drag here to place card on table
     </div>
 
@@ -96,27 +96,23 @@ import {Hand} from "../api/models/hand.model";
         img-class="playing-card-hand"
         style="display:inline-block ; width: 71px; height: 100px; padding-left: 1px; padding-right: 1px "
         card="card" 
-        game-id="{{vm.gameId}}"
-        ng-repeat="card in vm.getCardsInHand()"
+        game-id="{{gameId}}"
+        ng-repeat="card in getCardsInHand()"
         data-card-rank="{{card.rank}}"
         data-card-suit="{{card.suit}}"
         data-drag-source="HAND"
-        data-drop-target="HAND"   
+        data-drop-target="HAND">
       </playing-card>
   </div>
   
           `,
 //    templateUrl: '/imports/fastcards/ui/run-game-hand/run-game-hand.html',
-    controller: RunGameHand,
-    controllerAs: 'vm',
-    require: {topFrame: '^fastCardsTopFrame'}
   }
 )
 export class RunGameHand extends RunGame {
   @Input() showTableProxy:string;
   undoAction:Action;
-  constructor($log, $scope) {
-    super($log, $scope);
+  constructor() {
   }
 
   private showTableProxyBool():boolean {

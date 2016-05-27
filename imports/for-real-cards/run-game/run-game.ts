@@ -13,12 +13,9 @@ let dragula = require("dragula");
 
 const SESSION_GAME_ID_KEY = 'session-game-id';
 export class RunGame {
-  protected $log:any;
-  protected $scope:any;
-  topFrame:FastCardsTopFrame;
   @Input() gameId:string;
   userPassword:string;
-  protected static gameStreams:GameStreams;
+  static gameStreams:GameStreams;
   private static gameStreamInitializedToId:string;
   protected static dragAndDropInitialized:boolean = false;
   protected static drake;
@@ -37,10 +34,7 @@ export class RunGame {
     this.initialize();
   }
 
-  constructor($log, $scope) {
-    this.$log = $log;
-    this.$scope = $scope;
-
+  constructor() {
   };
 
   static getActions():Action[] {
@@ -110,9 +104,9 @@ export class RunGame {
     if (RunGame.gameStreamInitializedToId !== this.gameId) {
       this.userPassword = Session.get('password');
       if (!this.amIIncluded()) {
-        Meteor.call('FastCardsJoinGame', this.gameId, this.userPassword, (error, result:Hand)=> {
+        Meteor.call('ForRealCardsJoinGame', this.gameId, this.userPassword, (error, result:Hand)=> {
           if (error) {
-            this.$log.error(error);
+            log.error(error);
           } else {
             this.setIncluded(result.gameId);
           }
@@ -129,19 +123,6 @@ export class RunGame {
            log.debug(action);
            log.debug(RunGame.gameStreams.hands)
            log.debug(this)*/
-          if (action.actionType === ActionType.RESET) {
-            if (this.topFrame)
-              this.topFrame.setGameDescription("New Game (id " + this.gameId + ")");
-          } else if (action.actionType === ActionType.DEAL) {
-            if (this.topFrame)
-              this.topFrame.setGameDescription(RunGame.gameStreams.currentGameConfig.name + " (id " + this.gameId + ")");
-          }
-          if (action.sequencePosition===action.sequenceLength-1) {
-            // Only process if this the last one
-            Meteor.setTimeout(()=> {
-              this.$scope.$apply();
-            }, 0);
-          }
         },
         (error)=> {
           log.error(error);

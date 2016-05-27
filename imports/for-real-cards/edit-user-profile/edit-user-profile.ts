@@ -65,7 +65,7 @@ import {CommonPopups} from "../../common-app/ui-twbs-ng2"
 export class EditUserProfile {
   avatarURL:string;
   disposable:Subscription;
-  constructor($scope) {
+  constructor() {
     this.disposable = AccountTools.startObserving((event:UserEvent)=> {
       if (event.eventType === UserEventType.AVATAR_UPDATE && event.userId === Meteor.userId()) {
         this.avatarURL = event.imageURL;

@@ -396,11 +396,11 @@ export class GameStreams {
     );
   }
 
-  isUndone(action:Action):boolean {
+  private isUndone(action:Action):boolean {
     return this.undoneIds.indexOf(action._id)!==-1;
   }
 
-  addUndone(action:Action) {
+  private addUndone(action:Action) {
 //    this.debugOutput('added undone', action);
     this.undoneIds.push(action._id);
   }
@@ -539,7 +539,7 @@ export class GameStreams {
     });
   }
 
-  subscribe(onNext:(action:Action)=>void, onError:(error)=>void, onCompleted:()=>void=undefined):void {
+  subscribe(onNext:(action:Action)=>void, onError:(error)=>void=undefined, onCompleted:()=>void=undefined):void {
     this.subject.subscribe(onNext, onError, onCompleted);
   }
 

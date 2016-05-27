@@ -8,14 +8,16 @@ import {Subscription} from 'rxjs'
 import { Menus, MenuItem, AccountTools, UserEventType, UserEvent} from '../../common-app/api';
 
 import {PopoverMenu} from '../../common-app/ui-twbs-ng2';
-import {EditUserProfile} from '../edit-user-profile/edit-user-profile'; (EditUserProfile)
-import {RunGameTabs} from "../run-game/run-game-tabs"; (RunGameTabs)
-import {RunGameTableContainer} from "../run-game/run-game-table-container"; {RunGameTableContainer}
+import {EditUserProfile} from '../edit-user-profile/edit-user-profile';
+import {RunGameTabs} from "../run-game/run-game-tabs";
+import {RunGameTableContainer} from "../run-game/run-game-table-container"; 
 //import {AccountsAdmin} from '../../common-app/ui-twbs_ng15/accounts-admin/accounts-admin'; (AccountsAdmin)
 import {EnterGame} from '../enter-game/enter-game';
 //import {GameActionList} from './game-action-list'; (GameActionList)
 import "../scss/fastcards.scss";
 import {Start} from "../start/start";
+import {Action, ActionType} from "../api/models/action.model";
+import {RunGame} from "../run-game/run-game";
 
 @Component(
   {
@@ -34,12 +36,12 @@ import {Start} from "../start/start";
 )
 @Routes([
   {path: '/start', component: Start},
-  {path: '/enter-game', component: EnterGame}
-/*  {path: '/game-hand/', component: 'runGameTabs'},
-  {path: '/game-table/', component: 'runGameTableContainer' },
-  {path: '/edit-profile/', component: 'editUserProfile'},
-  {path: '/accounts-admin/',  component: 'accountsAdmin'},
-  {path: '/game-action-list/',  component: 'gameActionList'} */
+  {path: '/enter-game', component: EnterGame},
+  {path: '/game-hand/:id', component: RunGameTabs},
+  {path: '/game-table/:id', component: RunGameTableContainer },
+  {path: '/edit-profile/:id', component: EditUserProfile} /*,
+  {path: '/accounts-admin',  component: 'accountsAdmin'},
+  {path: '/game-action-list',  component: 'gameActionList'}*/
 ])
 export class ForRealCardsTopFrame {
   private gameDescription:string;
@@ -116,11 +118,23 @@ export class ForRealCardsTopFrame {
     }
   }
 
-  navigateToHand($scope:any, gameId:string, userPassword:string) {
+  startWatchingGame() {
+    RunGame.gameStreams.subscribe((action:Action)=> {
+      if (action.actionType === ActionType.DEAL) {
+        this.setGameDescription(RunGame.gameStreams.currentGameConfig.name + " (id " + action.gameId + ")");
+      } else if (action.actionType === ActionType.NEW_HAND) {
+        this.setGameDescription(RunGame.gameStreams.currentGameConfig.name + " (id " + action.gameId + ")");
+      } else if (action.actionType === ActionType.RESET) {
+        this.setGameDescription("New Game (id " + action.gameId + ")");
+      }
+    });
+  }
+
+  navigateToHand(gameId:string, userPassword:string) {
     Session.set('password', userPassword);
     this.router.navigate(['GameHand', {gameId: gameId}]);
   }
-  navigateToTable($scope:any, gameId:string, userPassword:string) {
+  navigateToTable(gameId:string, userPassword:string) {
     Session.set('password', userPassword);
     this.router.navigate(['GameTable', {gameId: gameId}]);
   }
@@ -142,7 +156,7 @@ export class ForRealCardsTopFrame {
   getGameDescription():string {
     return this.gameDescription;
   }
-  setGameDescription(newDescription:string):void {
+  private setGameDescription(newDescription:string):void {
     this.gameDescription = newDescription;
   }
 }

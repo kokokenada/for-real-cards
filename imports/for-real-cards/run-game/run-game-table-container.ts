@@ -1,24 +1,19 @@
 /**
  * Created by kenono on 2016-05-08.
  */
-import { Component, Input } from '@angular/core';
-import { RunGameTable } from "./run-game-table"; (RunGameTable)
+import { Component } from '@angular/core';
+import { RunGameTable } from "./run-game-table";
+import { RunGameContainer } from "./run-game-container"; 
 
 @Component(
   {
-    selector: 'runGameTableContainer',
+    selector: 'run-game-table-container',
+    directives: [RunGameTable],
     template: `
 
-  <run-game-table height="90vw" width="100hw" game-id="{{vm.gameId}}"></run-game-table>
-          `,
-    controller: RunGameTableContainer,
-    controllerAs: 'vm',
+  <run-game-table height="90vw" width="100hw" game-id="{{gameId}}"></run-game-table>
+          `
   }
 )
-export class RunGameTableContainer {
-  @Input() gameId:string;
-
-  $routerOnActivate(next) {
-    this.gameId = next.params.gameId;
-  }
+export class RunGameTableContainer extends RunGameContainer {
 }

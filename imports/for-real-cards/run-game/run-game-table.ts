@@ -6,12 +6,12 @@ import { Component, Input } from '@angular/core';
 import {Tools} from "../../common-app/api";
 
 import {RunGame} from './run-game.ts';
-import {Player} from "../player/player"; (Player)
+import {Player} from "../player/player";
 import {Card, GameRenderingTools} from "../api";
 import {Card} from "../api/models/card.model";
-import {PlayingCard} from "../playing-card/playing-card"; (PlayingCard);
+import {PlayingCard} from "../playing-card/playing-card";
 import {Hand} from "../api/models/hand.model";
-import {DeckView} from "./deck-view"; (DeckView)
+import {DeckView} from "./deck-view";
 import {Deck} from "../api/models/deck.model";
 
 const TABLE_ZONE_CENTER_RADIUS = 20;
@@ -20,11 +20,11 @@ const TABLE_ZONE_OUTER_RADIUS = 30;
 //object-fit: contain !important;
 @Component(
   {
-    module: 'fastcards',
-    selector: 'runGameTable',
+    selector: 'run-game-table',
+    directives: [DeckView, Player, PlayingCard],
     template: `
 
-<div style="position: relative; width:{{vm.width}}; height: {{vm.height}}">
+<div style="position: relative; width:{{width}}; height: {{height}}">
 
   <style>
       .playing-card {
@@ -36,8 +36,10 @@ const TABLE_ZONE_OUTER_RADIUS = 30;
   </style>
   <svg style="position: absolute; z-index: 5" height="100%" width="100%" viewBox="0,0,100,100" preserveAspectRatio="none">
     <circle cx="50" cy="50" r="40" style="fill:green;stroke:grey;stroke-width:2" />
+    <!--
     <path    
-            ng-if="vm.showDropZone()" d="{{vm.dropZonePath()}}" fill="darkgreen"></path>
+            ng-if="showDropZone()" d="{{dropZonePath()}}" fill="darkgreen"></path>
+            -->
   </svg>
   
   <!-- TABLE DROP ZONE -->
@@ -51,14 +53,14 @@ const TABLE_ZONE_OUTER_RADIUS = 30;
   </div>
   <!-- PLAYERS AROUND THE TABLE -->
   <player 
-    ng-repeat="hand in vm.getHands()" 
+    ng-repeat="hand in getHands()" 
     hand="hand" 
     style="
             position: absolute; 
             z-index: 100;
             width:10%; height:20%; 
-            top:{{vm.get100BasedCoordinates($index).y.toString() + '%'}}; 
-            left: {{vm.get100BasedCoordinates($index).x.toString() + '%' }}"
+            top:{{get100BasedCoordinates($index).y.toString() + '%'}}; 
+            left: {{get100BasedCoordinates($index).x.toString() + '%' }}"
   >        
     
   
@@ -68,11 +70,11 @@ const TABLE_ZONE_OUTER_RADIUS = 30;
   
   <div
     style="position: absolute; width:100%; height:100%" 
-    ng-repeat="hand in vm.getHands()"
+    ng-repeat="hand in getHands()"
     data-drop-target="TABLE"
     data-drag-source="TABLE"
     id="player-table-cards-{{$index}}"
-    ng-init="vm.addDragContainer($index)"
+    ng-init="addDragContainer($index)"
     class="drag-and-drop-container"
   > 
     <style>
@@ -83,11 +85,11 @@ const TABLE_ZONE_OUTER_RADIUS = 30;
       filter: alpha(opacity=20);
       position: absolute;
       z-index: 30;
-      width: 7.19% !important; height: 10% !important; top: {{vm.getDropCoordinates(hand).y}}% !important; left: {{vm.getDropCoordinates(hand).x}}% !important;
+      width: 7.19% !important; height: 10% !important; top: {{getDropCoordinates(hand).y}}% !important; left: {{getDropCoordinates(hand).x}}% !important;
     }
     </style>
     <playing-card 
-        ng-repeat="card in vm.getCardsInHandFaceUp(hand.userId)"
+        ng-repeat="card in getCardsInHandFaceUp(hand.userId)"
         card="card"
         img-class="playing-card"
         data-card-rank="{{card.rank}}"
@@ -96,14 +98,14 @@ const TABLE_ZONE_OUTER_RADIUS = 30;
               position: absolute; 
               z-index: 20;
               width:7.19%; height:10%; 
-              top:{{vm.getFaceUpCardCoordinate(hand, card).y.toString() + '%'}}; 
-              left: {{vm.getFaceUpCardCoordinate(hand, card).x.toString() + '%' }}"
+              top:{{getFaceUpCardCoordinate(hand, card).y.toString() + '%'}}; 
+              left: {{getFaceUpCardCoordinate(hand, card).x.toString() + '%' }}"
       >
       </playing-card>
   </div>
     <!-- DECK -->
-  <deck-view game-id="{{vm.gameId}}" 
-    ng-show="vm.shouldShowDeck()"
+  <deck-view game-id="{{gameId}}" 
+    ng-show="shouldShowDeck()"
     img-class="playing-card"
     style = "
             position: absolute; 
@@ -130,11 +132,11 @@ const TABLE_ZONE_OUTER_RADIUS = 30;
         top:40%;
         left:52%
     "
-    ng-show="vm.shouldShowPile()" 
+    ng-show="shouldShowPile()" 
     img-class="playing-card"
-    game-id="{{vm.gameId}}"
-    data-card-rank="{{vm.topCardInPile().rank}}"
-    data-card-suit="{{vm.topCardInPile().suit}}"
+    game-id="{{gameId}}"
+    data-card-rank="{{topCardInPile().rank}}"
+    data-card-suit="{{topCardInPile().suit}}"
     data-drag-source="PILE"
     data-drop-target="PILE"
   >
@@ -143,11 +145,8 @@ const TABLE_ZONE_OUTER_RADIUS = 30;
   
   
 </div>
-<!--<player-list hands='vm.getHands()'></player-list>-->
+<!--<player-list hands='getHands()'></player-list>-->
           `,
-    controller: RunGameTable,
-    controllerAs: 'vm',
-    require: {topFrame: '^fastCardsTopFrame'}
   }
 )
 
@@ -156,8 +155,7 @@ export class RunGameTable extends RunGame {
   @Input() width:string;
   @Input() height:string;
   @Input() forPlayer:string;
-  constructor($log, $scope) {
-    super($log, $scope);
+  constructor() {
   }
 
   private forPlayerBool():boolean {

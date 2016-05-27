@@ -2,9 +2,11 @@
  * Created by kenono on 2016-05-08.
  */
 import { Component, Input } from '@angular/core';
+import { NgFor } from '@angular/common'
+
 import {Subscription} from 'rxjs'
 
-import { Avatar } from '../../common-app/ui-twbs-ng2'; (Avatar);
+import { Avatar } from '../../common-app/ui-twbs-ng2';
 import { AccountTools, UserEvent, UserEventType } from "../../common-app/api";
 
 import {Card, Hand, GameRenderingTools} from  '../api';
@@ -12,6 +14,7 @@ import {Card, Hand, GameRenderingTools} from  '../api';
 @Component(
   {
     selector: 'player',
+    directives: [Avatar, NgFor],
     template: `
 
 
@@ -34,7 +37,7 @@ import {Card, Hand, GameRenderingTools} from  '../api';
     {{vm.displayName()}}
   </div>
   <!-- AVATAR -->
-  <avatar ng-click="vm.clickedAvatar()" user-id="{{vm.hand.userId}}"  shape="rectangle"
+  <avatar (click)="vm.clickedAvatar()" [userId]="hand.userId"  shape="rectangle"
       style="     
         position: absolute;
         top: 1.2em;
@@ -48,43 +51,42 @@ import {Card, Hand, GameRenderingTools} from  '../api';
   <!-- CARDS -->
   <div style="position: absolute; display: inline-block; top: 80%; z-index: 100; width: 100%;  " >
     <div 
-      ng-repeat="card in vm.getCardsInHand()" 
-      style="display: inline-block;  
-      width:{{vm.cardWidth()}}%;
+      *ngFor="card of getCardsInHand()" 
+      style="display: inline-block;
       height:auto;"
+      [style.width]="cardwidth() + '%'"
+      [attr.data-card-suit]="card.suit"
+      [attr.data-card-rank]="card.rank"
       >
-      <img style="height:auto; width:90%" src="{{vm.getCardBackURL()}}"/>        
+      <img style="height:auto; width:90%" [src]="getCardBackURL()"/>        
     </div>
   </div>
   <!-- Tricks -->
   <div 
-    ng-repeat="trick in vm.getTricks()" 
-    style="position: absolute; top:0; left:{{(vm.getTrickLeft($index))}}%; 
-    width:{{vm.getTrickWidth()}}%;
+    *ngFor="trick of getTricks(); let i=index" 
+    style="position: absolute; top:0; left:{{(vm.getTrickLeft(i))}}%; 
+    width:{{getTrickWidth()}}%;
     z-index: 200;
+    [attr.data-cards-in-trick]="trick?.length"
     ">
-    <img style="height:auto; width:100%" src="{{vm.getCardBackURL()}}"/>        
+    <img style="height:auto; width:100%" [src]="getCardBackURL()"/>        
   </div>
 
 </div>
   <!-- card count -->
-  <label ng-show="vm.numberOfCards()" class="card-count" 
-  style="position: absolute; 10%; top:80%; left:90%; font-size: x-small; z-index: 250;">{{vm.numberOfCards()}}</label>
+  <label [hidden]='!vm.numberOfCards()' 
+    class="card-count" 
+    style="position: absolute; 10%; top:80%; left:90%; font-size: x-small; z-index: 250;">
+    {{numberOfCards()}}
+  </label>
 
-          `,
-    controller: Player,
-    controllerAs: 'vm',
+          `
   }
 )
 export class Player {
   @Input() hand:Hand;
-  $scope:any;
   disposable:Subscription;
   private _displayName:string;
-
-  constructor($scope) {
-    this.$scope = $scope;
-  }
 
   $onInit() {
     this.disposable = AccountTools.startObserving((event:UserEvent)=>{

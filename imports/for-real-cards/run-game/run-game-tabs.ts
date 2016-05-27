@@ -3,37 +3,35 @@
  */
 
 import { Component, Input } from '@angular/core';
-import { RunGameHandAndTable} from "./run-game-hand-and-table"; (RunGameHandAndTable)
-import { RunGameHand } from "./run-game-hand"; (RunGameHand)
-import { RunGameTable } from "./run-game-table"; (RunGameTable);
+import { OnActivate, Router, RouteSegment } from '@angular/router';
+
+import { RunGameHandAndTable} from "./run-game-hand-and-table";
+import { RunGameHand } from "./run-game-hand";
+import { RunGameTable } from "./run-game-table";
+import { TAB_DIRECTIVES } from 'ng2-bootstrap/ng2-bootstrap'
+import {RunGameContainer} from "./run-game-container";
 
 @Component(
   {
-    selector: 'runGameTabs',
+    selector: 'run-game-tabs',
+    directives: [RunGameHandAndTable, RunGameHand, RunGameTable, TAB_DIRECTIVES],
     template: `
-  <uib-tabset active="active">
-    <uib-tab index="0" heading="Hand and Table">
-      <run-game-hand-and-table game-id="{{vm.gameId}}"></run-game-hand-and-table>
-    </uib-tab>
-    <uib-tab index="1" heading="Hand">
-      <run-game-hand show-table-proxy game-id="{{vm.gameId}}"></run-game-hand>    
-    </uib-tab>
-    <uib-tab index="2" heading="Table">
-      <run-game-table height="90vw" width="100hw" game-id="{{vm.gameId}}"></run-game-table>
-    </uib-tab>
-  </uib-tabset>
+  <tabset active="active">
+    <tab index="0" heading="Hand and Table">
+      <run-game-hand-and-table game-id="{{gameId}}"></run-game-hand-and-table>
+    </tab>
+    <tab index="1" heading="Hand">
+      <run-game-hand show-table-proxy game-id="{{gameId}}"></run-game-hand>    
+    </tab>
+    <tab index="2" heading="Table">
+      <run-game-table height="90vw" width="100hw" game-id="{{gameId}}"></run-game-table>
+    </tab>
+  </tabset>
   
           `,
-    controller: RunGameTabs,
-    controllerAs: 'vm',
   }
 )
 
-export class RunGameTabs {
-  @Input() gameId:string;
-  $routerOnActivate(next) {
-    this.gameId = next.params.gameId;
-  }
+export class RunGameTabs extends RunGameContainer{
 }
-
 

@@ -8,9 +8,8 @@ import * as log from 'loglevel';
 
 @Component({
   selector: 'avatar',
-  controllerAs: 'vm',
   template: `
-    <img src="{{vm.getImageUrl()}}" style="{{vm.getImageStyles()}}"/>
+    <img [src]="getImageUrl()" style="{{getImageStyles()}}"/>
 `,
 })
 
@@ -20,10 +19,8 @@ export class Avatar {
   @Input() private shape:string = 'round';
   private imageURL:string;
   disposable:Subscription;
-  $scope:any;
-  
-  constructor($scope) {
-    this.$scope = $scope;
+
+  constructor() {
   }
 
   $onInit() {

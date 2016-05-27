@@ -1,6 +1,7 @@
-
-import {Meteor} from 'meteor/meteor';
-//import {FastCardsTopFrame} from './top-frame.ts'
+import { Router } from '@angular/router'
+import * as log from 'loglevel';
+import { Meteor } from 'meteor/meteor';
+import { Session } from 'meteor/session';
 import { Component } from '@angular/core';
 
 @Component(
@@ -17,10 +18,10 @@ import { Component } from '@angular/core';
         <div class="col-xs-1"></div>
         <label class="col-xs-4" for="password">Password (optional):</label>
         <div class="col-xs-7">
-          <input class="form-control" ng-model="vm.password" type="text" id="password">
+          <input class="form-control" [(ngModel)]="password" type="text" id="password">
         </div>
       </div>
-      <button type="button" class="btn btn-success btn-block" ng-click="vm.newGame()">
+      <button type="button" class="btn btn-success btn-block" (click)="newGame()">
         Start Game
       </button>
       </div>
@@ -30,16 +31,16 @@ import { Component } from '@angular/core';
   }
 )
 export class NewGame{
-  constructor() {
+  constructor(private router:Router) {
   }
   password: string;
   newGame() {
-    Meteor.call('FastCardsNewGame', this.password, (error, result)=>{
+    Meteor.call('ForRealCardsNewGame', this.password, (error, result)=>{
       if (error) {
-        this.$log.error(error);
+        log.error(error);
       } else {
-        this.topFrame.constructor.navigateToHand(this.$scope, result, this.password);
-        this.topFrame.setGameDescription("New Game (id " + result + ")");
+        Session.set('password', this.password);
+        this.router.navigateByUrl('/game-hand/' + result);
       }
     });
   }
