@@ -11,8 +11,6 @@ export class RunGameContainer {
 
   }
   routerOnActivate(curr: RouteSegment) {
-    let id = curr.getParam('id');
-    this.gameId = id;
+    this.gameId = curr.getParam('id');
   }
-
 }

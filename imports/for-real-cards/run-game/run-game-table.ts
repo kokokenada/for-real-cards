@@ -53,14 +53,14 @@ const TABLE_ZONE_OUTER_RADIUS = 30;
   </div>
   <!-- PLAYERS AROUND THE TABLE -->
   <player 
-    ng-repeat="hand in getHands()" 
-    hand="hand" 
+    *ngFor="let hand of getHands(); let i = index" 
+    [hand]="hand" 
     style="
             position: absolute; 
             z-index: 100;
             width:10%; height:20%; 
-            top:{{get100BasedCoordinates($index).y.toString() + '%'}}; 
-            left: {{get100BasedCoordinates($index).x.toString() + '%' }}"
+            top:{{get100BasedCoordinates(i).y.toString() + '%'}}; 
+            left: {{get100BasedCoordinates(i).x.toString() + '%' }}"
   >        
     
   
@@ -70,11 +70,11 @@ const TABLE_ZONE_OUTER_RADIUS = 30;
   
   <div
     style="position: absolute; width:100%; height:100%" 
-    ng-repeat="hand in getHands()"
+    *ngFor="let hand of getHands(); let j=index"
     data-drop-target="TABLE"
     data-drag-source="TABLE"
-    id="player-table-cards-{{$index}}"
-    ng-init="addDragContainer($index)"
+    id="player-table-cards-{{j}}"
+    ng-init="addDragContainer(j)"
     class="drag-and-drop-container"
   > 
     <style>
@@ -89,11 +89,11 @@ const TABLE_ZONE_OUTER_RADIUS = 30;
     }
     </style>
     <playing-card 
-        ng-repeat="card in getCardsInHandFaceUp(hand.userId)"
-        card="card"
+        *ngFor="let card of getCardsInHandFaceUp(hand.userId)"
+        [card]="card"
         img-class="playing-card"
-        data-card-rank="{{card.rank}}"
-        data-card-suit="{{card.suit}}"
+        [attr.data-card-rank]="card.rank"
+        [attr.data-card-suit]="card.suit"
         style="
               position: absolute; 
               z-index: 20;
@@ -104,8 +104,8 @@ const TABLE_ZONE_OUTER_RADIUS = 30;
       </playing-card>
   </div>
     <!-- DECK -->
-  <deck-view game-id="{{gameId}}" 
-    ng-show="shouldShowDeck()"
+  <deck-view [gameId]="gameId" 
+    [hidden]="!shouldShowDeck()"
     img-class="playing-card"
     style = "
             position: absolute; 
@@ -132,11 +132,11 @@ const TABLE_ZONE_OUTER_RADIUS = 30;
         top:40%;
         left:52%
     "
-    ng-show="shouldShowPile()" 
+    [hidden]="!shouldShowPile()" 
     img-class="playing-card"
-    game-id="{{gameId}}"
-    data-card-rank="{{topCardInPile().rank}}"
-    data-card-suit="{{topCardInPile().suit}}"
+    [gameId]="gameId"
+    [attr.data-card-rank]="topCardInPile().rank"
+    [attr.data-card-suit]="topCardInPile().suit"
     data-drag-source="PILE"
     data-drop-target="PILE"
   >

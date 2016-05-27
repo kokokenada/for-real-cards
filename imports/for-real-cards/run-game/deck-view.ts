@@ -8,23 +8,37 @@ import {Card, Deck} from "../api";
 
 @Component(
   {
-    selector: 'deckView',
-    controller: DeckView,
-    controllerAs: 'vm',
+    selector: 'deck-view',
     template: `
 <!-- The image--> 
-<img ng-show="vm.numberOfCards()" src="{{vm.URL()}}"
-  class="{{vm.imgClass}}"
+<img [hidden]="!numberOfCards()" [src]="URL()"
+  [class]="imgClass"
   data-drag-source="DECK"
 />
 <!-- CARD COUNT-->
-<label ng-show="vm.numberOfCards()" 
+<label [hidden]="!numberOfCards()" 
   class="card-count"
-  style="position: absolute; top:0%; left:85%; ">{{vm.numberOfCards()}}</label>
+  style="position: absolute; top:0; left:85%; ">
+  {{numberOfCards()}}
+ </label>
 <!--FLIP THE DECK BUTTONS-->  
-<div ng-show="vm.numberOfCards()===0"  style="position: absolute; height:100%; width:100%; border-width: 1px; border-style: solid;border-color: black ">
-  <button class="btn btn-block btn-default" style="font-size: x-small; white-space: normal; height: 50%" ng-show="vm.cardsInPile(false)" ng-click="vm.pileToDeck()">Move Pile</button>
-  <button class="btn btn-block btn-default" style="font-size: x-small; white-space: normal; height: 50%" ng-show="vm.cardsInPile(true)" ng-click="vm.pileToDeck()">Shuffle & Move</button>
+<div 
+  [hidden]="!numberOfCards()===0"  
+  style="position: absolute; height:100%; width:100%; border-width: 1px; border-style: solid;border-color: black ">
+  
+  <button 
+      class="btn btn-block btn-default" 
+      style="font-size: x-small; white-space: normal; height: 50%" 
+      [hidden]="!cardsInPile(false)" 
+      (click)="pileToDeck()">
+      Move Pile
+  </button>
+  <button class="btn btn-block btn-default" 
+      style="font-size: x-small; white-space: normal; height: 50%" 
+      [hidden]="!cardsInPile(true)" 
+      (click)="vm.pileToDeck()">
+      Shuffle & Move
+  </button>
 </div> 
 `
   }
@@ -37,10 +51,10 @@ export class DeckView extends RunGame {
   }
 
   numberOfCards():number {
-    return this.getCardsInDeck().length;
+    return this.getCardsInDeck() ? this.getCardsInDeck().length : 0;
   }
   cardsInPile():number {
-    return this.getCardsInPile().length;
+    return this.getCardsInPile() ? this.getCardsInPile().length : 0;
   }
   pileToDeck(shuffle:boolean):void{
     if (shuffle) {

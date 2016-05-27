@@ -9,22 +9,21 @@ import {Card} from '../api/models/card.model'
 @Component(
   {
     selector: 'playing-card',
-    controllerAs: 'vm',
     template:
 `
 <img 
-  src="{{vm.imageURL()}}"
-  class="{{vm.imgClass}}"
-  alt="{{vm.encodedCardId()}}"
-  data-card-rank="{{vm.card.rank}}"
-  data-card-suit="{{vm.card.suit}}"
+  [src]="imageURL()"
+  [class]="imgClass"
+  [alt]="encodedCardId()"
+  [attr.data-card-rank]="card?.rank"
+  [attr.data-card-suit]="card?.suit"
 />
 `
 })
 export class PlayingCard {
   @Input() private card:Card;
   @Input() imgClass:string;
-  @Input() imageURL():string {
+  imageURL():string {
     if (this.card) {
 //      return Meteor.absoluteUrl() + "decks/standard2/" + this.card.encode() + ".svg#svgView(preserveAspectRatio(none))";
       return Meteor.absoluteUrl() + "decks/default/" + this.card.encode() + ".jpg";

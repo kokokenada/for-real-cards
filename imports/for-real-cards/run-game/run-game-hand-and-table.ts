@@ -11,8 +11,16 @@ import {RunGameHand} from "./run-game-hand";
     directives: [RunGameTable, RunGameHand],
     template: `
 
-  <run-game-table for-player="true" height="45vh" width="100hw" game-id="{{gameId}}"></run-game-table>
-  <run-game-hand game-id="{{gameId}}" style="width:100vw; height: 45vh"></run-game-hand>
+  <run-game-table 
+    [forPlayer]="true" 
+    height="45vh" 
+    width="100hw" 
+    [gameId]="gameId">  
+  </run-game-table>
+  <run-game-hand 
+    [gameId]="gameId" 
+    style="width:100vw; height: 45vh">
+  </run-game-hand>
           `
   }
 )

@@ -1,22 +1,23 @@
 import { Component, Input } from '@angular/core';
 
 import {CommonPopups} from "../../common-app/ui-twbs-ng2";
+import {Tools} from "../../common-app/api";
 
 import {RunGame} from './run-game.ts';
 import {DealModal} from "../deal-modal/deal-modal"
-import {PlayingCard} from "../playing-card/playing-card"; {PlayingCard}
+import {PlayingCard} from "../playing-card/playing-card";
 import {GameConfig, CardLocation, CardCountAllowed} from "../api";
-import {DeckView} from "./deck-view"; (DeckView)
-import {Tools} from "../../common-app/api";
-import {PileView} from "./pile-view"; (PileView)
+import {DeckView} from "./deck-view";
+import {PileView} from "./pile-view";
 import {Action, ActionFormatted} from "../api/models/action.model";
-//import {timeoutApply} from "../../common/ui-twbs_ng15/util";
+
 import {Card} from "../api/models/card.model";
 import {Hand} from "../api/models/hand.model";
 
 @Component(
   {
     selector: 'run-game-hand',
+    directives: [DeckView, PileView, PlayingCard],
     template: `
   <div>
     <button class="btn btn-primary" (click)="deal()">Deal</button>
@@ -45,8 +46,8 @@ import {Hand} from "../api/models/hand.model";
       style="height:15vh;"  
       data-drag-source="DECK"
       data-drop-target="DECK"
-      img-class="playing-card-landscape"
-      game-id="{{gameId}}"
+      [imgClass]="playing-card-landscape"
+      [gameId]="gameId"
       >
     </deck-view>
     <!-- PILE -->
@@ -54,11 +55,11 @@ import {Hand} from "../api/models/hand.model";
       [hidden]="!shouldShowPile()" 
       class="drag-and-drop-container col-xs-{{numberOfColumns()}}"
       style="height:15vh;"
-      img-class="playing-card-landscape"
-      card="topCardInPile()" 
-      game-id="{{gameId}}"
-      data-card-rank="{{topCardInPile().rank}}"
-      data-card-suit="{{topCardInPile().suit}}"
+      [imgClass]="playing-card-landscape"
+      [card]="topCardInPile()" 
+      [gameId]="gameId"
+      [attr.data-card-rank]="topCardInPile()?.rank"
+      [attr.data-card-suit]="topCardInPile()?.suit"
       data-drag-source="PILE"
       data-drop-target="PILE"
     >
@@ -93,13 +94,13 @@ import {Hand} from "../api/models/hand.model";
     </style>
       <playing-card 
           
-        img-class="playing-card-hand"
+        *ngFor="let card of getCardsInHand()"
+        [imgClass]="playing-card-hand"
         style="display:inline-block ; width: 71px; height: 100px; padding-left: 1px; padding-right: 1px "
-        card="card" 
-        game-id="{{gameId}}"
-        ng-repeat="card in getCardsInHand()"
-        data-card-rank="{{card.rank}}"
-        data-card-suit="{{card.suit}}"
+        [card]="card" 
+        [gameId]="gameId"
+        [attr.data-card-rank]="card.rank"
+        [attr.data-card-suit]="card.suit"
         data-drag-source="HAND"
         data-drop-target="HAND">
       </playing-card>
@@ -111,9 +112,9 @@ import {Hand} from "../api/models/hand.model";
 )
 export class RunGameHand extends RunGame {
   @Input() showTableProxy:string;
+  @Input() gameId:string;
+
   undoAction:Action;
-  constructor() {
-  }
 
   private showTableProxyBool():boolean {
     return Tools.stringToBool(this.showTableProxy);
@@ -124,7 +125,8 @@ export class RunGameHand extends RunGame {
   }
 
   shouldShowTakeTrick():boolean {
-    return RunGame.gameStreams.currentGameConfig && RunGame.gameStreams.currentGameConfig.hasTricks && RunGame.gameStreams.trickReady();
+      if (RunGame.gameStreams)
+      return RunGame.gameStreams.currentGameConfig && RunGame.gameStreams.currentGameConfig.hasTricks && RunGame.gameStreams.trickReady();
   }
   
   numberOfColumns():string {
@@ -141,6 +143,7 @@ export class RunGameHand extends RunGame {
   
   shouldShowSort():boolean {
     return (
+      RunGame.gameStreams &&
       RunGame.gameStreams.currentGameConfig &&
       RunGame.gameStreams.currentGameConfig.findCommand(CardLocation.HAND, CardLocation.HAND).cardCountAllowed!==CardCountAllowed.NONE
     );
@@ -175,7 +178,7 @@ export class RunGameHand extends RunGame {
   }
 
   shouldShowUndo():boolean {
-    return RunGame.gameStreams.actionToUndo() ? true : false;
+    return RunGame.gameStreams && RunGame.gameStreams.actionToUndo();
   }
   
   undo():void {

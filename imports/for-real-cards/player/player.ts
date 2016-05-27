@@ -47,11 +47,11 @@ import {Card, Hand, GameRenderingTools} from  '../api';
         width: auto
          "
    >  
-  </avatar>
+    </avatar>
   <!-- CARDS -->
   <div style="position: absolute; display: inline-block; top: 80%; z-index: 100; width: 100%;  " >
     <div 
-      *ngFor="card of getCardsInHand()" 
+      *ngFor="let card of getCardsInHand()" 
       style="display: inline-block;
       height:auto;"
       [style.width]="cardwidth() + '%'"
@@ -63,7 +63,7 @@ import {Card, Hand, GameRenderingTools} from  '../api';
   </div>
   <!-- Tricks -->
   <div 
-    *ngFor="trick of getTricks(); let i=index" 
+    *ngFor="let trick of getTricks(); let i=index" 
     style="position: absolute; top:0; left:{{(vm.getTrickLeft(i))}}%; 
     width:{{getTrickWidth()}}%;
     z-index: 200;
@@ -85,7 +85,7 @@ import {Card, Hand, GameRenderingTools} from  '../api';
 )
 export class Player {
   @Input() hand:Hand;
-  disposable:Subscription;
+  disposable:Subscription;  
   private _displayName:string;
 
   $onInit() {

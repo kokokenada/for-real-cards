@@ -11,7 +11,7 @@ import { RunGameContainer } from "./run-game-container";
     directives: [RunGameTable],
     template: `
 
-  <run-game-table height="90vw" width="100hw" game-id="{{gameId}}"></run-game-table>
+  <run-game-table height="90vw" width="100hw" [gameId]="gameId"></run-game-table>
           `
   }
 )

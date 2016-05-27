@@ -1,12 +1,12 @@
 import {Meteor} from 'meteor/meteor';
-import {Tracker, Computation} from 'meteor/tracker';
-import {Mongo, Cursor} from 'meteor/mongo'
 import {Session} from 'meteor/session';
 import * as log from 'loglevel';
 import { Input } from '@angular/core';
+
 import {CommonPopups} from "../../common-app/ui-twbs-ng2";
 
 import {Action, ActionType, Card, CardCountAllowed, CardLocation, Deck, DeckLocation, DragAndDrop, GameConfig, GameStreams, GameRenderingTools, Hand} from '../api';
+
 
 let dragula = require("dragula");
 
@@ -21,21 +21,18 @@ export class RunGame {
   protected static drake;
   private dragSource:string;
 
-  $onInit() {
-//    console.log('init rungame');
-//    console.log(this);
+  ngOnInit() {
+    console.log('init rungame');
+    console.log(this);
     this.dragAndDropInit();
   }
 
-  $onChanges(obj) {
-//    console.log('onchanges rungame:');
-//    console.log(obj);
-//    console.log(this)
+  ngOnChanges(obj) {
+    console.log('onchanges rungame:');
+    console.log(obj);
+    console.log(this)
     this.initialize();
   }
-
-  constructor() {
-  };
 
   static getActions():Action[] {
     return RunGame.gameStreams.actions;
@@ -100,7 +97,12 @@ export class RunGame {
   }
 
   private initialize() {
-
+    console.log("initialize()")
+    console.log(this);
+    if (this.gameId===undefined) {
+      console.log("gameId udefined")
+      return;
+    }
     if (RunGame.gameStreamInitializedToId !== this.gameId) {
       this.userPassword = Session.get('password');
       if (!this.amIIncluded()) {
@@ -167,28 +169,37 @@ export class RunGame {
   }
 
   getCardsInDeck():Card[] {
-    return RunGame.gameStreams.tableFaceDown;
+    if (RunGame.gameStreams)
+      return RunGame.gameStreams.tableFaceDown;
   }
 
   getCardsInPile():Card[] {
-    return RunGame.gameStreams.tablePile;
+    if (RunGame.gameStreams)
+      return RunGame.gameStreams.tablePile;
   }
 
   getCardsFaceUp(userId:string = Meteor.userId()):Card[] {
-    let hand:Hand = RunGame.gameStreams.getHandFromUserId(userId);
-    if (hand)
-      return hand.cardsFaceUp;
+    if (RunGame.gameStreams) {
+      let hand:Hand = RunGame.gameStreams.getHandFromUserId(userId);
+      if (hand)
+        return hand.cardsFaceUp;
+    }
   }
 
   topCardInPile():Card {
-    let length = RunGame.gameStreams.tablePile.length;
-    if (length)
-      return RunGame.gameStreams.tablePile[length - 1];
+    if (RunGame.gameStreams && RunGame.gameStreams.tablePile) {
+      let length = RunGame.gameStreams.tablePile.length;
+      if (length)
+        return RunGame.gameStreams.tablePile[length - 1];
+    }
   }
 
   shouldShowTableDrop():boolean {
-    return RunGame.gameStreams.currentGameConfig &&
+    return (
+      RunGame.gameStreams &&
+      RunGame.gameStreams.currentGameConfig &&
       RunGame.gameStreams.currentGameConfig.isTarget(CardLocation.TABLE)
+    )
   }
 
   private tricksInProgress():boolean {
@@ -209,6 +220,7 @@ export class RunGame {
 
   shouldShowPile():boolean {
     return (
+      RunGame.gameStreams &&
       RunGame.gameStreams.currentGameConfig &&
       (
         this.tricksInProgress()===false &&
@@ -222,7 +234,7 @@ export class RunGame {
 
 
   shouldShowDeck():boolean {
-    if (RunGame.gameStreams.currentGameConfig)
+    if (RunGame.gameStreams && RunGame.gameStreams.currentGameConfig)
       return this.tricksInProgress()===false && RunGame.gameStreams.currentGameConfig.deckLocationAfterDeal == DeckLocation.CENTER;
   }
 
@@ -232,6 +244,7 @@ export class RunGame {
 
   canShowHand():boolean {
     return (
+      RunGame.gameStreams &&
       RunGame.gameStreams.currentGameConfig && 
       RunGame.gameStreams.currentGameConfig.findCommand(CardLocation.HAND, CardLocation.TABLE).cardCountAllowed===CardCountAllowed.ALL
     );
