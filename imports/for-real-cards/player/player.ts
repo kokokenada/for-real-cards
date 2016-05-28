@@ -2,7 +2,6 @@
  * Created by kenono on 2016-05-08.
  */
 import { Component, Input } from '@angular/core';
-import { NgFor } from '@angular/common'
 
 import {Subscription} from 'rxjs'
 
@@ -14,7 +13,7 @@ import {Card, Hand, GameRenderingTools} from  '../api';
 @Component(
   {
     selector: 'player',
-    directives: [Avatar, NgFor],
+    directives: [Avatar],
     template: `
 
 
@@ -34,10 +33,10 @@ import {Card, Hand, GameRenderingTools} from  '../api';
             text-align: center; 
             white-space: nowrap;
             background-color:lightgray; color:darkblue; padding: 0; margin: 0">
-    {{vm.displayName()}}
+    {{displayName()}}
   </div>
   <!-- AVATAR -->
-  <avatar (click)="vm.clickedAvatar()" [userId]="hand.userId"  shape="rectangle"
+  <avatar (click)="clickedAvatar()" [userId]="hand.userId"  shape="rectangle"
       style="     
         position: absolute;
         top: 1.2em;
@@ -55,8 +54,8 @@ import {Card, Hand, GameRenderingTools} from  '../api';
       style="display: inline-block;
       height:auto;"
       [style.width]="cardwidth() + '%'"
-      [attr.data-card-suit]="card.suit"
-      [attr.data-card-rank]="card.rank"
+      [attr.data-card-suit]="card?.suit"
+      [attr.data-card-rank]="card?.rank"
       >
       <img style="height:auto; width:90%" [src]="getCardBackURL()"/>        
     </div>
@@ -64,17 +63,16 @@ import {Card, Hand, GameRenderingTools} from  '../api';
   <!-- Tricks -->
   <div 
     *ngFor="let trick of getTricks(); let i=index" 
-    style="position: absolute; top:0; left:{{(vm.getTrickLeft(i))}}%; 
-    width:{{getTrickWidth()}}%;
+    [ngStyle]="{'position': 'absolute', 'top':0, 'left':getTrickLeft(i), 'width': getTrickWidth() }"
     z-index: 200;
     [attr.data-cards-in-trick]="trick?.length"
-    ">
+    >
     <img style="height:auto; width:100%" [src]="getCardBackURL()"/>        
   </div>
 
 </div>
   <!-- card count -->
-  <label [hidden]='!vm.numberOfCards()' 
+  <label [hidden]='!numberOfCards()' 
     class="card-count" 
     style="position: absolute; 10%; top:80%; left:90%; font-size: x-small; z-index: 250;">
     {{numberOfCards()}}
@@ -88,14 +86,16 @@ export class Player {
   disposable:Subscription;  
   private _displayName:string;
 
-  $onInit() {
+  ngOnInit() {
+    console.log('player on init')
+    console.log(this)
     this.disposable = AccountTools.startObserving((event:UserEvent)=>{
       if (event.eventType===UserEventType.DISPLAY_NAME_UPDATE && event.userId===this.hand.userId) {
         this._displayName = event.displayName;
       }
     });
   }
-  $onDestroy() {
+  ngOnDestroy() {
     if (this.disposable) {
       this.disposable.unsubscribe();
     }
@@ -121,13 +121,13 @@ export class Player {
     return this.hand.tricks;
   }
 
-  getTrickWidth():number {
+  getTrickWidth():string {
     let numberOfSlots = Math.max(this.hand.tricks[0].length, 4);
-    return (100/numberOfSlots);
+    return (100/numberOfSlots).toString() + "%";
   }
 
-  getTrickLeft(index:number):number {
-    return index * this.getTrickWidth();
+  getTrickLeft(index:number):string {
+    return (index * this.getTrickWidth()).toString() + "%";
   }
 
   numberOfCards():number {

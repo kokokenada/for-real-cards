@@ -135,8 +135,8 @@ const TABLE_ZONE_OUTER_RADIUS = 30;
     [hidden]="!shouldShowPile()" 
     img-class="playing-card"
     [gameId]="gameId"
-    [attr.data-card-rank]="topCardInPile().rank"
-    [attr.data-card-suit]="topCardInPile().suit"
+    [attr.data-card-rank]="topCardInPile()?.rank"
+    [attr.data-card-suit]="topCardInPile()?.suit"
     data-drag-source="PILE"
     data-drop-target="PILE"
   >
