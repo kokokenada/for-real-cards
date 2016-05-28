@@ -22,15 +22,15 @@ export class RunGame {
   private dragSource:string;
 
   ngOnInit() {
-    console.log('init rungame');
-    console.log(this);
+ //   console.log('init rungame');
+ //   console.log(this);
     this.dragAndDropInit();
   }
 
   ngOnChanges(obj) {
-    console.log('onchanges rungame:');
-    console.log(obj);
-    console.log(this)
+//    console.log('onchanges rungame:');
+ //   console.log(obj);
+ //   console.log(this)
     this.initialize();
   }
 
@@ -97,9 +97,9 @@ export class RunGame {
   }
 
   private initialize() {
-    console.log("initialize()")
-    console.log(this);
-    if (this.gameId===undefined) {
+   // console.log("initialize()")
+    //console.log(this);
+    if   (this.gameId===undefined) {
       console.log("gameId udefined")
       return;
     }

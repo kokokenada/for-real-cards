@@ -3,7 +3,7 @@
  */
 
 import { Component } from '@angular/core';
-import {Subscription} from 'rxjs'
+import { Subscription } from 'rxjs'
 import * as log from 'loglevel';
 
 import {AccountTools, AvatarCollection, AvatarTools, AccountTools, Credentials, Uploader, UploadFileInfo, UserEvent, UserEventType} from "../../common-app/api"
@@ -11,9 +11,7 @@ import {CommonPopups} from "../../common-app/ui-twbs-ng2"
 
 
 @Component({
-  module: 'fastcards',
-  selector: 'editUserProfile',
-  controllerAs: 'vm',
+  selector: 'edit-user-profile',
   controller: EditUserProfile,
   template: `
 
@@ -25,11 +23,11 @@ import {CommonPopups} from "../../common-app/ui-twbs-ng2"
           <div class="row">
             <div class="form-group col-md-6">
               <label for="username">Username:</label>
-              <input ng-model="vm.credentials.username" type="text" class="form-control" id="username">
+              <input [(ngModel)]="credentials.username" type="text" class="form-control" id="username">
             </div>
             <div class="form-group col-md-6">
               <label for="email">Email</label><span> (optional)</span>
-              <input ng-model="vm.credentials.email" type="text" class="form-control" id="email">
+              <input [(ngModel)]="credentials.email" type="text" class="form-control" id="email">
             </div>
             <div class="form-group col-md-6">
               <label for="avatar">Avatar</label><span> (optional)</span>
@@ -51,9 +49,9 @@ import {CommonPopups} from "../../common-app/ui-twbs-ng2"
                   <div>You can also drop image to here</div>
               </div>
             </div>
-            <img src="{{vm.avatarUrl()}}"/>
+            <img [src]="avatarUrl()"/>
             <div class="form-group col-md-6">                    
-              <button ng-click="vm.save()" class="btn btn-primary pull-right">Save</button> 
+              <button (click)="save()" class="btn btn-primary pull-right">Save</button> 
             </div>
           </div>
         </div>
@@ -64,27 +62,28 @@ import {CommonPopups} from "../../common-app/ui-twbs-ng2"
 
 export class EditUserProfile {
   avatarURL:string;
-  disposable:Subscription;
+  credentials:Credentials = new Credentials("","");
+  subscription:Subscription;
   constructor() {
-    this.disposable = AccountTools.startObserving((event:UserEvent)=> {
+    this.subscription = AccountTools.startObserving((event:UserEvent)=> {
       if (event.eventType === UserEventType.AVATAR_UPDATE && event.userId === Meteor.userId()) {
         this.avatarURL = event.imageURL;
       }
     });
   }
 
-  $onInit() {
+  ngOnInit() {
     console.log('init EditUserProfile');
     console.log(this);
     AccountTools.readCurrentUser();
   }
-  $onChanges(obj) {
+  ngOnChanges(obj) {
     console.log('onchanges EditUserProfile:');
     console.log(obj);
   }
-  $onDestroy() {
-    if (this.disposable) {
-      this.disposable.unsubscribe();
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
     }
   }
 

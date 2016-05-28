@@ -39,7 +39,7 @@ import {RunGame} from "../run-game/run-game";
   {path: '/enter-game', component: EnterGame},
   {path: '/game-hand/:id', component: RunGameTabs},
   {path: '/game-table/:id', component: RunGameTableContainer },
-  {path: '/edit-profile/:id', component: EditUserProfile} /*,
+  {path: '/edit-profile', component: EditUserProfile} /*,
   {path: '/accounts-admin',  component: 'accountsAdmin'},
   {path: '/game-action-list',  component: 'gameActionList'}*/
 ])
@@ -118,6 +118,8 @@ export class ForRealCardsTopFrame {
     }
   }
 
+
+  // Hmm when can this be called
   startWatchingGame() {
     RunGame.gameStreams.subscribe((action:Action)=> {
       if (action.actionType === ActionType.DEAL) {
@@ -132,17 +134,17 @@ export class ForRealCardsTopFrame {
 
   navigateToHand(gameId:string, userPassword:string) {
     Session.set('password', userPassword);
-    this.router.navigate(['GameHand', {gameId: gameId}]);
+    this.router.navigate(['/game-hand', {gameId: gameId}]);
   }
   navigateToTable(gameId:string, userPassword:string) {
     Session.set('password', userPassword);
-    this.router.navigate(['GameTable', {gameId: gameId}]);
+    this.router.navigate(['/game-table', {gameId: gameId}]);
   }
   navigateToEnter() {
     this.router.navigate(['/enter-game']);
   }
   navigateToProfile() {
-    this.router.navigate(['EditUserProfile']);
+    this.router.navigate(['/edit-profile']);
   }
   navigateToStart() {
     this.router.navigate(['/start']);

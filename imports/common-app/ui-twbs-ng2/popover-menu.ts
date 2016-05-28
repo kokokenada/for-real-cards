@@ -2,15 +2,21 @@
  * Created by kenono on 2016-04-16.
  */
 
-import { Menus, MenuItem } from '../api/services/menus'
 import { Component, Input } from '@angular/core';
+import { DROPDOWN_DIRECTIVES } from 'ng2-bootstrap/ng2-bootstrap';
+import { Subscription } from 'rxjs'
+
+import { Menus, MenuItem } from '../api/services/menus'
+import { AccountTools, UserEvent, UserEventType } from "../api"
+
 
 @Component({
   selector: 'popover-menu',
+  directives: [DROPDOWN_DIRECTIVES],
   template: `
 
-    <span>
-      <span class="glyphicon glyphicon-menu-hamburger"  aria-hidden="true"></span>
+    <span dropdown (on-toggle)="toggled($event)">
+      <span dropdownToggle class="glyphicon glyphicon-menu-hamburger"  aria-hidden="true"></span>
       <ul class="dropdown-menu dropdown-menu-right" >
         <li
             *ngFor="let item of getMenuItems()"
@@ -25,7 +31,20 @@ import { Component, Input } from '@angular/core';
 export class PopoverMenu {
   @Input() menuId: string;
   private menuItems:MenuItem[];
-  constructor() {
+  private subscription:Subscription;
+
+  ngOnInit() {
+    this.subscription = AccountTools.startObserving((event:UserEvent)=>{
+      if (event.eventType===UserEventType.LOGIN) {
+        this.menuItems =null;
+        this.getMenuItems();
+      }
+    });
+  }
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
   getMenuItems():MenuItem[] {
@@ -34,6 +53,8 @@ export class PopoverMenu {
 
 //    console.log('menuId: ' + this.menuId + ' menuItem:');
 //    console.log(menuItem);
+//      console.log('user:' + Meteor.userId())
+//      console.log(Meteor.user())
       if (menuItem){
         this.menuItems = [];
         menuItem.items.forEach((subMenuItem:MenuItem)=>{
@@ -47,7 +68,7 @@ export class PopoverMenu {
   }
 
   itemSelected(menuItem:MenuItem) {
-    console.log(menuItem);
+//    console.log(menuItem);
     if (menuItem.event) {
 //      this.$rootScope.$broadcast(menuItem.event);
     }

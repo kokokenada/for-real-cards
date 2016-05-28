@@ -2,8 +2,8 @@
  * Created by kenono on 2016-04-23.
  */
 import { Component, Input } from '@angular/core';
-import {AccountTools, UserEvent, UserEventType} from "../api"
-import {Subscription} from 'rxjs'
+import { AccountTools, UserEvent, UserEventType } from "../api"
+import { Subscription } from 'rxjs'
 import * as log from 'loglevel';
 
 @Component({
@@ -23,14 +23,14 @@ export class Avatar {
   constructor() {
   }
 
-  $onInit() {
+  ngOnInit() {
     this.disposable = AccountTools.startObserving((event:UserEvent)=>{
       if (event.eventType===UserEventType.AVATAR_UPDATE && event.userId===this.userId) {
         this.imageURL = event.imageURL;
       }
     });
   }
-  $onDestroy() {
+  ngOnDestroy() {
     if (this.disposable) {
       this.disposable.unsubscribe();
     }
