@@ -4,5 +4,5 @@
 
 export * from "./avatar"
 export * from "./common-popups";
-export * from "./modal";
+export * from "./modal.service";
 export * from "./popover-menu";

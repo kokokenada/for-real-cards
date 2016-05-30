@@ -4,7 +4,7 @@
 import 'reflect-metadata';
 import 'zone.js/dist/zone';
 import { Component, provide } from '@angular/core';
-import { ROUTER_PROVIDERS } from '@angular/router';
+import { ROUTER_PROVIDERS, ROUTER_DIRECTIVES } from '@angular/router';
 import { LocationStrategy, HashLocationStrategy, APP_BASE_HREF } from '@angular/common';
 import { bootstrap } from '@angular/platform-browser-dynamic';
 
@@ -14,6 +14,7 @@ bootstrap(ForRealCardsTopFrame,
     [
       provide(APP_BASE_HREF, { useValue: '/' }),
       ROUTER_PROVIDERS,
+      ROUTER_DIRECTIVES,
       provide(LocationStrategy,
         {useClass: HashLocationStrategy})
     ]

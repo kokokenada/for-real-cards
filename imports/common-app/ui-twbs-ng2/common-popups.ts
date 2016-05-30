@@ -6,7 +6,7 @@ import {Observable, Subject, Subscription} from 'rxjs'
 import { Component, Input } from '@angular/core';
 import * as log from 'loglevel';
 
-import {Modal} from '../../common-app/ui-twbs-ng2/modal';
+import { ModalService } from '../../common-app/ui-twbs-ng2/modal.service';
 
 export class CommonPopups {
 
@@ -74,7 +74,7 @@ export class CommonPopups {
 </form>    
 `
 })
-class ConfirmModal extends Modal {
+class ConfirmModal {
   @Input() titleText:string;
   @Input() cancelText:string;
   @Input() okText:string;

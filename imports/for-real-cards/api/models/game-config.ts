@@ -144,6 +144,21 @@ export class GameConfig {
     }
     return returnValue;
   }
+  
+  static getDefaultConfig():GameConfig {
+    return new GameConfig({
+      name: "",
+      minimumNumberOfPlayers: 2,
+      maximumNumberOfPlayers: 5,
+      deck: Deck.getDeck(DeckId.STANDARD_ACE_HIGH),
+      numberOfCardsToPlayer: 5,
+      deckLocationAfterDeal: DeckLocation.CENTER,
+      turnCardUpAfterDeal: true,
+      hasTricks: false,
+      seeLastCardOnlyOnFaceUpPile: false,
+      userCommands: GameConfig.getDefaultUserCommands()
+    })
+  }
 
   findCommand(from:CardLocation, to:CardLocation):UserCommand {
     if (!this.userCommands)

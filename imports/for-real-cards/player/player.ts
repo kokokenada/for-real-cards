@@ -53,7 +53,7 @@ import {Card, Hand, GameRenderingTools} from  '../api';
       *ngFor="let card of getCardsInHand()" 
       style="display: inline-block;
       height:auto;"
-      [style.width]="cardwidth() + '%'"
+      [style.width]="cardWidth() + '%'"
       [attr.data-card-suit]="card?.suit"
       [attr.data-card-rank]="card?.rank"
       >

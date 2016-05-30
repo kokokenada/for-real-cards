@@ -7,10 +7,10 @@ import {Tracker, Computation} from 'meteor/tracker';
 import {GAME_SUBSCRPTION_NAME, GameSubscriptionOptions} from "../models/game.publications.ts";
 import {Observable, Subject} from 'rxjs'
 import {Action, ActionCollection, ActionType, VisibilityType, ActionFormatted} from '../models/action.model'
-import {GameConfig} from '../models/game-config';
+import {GameConfig, DeckLocation} from '../models/game-config';
 import {Hand, HandCollection} from '../models/hand.model';
 import {Card} from '../models/card.model';
-import {Deck} from '../models/deck.model';
+import {Deck, DeckId} from '../models/deck.model';
 import * as log from 'loglevel';
 import {CardSuit, CardRank} from "../models/card.model";
 
@@ -33,6 +33,8 @@ export class GameStreams {
     this.tableFaceDown = [];
     this.tablePile = [];
     this.lastNotified = null;
+    this.currentGameConfig = GameConfig.getDefaultConfig();
+
     this.startSubScriptions();
   }
 

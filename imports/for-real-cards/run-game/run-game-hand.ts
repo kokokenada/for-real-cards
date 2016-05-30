@@ -1,23 +1,21 @@
 import { Component, Input } from '@angular/core';
 
-import {CommonPopups} from "../../common-app/ui-twbs-ng2";
-import {Tools} from "../../common-app/api";
+import { CommonPopups } from "../../common-app/ui-twbs-ng2";
+import { Tools } from "../../common-app/api";
 
-import {RunGame} from './run-game.ts';
-import {DealModal} from "../deal-modal/deal-modal"
-import {PlayingCard} from "../playing-card/playing-card";
-import {GameConfig, CardLocation, CardCountAllowed} from "../api";
-import {DeckView} from "./deck-view";
-import {PileView} from "./pile-view";
-import {Action, ActionFormatted} from "../api/models/action.model";
-
-import {Card} from "../api/models/card.model";
-import {Hand} from "../api/models/hand.model";
+import { RunGame } from './run-game.ts';
+import { DealModalService, DEAL_MODAL_PROVIDERS } from "../deal-modal/deal-modal.service"
+import { PlayingCard } from "../playing-card/playing-card";
+import { Action, ActionFormatted, Card, GameConfig, CardLocation, CardCountAllowed, Hand} from "../api";
+import { DeckView } from "./deck-view";
+import { PileView } from "./pile-view";
+import {ModalService} from "../../common-app/ui-twbs-ng2/modal.service";
 
 @Component(
   {
     selector: 'run-game-hand',
     directives: [DeckView, PileView, PlayingCard],
+    providers: [DEAL_MODAL_PROVIDERS],
     template: `
   <div>
     <button class="btn btn-primary" (click)="deal()">Deal</button>
@@ -113,8 +111,11 @@ import {Hand} from "../api/models/hand.model";
 export class RunGameHand extends RunGame {
   @Input() showTableProxy:string;
   @Input() gameId:string;
-
   undoAction:Action;
+
+  constructor(private dealModelService:DealModalService) {
+
+  }
 
   private showTableProxyBool():boolean {
     return Tools.stringToBool(this.showTableProxy);
@@ -165,7 +166,7 @@ export class RunGameHand extends RunGame {
     let defaultGameConfig:GameConfig;
     if (RunGame.gameStreams)
       defaultGameConfig = RunGame.gameStreams.currentGameConfig;
-    DealModal.openWithDefaults(defaultGameConfig).subscribe(
+    this.dealModelService.open(defaultGameConfig).subscribe(
       (result:GameConfig)=> {
         if (result) {
           RunGame.gameStreams.deal(result);

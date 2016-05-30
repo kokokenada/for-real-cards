@@ -18,6 +18,7 @@ import "../scss/fastcards.scss";
 import {Start} from "../start/start";
 import {Action, ActionType} from "../api/models/action.model";
 import {RunGame} from "../run-game/run-game";
+import {DealModal} from "../deal-modal/deal-modal";
 
 @Component(
   {
@@ -39,7 +40,9 @@ import {RunGame} from "../run-game/run-game";
   {path: '/enter-game', component: EnterGame},
   {path: '/game-hand/:id', component: RunGameTabs},
   {path: '/game-table/:id', component: RunGameTableContainer },
-  {path: '/edit-profile', component: EditUserProfile} /*,
+  {path: '/edit-profile', component: EditUserProfile},
+  {path: '/frc-deal-modal', component: DealModal}
+  /*,
   {path: '/accounts-admin',  component: 'accountsAdmin'},
   {path: '/game-action-list',  component: 'gameActionList'}*/
 ])
