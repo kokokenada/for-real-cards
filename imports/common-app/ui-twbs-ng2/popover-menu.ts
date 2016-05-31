@@ -6,8 +6,7 @@ import { Component, Input } from '@angular/core';
 import { DROPDOWN_DIRECTIVES } from 'ng2-bootstrap/ng2-bootstrap';
 import { Subscription } from 'rxjs'
 
-import { Menus, MenuItem } from '../api/services/menus'
-import { AccountTools, UserEvent, UserEventType } from "../api"
+import { Menus, MenuItem, UserEvent, UserEventType } from "../api"
 
 
 @Component({
@@ -34,7 +33,7 @@ export class PopoverMenu {
   private subscription:Subscription;
 
   ngOnInit() {
-    this.subscription = AccountTools.startObserving((event:UserEvent)=>{
+    this.subscription = UserEvent.startObserving((event:UserEvent)=>{
       if (event.eventType===UserEventType.LOGIN) {
         this.menuItems =null;
         this.getMenuItems();

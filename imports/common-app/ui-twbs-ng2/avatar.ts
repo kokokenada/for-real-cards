@@ -2,7 +2,7 @@
  * Created by kenono on 2016-04-23.
  */
 import { Component, Input } from '@angular/core';
-import { AccountTools, UserEvent, UserEventType } from "../api"
+import {  UserEvent, UserEventType } from "../api"
 import { Subscription } from 'rxjs'
 import * as log from 'loglevel';
 
@@ -24,7 +24,7 @@ export class Avatar {
   }
 
   ngOnInit() {
-    this.disposable = AccountTools.startObserving((event:UserEvent)=>{
+    this.disposable = UserEvent.startObserving((event:UserEvent)=>{
       if (event.eventType===UserEventType.AVATAR_UPDATE && event.userId===this.userId) {
         this.imageURL = event.imageURL;
       }
@@ -40,7 +40,7 @@ export class Avatar {
     return this.imageURL;
   }
 
-  getImageStyles() {
+  getImageStyles():any {
     if (this.shape==='round') {
       return {'border-radius': '50%', height: '100%', width: '100%', 'object-fit': 'contain'};
     } else if (this.shape==="rectangle") {

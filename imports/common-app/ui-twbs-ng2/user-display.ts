@@ -4,7 +4,7 @@
 import { Component, Input } from '@angular/core';
 
 import { User } from '../api/models/user.model';
-import { AccountTools, UserEvent, UserEventType }  from '../api/services/account-tools';
+import { UserEvent, UserEventType }  from '../api';
 import { Avatar } from './avatar';
 
 @Component({
@@ -47,7 +47,7 @@ export class UserDisplay {
   displayName:string;
   @Input() userId:string;
   constructor() {
-    AccountTools.subscribe((userEvent:UserEvent)=>{
+    UserEvent.subscribe((userEvent:UserEvent)=>{
       if (userEvent.eventType===UserEventType.DISPLAY_NAME_UPDATE) {
         this.displayName = userEvent.displayName;
       }

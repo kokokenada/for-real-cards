@@ -5,7 +5,7 @@ import { Routes, Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from '@angular/ro
 import { Session } from 'meteor/session';
 import {Subscription} from 'rxjs'
 
-import { Menus, MenuItem, AccountTools, UserEventType, UserEvent} from '../../common-app/api';
+import { Menus, MenuItem, UserEventType, UserEvent} from '../../common-app/api';
 
 import {PopoverMenu} from '../../common-app/ui-twbs-ng2';
 import {EditUserProfile} from '../edit-user-profile/edit-user-profile';
@@ -55,7 +55,6 @@ export class ForRealCardsTopFrame {
 
     Menus.addSubMenuItem('topbar', {
       id: 'admin.users',
-      state: 'admin.users',
       title: 'User Admin',
       roles: ['admin'],
       callback: ()=>{
@@ -94,7 +93,7 @@ export class ForRealCardsTopFrame {
       id: 'logout',
       title: 'Logout',
       callback: (menuItem:MenuItem)=> {
-        AccountTools.pushEvent(new UserEvent(UserEventType.LOG_OUT_REQUEST));
+        UserEvent.pushEvent(new UserEvent(UserEventType.LOG_OUT_REQUEST));
       }
     });
   }
@@ -102,7 +101,7 @@ export class ForRealCardsTopFrame {
   ngOnInit() {
     console.log("On Init")
     this.router.navigate(['/start']);
-    this.disposable = AccountTools.startObserving((event:UserEvent)=> {
+    this.disposable = UserEvent.startObserving((event:UserEvent)=> {
         if (event.eventType === UserEventType.LOGOUT) {
           this.navigateToStart();
         } else if (event.eventType === UserEventType.LOGIN) {

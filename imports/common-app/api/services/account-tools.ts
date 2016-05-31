@@ -8,31 +8,9 @@ import {AvatarCollection} from '../models/avatar.model'
 import {User} from '../models/user.model';
 import {Tools} from "./tools"
 import {Credentials} from "./credentials";
-
-export enum UserEventType {
-  LOGIN,                // 0 
-  LOG_OUT_REQUEST,      // 1
-  LOGOUT,               // 2
-  AVATAR_UPDATE,        // 3
-  DISPLAY_NAME_UPDATE   // 4
-}
-
-export class UserEvent {
-  eventType: UserEventType;
-  userId:string;
-  imageURL:string;
-  displayName: string;
-  constructor(eventType:UserEventType, data: {userId?:string, imageURL?:string, displayName?:string} = {}) {
-    this.eventType=eventType;
-    this.userId = data.userId;
-    this.imageURL = data.imageURL;
-    this.displayName = data.displayName;
-  }
-}
+import {UserEvent, UserEventType} from "../models/user-event.class";
 
 export class AccountTools {
-  private static loginStatusSubject:Subject = new Subject();
-  private static userCursor:Mongo.Cursor;
   static editUserObject:any;
   
   static login(credentials:Credentials):Observable {
@@ -46,7 +24,7 @@ export class AccountTools {
             observer.error(error);
           } else {
             log.info('Login successful.');
-            AccountTools.pushEvent(new UserEvent(UserEventType.LOGIN, {userId: Meteor.userId()}));
+            UserEvent.pushEvent(new UserEvent(UserEventType.LOGIN, {userId: Meteor.userId()}));
             observer.next(Meteor.user());
             observer.complete();
           }
@@ -70,7 +48,7 @@ export class AccountTools {
           log.error(error);
           observer.error(error);
         } else {
-          AccountTools.pushEvent(new UserEvent(UserEventType.LOGIN, {userId: Meteor.userId()}));
+          UserEvent.pushEvent(new UserEvent(UserEventType.LOGIN, {userId: Meteor.userId()}));
           observer.next(Meteor.user());
           observer.complete();
         }
@@ -93,7 +71,7 @@ export class AccountTools {
           );
           AccountTools.register(credentials).subscribe(
             (user) => {
-              AccountTools.pushEvent(new UserEvent(UserEventType.LOGIN, {userId: Meteor.userId()}));
+              UserEvent.pushEvent(new UserEvent(UserEventType.LOGIN, {userId: Meteor.userId()}));
               observer.next(user);
               observer.complete();
             }, (error)=> {
@@ -118,7 +96,7 @@ export class AccountTools {
             if (numberAffected === 1) {
               observer.next(AccountTools.editUserObject);
               observer.complete();
-              AccountTools.pushDisplayNameValue(Meteor.user());
+              UserEvent.pushDisplayNameValue(Meteor.user());
             } else {
               let errorDescription:string = 'Unexpected number of records affected. (' + numberAffected + ')';
               log.error(errorDescription);
@@ -133,7 +111,7 @@ export class AccountTools {
 
   static logOut():void {
     Meteor.logout();
-    AccountTools.pushEvent(new UserEvent(UserEventType.LOGOUT));
+    UserEvent.pushEvent(new UserEvent(UserEventType.LOGOUT));
   };
   
   static readCurrentUser() {
@@ -195,73 +173,6 @@ export class AccountTools {
     return user;
   }
 
-  static pushEvent(userEvent:UserEvent):void {
-    return AccountTools.loginStatusSubject.next(userEvent);
-  }
-
-  static subscribe(onNext:(event:UserEvent)=>void, onError:(error:any)=>void=null, onComplete:()=>void=null):Subscription {
-    return AccountTools.loginStatusSubject.subscribe(onNext, onError, onComplete)
-  }
-
-  private static getAvatarURL(user:User):string {
-    if (!user) {
-      return AvatarCollection.defaultAvatarUrl();
-    }
-    let profile = user.profile;
-    if (!profile || !profile.avatar_id)
-      return AvatarCollection.defaultAvatarUrl();
-    return AvatarCollection.imageURL(profile.avatar_id);
-  }
-
-
-  static pushAvatarValue(user:User) {
-    AccountTools.pushEvent(
-      new UserEvent(UserEventType.AVATAR_UPDATE, {
-        userId: user._id,
-        imageURL: AccountTools.getAvatarURL(user)
-      })
-    );
-  }
-
-  static pushDisplayNameValue(user:User) {
-    AccountTools.pushEvent(
-      new UserEvent(UserEventType.DISPLAY_NAME_UPDATE, {
-        userId: user._id,
-        displayName: AccountTools.getDisplayNameNoLookup(user)
-      })
-    );
-  }
-
-
-  static startObserving(onNext:(event:UserEvent)=>void, onError:(error:any)=>void=null, onComplete:()=>void=null):Subscription {
-    let returnValue:Subscription = AccountTools.loginStatusSubject.subscribe(onNext, onError, onComplete); 
-    Tracker.autorun(
-      ()=>{
-        if (!AccountTools.userCursor) {
-          AccountTools.userCursor = Meteor.users.find();
-          AccountTools.userCursor.observeChanges({
-            added: (_id, doc:User)=>{
-              AccountTools.pushAvatarValue(doc);
-              AccountTools.pushDisplayNameValue(doc);
-            },
-            changed:(_id,doc)=>{
-              console.error('DOC CHANGE HANDLER NEEDS IMPLEMENTATION');
-              console.error(doc);
-//              AccountTools.pushAvatarValue(user);
-//              AccountTools.pushDisplayNameValue(user);
-            }
-          });
-        } else {
-          AccountTools.userCursor.forEach((user:User)=>{
-            AccountTools.pushAvatarValue(user);
-            AccountTools.pushDisplayNameValue(user);
-          })
-        }
-      }
-    );
-    return returnValue;
-  }
-
   static getDisplayName(param:string = undefined):string;
   static getDisplayName(param:User):string;
   static getDisplayName(param:any):string {
@@ -273,7 +184,17 @@ export class AccountTools {
     }
     return AccountTools.getDisplayNameNoLookup(user);
   }
-  
+
+  static getAvatarURL(user:User):string {
+    if (!user) {
+      return AvatarCollection.defaultAvatarUrl();
+    }
+    let profile = user.profile;
+    if (!profile || !profile.avatar_id)
+      return AvatarCollection.defaultAvatarUrl();
+    return AvatarCollection.imageURL(profile.avatar_id);
+  }
+
   static getDisplayNameNoLookup(user:User) {
     if (!user) {
       return 'Not Logged In';
@@ -286,7 +207,3 @@ export class AccountTools {
   }
 
 }
-AccountTools.subscribe((event:UserEvent)=> {
-  if (event.eventType ===  UserEventType.LOG_OUT_REQUEST)
-    AccountTools.logOut();
-});

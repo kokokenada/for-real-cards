@@ -13,7 +13,6 @@ import {CommonPopups} from "../../common-app/ui-twbs-ng2"
 
 @Component({
   selector: 'edit-user-profile',
-  controller: EditUserProfile,
   template: `
 
       <form role="form">
@@ -66,7 +65,7 @@ export class EditUserProfile {
   credentials:Credentials = new Credentials("","");
   subscription:Subscription;
   constructor() {
-    this.subscription = AccountTools.startObserving((event:UserEvent)=> {
+    this.subscription = UserEvent.startObserving((event:UserEvent)=> {
       if (event.eventType === UserEventType.AVATAR_UPDATE && event.userId === Meteor.userId()) {
         this.avatarURL = event.imageURL;
       }
