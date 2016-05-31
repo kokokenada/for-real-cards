@@ -2,7 +2,8 @@ import 'meteor/aldeed:simple-schema';
 import { Mongo } from 'meteor/mongo';
 import { Meteor } from 'meteor/meteor';
 import * as log from 'loglevel';
-import moment = require('moment');
+import * as moment from 'moment';
+
 import {AccountTools} from '../../../common-app/api';
 
 import {Hand, HandCollection} from './hand.model.ts'
@@ -51,8 +52,10 @@ export class Action {
   sequencePosition:number;
   sequenceLength:number;
   constructor(initialValues:{
+    _id?:string,
     gameId:string, 
-    creatorId:string, 
+    creatorId:string,
+    dateCreated?:Date,
     actionType:ActionType, 
     toPlayerId?:string,
     fromPlayerId?:string,
@@ -62,8 +65,10 @@ export class Action {
     relatedActionId?:string
     }) 
   {
+    this._id = initialValues._id
     this.gameId = initialValues.gameId;
     this.creatorId = initialValues.creatorId;
+    this.dateCreated = initialValues.dateCreated;
     this.actionType = initialValues.actionType;
     this.toPlayerId = initialValues.toPlayerId;
     this.fromPlayerId = initialValues.fromPlayerId;
@@ -74,31 +79,30 @@ export class Action {
   }
 }
 
-export class ActionFormatted {
-  action:Action;
-  constructor(action:Action) {
-    this.action = action;
-  }
+export class ActionFormatted extends Action {
+
   actionDescription():string {
-    return ActionType[this.action.actionType];
+    return ActionType[this.actionType];
   }
   actionTime():string {
-    return moment(this.action.dateCreated).format("HH:mm:ss:SSS");
+    if (!this.dateCreated)
+      return "";
+    return moment(this.dateCreated).format("HH:mm:ss:SSS");
   }
   creator():string {
-    return AccountTools.getDisplayName(this.action.creatorId);
+    return AccountTools.getDisplayName(this.creatorId);
   }
   toPlayer():string {
-    if (this.action.toPlayerId)
-      return AccountTools.getDisplayName(this.action.toPlayerId);
+    if (this.toPlayerId)
+      return AccountTools.getDisplayName(this.toPlayerId);
   }
   fromPlayer():string {
-    if (this.action.fromPlayerId)
-      return AccountTools.getDisplayName(this.action.fromPlayerId);
+    if (this.fromPlayerId)
+      return AccountTools.getDisplayName(this.fromPlayerId);
   }
-  visibilityType():string {
-    if (this.action.visibilityType)
-      return VisibilityType[this.action.visibilityType];
+  visibilityTypeDescription():string {
+    if (this.visibilityType)
+      return VisibilityType[this.visibilityType];
   }
 }
 

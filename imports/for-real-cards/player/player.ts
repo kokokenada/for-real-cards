@@ -86,8 +86,8 @@ export class Player {
   private _displayName:string;
 
   ngOnInit() {
-    console.log('player on init')
-    console.log(this)
+//    console.log('player on init')
+//    console.log(this)
     this.disposable = UserEvent.startObserving((event:UserEvent)=>{
       if (event.eventType===UserEventType.DISPLAY_NAME_UPDATE && event.userId===this.hand.userId) {
         this._displayName = event.displayName;

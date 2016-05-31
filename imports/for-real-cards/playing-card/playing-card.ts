@@ -24,15 +24,24 @@ import {CardImageStyle} from "../api/interfaces/card-image-style.interface";
 export class PlayingCard {
   @Input() private card:Card;
   @Input() imgStyle:CardImageStyle;
+
+  private static encode(card:any):string {
+/*    if (card.encode)
+      return card.encode();
+    let cardObj:Card = new Card(card);*/
+    return card.encode();
+  }
+
   imageURL():string {
     if (this.card) {
 //      return Meteor.absoluteUrl() + "decks/standard2/" + this.card.encode() + ".svg#svgView(preserveAspectRatio(none))";
-      return Meteor.absoluteUrl() + "decks/default/" + this.card.encode() + ".jpg";
+
+      return Meteor.absoluteUrl() + "decks/default/" + PlayingCard.encode(this.card) + ".jpg";
     }
   }
   encodedCardId():string {
     if (this.card)
-      return this.card.encode();
+      return PlayingCard.encode(this.card);
     return "no card defined";
   }
 }

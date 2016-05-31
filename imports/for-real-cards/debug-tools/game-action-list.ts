@@ -4,8 +4,9 @@
 import { Component, Input } from '@angular/core';
 
 import { RunGame } from "../run-game/run-game";
-import { Action, ActionFormatted } from '../api'
+import { Action } from '../api'
 import { PlayingCard } from "../playing-card/playing-card"
+import {ActionFormatted} from "../api/models/action.model";
 
 @Component({
   selector: 'game-action-list',
@@ -29,21 +30,21 @@ import { PlayingCard } from "../playing-card/playing-card"
       </tr>    
     </thead>
     <tbody>
-      <template ngFor #action [ngForOf]="getActions()">
+      <template ngFor let-action [ngForOf]="getActions()">
         <tr>
           <td>{{action._id}}</td>
-          <td>{{format(action).actionTime()}}</td>
-          <td>{{format(action).actionDescription()}} ({{action.actionType}})</td>
-          <td>{{format(action).creator()}}</td>
-          <td>{{format(action).toPlayer()}}</td>
-          <td>{{format(action).fromPlayer()}}</td>
+          <td>{{actionTime(action)}}</td>
+          <td>{{actionDescription(action)}} ({{action.actionType}})</td>
+          <td>{{creator(action)}}</td>
+          <td>{{toPlayer(action)}}</td>
+          <td>{{fromPlayer(action)}}</td>
           <td>{{action.relatedActionId}}</td>
-          <td>{{format(action).visibilityType()}}</td>
+          <td>{{visibilityTypeDescription(action)}}</td>
         </tr>
         <tr [hidden]="action.cards?.length===0">
           <td>Cards:</td>
           <td colspan="5">
-            <playing-card *ngFor="let card of action.cards" card="card" imgStyle="{height: 'auto', width: '100%'}" style="display:inline-block; width:40px"></playing-card>
+            <playing-card *ngFor="let card of action.cards" [card]="card" [imgStyle]="{height: 'auto', width: '100%'}" style="display:inline-block; width:40px"></playing-card>
           </td>
         </tr>
       </template>
@@ -52,12 +53,35 @@ import { PlayingCard } from "../playing-card/playing-card"
 </form>
 `})
 export class GameActionList {
-  @Input() gameId:string;
+
   getActions():Action[] {
-    console.log(RunGame.getActions())
-    return RunGame.getActions();
+    return RunGame.getActions(); //this.actionsFormatted;
   }
-  format(action:Action):ActionFormatted {
-    return new ActionFormatted(action);
+
+  actionTime(action:Action):string {
+    console.log(action)
+    console.log(new ActionFormatted(action).actionTime())
+    return new ActionFormatted(action).actionTime();
   }
+
+  actionDescription(action:Action):string {
+    return new ActionFormatted(action).actionDescription();
+  }
+
+  creator(action:Action):string {
+    return new ActionFormatted(action).creator();
+  }
+
+  toPlayer(action:Action):string {
+    return new ActionFormatted(action).toPlayer();
+  }
+
+  fromPlayer(action:Action):string {
+    return new ActionFormatted(action).fromPlayer();
+  }
+
+  visibilityTypeDescription(action:Action):string {
+    return new ActionFormatted(action).visibilityTypeDescription();
+  }
+
 }

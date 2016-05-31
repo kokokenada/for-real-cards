@@ -176,10 +176,10 @@ export class RunGameHand extends RunGame {
     let action:ActionFormatted  = new ActionFormatted( RunGame.gameStreams.actionToUndo() );
 
     let prompt:string = "Undo " + action.actionDescription() + " done by "
-      + (action.action.creatorId === Meteor.userId() ? "yourself" : action.creator());
+      + (action.creatorId === Meteor.userId() ? "yourself" : action.creator());
     CommonPopups.confirm(prompt).subscribe((result:boolean)=> {
       if (result) {
-        RunGame.gameStreams.undo(action.action._id);
+        RunGame.gameStreams.undo(action._id);
       }
     })
   }
