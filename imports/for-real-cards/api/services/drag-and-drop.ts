@@ -79,7 +79,7 @@ export class DragAndDrop {
             // User is manually sorting
             let cardOrder:Card[] = [];
             for (let i = 0; i < this.targetElement.childElementCount; i++) {
-              let node = this.targetElement.children[i];
+              let node:any = this.targetElement.children[i];
               if (node.tagName.toLowerCase()==="playing-card") {
                 let card:Card = new Card({suit: node.dataset.cardSuit, rank: node.dataset.cardRank});
                 cardOrder.push(card);

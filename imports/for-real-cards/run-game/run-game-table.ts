@@ -2,14 +2,16 @@
  * Created by kenono on 2016-05-14.
  */
 import { Component, Input } from '@angular/core';
+import { Dragula, DragulaService} from 'ng2-dragula/ng2-dragula';
 
-import {Tools} from "../../common-app/api";
+import { Tools } from "../../common-app/api";
 
-import {RunGame} from './run-game.ts';
-import {Player} from "../player/player";
-import {Card, Coordinates, Deck, GameRenderingTools, Hand} from "../api";
-import {PlayingCard} from "../playing-card/playing-card";
-import {DeckView} from "./deck-view";
+import { Card, Coordinates, Deck, GameRenderingTools, Hand} from "../api";
+import { RunGame } from './run-game.ts';
+import { Player } from "../player/player";
+import { PlayingCard } from "../playing-card/playing-card";
+import { DeckView } from "./deck-view";
+import { PileView } from "./pile-view";
 
 const TABLE_ZONE_CENTER_RADIUS = 20;
 const TABLE_ZONE_OUTER_RADIUS = 30;
@@ -18,7 +20,8 @@ const TABLE_ZONE_OUTER_RADIUS = 30;
 @Component(
   {
     selector: 'run-game-table',
-    directives: [DeckView, Player, PlayingCard],
+    directives: [DeckView, Dragula, Player, PlayingCard, PileView],
+    viewProviders: [DragulaService],
     template: `
 
   <div [ngStyle]="{position: 'relative', width:width, height: height}">
@@ -26,18 +29,20 @@ const TABLE_ZONE_OUTER_RADIUS = 30;
 
   <svg style="position: absolute; z-index: 5" height="100%" width="100%" viewBox="0,0,100,100" preserveAspectRatio="none">
     <circle cx="50" cy="50" r="40" style="fill:green;stroke:grey;stroke-width:2" />
-    <!--
+    
     <path    
-            ng-if="showDropZone()" d="{{dropZonePath()}}" fill="darkgreen"></path>
-            -->
+      *ngIf="showDropZone()" 
+      [attr.d]="dropZonePath()" 
+      fill="darkgreen">
+    </path>
+            
   </svg>
   
   <!-- TABLE DROP ZONE -->
   <div
-      style="position: absolute; top: 60%; left: 10%; width:80%; height:30%; z-index: 20;"
-      
-       class="drag-and-drop-container"
-       data-drop-target="TABLE"
+    style="position: absolute; top: 60%; left: 10%; width:80%; height:30%; z-index: 20;"
+    [dragula]="'drag-and-drop'"
+    data-drop-target="TABLE"
 >
   
   </div>
@@ -65,9 +70,7 @@ const TABLE_ZONE_OUTER_RADIUS = 30;
     *ngFor="let hand of getHands(); let j=index"
     data-drop-target="TABLE"
     data-drag-source="TABLE"
-    id="player-table-cards-{{j}}"
-    ng-init="addDragContainer(j)"
-    class="drag-and-drop-container"
+    [dragula]="'drag-and-drop'"
   > 
     <style>
     
@@ -98,8 +101,9 @@ const TABLE_ZONE_OUTER_RADIUS = 30;
       </playing-card>
   </div>
     <!-- DECK -->
-  <deck-view [gameId]="gameId" 
-    [hidden]="!shouldShowDeck()"
+  <deck-view 
+    *ngIf="shouldShowDeck()"
+    [gameId]="gameId" 
     [imgStyle] ="portraitCardStyle()"
     style = "
             position: absolute; 
@@ -108,7 +112,7 @@ const TABLE_ZONE_OUTER_RADIUS = 30;
             top:40%;
             left:33.61%
     "
-    class="drag-and-drop-container"
+   [dragula]="'drag-and-drop'"
     data-drag-source="DECK"
     data-drop-target="DECK"
   >
@@ -118,16 +122,16 @@ const TABLE_ZONE_OUTER_RADIUS = 30;
   <!-- PILE -->
   
   <pile-view 
-    class="drag-and-drop-container"
+    *ngIf="shouldShowPile()" 
+    [dragula]="'drag-and-drop'"
     style = "
         position: absolute; 
         z-index: 10;
         width:14.38%; height:20%;
         top:40%;
-        left:52%
+        left: 52%;  
     "
-    [hidden]="!shouldShowPile()" 
-    [imgClass]="portraitCardStyle()"
+    [imgStyle]="portraitCardStyle()"
     [gameId]="gameId"
     [attr.data-card-rank]="topCardInPile()?.rank"
     [attr.data-card-suit]="topCardInPile()?.suit"
@@ -140,32 +144,23 @@ const TABLE_ZONE_OUTER_RADIUS = 30;
   }
 )
 
-
 export class RunGameTable extends RunGame {
   @Input() width:string;
   @Input() height:string;
   @Input() forPlayer:string;
   @Input() gameId:string;
   
-  constructor() {
+  constructor(private dragulaService: DragulaService) {
+    super(dragulaService)
   }
 
   private forPlayerBool():boolean {
     return Tools.stringToBool(this.forPlayer);
   }
-  addDragContainer(index:number):void {
-    let id= "player-table-cards-" + index.toString();
-    let el = document.getElementById(id);
-    if (!el)
-      return;
-    RunGame.drake.containers.forEach((container)=> {
-      if (container.id === id)
-        return;
-    });
-    RunGame.drake.containers.push(el);
-
-  }
   showDropZone():boolean {
+    console.log('showDropZOne')
+    console.log(this.forPlayerBool())
+    console.log(this.shouldShowTableDrop())
     return this.forPlayerBool() &&
         this.shouldShowTableDrop();
   }

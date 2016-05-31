@@ -21,8 +21,8 @@ import { RunGameContainer } from "./run-game-container";
       <run-game-hand-and-table [gameId]="gameId"></run-game-hand-and-table>
     </tab>
     <tab index="1" heading="Hand">
-      <run-game-hand show-table-proxy [gameId]="gameId"></run-game-hand>    
-    </tab>
+      <run-game-hand showTableProxy="true" [gameId]="gameId"></run-game-hand>    
+    </tab> 
     <tab index="2" heading="Table">
      <run-game-table height="90vw" width="100hw" [gameId]="gameId"></run-game-table>  
     </tab>

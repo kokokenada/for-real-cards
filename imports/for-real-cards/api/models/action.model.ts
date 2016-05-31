@@ -6,10 +6,10 @@ import * as moment from 'moment';
 
 import {AccountTools} from '../../../common-app/api';
 
-import {Hand, HandCollection} from './hand.model.ts'
+import { HandCollection } from '../models/hand.model';
 import {Card} from './card.model'
 import {GameConfig} from './game-config';
-import {Deck} from './deck.model';
+
 
 export let ActionCollection = new Mongo.Collection("actions", {transform: decode});
 

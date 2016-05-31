@@ -12,7 +12,7 @@ import {RunGameHand} from "./run-game-hand";
     template: `
 
   <run-game-table 
-    [forPlayer]="true" 
+    forPlayer="true" 
     height="45vh" 
     width="100hw" 
     [gameId]="gameId">  

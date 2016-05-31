@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Meteor } from 'meteor/meteor';
+import {Dragula, DragulaService} from 'ng2-dragula/ng2-dragula';
 
 import { CommonPopups } from "../../common-app/ui-twbs-ng2";
 import { Tools } from "../../common-app/api";
@@ -7,33 +8,33 @@ import { Tools } from "../../common-app/api";
 import { RunGame } from './run-game.ts';
 import { DealModalService, DEAL_MODAL_PROVIDERS } from "../deal-modal/deal-modal.service"
 import { PlayingCard } from "../playing-card/playing-card";
-import { Action, ActionFormatted, Card, GameConfig, CardLocation, CardCountAllowed, Hand} from "../api";
+import { Action, ActionFormatted, Card, CardImageStyle, GameConfig, CardLocation, CardCountAllowed, Hand} from "../api";
 import { DeckView } from "./deck-view";
 import { PileView } from "./pile-view";
-import {ModalService} from "../../common-app/ui-twbs-ng2/modal.service";
-import {CardImageStyle} from "../api/interfaces/card-image-style.interface";
 
 @Component(
   {
     selector: 'run-game-hand',
-    directives: [DeckView, PileView, PlayingCard],
+    directives: [DeckView, Dragula, PileView, PlayingCard],
+    viewProviders: [DragulaService],
     providers: [DEAL_MODAL_PROVIDERS],
     template: `
   <div>
     <button class="btn btn-primary" (click)="deal()">Deal</button>
-    <button [hidden]="!canShowHand()" class="btn btn-primary" (click)="showHand()">Show Hand</button>
-    <button [hidden]="!shouldShowTakeTrick()" class="btn btn-primary" (click)="takeTrick()">Take Trick</button>
-    <button [hidden]="!shouldShowSort()" class="btn btn-primary" (click)="sort()">Sort Hand</button>
-    <button [hidden]="!shouldShowUndo()" class="btn btn-default pull-right" (click)="undo()">Undo</button>
+    <button *ngIf="canShowHand()" class="btn btn-primary" (click)="showHand()">Show Hand</button>
+    <button *ngIf="shouldShowTakeTrick()" class="btn btn-primary" (click)="takeTrick()">Take Trick</button>
+    <button *ngIf="shouldShowSort()" class="btn btn-primary" (click)="sort()">Sort Hand</button>
+    <button *ngIf="shouldShowUndo()" class="btn btn-default pull-right" (click)="undo()">Undo</button>
   </div>
-  <div [hidden]="!shouldShowTableProxy()" 
+  <div *ngIf="shouldShowTableProxy()" 
         style="height:15vh" 
         class="row"
       >
     <!-- DECK -->
-    <deck-view 
-      [hidden]="!shouldShowDeck()" 
-      class="drag-and-drop-container col-xs-{{numberOfColumns()}}"
+    <deck-view
+      *ngIf="shouldShowDeck()" 
+      [dragula]="'drag-and-drop'"
+      [class]="'col-xs-' + numberOfColumns()"
       style="height:15vh;"  
       data-drag-source="DECK"
       data-drop-target="DECK"
@@ -43,8 +44,9 @@ import {CardImageStyle} from "../api/interfaces/card-image-style.interface";
     </deck-view>
     <!-- PILE -->
     <pile-view 
-      [hidden]="!shouldShowPile()" 
-      class="drag-and-drop-container col-xs-{{numberOfColumns()}}"
+      *ngIf="shouldShowPile()" 
+      [dragula]="'drag-and-drop'"
+      [class]="'col-xs-' + numberOfColumns()"
       style="height:15vh;"
       [imgStyle]="landscapeCardStyle()"
       [card]="topCardInPile()" 
@@ -56,21 +58,26 @@ import {CardImageStyle} from "../api/interfaces/card-image-style.interface";
     >
     </pile-view>      
     <!-- TABLE DROP -->
-    <div [hidden]="!shouldShowTableDrop()" 
-          data-drop-target="TABLE"
-          style="height:15vh;"
-          class="well drag-and-drop-container col-xs-{{numberOfColumns()}}" style="text-align: center">
-          Drag here to place card on table
+    <div 
+      *ngIf="shouldShowTableDrop()" 
+      [dragula]="'drag-and-drop'"      
+      data-drop-target="TABLE"
+      style="height:15vh;"
+      class="well"
+      [class]="'col-xs-' + numberOfColumns()" 
+      style="text-align: center">
+      Drag here to place card on table
     </div>
 
   </div>
 
 
   <!-- HAND -->
-  <div class="drag-and-drop-container" 
-        style="padding-left: 20px; padding-right: 20px; overflow-y: scroll" 
-         data-drop-target="HAND"
-         data-drag-source="HAND"
+  <div 
+    [dragula]="'drag-and-drop'" 
+    style="padding-left: 20px; padding-right: 20px; overflow-y: scroll" 
+    data-drop-target="HAND"
+    data-drag-source="HAND"
     >
     <style>
 .gu-transit, .gu-mirror {
@@ -103,8 +110,8 @@ export class RunGameHand extends RunGame {
   @Input() gameId:string;
   undoAction:Action;
 
-  constructor(private dealModelService:DealModalService) {
-//    super();
+  constructor(private dealModelService:DealModalService, private dragulaService: DragulaService ) {
+    super(dragulaService);
   }
 
   private showTableProxyBool():boolean {
@@ -112,6 +119,11 @@ export class RunGameHand extends RunGame {
   }
 
   shouldShowTableProxy():boolean {
+//    console.log('shouldShowTableProxy')
+//    console.log(this.showTableProxyBool())
+//    console.log(this.shouldShowDeck())
+//    console.log(this.shouldShowPile())
+//    console.log(this.shouldShowTableDrop())
     return this.showTableProxyBool() && (this.shouldShowDeck() || this.shouldShowPile() || this.shouldShowTableDrop());
   }
 

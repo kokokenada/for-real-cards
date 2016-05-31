@@ -3,14 +3,11 @@ import {Session} from 'meteor/session';
 import * as log from 'loglevel';
 import { Input } from '@angular/core';
 
-import {CommonPopups} from "../../common-app/ui-twbs-ng2";
+import { CommonPopups } from "../../common-app/ui-twbs-ng2";
+import { DragulaService } from 'ng2-dragula/ng2-dragula';
 
 import {Action, ActionType, Card, CardCountAllowed, CardLocation, Deck, DeckLocation, DragAndDrop, GameConfig, GameStreams, GameRenderingTools, Hand} from '../api';
 import {CardImageStyle} from "../api/interfaces/card-image-style.interface";
-
-
-let dragula = require("dragula");
-
 
 const SESSION_GAME_ID_KEY = 'session-game-id';
 export class RunGame {
@@ -19,8 +16,12 @@ export class RunGame {
   static gameStreams:GameStreams;
   private static gameStreamInitializedToId:string;
   protected static dragAndDropInitialized:boolean = false;
-  protected static drake;
+  //protected static drake;
   private dragSource:string;
+
+  constructor(private dragulaService: DragulaService) {
+
+  }
 
   ngOnInit() {
  //   console.log('init rungame');
@@ -40,7 +41,6 @@ export class RunGame {
   }
 
   dragAndDropInit() { // Share a scope for drag and drop
-    let containerElements = _.toArray(document.getElementsByClassName('drag-and-drop-container'));
 
     if (!RunGame.dragAndDropInitialized) {
       RunGame.dragAndDropInitialized = true;
@@ -69,14 +69,16 @@ export class RunGame {
         accepts: accepts,
         invalid: invalid
       };
-      RunGame.drake = dragula(
-        containerElements,
+      console.log('setOPtions')
+      console.log(options)
+      this.dragulaService.setOptions('drag-and-drop',
         options
       );
-
-      RunGame.drake.on('drag', (el, source)=> {
+      this.dragulaService.drag.subscribe((value)=>{
+        let [arg1, e, el] = value;
       });
-      RunGame.drake.on('drop', (el, targetEl, sourceEl, siblingEl)=> {
+      this.dragulaService.drop.subscribe((value)=>{
+        let [arg1, el, targetEl, sourceEl, siblingEl] =value;
         let dragAndDrop = new DragAndDrop(el, targetEl, sourceEl, siblingEl, RunGame.gameStreams.currentGameConfig);
         if (!dragAndDrop.isDropAllowed()) {
           dragAndDrop.logError("Drop received an element that should not have been allowed");
@@ -88,8 +90,6 @@ export class RunGame {
         dragAndDrop.runActions(RunGame.gameStreams);        
         
       });
-    } else {
-      RunGame.drake.containers = containerElements;
     }
   }
 
@@ -197,6 +197,10 @@ export class RunGame {
   }
 
   shouldShowTableDrop():boolean {
+    console.log('shoouldShowTableDrop')
+    console.log(RunGame.gameStreams)
+    console.log(RunGame.gameStreams.currentGameConfig)
+    console.log(RunGame.gameStreams.currentGameConfig.isTarget(CardLocation.TABLE))
     return (
       RunGame.gameStreams &&
       RunGame.gameStreams.currentGameConfig &&
