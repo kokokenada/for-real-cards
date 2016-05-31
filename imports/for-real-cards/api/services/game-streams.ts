@@ -2,7 +2,7 @@
  * Created by kenono on 2016-04-23.
  */
 import {Meteor} from 'meteor/meteor';
-import {Mongo, Cursor} from 'meteor/mongo'
+import {Mongo} from 'meteor/mongo'
 import {Tracker } from 'meteor/tracker';
 import {GAME_SUBSCRPTION_NAME, GameSubscriptionOptions} from "../models/game.publications.ts";
 import {Observable, Subject} from 'rxjs'

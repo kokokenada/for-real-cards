@@ -1,4 +1,4 @@
-import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import 'meteor/aldeed:simple-schema';
 import { Mongo } from 'meteor/mongo';
 import { Meteor } from 'meteor/meteor';
 import * as log from 'loglevel';

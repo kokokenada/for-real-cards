@@ -37,7 +37,7 @@ export class User {
 }
 
 // Taken from: https://github.com/aldeed/meteor-collection2
-let Schema = {};
+let Schema:any = {};
 
 Schema.UserCountry = new SimpleSchema({
   name: {
@@ -178,7 +178,7 @@ Schema.User = new SimpleSchema({
 Meteor.users.attachSchema(Schema.User);
 
 function addTestUser(username:string, email:string, role:string) {
-  let existsUser = Accounts.findUserByEmail(email) ? true : false;
+  let existsUser:any = Accounts.findUserByEmail(email) ? true : false;
   if (existsUser) {
     Meteor.users.remove({_id: existsUser._id});
   }

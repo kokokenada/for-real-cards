@@ -1,6 +1,6 @@
 import { Mongo } from 'meteor/mongo';
 import { Meteor } from 'meteor/meteor';
-import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import 'meteor/aldeed:simple-schema';
 
 let CounterCollection = new Mongo.Collection("counters");
 

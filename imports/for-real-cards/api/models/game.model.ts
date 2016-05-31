@@ -1,4 +1,4 @@
-import { SimpleSchema} from 'meteor/aldeed:simple-schema';
+import 'meteor/aldeed:simple-schema';
 import { Mongo } from 'meteor/mongo';
 import { Meteor } from 'meteor/meteor';
 
@@ -40,7 +40,7 @@ function unregisteredOrCreator(userId, game) {
 
 GameCollection.allow({
   insert: function (userId, game) {
-    return false; // Use metthod
+    return false; // Use method
   },
   update: function (userId, game) {
     return unregisteredOrCreator(userId, game);
@@ -49,12 +49,6 @@ GameCollection.allow({
     return unregisteredOrCreator(userId, game);
   } 
 });
-
-if (Meteor.isServer) {
-  Meteor.publish('games'), function() {
-    return GameCollection.find({});
-  }
-}
 
 GameCollection.attachSchema(GamesSchema);
  

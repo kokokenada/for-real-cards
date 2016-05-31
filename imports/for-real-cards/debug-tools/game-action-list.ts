@@ -29,7 +29,7 @@ import { PlayingCard } from "../playing-card/playing-card"
       </tr>    
     </thead>
     <tbody>
-      <template ngFor="let action of getActions()">
+      <template ngFor #action [ngForOf]="getActions()">
         <tr>
           <td>{{action._id}}</td>
           <td>{{format(action).actionTime()}}</td>
@@ -38,15 +38,9 @@ import { PlayingCard } from "../playing-card/playing-card"
           <td>{{format(action).toPlayer()}}</td>
           <td>{{format(action).fromPlayer()}}</td>
           <td>{{action.relatedActionId}}</td>
-          <td>{{format(action).visbilityType()}}</td>
-        </tr>    
-        <style>
-        .playing-card {
-          height:auto;
-          width:100%
-        }
-        </style>
-        <tr [hidden]="action.cards.length===0">
+          <td>{{format(action).visibilityType()}}</td>
+        </tr>
+        <tr [hidden]="action.cards?.length===0">
           <td>Cards:</td>
           <td colspan="5">
             <playing-card *ngFor="let card of action.cards" card="card" imgStyle="{height: 'auto', width: '100%'}" style="display:inline-block; width:40px"></playing-card>
@@ -60,6 +54,7 @@ import { PlayingCard } from "../playing-card/playing-card"
 export class GameActionList {
   @Input() gameId:string;
   getActions():Action[] {
+    console.log(RunGame.getActions())
     return RunGame.getActions();
   }
   format(action:Action):ActionFormatted {

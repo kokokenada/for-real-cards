@@ -1,7 +1,7 @@
 /**
  * Created by kenono on 2016-05-01.
  */
-import { Roles } from 'meteor/alanning:roles'
+import  'meteor/alanning:roles'
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { User} from '../models/user.model';
@@ -126,7 +126,7 @@ export class AccountsAdminTools {
       cursor = Meteor.users.find(userId, {reactive: false, fields: {username:1}});
     } else {
 
-      let queryOptions = {};
+      let queryOptions:any = {};
 
       if (Meteor.isServer) { //skip and limit force reactive-table to use addedBefore instead of added on the observer
         //since these are really for server paging, no need to do them on the client
