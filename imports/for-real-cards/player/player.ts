@@ -2,13 +2,12 @@
  * Created by kenono on 2016-05-08.
  */
 import { Component, Input } from '@angular/core';
-
-import {Subscription} from 'rxjs'
+import { Meteor } from 'meteor/meteor';
+import { Subscription } from 'rxjs'
 
 import { Avatar } from '../../common-app/ui-twbs-ng2';
 import { AccountTools, UserEvent, UserEventType } from "../../common-app/api";
-
-import {Card, Hand, GameRenderingTools} from  '../api';
+import { Card, Hand, GameRenderingTools } from  '../api';
 
 @Component(
   {
@@ -121,13 +120,17 @@ export class Player {
     return this.hand.tricks;
   }
 
-  getTrickWidth():string {
+  private getTrickWidthValue():number {
     let numberOfSlots = Math.max(this.hand.tricks[0].length, 4);
-    return (100/numberOfSlots).toString() + "%";
+    return 100/numberOfSlots;
+  }
+
+  getTrickWidth():string {
+    return this.getTrickWidthValue().toString() + "%";
   }
 
   getTrickLeft(index:number):string {
-    return (index * this.getTrickWidth()).toString() + "%";
+    return (index * this.getTrickWidthValue()).toString() + "%";
   }
 
   numberOfCards():number {

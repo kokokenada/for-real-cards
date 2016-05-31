@@ -6,6 +6,7 @@ import { Input } from '@angular/core';
 import {CommonPopups} from "../../common-app/ui-twbs-ng2";
 
 import {Action, ActionType, Card, CardCountAllowed, CardLocation, Deck, DeckLocation, DragAndDrop, GameConfig, GameStreams, GameRenderingTools, Hand} from '../api';
+import {CardImageStyle} from "../api/interfaces/card-image-style.interface";
 
 
 let dragula = require("dragula");
@@ -101,6 +102,7 @@ export class RunGame {
     //console.log(this);
     if   (this.gameId===undefined) {
       console.log("gameId udefined")
+      console.log(this)
       return;
     }
     if (RunGame.gameStreamInitializedToId !== this.gameId) {
@@ -252,6 +254,21 @@ export class RunGame {
 
   showHand():void {
     RunGame.gameStreams.showHand();
+  }
+  
+  landscapeCardStyle():CardImageStyle {
+    return {
+      // transform-not:rotate(90deg) scale(0.5, 3.5) !important; <!--transform:rotate(90deg) translate(-2.6vh, 0) !important;-->
+      height: '100%',
+      width: '100%' // !important needed?
+    }
+  }
+
+  portraitCardStyle():CardImageStyle {
+    return {
+      height: '100%',
+      width: '100%'
+    }
   }
 
 }

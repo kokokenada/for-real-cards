@@ -6,6 +6,7 @@ import { Component, Input } from '@angular/core';
 
 import { RunGame } from './run-game.ts';
 import { PlayingCard } from "../playing-card/playing-card";
+import {CardImageStyle} from "../api/interfaces/card-image-style.interface";
 
 @Component(
   {
@@ -17,7 +18,7 @@ import { PlayingCard } from "../playing-card/playing-card";
   [hidden]="!numberOfCards()"
   [card]="topCardInPile()" 
   [gameId]="gameId"
-  [imgClass]="imgClass"
+  [imgStyle]="imgStyle"
   [attr.data-card-rank]="topCardInPile()?.rank"
   [attr.data-card-suit]="topCardInPile()?.suit"
 >
@@ -36,7 +37,8 @@ import { PlayingCard } from "../playing-card/playing-card";
   }
 )
 export class PileView extends RunGame {
-  @Input() imgClass:string;
+  @Input() imgStyle:CardImageStyle;
+  @Input() gameId:string;
   numberOfCards():number {
     return this.getCardsInPile() ? this.getCardsInPile().length : 0;
   }

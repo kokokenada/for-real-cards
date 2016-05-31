@@ -4,9 +4,10 @@
 
 import { Component } from '@angular/core';
 import { Subscription } from 'rxjs'
+import { Meteor } from 'meteor/meteor';
 import * as log from 'loglevel';
 
-import {AccountTools, AvatarCollection, AvatarTools, AccountTools, Credentials, Uploader, UploadFileInfo, UserEvent, UserEventType} from "../../common-app/api"
+import {AccountTools, AvatarCollection, AvatarTools, Credentials, Uploader, UploadFileInfo, UserEvent, UserEventType} from "../../common-app/api"
 import {CommonPopups} from "../../common-app/ui-twbs-ng2"
 
 

@@ -5,6 +5,7 @@
 import {Meteor} from 'meteor/meteor';
 import { Component, Input } from '@angular/core';
 import {Card} from '../api/models/card.model'
+import {CardImageStyle} from "../api/interfaces/card-image-style.interface";
 
 @Component(
   {
@@ -13,7 +14,7 @@ import {Card} from '../api/models/card.model'
 `
 <img 
   [src]="imageURL()"
-  [class]="imgClass"
+  [ngStyle]="imgStyle"
   [alt]="encodedCardId()"
   [attr.data-card-rank]="card?.rank"
   [attr.data-card-suit]="card?.suit"
@@ -22,7 +23,7 @@ import {Card} from '../api/models/card.model'
 })
 export class PlayingCard {
   @Input() private card:Card;
-  @Input() imgClass:string;
+  @Input() imgStyle:CardImageStyle;
   imageURL():string {
     if (this.card) {
 //      return Meteor.absoluteUrl() + "decks/standard2/" + this.card.encode() + ".svg#svgView(preserveAspectRatio(none))";

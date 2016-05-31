@@ -3,8 +3,12 @@
  */
 
 import {initServerGameMethods} from "./models/game.methods";
+
+export * from "./interfaces/card-image-style.interface";
+
 export * from "./models/action.model";
 export * from "./models/card.model";
+export * from "./models/coordinates.class";
 export * from "./models/deck.model";
 export * from "./models/game.methods";
 export * from "./models/game.model";

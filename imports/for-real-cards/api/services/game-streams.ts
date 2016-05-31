@@ -660,7 +660,7 @@ export class GameStreams {
     let action:Action = new Action({
       gameId: this.gameId,
       creatorId: Meteor.userId(),
-      visibililtyType: VisibilityType.PLAYER,
+      visibilityType: VisibilityType.PLAYER,
       fromPlayerId: fromPlayerId,
       actionType: ActionType.HAND_TO_PILE,
       cards: [new Card({suit:suit, rank:rank})]
@@ -672,7 +672,7 @@ export class GameStreams {
     let action:Action = new Action({
       gameId: this.gameId,
       creatorId: Meteor.userId(),
-      visibililtyType: VisibilityType.PLAYER,
+      visibilityType: VisibilityType.PLAYER,
       toPlayerId: toPlayerId,
       actionType: ActionType.PILE_TO_HAND,
       cards: [new Card({suit:suit, rank:rank})]
@@ -696,7 +696,7 @@ export class GameStreams {
     let action:Action = new Action({
       gameId: this.gameId,
       creatorId: Meteor.userId(),
-      visibililtyType: VisibilityType.PLAYER,
+      visibilityType: VisibilityType.PLAYER,
       actionType: ActionType.PILE_TO_DECK,
       cards: cards
     });
@@ -718,7 +718,7 @@ export class GameStreams {
     let action:Action = new Action({
       gameId: this.gameId,
       creatorId: Meteor.userId(),
-      visibililtyType: VisibilityType.PLAYER,
+      visibilityType: VisibilityType.PLAYER,
       toPlayerId: toPlayerId,
       actionType: ActionType.TABLE_TO_HAND,
       cards: [new Card({suit:suit, rank:rank})]

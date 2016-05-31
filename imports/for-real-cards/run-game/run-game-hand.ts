@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { Meteor } from 'meteor/meteor';
 
 import { CommonPopups } from "../../common-app/ui-twbs-ng2";
 import { Tools } from "../../common-app/api";
@@ -10,6 +11,7 @@ import { Action, ActionFormatted, Card, GameConfig, CardLocation, CardCountAllow
 import { DeckView } from "./deck-view";
 import { PileView } from "./pile-view";
 import {ModalService} from "../../common-app/ui-twbs-ng2/modal.service";
+import {CardImageStyle} from "../api/interfaces/card-image-style.interface";
 
 @Component(
   {
@@ -28,15 +30,6 @@ import {ModalService} from "../../common-app/ui-twbs-ng2/modal.service";
         style="height:15vh" 
         class="row"
       >
-      <!--transform:rotate(90deg) translate(-2.6vh, 0) !important;-->
-    <style>
-      .playing-card-landscape {
-        transform-not:rotate(90deg) scale(0.5, 3.5) !important;
-    
-        height:100% !important;
-        width:100% !important;
-      }
-    </style>
     <!-- DECK -->
     <deck-view 
       [hidden]="!shouldShowDeck()" 
@@ -44,7 +37,7 @@ import {ModalService} from "../../common-app/ui-twbs-ng2/modal.service";
       style="height:15vh;"  
       data-drag-source="DECK"
       data-drop-target="DECK"
-      [imgClass]="playing-card-landscape"
+      [imgStyle]="landscapeCardStyle()"
       [gameId]="gameId"
       >
     </deck-view>
@@ -53,7 +46,7 @@ import {ModalService} from "../../common-app/ui-twbs-ng2/modal.service";
       [hidden]="!shouldShowPile()" 
       class="drag-and-drop-container col-xs-{{numberOfColumns()}}"
       style="height:15vh;"
-      [imgClass]="playing-card-landscape"
+      [imgStyle]="landscapeCardStyle()"
       [card]="topCardInPile()" 
       [gameId]="gameId"
       [attr.data-card-rank]="topCardInPile()?.rank"
@@ -86,14 +79,11 @@ import {ModalService} from "../../common-app/ui-twbs-ng2/modal.service";
   filter: alpha(opacity=20);
   display:inline-block ; width: 71px !important; height: 100px!important; padding-left: 1px; padding-right: 1px 
 }
-.playing-card-hand {
-  width: 71px !important; height: 100px !important; 
-}
     </style>
       <playing-card 
           
         *ngFor="let card of getCardsInHand()"
-        [imgClass]="playing-card-hand"
+        [imgStyle]="inHandCardStyle()"
         style="display:inline-block ; width: 71px; height: 100px; padding-left: 1px; padding-right: 1px "
         [card]="card" 
         [gameId]="gameId"
@@ -114,7 +104,7 @@ export class RunGameHand extends RunGame {
   undoAction:Action;
 
   constructor(private dealModelService:DealModalService) {
-
+//    super();
   }
 
   private showTableProxyBool():boolean {
@@ -126,8 +116,7 @@ export class RunGameHand extends RunGame {
   }
 
   shouldShowTakeTrick():boolean {
-      if (RunGame.gameStreams)
-      return RunGame.gameStreams.currentGameConfig && RunGame.gameStreams.currentGameConfig.hasTricks && RunGame.gameStreams.trickReady();
+      return RunGame.gameStreams && RunGame.gameStreams.currentGameConfig && RunGame.gameStreams.currentGameConfig.hasTricks && RunGame.gameStreams.trickReady();
   }
   
   numberOfColumns():string {
@@ -194,5 +183,12 @@ export class RunGameHand extends RunGame {
       }
     })
   }
+  
+  inHandCardStyle():CardImageStyle {
+    return {
+      width: "71px",
+      height: "100px"
+    }
+  } 
 }
 

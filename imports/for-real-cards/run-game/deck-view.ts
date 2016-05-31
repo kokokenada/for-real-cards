@@ -5,6 +5,7 @@ import { Component, Input } from '@angular/core';
 
 import {RunGame} from './run-game.ts';
 import {Card, Deck} from "../api";
+import {CardImageStyle} from "../api/interfaces/card-image-style.interface";
 
 @Component(
   {
@@ -12,7 +13,7 @@ import {Card, Deck} from "../api";
     template: `
 <!-- The image--> 
 <img [hidden]="!numberOfCards()" [src]="URL()"
-  [class]="imgClass"
+  [ngStyle]="imgStyle"
   data-drag-source="DECK"
 />
 <!-- CARD COUNT-->
@@ -44,7 +45,8 @@ import {Card, Deck} from "../api";
   }
 )
 export class DeckView extends RunGame {
-  @Input() imgClass:string;
+  @Input() imgStyle:CardImageStyle;
+  @Input() gameId:string;
 
   URL():string {
     return this.cardBackURL();

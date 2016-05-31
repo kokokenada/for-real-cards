@@ -11,9 +11,9 @@ import {PopoverMenu} from '../../common-app/ui-twbs-ng2';
 import {EditUserProfile} from '../edit-user-profile/edit-user-profile';
 import {RunGameTabs} from "../run-game/run-game-tabs";
 import {RunGameTableContainer} from "../run-game/run-game-table-container"; 
-//import {AccountsAdmin} from '../../common-app/ui-twbs_ng15/accounts-admin/accounts-admin'; (AccountsAdmin)
+import {AccountsAdmin} from '../../common-app/ui-twbs-ng2/accounts-admin/accounts-admin';
 import {EnterGame} from '../enter-game/enter-game';
-//import {GameActionList} from './game-action-list'; (GameActionList)
+import { GameActionList } from '../debug-tools/game-action-list';
 import "../scss/for-real-cards.scss";
 import {Start} from "../start/start";
 import {Action, ActionType} from "../api/models/action.model";
@@ -41,10 +41,9 @@ import {DealModal} from "../deal-modal/deal-modal";
   {path: '/game-hand/:id', component: RunGameTabs},
   {path: '/game-table/:id', component: RunGameTableContainer },
   {path: '/edit-profile', component: EditUserProfile},
-  {path: '/frc-deal-modal', component: DealModal}
-  /*,
-  {path: '/accounts-admin',  component: 'accountsAdmin'},
-  {path: '/game-action-list',  component: 'gameActionList'}*/
+  {path: '/frc-deal-modal', component: DealModal},
+  {path: '/accounts-admin',  component: AccountsAdmin},
+  {path: '/game-action-list',  component: GameActionList}
 ])
 export class ForRealCardsTopFrame {
   private gameDescription:string;
@@ -69,7 +68,7 @@ export class ForRealCardsTopFrame {
       title: 'Game Action List',
       roles: ['admin'],
       callback: ()=>{
-        this.router.navigate(['GameActionList']);
+        this.router.navigate(['/game-action-list']);
       }
     });
 

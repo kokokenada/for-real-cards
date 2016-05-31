@@ -4,8 +4,7 @@ import {NewGame} from './new-game';
 import {JoinGame} from './join-game';
 
 @Component({
-  selector: 'welcome',
-  controllerAs: 'vm',
+  selector: 'enter-game',
   directives: [NewGame, JoinGame],
   template: `
       <new-game></new-game>

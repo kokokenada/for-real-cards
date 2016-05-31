@@ -7,12 +7,9 @@ import {Tools} from "../../common-app/api";
 
 import {RunGame} from './run-game.ts';
 import {Player} from "../player/player";
-import {Card, GameRenderingTools} from "../api";
-import {Card} from "../api/models/card.model";
+import {Card, Coordinates, Deck, GameRenderingTools, Hand} from "../api";
 import {PlayingCard} from "../playing-card/playing-card";
-import {Hand} from "../api/models/hand.model";
 import {DeckView} from "./deck-view";
-import {Deck} from "../api/models/deck.model";
 
 const TABLE_ZONE_CENTER_RADIUS = 20;
 const TABLE_ZONE_OUTER_RADIUS = 30;
@@ -24,14 +21,6 @@ const TABLE_ZONE_OUTER_RADIUS = 30;
     directives: [DeckView, Player, PlayingCard],
     template: `
 
-  <style>
-      .playing-card {
-        height:100%; 
-        width:100%;
-        
-    }
-
-  </style>
   <div [ngStyle]="{position: 'relative', width:width, height: height}">
 
 
@@ -94,7 +83,7 @@ const TABLE_ZONE_OUTER_RADIUS = 30;
     <playing-card 
         *ngFor="let card of getCardsInHandFaceUp(hand.userId)"
         [card]="card"
-        [imgClass]="'playing-card'"
+        [imgStyle]="portraitCardStyle()"
         [attr.data-card-rank]="card.rank"
         [attr.data-card-suit]="card.suit"
         [ngStyle]="{
@@ -111,7 +100,7 @@ const TABLE_ZONE_OUTER_RADIUS = 30;
     <!-- DECK -->
   <deck-view [gameId]="gameId" 
     [hidden]="!shouldShowDeck()"
-    [imgClass] ="'playing-card'"
+    [imgStyle] ="portraitCardStyle()"
     style = "
             position: absolute; 
             z-index: 10;
@@ -138,7 +127,7 @@ const TABLE_ZONE_OUTER_RADIUS = 30;
         left:52%
     "
     [hidden]="!shouldShowPile()" 
-    [imgClass]="'playing-card'"
+    [imgClass]="portraitCardStyle()"
     [gameId]="gameId"
     [attr.data-card-rank]="topCardInPile()?.rank"
     [attr.data-card-suit]="topCardInPile()?.suit"
@@ -156,6 +145,8 @@ export class RunGameTable extends RunGame {
   @Input() width:string;
   @Input() height:string;
   @Input() forPlayer:string;
+  @Input() gameId:string;
+  
   constructor() {
   }
 
@@ -202,9 +193,9 @@ export class RunGameTable extends RunGame {
 
   get100BasedCoordinates(index:number):Coordinates {
     let degrees = this.degrees(index);
-    console.log('getCoord')
-    console.log(index)
-    console.log(degrees)
+//    console.log('getCoord')  investigate why these recur
+ //   console.log(index)
+  //  console.log(degrees)
     return GameRenderingTools.getXY(20, 10, 50, 50, 40, this.degrees(index));
   }
 

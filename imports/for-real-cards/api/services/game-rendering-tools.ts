@@ -1,16 +1,8 @@
 /**
  * Created by kenono on 2016-05-10.
  */
-
-export class Coordinates {
-  constructor(x:number=0, y:number=0) {
-    this.x = x;
-    this.y=y;
-  }
-  x:number;
-  y:number;
-}
-
+import { Coordinates } from "../models/coordinates.class"
+  
 export class GameRenderingTools {
   private static getPointOnEllipse(centerX:number, centerY:number, radius:number, degrees:number, xSquash:number=1, ySquash:number=1):Coordinates {
     let theta:number = 2*Math.PI*(degrees/360);
