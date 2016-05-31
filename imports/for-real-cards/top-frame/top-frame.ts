@@ -1,24 +1,24 @@
 import { Component } from '@angular/core';
 import { Routes, Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from '@angular/router'
-
-
 import { Session } from 'meteor/session';
-import {Subscription} from 'rxjs'
+import { Subscription } from 'rxjs'
 
-import { Menus, MenuItem, UserEventType, UserEvent} from '../../common-app/api';
+import { AccountTools, Menus, MenuItem, UserEventType, UserEvent} from '../../common-app/api';
+import { AccountsAdmin } from '../../common-app/ui-twbs-ng2/accounts-admin/accounts-admin';
 
-import {PopoverMenu} from '../../common-app/ui-twbs-ng2';
-import {EditUserProfile} from '../edit-user-profile/edit-user-profile';
-import {RunGameTabs} from "../run-game/run-game-tabs";
-import {RunGameTableContainer} from "../run-game/run-game-table-container"; 
-import {AccountsAdmin} from '../../common-app/ui-twbs-ng2/accounts-admin/accounts-admin';
-import {EnterGame} from '../enter-game/enter-game';
+import { Action, ActionType } from "../api";
+
+import { DealModal } from "../deal-modal/deal-modal";
+import { EditUserProfile } from '../edit-user-profile/edit-user-profile';
+import { EnterGame } from '../enter-game/enter-game';
 import { GameActionList } from '../debug-tools/game-action-list';
+import { PopoverMenu } from '../../common-app/ui-twbs-ng2';
+import { RunGame } from "../run-game/run-game";
+import { RunGameTableContainer } from "../run-game/run-game-table-container";
+import { RunGameTabs } from "../run-game/run-game-tabs";
+import { Start } from "../start/start";
+
 import "../scss/for-real-cards.scss";
-import {Start} from "../start/start";
-import {Action, ActionType} from "../api/models/action.model";
-import {RunGame} from "../run-game/run-game";
-import {DealModal} from "../deal-modal/deal-modal";
 
 @Component(
   {
@@ -58,7 +58,7 @@ export class ForRealCardsTopFrame {
       title: 'User Admin',
       roles: ['admin'],
       callback: ()=>{
-        this.router.navigate(['AccountsAdmin']);
+        this.router.navigate(['/accounts-admin']);
       }
     });
 
@@ -103,10 +103,12 @@ export class ForRealCardsTopFrame {
     this.router.navigate(['/start']);
     this.disposable = UserEvent.startObserving((event:UserEvent)=> {
         if (event.eventType === UserEventType.LOGOUT) {
+          this.displayName = "Not logged in";
           this.navigateToStart();
         } else if (event.eventType === UserEventType.LOGIN) {
-            this.navigateToEnter();
-        } else if (event.eventType===UserEventType.DISPLAY_NAME_UPDATE) {
+          this.displayName = AccountTools.getDisplayName(Meteor.user);
+          this.navigateToEnter();
+        } else if (event.eventType===UserEventType.DISPLAY_NAME_UPDATE && event.userId === Meteor.userId()) {
           this.displayName = event.displayName;
         }
       }

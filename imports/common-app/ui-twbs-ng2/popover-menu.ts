@@ -34,7 +34,7 @@ export class PopoverMenu {
 
   ngOnInit() {
     this.subscription = UserEvent.startObserving((event:UserEvent)=>{
-      if (event.eventType===UserEventType.LOGIN) {
+      if (event.eventType===UserEventType.LOGIN || event.eventType===UserEventType.ROLL_UPDATE) {
         this.menuItems =null;
         this.getMenuItems();
       }

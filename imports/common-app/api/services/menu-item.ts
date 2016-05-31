@@ -39,7 +39,11 @@ export class MenuItem implements MenuItemDefintion {
     //this.menu=options;
   }
   shouldRender () {
+
     let user = Meteor.user();
+//    console.log('should render')
+//    console.log(user)
+//    console.log(this)
     if (!!~this.roles.indexOf('*') || this.roles.length===0) {
       return true;
     } else {

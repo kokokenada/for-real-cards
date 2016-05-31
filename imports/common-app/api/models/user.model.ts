@@ -2,7 +2,7 @@
  * Created by kenono on 2016-04-21.
  */
 import { Meteor } from 'meteor/meteor';
-import 'meteor/aldeed:simple-schema';
+import  'meteor/aldeed:simple-schema';
 import * as log from 'loglevel';
 
 export class User {
@@ -207,6 +207,8 @@ function addTestUsers() {
   addTestUser("admin", "admin@app.com", 'admin');
   addTestUser("ann", "ann@app.com", 'user');
   addTestUser("bob", "bob@app.com", 'user');
+  addTestUser("fred", "fred@app.com", 'user');
+  addTestUser("sue", "sue@app.com", 'user');
 }
 
 if (Meteor.isServer) {

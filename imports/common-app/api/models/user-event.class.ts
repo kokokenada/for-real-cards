@@ -10,7 +10,8 @@ export enum UserEventType {
   LOG_OUT_REQUEST,      // 1
   LOGOUT,               // 2
   AVATAR_UPDATE,        // 3
-  DISPLAY_NAME_UPDATE   // 4
+  DISPLAY_NAME_UPDATE,  // 4
+  ROLL_UPDATE           // 5
 }
 
 export class UserEvent {
@@ -67,10 +68,10 @@ export class UserEvent {
               UserEvent.pushDisplayNameValue(doc);
             },
             changed:(_id,doc)=>{
-              console.error('DOC CHANGE HANDLER NEEDS IMPLEMENTATION');
-              console.error(doc);
-//              UserEvent.pushAvatarValue(user);
-//              UserEvent.pushDisplayNameValue(user);
+              let user:User = Meteor.users.findOne(_id);
+              UserEvent.pushAvatarValue(user);
+              UserEvent.pushDisplayNameValue(user);
+              UserEvent.pushEvent(new UserEvent(UserEventType.ROLL_UPDATE, {userId: _id}))
             }
           });
         } else {
