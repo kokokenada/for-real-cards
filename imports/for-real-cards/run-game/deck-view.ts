@@ -23,7 +23,7 @@ import {Card, Deck} from "../api";
  </label>
 <!--FLIP THE DECK BUTTONS-->  
 <div 
-  [hidden]="!numberOfCards()===0"  
+  [hidden]="numberOfCards()>0"  
   style="position: absolute; height:100%; width:100%; border-width: 1px; border-style: solid;border-color: black ">
   
   <button 

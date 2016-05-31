@@ -46,10 +46,10 @@ export class JoinGame{
   }
   joinGame() {
     Session.set('password', this.password);
-    this.router.navigateByUrl('/game-hand/');
+    this.router.navigate(['/game-hand', this.gameId]);
   };
   displayGame() {
     Session.set('password', this.password);
-    this.router.navigateByUrl('/game-table/');
+    this.router.navigate(['/game-table', this.gameId]);
   }; 
 }

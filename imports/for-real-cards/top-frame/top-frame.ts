@@ -14,7 +14,7 @@ import {RunGameTableContainer} from "../run-game/run-game-table-container";
 //import {AccountsAdmin} from '../../common-app/ui-twbs_ng15/accounts-admin/accounts-admin'; (AccountsAdmin)
 import {EnterGame} from '../enter-game/enter-game';
 //import {GameActionList} from './game-action-list'; (GameActionList)
-import "../scss/fastcards.scss";
+import "../scss/for-real-cards.scss";
 import {Start} from "../start/start";
 import {Action, ActionType} from "../api/models/action.model";
 import {RunGame} from "../run-game/run-game";

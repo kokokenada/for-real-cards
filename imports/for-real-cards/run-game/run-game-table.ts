@@ -24,8 +24,6 @@ const TABLE_ZONE_OUTER_RADIUS = 30;
     directives: [DeckView, Player, PlayingCard],
     template: `
 
-<div style="position: relative; width:{{width}}; height: {{height}}">
-
   <style>
       .playing-card {
         height:100%; 
@@ -34,6 +32,9 @@ const TABLE_ZONE_OUTER_RADIUS = 30;
     }
 
   </style>
+  <div [ngStyle]="{position: 'relative', width:width, height: height}">
+
+
   <svg style="position: absolute; z-index: 5" height="100%" width="100%" viewBox="0,0,100,100" preserveAspectRatio="none">
     <circle cx="50" cy="50" r="40" style="fill:green;stroke:grey;stroke-width:2" />
     <!--
@@ -55,12 +56,14 @@ const TABLE_ZONE_OUTER_RADIUS = 30;
   <player 
     *ngFor="let hand of getHands(); let i = index" 
     [hand]="hand" 
-    style="
-            position: absolute; 
-            z-index: 100;
-            width:10%; height:20%; 
-            top:{{get100BasedCoordinates(i).y.toString() + '%'}}; 
-            left: {{get100BasedCoordinates(i).x.toString() + '%' }}"
+    [ngStyle]="{
+            position: 'absolute', 
+            'z-index': 100,
+            width:'10%',
+            height:'20%', 
+            top: get100BasedCoordinates(i).y.toString() + '%', 
+            left: get100BasedCoordinates(i).x.toString() + '%'
+            }"
   >        
     
   
@@ -91,22 +94,24 @@ const TABLE_ZONE_OUTER_RADIUS = 30;
     <playing-card 
         *ngFor="let card of getCardsInHandFaceUp(hand.userId)"
         [card]="card"
-        img-class="playing-card"
+        [imgClass]="'playing-card'"
         [attr.data-card-rank]="card.rank"
         [attr.data-card-suit]="card.suit"
-        style="
-              position: absolute; 
-              z-index: 20;
-              width:7.19%; height:10%; 
-              top:{{getFaceUpCardCoordinate(hand, card).y.toString() + '%'}}; 
-              left: {{getFaceUpCardCoordinate(hand, card).x.toString() + '%' }}"
+        [ngStyle]="{
+              position: 'absolute', 
+              'z-index': 20,
+              width:'7.19%', 
+              height:'10%', 
+              top: getFaceUpCardCoordinate(hand, card).y.toString() + '%', 
+              left: getFaceUpCardCoordinate(hand, card).x.toString() + '%'
+              }"
       >
       </playing-card>
   </div>
     <!-- DECK -->
   <deck-view [gameId]="gameId" 
     [hidden]="!shouldShowDeck()"
-    img-class="playing-card"
+    [imgClass] ="'playing-card'"
     style = "
             position: absolute; 
             z-index: 10;
@@ -133,19 +138,15 @@ const TABLE_ZONE_OUTER_RADIUS = 30;
         left:52%
     "
     [hidden]="!shouldShowPile()" 
-    img-class="playing-card"
+    [imgClass]="'playing-card'"
     [gameId]="gameId"
     [attr.data-card-rank]="topCardInPile()?.rank"
     [attr.data-card-suit]="topCardInPile()?.suit"
     data-drag-source="PILE"
     data-drop-target="PILE"
   >
-  </pile-view>      
-
-  
-  
+  </pile-view>
 </div>
-<!--<player-list hands='getHands()'></player-list>-->
           `,
   }
 )
@@ -200,6 +201,10 @@ export class RunGameTable extends RunGame {
   }
 
   get100BasedCoordinates(index:number):Coordinates {
+    let degrees = this.degrees(index);
+    console.log('getCoord')
+    console.log(index)
+    console.log(degrees)
     return GameRenderingTools.getXY(20, 10, 50, 50, 40, this.degrees(index));
   }
 

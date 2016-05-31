@@ -9,7 +9,7 @@ import * as log from 'loglevel';
 @Component({
   selector: 'avatar',
   template: `
-    <img [src]="getImageUrl()" style="{{getImageStyles()}}"/>
+    <img [src]="getImageUrl()" [ngStyle]="getImageStyles()"/>
 `,
 })
 
@@ -40,13 +40,13 @@ export class Avatar {
     return this.imageURL;
   }
 
-  getImageStyles():string {
+  getImageStyles() {
     if (this.shape==='round') {
-      return 'border-radius: 50%; height: 100%; width: 100%; object-fit: contain';
+      return {'border-radius': '50%', height: '100%', width: '100%', 'object-fit': 'contain'};
     } else if (this.shape==="rectangle") {
-      return 'height: 100%; width: 100%; object-fit: contain';
+      return {height: '100%', width: '100%', 'object-fit': 'contain'};
     }
-    return 'width:100%';
+    return {width: '100%'};
   }
 
   // Get the initials of the user (from https://github.com/meteor-utilities/avatar/)
