@@ -3,7 +3,7 @@
  */
 import { Meteor } from 'meteor/meteor';
 import 'meteor/cfs:standard-packages'
-import * as log from 'loglevel';
+import * as log from 'loglevel'
 
 import { AccountTools } from "../services/account-tools";
 
