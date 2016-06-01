@@ -66,6 +66,6 @@ export class DeckView extends RunGame {
       });
       Deck.shuffle(seed, this.getCardsInPile());
     }
-    RunGame.gameStreams.pileToDeck(this.getCardsInPile());
+    RunGame.gameState.pileToDeck(this.getCardsInPile());
   }
 }

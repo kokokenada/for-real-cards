@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Meteor } from 'meteor/meteor';
-import {Dragula, DragulaService} from 'ng2-dragula/ng2-dragula';
+import { Dragula, DragulaService } from 'ng2-dragula/ng2-dragula';
 
 import { CommonPopups } from "../../common-app/ui-twbs-ng2";
 import { Tools } from "../../common-app/api";
@@ -16,7 +16,6 @@ import { PileView } from "./pile-view";
   {
     selector: 'run-game-hand',
     directives: [DeckView, Dragula, PileView, PlayingCard],
-    viewProviders: [DragulaService],
     providers: [DEAL_MODAL_PROVIDERS],
     template: `
   <div>
@@ -128,7 +127,7 @@ export class RunGameHand extends RunGame {
   }
 
   shouldShowTakeTrick():boolean {
-      return RunGame.gameStreams && RunGame.gameStreams.currentGameConfig && RunGame.gameStreams.currentGameConfig.hasTricks && RunGame.gameStreams.trickReady();
+      return RunGame.gameState && RunGame.gameState.currentGameConfig && RunGame.gameState.currentGameConfig.hasTricks && RunGame.gameState.trickReady();
   }
   
   numberOfColumns():string {
@@ -140,14 +139,14 @@ export class RunGameHand extends RunGame {
   }
   
   takeTrick():void {
-    RunGame.gameStreams.takeTrick();
+    RunGame.gameState.takeTrick();
   }
   
   shouldShowSort():boolean {
     return (
-      RunGame.gameStreams &&
-      RunGame.gameStreams.currentGameConfig &&
-      RunGame.gameStreams.currentGameConfig.findCommand(CardLocation.HAND, CardLocation.HAND).cardCountAllowed!==CardCountAllowed.NONE
+      RunGame.gameState &&
+      RunGame.gameState.currentGameConfig &&
+      RunGame.gameState.currentGameConfig.findCommand(CardLocation.HAND, CardLocation.HAND).cardCountAllowed!==CardCountAllowed.NONE
     );
   }
   
@@ -160,17 +159,17 @@ export class RunGameHand extends RunGame {
       let card = hand.cardsInHand[i];
       cardOrder.push(card);
     }
-    RunGame.gameStreams.sortHand(cardOrder);
+    RunGame.gameState.sortHand(cardOrder);
   }
 
   deal() {
     let defaultGameConfig:GameConfig;
-    if (RunGame.gameStreams)
-      defaultGameConfig = RunGame.gameStreams.currentGameConfig;
+    if (RunGame.gameState)
+      defaultGameConfig = RunGame.gameState.currentGameConfig;
     this.dealModelService.open(defaultGameConfig).subscribe(
       (result:GameConfig)=> {
         if (result) {
-          RunGame.gameStreams.deal(result);
+          RunGame.gameState.deal(result);
         }
       },
       (error)=>{
@@ -180,18 +179,18 @@ export class RunGameHand extends RunGame {
   }
 
   shouldShowUndo():boolean {
-    return RunGame.gameStreams && RunGame.gameStreams.actionToUndo();
+    return RunGame.gameState && RunGame.gameState.actionToUndo();
   }
   
   undo():void {
     
-    let action:ActionFormatted  = new ActionFormatted( RunGame.gameStreams.actionToUndo() );
+    let action:ActionFormatted  = new ActionFormatted( RunGame.gameState.actionToUndo() );
 
     let prompt:string = "Undo " + action.actionDescription() + " done by "
       + (action.creatorId === Meteor.userId() ? "yourself" : action.creator());
     CommonPopups.confirm(prompt).subscribe((result:boolean)=> {
       if (result) {
-        RunGame.gameStreams.undo(action._id);
+        RunGame.gameState.undo(action._id);
       }
     })
   }

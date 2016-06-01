@@ -4,7 +4,7 @@
 import {Card, CardSuit, CardRank} from "../models/card.model";
 import {GameConfig, CardLocation, CardCountAllowed} from "../models/game-config";
 import {VisibilityType} from "../models/action.model";
-import {GameStreams} from './game-streams';
+import {GameState} from './game-state';
   
 export class DragAndDrop {
   suit:CardSuit;
@@ -69,7 +69,7 @@ export class DragAndDrop {
   }
   
   
-  runActions(gameStreams:GameStreams) {
+  runActions(gameStreams:GameState) {
     switch (this.source) {
       case CardLocation.HAND: {
         switch (this.target) {

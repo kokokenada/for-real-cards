@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Routes, Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from '@angular/router'
 import { Session } from 'meteor/session';
 import { Subscription } from 'rxjs'
+import { DragulaService} from 'ng2-dragula/ng2-dragula';
 
 import { AccountTools, Menus, MenuItem, UserEventType, UserEvent} from '../../common-app/api';
 import { AccountsAdmin } from '../../common-app/ui-twbs-ng2/accounts-admin/accounts-admin';
@@ -19,11 +20,13 @@ import { RunGameTabs } from "../run-game/run-game-tabs";
 import { Start } from "../start/start";
 
 import "../scss/for-real-cards.scss";
+import subscription = Roles.subscription;
 
 @Component(
   {
     selector: 'for-real-cards-top-frame',
     directives: [PopoverMenu, ROUTER_DIRECTIVES],
+    viewProviders: [DragulaService],
     template: `
 <div class="row">
   <label class="col-xs-5">For Real Cards ({{getUserDisplayName()}})</label>
@@ -48,7 +51,7 @@ import "../scss/for-real-cards.scss";
 export class ForRealCardsTopFrame {
   private gameDescription:string;
   private displayName:string;
-  disposable:Subscription;
+  private subscriptions:Subscription[] = [];
   constructor(private router: Router) {
 
     Menus.addMenu({id: 'topbar'});
@@ -101,7 +104,20 @@ export class ForRealCardsTopFrame {
   ngOnInit() {
     console.log("On Init")
     this.router.navigate(['/start']);
-    this.disposable = UserEvent.startObserving((event:UserEvent)=> {
+    this.watchingGame();
+    this.watchingUserEvents();
+  }
+  
+  ngOnDestroy() {
+    if (this.subscriptions) {
+      this.subscriptions.forEach((subscription:Subscription)=>{
+        subscription.unsubscribe();
+      })
+    }
+  }
+  
+  watchingUserEvents() {
+    this.subscriptions.push(UserEvent.startObserving((event:UserEvent)=> {
         if (event.eventType === UserEventType.LOGOUT) {
           this.displayName = "Not logged in";
           this.navigateToStart();
@@ -112,27 +128,19 @@ export class ForRealCardsTopFrame {
           this.displayName = event.displayName;
         }
       }
-    );
-  }
-  ngOnDestroy() {
-    console.log("On Destroy")
-    if (this.disposable) {
-      this.disposable.unsubscribe();
-    }
+    ));
   }
 
-
-  // Hmm when can this be called
-  startWatchingGame() {
-    RunGame.gameStreams.subscribe((action:Action)=> {
+  watchingGame() {
+    this.subscriptions.push(RunGame.subscribe((action:Action)=> {
       if (action.actionType === ActionType.DEAL) {
-        this.setGameDescription(RunGame.gameStreams.currentGameConfig.name + " (id " + action.gameId + ")");
+        this.setGameDescription(RunGame.gameState.currentGameConfig.name + " (id " + action.gameId + ")");
       } else if (action.actionType === ActionType.NEW_HAND) {
-        this.setGameDescription(RunGame.gameStreams.currentGameConfig.name + " (id " + action.gameId + ")");
+        this.setGameDescription(RunGame.gameState.currentGameConfig.name + " (id " + action.gameId + ")");
       } else if (action.actionType === ActionType.RESET) {
         this.setGameDescription("New Game (id " + action.gameId + ")");
       }
-    });
+    }));
   }
 
   navigateToHand(gameId:string, userPassword:string) {

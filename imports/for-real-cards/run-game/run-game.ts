@@ -1,26 +1,27 @@
-import {Meteor} from 'meteor/meteor';
-import {Session} from 'meteor/session';
+import { Meteor } from 'meteor/meteor';
+import { Session } from 'meteor/session';
+import { Subject, Subscription } from 'rxjs';
 import * as log from 'loglevel';
 import { Input } from '@angular/core';
+import { DragulaService } from 'ng2-dragula/ng2-dragula';
+import { MeteorComponent } from 'angular2-meteor';
 
 import { CommonPopups } from "../../common-app/ui-twbs-ng2";
-import { DragulaService } from 'ng2-dragula/ng2-dragula';
 
-import {Action, ActionType, Card, CardCountAllowed, CardLocation, Deck, DeckLocation, DragAndDrop, GameConfig, GameStreams, GameRenderingTools, Hand} from '../api';
+import {Action, ActionType, Card, CardCountAllowed, CardLocation, Deck, DeckLocation, DragAndDrop, GameConfig, GameState, GameRenderingTools, Hand} from '../api';
 import {CardImageStyle} from "../api/interfaces/card-image-style.interface";
 
 const SESSION_GAME_ID_KEY = 'session-game-id';
-export class RunGame {
+export class RunGame extends MeteorComponent {
   @Input() gameId:string;
   userPassword:string;
-  static gameStreams:GameStreams;
+  static gameState:GameState;
+  private static subject = new Subject();
   private static gameStreamInitializedToId:string;
   protected static dragAndDropInitialized:boolean = false;
-  //protected static drake;
-  private dragSource:string;
 
   constructor(private dragulaService: DragulaService) {
-
+    super();
   }
 
   ngOnInit() {
@@ -37,7 +38,11 @@ export class RunGame {
   }
 
   static getActions():Action[] {
-    return RunGame.gameStreams.actions;
+    return RunGame.gameState.actions;
+  }
+  
+  static subscribe(onNext:(action:Action)=>void, onError:(error)=>void=undefined, onCompleted:()=>void=undefined):Subscription {
+    return RunGame.subject.subscribe(onNext, onError, onCompleted);
   }
 
   dragAndDropInit() { // Share a scope for drag and drop
@@ -49,7 +54,7 @@ export class RunGame {
         return true; // elements are always draggable by default
       };
       let accepts = (el, target, source, sibling)=> {
-        let dragAndDrop = new DragAndDrop(el, target, source, sibling, RunGame.gameStreams.currentGameConfig);
+        let dragAndDrop = new DragAndDrop(el, target, source, sibling, RunGame.gameState.currentGameConfig);
         return dragAndDrop.isDropAllowed();
       };
       let invalid = (el, hanlde)=> {
@@ -79,7 +84,7 @@ export class RunGame {
       });
       this.dragulaService.drop.subscribe((value)=>{
         let [arg1, el, targetEl, sourceEl, siblingEl] =value;
-        let dragAndDrop = new DragAndDrop(el, targetEl, sourceEl, siblingEl, RunGame.gameStreams.currentGameConfig);
+        let dragAndDrop = new DragAndDrop(el, targetEl, sourceEl, siblingEl, RunGame.gameState.currentGameConfig);
         if (!dragAndDrop.isDropAllowed()) {
           dragAndDrop.logError("Drop received an element that should not have been allowed");
           return;
@@ -87,14 +92,10 @@ export class RunGame {
         console.log('drop')
         console.log(dragAndDrop)
 
-        dragAndDrop.runActions(RunGame.gameStreams);        
+        dragAndDrop.runActions(RunGame.gameState);        
         
       });
     }
-  }
-
-  getHands():Hand[] {
-    return RunGame.gameStreams.hands;
   }
 
   private initialize() {
@@ -119,13 +120,14 @@ export class RunGame {
 
       console.log('subscribing to game' + this.gameId);
 
-      RunGame.gameStreams = new GameStreams(this.gameId);
+      RunGame.gameState = new GameState(this.gameId, RunGame.subject);
+      RunGame.gameState.startSubScriptions();
       RunGame.gameStreamInitializedToId = this.gameId;
-      RunGame.gameStreams.subscribe(
+      RunGame.subscribe(
         (action:Action)=> {
           /*           log.debug('Got subscription callback in run-game.ts. Action:');
            log.debug(action);
-           log.debug(RunGame.gameStreams.hands)
+           log.debug(RunGame.gameState.hands)
            log.debug(this)*/
         },
         (error)=> {
@@ -134,6 +136,10 @@ export class RunGame {
         }
       );
     }
+  }
+
+  getHands():Hand[] {
+    return RunGame.gameState.hands;
   }
 
   private amIIncluded():boolean {
@@ -156,63 +162,59 @@ export class RunGame {
   }
 
   getHand(userId:string = Meteor.userId()):Hand {
-    if (RunGame.gameStreams) {
-      let hand:Hand = RunGame.gameStreams.getHandFromUserId(userId);
+    if (RunGame.gameState) {
+      let hand:Hand = RunGame.gameState.getHandFromUserId(userId);
       return hand;
     }
   }
 
   getCardsInHandFaceUp(userId:string = Meteor.userId()):Card[] {
-    if (RunGame.gameStreams) {
-      let hand:Hand = RunGame.gameStreams.getHandFromUserId(userId);
+    if (RunGame.gameState) {
+      let hand:Hand = RunGame.gameState.getHandFromUserId(userId);
       if (hand)
         return hand.cardsFaceUp;
     }
   }
 
   getCardsInDeck():Card[] {
-    if (RunGame.gameStreams)
-      return RunGame.gameStreams.tableFaceDown;
+    if (RunGame.gameState)
+      return RunGame.gameState.tableFaceDown;
   }
 
   getCardsInPile():Card[] {
-    if (RunGame.gameStreams)
-      return RunGame.gameStreams.tablePile;
+    if (RunGame.gameState)
+      return RunGame.gameState.tablePile;
   }
 
   getCardsFaceUp(userId:string = Meteor.userId()):Card[] {
-    if (RunGame.gameStreams) {
-      let hand:Hand = RunGame.gameStreams.getHandFromUserId(userId);
+    if (RunGame.gameState) {
+      let hand:Hand = RunGame.gameState.getHandFromUserId(userId);
       if (hand)
         return hand.cardsFaceUp;
     }
   }
 
   topCardInPile():Card {
-    if (RunGame.gameStreams && RunGame.gameStreams.tablePile) {
-      let length = RunGame.gameStreams.tablePile.length;
+    if (RunGame.gameState && RunGame.gameState.tablePile) {
+      let length = RunGame.gameState.tablePile.length;
       if (length)
-        return RunGame.gameStreams.tablePile[length - 1];
+        return RunGame.gameState.tablePile[length - 1];
     }
   }
 
   shouldShowTableDrop():boolean {
-    console.log('shoouldShowTableDrop')
-    console.log(RunGame.gameStreams)
-    console.log(RunGame.gameStreams.currentGameConfig)
-    console.log(RunGame.gameStreams.currentGameConfig.isTarget(CardLocation.TABLE))
     return (
-      RunGame.gameStreams &&
-      RunGame.gameStreams.currentGameConfig &&
-      RunGame.gameStreams.currentGameConfig.isTarget(CardLocation.TABLE)
+      RunGame.gameState &&
+      RunGame.gameState.currentGameConfig &&
+      RunGame.gameState.currentGameConfig.isTarget(CardLocation.TABLE)
     )
   }
 
   private tricksInProgress():boolean {
-    let gameConfig:GameConfig = RunGame.gameStreams.currentGameConfig;
+    let gameConfig:GameConfig = RunGame.gameState.currentGameConfig;
     if (gameConfig) {
       if (gameConfig.hasTricks) {
-        let hands:Hand[] =  RunGame.gameStreams.hands;
+        let hands:Hand[] =  RunGame.gameState.hands;
         for (let i=0; i<hands.length; i++) {
           let hand:Hand = hands[i];
           if (hand.cardsFaceUp.length>0 || hand.tricks.length>0) {
@@ -226,13 +228,13 @@ export class RunGame {
 
   shouldShowPile():boolean {
     return (
-      RunGame.gameStreams &&
-      RunGame.gameStreams.currentGameConfig &&
+      RunGame.gameState &&
+      RunGame.gameState.currentGameConfig &&
       (
         this.tricksInProgress()===false &&
         (
-          RunGame.gameStreams.currentGameConfig.isTarget(CardLocation.PILE) ||
-          RunGame.gameStreams.currentGameConfig.isSource(CardLocation.PILE)
+          RunGame.gameState.currentGameConfig.isTarget(CardLocation.PILE) ||
+          RunGame.gameState.currentGameConfig.isSource(CardLocation.PILE)
         )
       )
     );
@@ -240,8 +242,8 @@ export class RunGame {
 
 
   shouldShowDeck():boolean {
-    if (RunGame.gameStreams && RunGame.gameStreams.currentGameConfig)
-      return this.tricksInProgress()===false && RunGame.gameStreams.currentGameConfig.deckLocationAfterDeal == DeckLocation.CENTER;
+    if (RunGame.gameState && RunGame.gameState.currentGameConfig)
+      return this.tricksInProgress()===false && RunGame.gameState.currentGameConfig.deckLocationAfterDeal == DeckLocation.CENTER;
   }
 
   cardBackURL(portrait:boolean = true):string {
@@ -250,14 +252,14 @@ export class RunGame {
 
   canShowHand():boolean {
     return (
-      RunGame.gameStreams &&
-      RunGame.gameStreams.currentGameConfig && 
-      RunGame.gameStreams.currentGameConfig.findCommand(CardLocation.HAND, CardLocation.TABLE).cardCountAllowed===CardCountAllowed.ALL
+      RunGame.gameState &&
+      RunGame.gameState.currentGameConfig && 
+      RunGame.gameState.currentGameConfig.findCommand(CardLocation.HAND, CardLocation.TABLE).cardCountAllowed===CardCountAllowed.ALL
     );
   }
 
   showHand():void {
-    RunGame.gameStreams.showHand();
+    RunGame.gameState.showHand();
   }
   
   landscapeCardStyle():CardImageStyle {

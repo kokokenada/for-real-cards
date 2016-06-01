@@ -1,20 +1,21 @@
 /**
  * Created by kenono on 2016-04-23.
  */
-import {Meteor} from 'meteor/meteor';
-import {Mongo} from 'meteor/mongo'
-import {Tracker } from 'meteor/tracker';
-import {GAME_SUBSCRPTION_NAME, GameSubscriptionOptions} from "../models/game.publications.ts";
-import {Observable, Subject} from 'rxjs'
-import {Action, ActionCollection, ActionType, VisibilityType, ActionFormatted} from '../models/action.model'
-import {GameConfig, DeckLocation} from '../models/game-config';
-import {Hand, HandCollection} from '../models/hand.model';
-import {Card} from '../models/card.model';
-import {Deck, DeckId} from '../models/deck.model';
+import { Meteor} from 'meteor/meteor';
+import { Mongo} from 'meteor/mongo'
+import { Tracker } from 'meteor/tracker';
+import { Subject} from 'rxjs'
 import * as log from 'loglevel';
+
+import { GAME_SUBSCRPTION_NAME, GameSubscriptionOptions} from "../models/game.publications.ts";
+import { Action, ActionCollection, ActionType, VisibilityType, ActionFormatted} from '../models/action.model'
+import { GameConfig, DeckLocation} from '../models/game-config';
+import { Hand, HandCollection} from '../models/hand.model';
+import { Card} from '../models/card.model';
+import { Deck, DeckId} from '../models/deck.model';
 import {CardSuit, CardRank} from "../models/card.model";
 
-export class GameStreams {
+export class GameState {
   private gameId:string;
   private subject:Subject;
   private lastNotified:Date;
@@ -26,16 +27,14 @@ export class GameStreams {
   currentGameConfig: GameConfig;
   private undoneIds:string[] = [];
 
-  constructor(gameId:string) {
+  constructor(gameId:string, subject:Subject) {
     this.gameId = gameId;
-    this.subject = new Subject();
+    this.subject = subject;
     this.hands = [];
     this.tableFaceDown = [];
     this.tablePile = [];
     this.lastNotified = null;
     this.currentGameConfig = GameConfig.getDefaultConfig();
-
-    this.startSubScriptions();
   }
 
   private processAction(actions:Action[], index:number):void {
@@ -460,7 +459,7 @@ export class GameStreams {
     // Maybe one support people leaving game (doesn't have that behavior now)
   }
 
-  private startSubScriptions() {
+  startSubScriptions() {
     Tracker.autorun(()=> {
       let options:GameSubscriptionOptions = {gameId: this.gameId};
       let subscriptionHandle =Meteor.subscribe(GAME_SUBSCRPTION_NAME, options, {
@@ -539,10 +538,6 @@ export class GameStreams {
         log.error(error);
       }
     });
-  }
-
-  subscribe(onNext:(action:Action)=>void, onError:(error)=>void=undefined, onCompleted:()=>void=undefined):void {
-    this.subject.subscribe(onNext, onError, onCompleted);
   }
 
   deal(gameConfig:GameConfig) {

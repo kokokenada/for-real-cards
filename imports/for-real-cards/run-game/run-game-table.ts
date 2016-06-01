@@ -21,7 +21,6 @@ const TABLE_ZONE_OUTER_RADIUS = 30;
   {
     selector: 'run-game-table',
     directives: [DeckView, Dragula, Player, PlayingCard, PileView],
-    viewProviders: [DragulaService],
     template: `
 
   <div [ngStyle]="{position: 'relative', width:width, height: height}">
