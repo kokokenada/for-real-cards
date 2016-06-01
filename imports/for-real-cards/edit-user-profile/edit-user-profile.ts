@@ -2,14 +2,23 @@
  * Created by kenono on 2016-04-17.
  */
 
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { Subscription } from 'rxjs'
 import { Meteor } from 'meteor/meteor';
-import {FILE_UPLOAD_DIRECTIVES, FileUploader} from 'ng2-file-upload';
+import { FILE_UPLOAD_DIRECTIVES, FileUploader} from 'ng2-file-upload';
 import * as log from 'loglevel';
 
-import { AccountTools, AvatarCollection, AvatarTools, Credentials, Uploader, UploadFileInfo, UserEvent, UserEventType } from "../../common-app/api"
-import { CommonPopups } from "../../common-app/ui-twbs-ng2"
+import {
+  AccountTools,
+  AvatarOriginalCollection,
+  AvatarTools,
+  Credentials,
+  Uploader,
+  UploadFileInfo,
+  UserEvent,
+  UserEventType
+} from "../../common-app/api"
+import {CommonPopups} from "../../common-app/ui-twbs-ng2"
 
 
 @Component({
@@ -96,12 +105,13 @@ export class EditUserProfile {
   uploader:FileUploader = new FileUploader({url: URL});
   hasBaseDropZoneOver:boolean = false;
 
-  credentials:Credentials = new Credentials("","");
+  credentials:Credentials = new Credentials("", "");
   subscription:Subscription;
-  constructor() {
+
+  constructor(private ngZone:NgZone) {
     this.subscription = UserEvent.startObserving((event:UserEvent)=> {
       if (event.eventType === UserEventType.AVATAR_UPDATE && event.userId === Meteor.userId()) {
-        this.avatarURL = event.imageURL;
+        this.avatarURL = AvatarTools.getAvatarURL(event.user, "medium");
       }
     });
   }
@@ -111,10 +121,12 @@ export class EditUserProfile {
     console.log(this);
     AccountTools.readCurrentUser();
   }
+
   ngOnChanges(obj) {
     console.log('onchanges EditUserProfile:');
     console.log(obj);
   }
+
   ngOnDestroy() {
     if (this.subscription) {
       this.subscription.unsubscribe();
@@ -131,23 +143,28 @@ export class EditUserProfile {
 
   uploadToFSCollection():void {
     let files:any[] = [];
-    this.uploader.queue.forEach((queueItem:any)=>{
+    this.uploader.queue.forEach((queueItem:any)=> {
       files.push(queueItem._file)
     });
     this.addImages(files);
   }
 
   addImages(files) {
-    log.debug(files);
-    let uploader = new Uploader();
-    uploader.upload(files, AvatarCollection, 'common.avatar-images', {userId: Meteor.userId()}).subscribe(
-      (result:UploadFileInfo[]) => {
-        AvatarTools.updateProfileAvatar(result);
-      },
-      (error) => {
-        CommonPopups.alert(error);
-      }
-    );
+    this.ngZone.runOutsideAngular(()=>{
+      log.debug(files);
+      let currentFile = files[0];
+      Uploader.uploadFile(this.ngZone, currentFile, AvatarOriginalCollection,
+        (result) => {
+          console.log('upload sucess')
+          console.log(result)
+        }, (error) => {
+          log.error("Error uploading");
+          log.error(error);
+          CommonPopups.alert(error);
+        }
+      );
+
+    });
   }
 
   avatarUrl():string {

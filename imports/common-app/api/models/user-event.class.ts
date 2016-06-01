@@ -1,8 +1,10 @@
 /**
  * Created by kenono on 2016-05-31.
  */
+import { Mongo } from "meteor/mongo"
 import { Subject, Subscription} from 'rxjs';
-import {User} from "./user.model";
+
+import { User } from "./user.model";
 import { AccountTools } from "../services/account-tools";
 
 export enum UserEventType {
@@ -20,12 +22,12 @@ export class UserEvent {
 
   eventType: UserEventType;
   userId:string;
-  imageURL:string;
   displayName: string;
-  constructor(eventType:UserEventType, data: {userId?:string, imageURL?:string, displayName?:string} = {}) {
+  user:User;
+  constructor(eventType:UserEventType, data: {userId?:string, user?:User, displayName?:string} = {}) {
     this.eventType=eventType;
     this.userId = data.userId;
-    this.imageURL = data.imageURL;
+    this.user = data.user;
     this.displayName = data.displayName;
   }
   
@@ -41,7 +43,7 @@ export class UserEvent {
     UserEvent.pushEvent(
       new UserEvent(UserEventType.AVATAR_UPDATE, {
         userId: user._id,
-        imageURL: AccountTools.getAvatarURL(user)
+        user: user
       })
     );
   }

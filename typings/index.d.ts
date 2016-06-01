@@ -1,4 +1,3 @@
-/// <reference path="globals/collectionfs/collectionfs.d.ts" />
 /// <reference path="globals/es6-shim/index.d.ts" />
 /// <reference path="globals/loglevel/index.d.ts" />
 /// <reference path="globals/meteor-roles/index.d.ts" />

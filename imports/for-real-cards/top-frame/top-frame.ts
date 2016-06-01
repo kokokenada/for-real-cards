@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor';
 import { Component } from '@angular/core';
 import { Routes, Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from '@angular/router'
 import { Session } from 'meteor/session';

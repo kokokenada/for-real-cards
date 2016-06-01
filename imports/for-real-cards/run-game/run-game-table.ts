@@ -149,8 +149,8 @@ export class RunGameTable extends RunGame {
   @Input() forPlayer:string;
   @Input() gameId:string;
   
-  constructor(private dragulaService: DragulaService, private ngZone:NgZone) {
-    super(dragulaService, ngZone);
+  constructor(private dragulaServiceChild: DragulaService, private ngZoneChild:NgZone) {
+    super(dragulaServiceChild, ngZoneChild);
   }
 
   private forPlayerBool():boolean {

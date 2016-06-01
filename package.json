@@ -15,6 +15,7 @@
     "bootstrap-sass": "^3.3.6",
     "dragula": "^3.7.1",
     "es6-shim": "^0.35.1",
+    "gm": "^1.22.0",
     "loglevel": "^1.4.0",
     "meteor-node-stubs": "~0.2.0",
     "moment": "^2.13.0",

@@ -13,9 +13,9 @@ export class DealModalService {
   constructor(private modalService:ModalService) {
     
   }
-  open(gameConfig:GameConfig):Subject {
+  open(gameConfig:GameConfig):Subject<Object> {
     return this.modalService.open("frc-deal-modal", {gameConfig: gameConfig});
   }
 }
 
-export let DEAL_MODAL_PROVIDERS = MODAL_PROVIDERS.concat([DealModalService]);
+export let DEAL_MODAL_PROVIDERS:any[] = MODAL_PROVIDERS.concat([DealModalService]);

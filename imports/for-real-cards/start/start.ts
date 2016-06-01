@@ -87,12 +87,12 @@ export class Start {
 
   constructor() {
     this.credentials = Credentials.getLastCredentials();
-    ConnectTools.checkConnection();
     ConnectTools.subscribe(
       (event:ConnectEvent)=>{
         this.message = event.message;
       }
     );
+    ConnectTools.checkConnection();
 //    $scope.$on('$destroy', function () {
 //      ConnectTools.stopCheckingConnection();
 //    });

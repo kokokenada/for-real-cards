@@ -1,30 +1,33 @@
 /**
  * Created by kenono on 2016-04-21.
  */
+import {NgZone} from '@angular/core'
 import { Mongo } from 'meteor/mongo'
 import { Meteor } from 'meteor/meteor';
-import { Observable, Subject, Subscription } from 'rxjs'
+import { Subject, Subscription} from 'rxjs'
+import 'meteor/jalik:ufs'; declare let UploadFS:any;
+
 import * as log from 'loglevel';
 
-export interface UploadFileInfo { 
-  _id: string;
-  height?: number
+export interface UploadFileInfo {
+  _id:string;
+  height?:number
   width?:number
 }
 
 export class Uploader {
-  private fsCollection:Mongo.Collection;
+/*  private fsCollection:Mongo.Collection;
   private properties;
   private subscription:string;
   private intervalHandle;
   private serverWaits = 0;
-  private ids:string[];
+  private ids:string[];*/
   private subject:Subject;
 
   constructor() {
     this.subject = new Subject();
   }
-
+/*
   private checkIfDone() {
     let progress = FS.HTTP.uploadQueue.progress();
 
@@ -54,7 +57,9 @@ export class Uploader {
                 } else {
                   // exit
                   log.info('waiting for image size. serverWaits:' + this.serverWaits);
-                  this.intervalHandle = Meteor.setInterval(()=>{this.checkIfDone()}, 333);
+                  this.intervalHandle = Meteor.setInterval(()=> {
+                    this.checkIfDone()
+                  }, 333);
                   retrying = true;
                 }
               }
@@ -101,9 +106,125 @@ export class Uploader {
       });
       this.ids.push(fileObj._id);
     }
-    this.intervalHandle = Meteor.setInterval(()=>{this.checkIfDone()}, 333);
+    this.intervalHandle = Meteor.setInterval(()=> {
+      this.checkIfDone()
+    }, 333);
     this.serverWaits = 0;
     return this.subject;
   }
-};
+*/
+  /**
+   * Converts DataURL to Blob object
+   *
+   * https://github.com/ebidel/filer.js/blob/master/src/filer.js#L137
+   *
+   * @param  {String} dataURL
+   * @return {Blob}
+   */
+  static dataURLToBlob(dataURL) {
+    const BASE64_MARKER = ';base64,';
 
+    if (dataURL.indexOf(BASE64_MARKER) === -1) {
+      const parts = dataURL.split(',');
+      const contentType = parts[0].split(':')[1];
+      const raw = decodeURIComponent(parts[1]);
+
+      return new Blob([raw], {type: contentType});
+    }
+
+    const parts = dataURL.split(BASE64_MARKER);
+    const contentType = parts[0].split(':')[1];
+    const raw = window.atob(parts[1]);
+    const rawLength = raw.length;
+    const uInt8Array = new Uint8Array(rawLength);
+
+    for (let i = 0; i < rawLength; ++i) {
+      uInt8Array[i] = raw.charCodeAt(i);
+    }
+
+    return new Blob([uInt8Array], {type: contentType});
+  }
+
+  /**
+   * Converts Blob object to ArrayBuffer
+   *
+   * @param  {Blob}       blob          Source file
+   * @param  {Function}   callback      Success callback with converted object as a first argument
+   * @param  {Function}   errorCallback Error callback with error as a first argument
+   */
+  static blobToArrayBuffer(ngZone:NgZone, blob, callback, errorCallback) {
+    ngZone.runOutsideAngular(()=>{
+      let reader = new FileReader();
+
+      reader.onload = (e:any) => {
+        callback(e.target.result);
+      };
+
+      reader.onerror = (e) => {
+        if (errorCallback) {
+          errorCallback(e);
+        }
+      };
+
+      reader.readAsArrayBuffer(blob);
+      
+    })
+  }
+
+  /**
+   * Uploads a new file
+   *
+   * @param  {String}   dataUrl [description]
+   * @param  {String}   name    [description]
+   * @param  {Collection} collection
+   * @param  {Function} resolve [description]
+   * @param  {Function} reject  [description]
+   */
+  static uploadDataUrl(ngZone:NgZone, dataUrl, name, colleciton, resolve, reject) {
+    // convert to Blob
+    let blob = Uploader.dataURLToBlob(dataUrl);
+    blob.name = name;
+
+    // pick from an object only: name, type and size
+    const file = _.pick(blob, 'name', 'type', 'size');
+
+    // convert to ArrayBuffer
+    Uploader.blobToArrayBuffer(ngZone, blob, (data) => {
+      const upload = new UploadFS.Uploader({
+        data,
+        file,
+        store: colleciton,
+        onError: reject,
+        onComplete: resolve
+      });
+
+      upload.start();
+    }, reject);
+  }
+
+  static uploadFile(ngZone:NgZone, currentFile, collection, successCallback, errorCallback) {
+
+    ngZone.runOutsideAngular(()=>{
+      let reader = new FileReader();
+      let dataURL:any;
+//    reader.onload = (function(aImg) { return function(e) { aImg.src = e.target.result; }; })(img);
+      reader.onload = (e:any) => {
+        dataURL =dataURL = reader.result;
+        Uploader.uploadDataUrl(
+          ngZone,
+          dataURL,
+          currentFile.name,
+          collection,
+          (result) => {
+            successCallback(result);
+          }, (error) => {
+            errorCallback(error);
+          }
+        );
+      };
+      reader.readAsDataURL(currentFile);
+      
+    })
+
+  }
+}

@@ -2,12 +2,111 @@
  * Created by kenono on 2016-04-21.
  */
 import { Meteor } from 'meteor/meteor';
-import 'meteor/cfs:standard-packages'
+import 'meteor/jalik:ufs'; declare let UploadFS:any;
+import { Mongo } from 'meteor/mongo';
 import * as log from 'loglevel'
 
 import { AccountTools } from "../services/account-tools";
 
 
+declare let gm; //require;
+
+//let gm = require('gm');
+
+export const AvatarOriginalCollection = new Mongo.Collection('avatar-original');
+export const AvatarMediumCollection = new Mongo.Collection('avatar-medium');
+export const AvatarThumbCollection = new Mongo.Collection('avatar-thumb');
+
+
+function loggedIn(userId) {
+  return !!userId;
+}
+
+
+export const AvatarMediumStore = new UploadFS.store.GridFS({
+  collection: AvatarMediumCollection,
+  name: 'avatar-medium',
+  transformWrite(from, to, fileId, file) {
+    gm(from, file.name)
+      .resize(250, 250)
+      .gravity('Center')
+      .extent(250, 250)
+      .quality(100)
+      .stream()
+      .pipe(to);
+  },
+  onFinishUpload: (file)=>{
+    console.log('finished upload medium')
+    console.log(file)
+    Meteor.users.update({_id: file.userId}, {$set: {'profile.avatar-medium': file}})
+  },
+
+});
+export const AvatarThumbsStore = new UploadFS.store.GridFS({
+  collection: AvatarThumbCollection,
+  name: 'avatar-thumbs',
+  transformWrite(from, to, fileId, file) {
+    gm(from, file.name)
+      .resize(50, 50)
+      .gravity('Center')
+      .extent(50, 50)
+      .quality(75)
+      .stream()
+      .pipe(to);
+  },
+  onFinishUpload: (file)=>{
+    console.log('finished upload thumb')
+    console.log(file)
+    Meteor.users.update({_id: file.userId}, {$set: {'profile.avatar-thumb': file}})
+  },
+
+});
+export const AvatarOriginalStore = new UploadFS.store.GridFS({
+  collection: AvatarOriginalCollection,
+  name: 'avatar-original',
+  onFinishUpload: (file)=>{
+    console.log('finished upload original')
+    console.log(file)
+    Meteor.users.update({_id: file.userId}, {$set: {'profile.avatar-original': file}})
+  },
+  filter: new UploadFS.Filter({
+    contentTypes: ['image/*']
+  }),
+  copyTo: [
+    AvatarMediumStore,
+    AvatarThumbsStore
+  ]
+});
+
+if (Meteor.isServer) {
+  AvatarOriginalCollection.allow({
+    insert: loggedIn,
+    update: loggedIn,
+    remove: loggedIn
+  });
+  AvatarMediumCollection.allow({
+    insert: loggedIn,
+    update: loggedIn,
+    remove: loggedIn
+  });
+  AvatarThumbCollection.allow({
+    insert: loggedIn,
+    update: loggedIn,
+    remove: loggedIn
+  });
+
+  Meteor.publish('common-app.avatar-images', function (_id, counter) {
+    if (!_.isArray(_id))
+      _id = [_id];
+    return [
+      AvatarOriginalCollection.find({_id: {$in: _id}, userId: this.userId}),
+      AvatarMediumCollection.find({_id: {$in: _id}, userId: this.userId}),
+      AvatarThumbCollection.find({_id: {$in: _id}, userId: this.userId})
+    ];
+  });
+}
+
+/* Old CollectionFS code, incase it gets undepricated or ufs doesn't work out
 
 export let AvatarCollection:any = {};
 AvatarCollection = new FS.Collection("avatars", {
@@ -44,7 +143,7 @@ AvatarCollection = new FS.Collection("avatars", {
                 }
               }
             )
-            )
+          )
             .stream('PNG').pipe(writeStream);
         }
       }),
@@ -121,6 +220,8 @@ AvatarCollection.imageURL = (image_id:string, size:string) => {
   return Meteor.absoluteUrl('cfs/files/avatars/' + image_id + queryString);
 
 };
-AvatarCollection.defaultAvatarUrl = ()=> {
-  return Meteor.absoluteUrl('/default-avatar.png');
-};
+
+
+
+
+ */

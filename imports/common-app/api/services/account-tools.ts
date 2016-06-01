@@ -1,10 +1,8 @@
 import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base'
-import { Mongo } from 'meteor/mongo'
 import {Observable, Subject, Subscription} from 'rxjs'
 import * as log from 'loglevel';
 
-import {AvatarCollection} from '../models/avatar.model'
 import {User} from '../models/user.model';
 import {Tools} from "./tools"
 import {Credentials} from "./credentials";
@@ -14,8 +12,10 @@ export class AccountTools {
   static editUserObject:any;
   
   static login(credentials:Credentials):Observable {
+    log.debug('Logging in');
     let observable:Observable = Observable.create(observer=> {
       credentials.saveCredentials();
+      log.debug('Credentials:' + JSON.stringify(credentials) );
       Meteor.loginWithPassword(
         credentials.email ? credentials.email : credentials.username, credentials.password,
         (error)=> {
@@ -129,6 +129,7 @@ export class AccountTools {
     });
   }
 
+/* CollectionFS Related
   static getToken(options = undefined) // reference https://github.com/CollectionFS/Meteor-CollectionFS/blob/b46cb20d2d86a806e19e9ffbd72955c2a4ae37e7/packages/access-point/access-point-common.js#L64
   {
     options = options || {};
@@ -158,7 +159,8 @@ export class AccountTools {
     }
     return authToken;
   }
-
+  */
+  
   private static _user(userId:string = undefined) {
     if (!userId) {
       userId = Meteor.userId();
@@ -184,17 +186,6 @@ export class AccountTools {
     }
     return AccountTools.getDisplayNameNoLookup(user);
   }
-
-  static getAvatarURL(user:User):string {
-    if (!user) {
-      return AvatarCollection.defaultAvatarUrl();
-    }
-    let profile = user.profile;
-    if (!profile || !profile.avatar_id)
-      return AvatarCollection.defaultAvatarUrl();
-    return AvatarCollection.imageURL(profile.avatar_id);
-  }
-
   static getDisplayNameNoLookup(user:User) {
     if (!user) {
       return 'Not Logged In';

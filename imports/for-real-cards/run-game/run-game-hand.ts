@@ -109,8 +109,8 @@ export class RunGameHand extends RunGame {
   @Input() gameId:string;
   undoAction:Action;
 
-  constructor(private dealModelService:DealModalService, private dragulaService: DragulaService, private ngZone:NgZone ) {
-    super(dragulaService, ngZone);
+  constructor(private dealModelService:DealModalService, private dragulaServiceChild: DragulaService, private ngZoneChild:NgZone ) {
+    super(dragulaServiceChild, ngZoneChild);
   }
 
   private showTableProxyBool():boolean {
@@ -179,7 +179,7 @@ export class RunGameHand extends RunGame {
   }
 
   shouldShowUndo():boolean {
-    return RunGame.gameState && RunGame.gameState.actionToUndo();
+    return RunGame.gameState && (RunGame.gameState.actionToUndo() ? true : false);
   }
   
   undo():void {

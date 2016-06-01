@@ -73,7 +73,7 @@ export class ModalService {
 
 
 
-export let MODAL_PROVIDERS = [
+export let MODAL_PROVIDERS:any[] = [
   ModalService //,
   //ComponentFactory//,
 //  Injector,

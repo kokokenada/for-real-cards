@@ -5,6 +5,7 @@ import { Component, Input } from '@angular/core';
 import {  UserEvent, UserEventType } from "../api"
 import { Subscription } from 'rxjs'
 import * as log from 'loglevel';
+import {AvatarTools} from "../api/services/avatar-tools";
 
 @Component({
   selector: 'avatar',
@@ -26,7 +27,7 @@ export class Avatar {
   ngOnInit() {
     this.disposable = UserEvent.startObserving((event:UserEvent)=>{
       if (event.eventType===UserEventType.AVATAR_UPDATE && event.userId===this.userId) {
-        this.imageURL = event.imageURL;
+        this.imageURL = AvatarTools.getAvatarURL(event.user, this.size);
       }
     });
   }

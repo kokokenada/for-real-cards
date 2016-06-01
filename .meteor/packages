@@ -23,7 +23,6 @@ aldeed:collection2
 fongandrew:find-and-modify
 session
 accounts-password
-cfs:standard-packages
-cfs:gridfs
-cfs:graphicsmagick
 alanning:roles
+jalik:ufs
+jalik:ufs-gridfs

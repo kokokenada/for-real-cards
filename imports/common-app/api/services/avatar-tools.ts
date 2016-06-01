@@ -1,14 +1,15 @@
 /**
  * Created by kenono on 2016-05-16.
  */
-import { Uploader, UploadFileInfo } from "./uploader";
-import { AvatarCollection } from "../models/avatar.model";
-import { AccountTools } from "./account-tools";
+import {Uploader, UploadFileInfo} from "./uploader";
+import {AccountTools} from "./account-tools";
+import { User } from "../models/user.model";
+import {AvatarOriginalCollection, AvatarMediumCollection, AvatarThumbCollection} from "../models/avatar.model"
 import * as log from 'loglevel';
-import { Meteor } from 'meteor/meteor';
+import {Meteor} from 'meteor/meteor';
 
 export class AvatarTools {
-
+/*
   static imageFromCamere():void {
     if (Meteor.isCordova) {
       var options = {
@@ -54,30 +55,31 @@ export class AvatarTools {
         });
     }
   }
-
-  static updateProfileAvatar(result:UploadFileInfo[]) {
+*/
+/* CollectionFS Related  
+static updateProfileAvatar(result:UploadFileInfo[]) {
     if (result && result.length > 0) {
       let userId:string = Meteor.userId();
       let currentAvatar:string = Meteor.user().profile.avatar_id;
       if (currentAvatar) {
         log.debug('removing currentAvatar:' + currentAvatar);
-        AvatarCollection.remove(currentAvatar);
+        AvatarOriginalCollection.remove(currentAvatar);
       }
       if (result.length > 1) {
         log.warn("Only one image required.  Using first.");
       }
       let _id = result[0]._id;
-      Meteor.users.update(userId, {$set: {"profile.avatar_id": _id}}, (error, numberAffected)=>{
+      Meteor.users.update(userId, {$set: {"profile.avatar_id": _id}}, (error, numberAffected)=> {
         if (error) {
           log(error);
         } else {
-          Tracker.autorun(()=>{
+          Tracker.autorun(()=> {
             let subscriptionHandle = Meteor.subscribe('common.avatar-images', _id);
-            let avatarObject = AvatarCollection.findOne({_id: _id});
+            let avatarObject = AvatarOriginalCollection.findOne({_id: _id});
             if (avatarObject && avatarObject.imageReady) {
               let user = Meteor.user();
               user.profile.avatar_id = result[0]._id;
-              AccountTools.pushAvatarValue(user);
+              UserEvent.pushAvatarValue(user);
               subscriptionHandle.stop();
             }
           });
@@ -85,6 +87,28 @@ export class AvatarTools {
       });
     }
   }
+*/
 
+  static getAvatarURL(user:User, size:string="thumb"):string {
+    if (!user) {
+      return AvatarTools.defaultAvatarUrl();
+    }
+    let profile = user.profile;
+    if (!profile)
+      return AvatarTools.defaultAvatarUrl();
+    
+    let file = profile['avatar-' + size];
+    if (!file) {
+      file = profile['avatar-medium'];
+    }
+    if (!file) {
+      return AvatarTools.defaultAvatarUrl();
+    }
+    return file.url;
+  }
+
+  static defaultAvatarUrl() {
+    return Meteor.absoluteUrl('/default-avatar.png');
+  };
 
 }
