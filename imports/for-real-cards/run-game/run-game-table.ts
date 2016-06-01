@@ -1,7 +1,7 @@
 /**
  * Created by kenono on 2016-05-14.
  */
-import { Component, Input } from '@angular/core';
+import { Component, Input, NgZone } from '@angular/core';
 import { Dragula, DragulaService} from 'ng2-dragula/ng2-dragula';
 
 import { Tools } from "../../common-app/api";
@@ -149,17 +149,14 @@ export class RunGameTable extends RunGame {
   @Input() forPlayer:string;
   @Input() gameId:string;
   
-  constructor(private dragulaService: DragulaService) {
-    super(dragulaService)
+  constructor(private dragulaService: DragulaService, private ngZone:NgZone) {
+    super(dragulaService, ngZone);
   }
 
   private forPlayerBool():boolean {
     return Tools.stringToBool(this.forPlayer);
   }
   showDropZone():boolean {
-    console.log('showDropZOne')
-    console.log(this.forPlayerBool())
-    console.log(this.shouldShowTableDrop())
     return this.forPlayerBool() &&
         this.shouldShowTableDrop();
   }

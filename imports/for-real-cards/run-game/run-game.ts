@@ -2,9 +2,9 @@ import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { Subject, Subscription } from 'rxjs';
 import * as log from 'loglevel';
-import { Input } from '@angular/core';
+import { Input, NgZone } from '@angular/core';
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
-import { MeteorComponent } from 'angular2-meteor';
+//import { MeteorComponent } from 'angular2-meteor';
 
 import { CommonPopups } from "../../common-app/ui-twbs-ng2";
 
@@ -12,7 +12,7 @@ import {Action, ActionType, Card, CardCountAllowed, CardLocation, Deck, DeckLoca
 import {CardImageStyle} from "../api/interfaces/card-image-style.interface";
 
 const SESSION_GAME_ID_KEY = 'session-game-id';
-export class RunGame extends MeteorComponent {
+export class RunGame {
   @Input() gameId:string;
   userPassword:string;
   static gameState:GameState;
@@ -20,8 +20,7 @@ export class RunGame extends MeteorComponent {
   private static gameStreamInitializedToId:string;
   protected static dragAndDropInitialized:boolean = false;
 
-  constructor(private dragulaService: DragulaService) {
-    super();
+  constructor(private dragulaService: DragulaService, private ngZone:NgZone) {
   }
 
   ngOnInit() {
@@ -125,6 +124,11 @@ export class RunGame extends MeteorComponent {
       RunGame.gameStreamInitializedToId = this.gameId;
       RunGame.subscribe(
         (action:Action)=> {
+          if (action.sequencePosition+1===action.sequenceLength) {
+            this.ngZone.run(()=>{
+              console.log('rendered')
+            });
+          }
           /*           log.debug('Got subscription callback in run-game.ts. Action:');
            log.debug(action);
            log.debug(RunGame.gameState.hands)

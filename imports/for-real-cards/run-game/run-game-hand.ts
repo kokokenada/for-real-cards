@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, NgZone } from '@angular/core';
 import { Meteor } from 'meteor/meteor';
 import { Dragula, DragulaService } from 'ng2-dragula/ng2-dragula';
 
@@ -109,8 +109,8 @@ export class RunGameHand extends RunGame {
   @Input() gameId:string;
   undoAction:Action;
 
-  constructor(private dealModelService:DealModalService, private dragulaService: DragulaService ) {
-    super(dragulaService);
+  constructor(private dealModelService:DealModalService, private dragulaService: DragulaService, private ngZone:NgZone ) {
+    super(dragulaService, ngZone);
   }
 
   private showTableProxyBool():boolean {
