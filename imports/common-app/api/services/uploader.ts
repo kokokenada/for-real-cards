@@ -90,7 +90,7 @@ export class Uploader {
       if (properties) {
         _.extend(newFile, properties);
       }
-      let fileObj = fsCollection.insert(newFile, (error, fileResult)=> {
+      let fileObj:any = fsCollection.insert(newFile, (error, fileResult)=> {
         if (error) {
           log.error(error);
           this.subject.error(error);
