@@ -1,6 +1,8 @@
 /**
- * Created by kenono on 2016-05-10.
+ * Copyright Ken Ono, Fabrica Technolology 2016
+ * Source code licensed under GPL 3.0
  */
+
 import { Coordinates } from "../models/coordinates.class"
   
 export class GameRenderingTools {

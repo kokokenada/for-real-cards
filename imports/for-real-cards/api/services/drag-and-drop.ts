@@ -1,5 +1,6 @@
 /**
- * Created by kenono on 2016-05-21.
+ * Copyright Ken Ono, Fabrica Technolology 2016
+ * Source code licensed under GPL 3.0
  */
 import {Card, CardSuit, CardRank} from "../models/card.model";
 import {GameConfig, CardLocation, CardCountAllowed} from "../models/game-config";

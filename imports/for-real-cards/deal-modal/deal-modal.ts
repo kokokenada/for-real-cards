@@ -1,6 +1,8 @@
 /**
- * Created by kenono on 2016-04-23.
+ * Copyright Ken Ono, Fabrica Technolology 2016
+ * Source code licensed under GPL 3.0
  */
+
 import { Component, Input } from '@angular/core';
 import { DROPDOWN_DIRECTIVES } from 'ng2-bootstrap/ng2-bootstrap';
 

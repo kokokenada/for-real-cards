@@ -1,3 +1,8 @@
+/**
+ * Copyright Ken Ono, Fabrica Technolology 2016
+ * Source code licensed under GPL 3.0
+ */
+
 import 'meteor/aldeed:simple-schema';
 import { Mongo } from 'meteor/mongo';
 import { Meteor } from 'meteor/meteor';

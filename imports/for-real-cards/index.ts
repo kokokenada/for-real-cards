@@ -1,6 +1,8 @@
 /**
- * Created by kenono on 2016-05-25.
+ * Copyright Ken Ono, Fabrica Technolology 2016
+ * Source code licensed under GPL 3.0
  */
+
 
 export * from "./top-frame/top-frame";
 

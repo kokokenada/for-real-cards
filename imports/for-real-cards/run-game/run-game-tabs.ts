@@ -1,6 +1,8 @@
 /**
- * Created by kenono on 2016-05-08.
+ * Copyright Ken Ono, Fabrica Technolology 2016
+ * Source code licensed under GPL 3.0
  */
+
 
 import { Component } from '@angular/core';
 import { TAB_DIRECTIVES } from 'ng2-bootstrap/ng2-bootstrap'

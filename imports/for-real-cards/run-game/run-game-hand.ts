@@ -1,3 +1,8 @@
+/**
+ * Copyright Ken Ono, Fabrica Technolology 2016
+ * Source code licensed under GPL 3.0
+ */
+
 import { Component, Input, NgZone } from '@angular/core';
 import { Meteor } from 'meteor/meteor';
 import { Dragula, DragulaService } from 'ng2-dragula/ng2-dragula';

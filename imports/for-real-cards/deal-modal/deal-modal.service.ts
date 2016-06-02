@@ -1,6 +1,8 @@
 /**
- * Created by kenono on 2016-05-30.
+ * Copyright Ken Ono, Fabrica Technolology 2016
+ * Source code licensed under GPL 3.0
  */
+
 import { Injectable, Inject } from '@angular/core';
 import { Subject } from "rxjs";
 

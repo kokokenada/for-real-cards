@@ -1,3 +1,7 @@
+/**
+ * Copyright Ken Ono, Fabrica Technolology 2016
+ * Source code licensed under GPL 3.0
+ */
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router'
 import { Session } from 'meteor/session';

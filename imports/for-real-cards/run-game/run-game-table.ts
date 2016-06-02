@@ -1,6 +1,8 @@
 /**
- * Created by kenono on 2016-05-14.
+ * Copyright Ken Ono, Fabrica Technolology 2016
+ * Source code licensed under GPL 3.0
  */
+
 import { Component, Input, NgZone } from '@angular/core';
 import { Dragula, DragulaService} from 'ng2-dragula/ng2-dragula';
 

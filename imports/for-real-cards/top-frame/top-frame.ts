@@ -1,3 +1,7 @@
+/**
+ * Copyright Ken Ono, Fabrica Technolology 2016
+ * Source code licensed under GPL 3.0
+ */
 import { Meteor } from 'meteor/meteor';
 import { Component } from '@angular/core';
 import { Routes, Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from '@angular/router'

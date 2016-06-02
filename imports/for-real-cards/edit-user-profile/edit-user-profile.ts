@@ -1,6 +1,8 @@
 /**
- * Created by kenono on 2016-04-17.
+ * Copyright Ken Ono, Fabrica Technolology 2016
+ * Source code licensed under GPL 3.0
  */
+
 
 import { Component, NgZone } from '@angular/core';
 import { Subscription } from 'rxjs'

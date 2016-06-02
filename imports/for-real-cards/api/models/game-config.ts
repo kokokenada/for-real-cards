@@ -1,6 +1,8 @@
 /**
- * Created by kenono on 2016-05-11.
+ * Copyright Ken Ono, Fabrica Technolology 2016
+ * Source code licensed under GPL 3.0
  */
+
 import {Deck, DeckId} from "./deck.model";
 
 export enum DeckLocation {
