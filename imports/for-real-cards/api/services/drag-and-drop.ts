@@ -1,6 +1,6 @@
 /**
  * Copyright Ken Ono, Fabrica Technolology 2016
- * Source code licensed under GPL 3.0
+ * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 import {Card, CardSuit, CardRank} from "../models/card.model";
 import {GameConfig, CardLocation, CardCountAllowed} from "../models/game-config";

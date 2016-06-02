@@ -152,23 +152,21 @@ export class Uploader {
    * @param  {Function}   callback      Success callback with converted object as a first argument
    * @param  {Function}   errorCallback Error callback with error as a first argument
    */
-  static blobToArrayBuffer(ngZone:NgZone, blob, callback, errorCallback) {
-    ngZone.runOutsideAngular(()=>{
-      let reader = new FileReader();
+  static blobToArrayBuffer(blob, callback, errorCallback) {
+    let reader = new FileReader();
 
-      reader.onload = (e:any) => {
-        callback(e.target.result);
-      };
+    reader.onload = (e:any) => {
+      callback(e.target.result);
+    };
 
-      reader.onerror = (e) => {
-        if (errorCallback) {
-          errorCallback(e);
-        }
-      };
+    reader.onerror = (e) => {
+      if (errorCallback) {
+        errorCallback(e);
+      }
+    };
 
-      reader.readAsArrayBuffer(blob);
-      
-    })
+    reader.readAsArrayBuffer(blob);
+     
   }
 
   /**
@@ -180,16 +178,16 @@ export class Uploader {
    * @param  {Function} resolve [description]
    * @param  {Function} reject  [description]
    */
-  static uploadDataUrl(ngZone:NgZone, dataUrl, name, colleciton, resolve, reject) {
+  static uploadDataUrl(dataUrl, name, colleciton, resolve, reject) {
     // convert to Blob
     let blob = Uploader.dataURLToBlob(dataUrl);
     blob.name = name;
 
     // pick from an object only: name, type and size
     const file = _.pick(blob, 'name', 'type', 'size');
-
+    
     // convert to ArrayBuffer
-    Uploader.blobToArrayBuffer(ngZone, blob, (data) => {
+    Uploader.blobToArrayBuffer(blob, (data) => {
       const upload = new UploadFS.Uploader({
         data,
         file,
@@ -202,29 +200,25 @@ export class Uploader {
     }, reject);
   }
 
-  static uploadFile(ngZone:NgZone, currentFile, collection, successCallback, errorCallback) {
+  static uploadFile(currentFile, collection, successCallback, errorCallback) {
 
-    ngZone.runOutsideAngular(()=>{
-      let reader = new FileReader();
-      let dataURL:any;
+    let reader = new FileReader();
+    let dataURL:any;
 //    reader.onload = (function(aImg) { return function(e) { aImg.src = e.target.result; }; })(img);
-      reader.onload = (e:any) => {
-        dataURL =dataURL = reader.result;
-        Uploader.uploadDataUrl(
-          ngZone,
-          dataURL,
-          currentFile.name,
-          collection,
-          (result) => {
-            successCallback(result);
-          }, (error) => {
-            errorCallback(error);
-          }
-        );
-      };
-      reader.readAsDataURL(currentFile);
-      
-    })
+    reader.onload = (e:any) => {
+      dataURL =dataURL = reader.result;
+      Uploader.uploadDataUrl(
+        dataURL,
+        currentFile.name,
+        collection,
+        (result) => {
+          successCallback(result);
+        }, (error) => {
+          errorCallback(error);
+        }
+      );
+    };
+    reader.readAsDataURL(currentFile);
 
   }
 }

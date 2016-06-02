@@ -1,10 +1,9 @@
 /**
  * Copyright Ken Ono, Fabrica Technolology 2016
- * Source code licensed under GPL 3.0
+ * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 
-
-import { Component, NgZone } from '@angular/core';
+import { Component } from '@angular/core';
 import { Subscription } from 'rxjs'
 import { Meteor } from 'meteor/meteor';
 import { FILE_UPLOAD_DIRECTIVES, FileUploader} from 'ng2-file-upload';
@@ -110,7 +109,7 @@ export class EditUserProfile {
   credentials:Credentials = new Credentials("", "");
   subscription:Subscription;
 
-  constructor(private ngZone:NgZone) {
+  constructor() {
     this.subscription = UserEvent.startObserving((event:UserEvent)=> {
       if (event.eventType === UserEventType.AVATAR_UPDATE && event.userId === Meteor.userId()) {
         this.avatarURL = AvatarTools.getAvatarURL(event.user, "medium");
@@ -152,21 +151,18 @@ export class EditUserProfile {
   }
 
   addImages(files) {
-    this.ngZone.runOutsideAngular(()=>{
-      log.debug(files);
-      let currentFile = files[0];
-      Uploader.uploadFile(this.ngZone, currentFile, AvatarOriginalCollection,
-        (result) => {
-          console.log('upload sucess')
-          console.log(result)
-        }, (error) => {
-          log.error("Error uploading");
-          log.error(error);
-          CommonPopups.alert(error);
-        }
-      );
-
-    });
+    log.debug(files);
+    let currentFile = files[0];
+    Uploader.uploadFile(currentFile, AvatarOriginalCollection,
+      (result) => {
+        console.log('upload sucess')
+        console.log(result)
+      }, (error) => {
+        log.error("Error uploading");
+        log.error(error);
+        CommonPopups.alert(error);
+      }
+    );
   }
 
   avatarUrl():string {
