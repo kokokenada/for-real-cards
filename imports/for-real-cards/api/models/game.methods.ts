@@ -12,10 +12,8 @@ import { Game, GameCollection } from './game.model.ts';
 import { HandCollection, Hand } from './hand.model.ts';
 import { ActionCollection, Action, ActionType } from "./action.model";
 
-console.log("in game methods server")
 
 if (Meteor.isServer) {
-  console.log("in game methods server")
   Meteor.methods({
     /**
      * Creates a new game
@@ -58,3 +56,4 @@ if (Meteor.isServer) {
     }
   });
 }
+export let something=""

@@ -13,7 +13,7 @@ import { AccountTools, Menus, MenuItem, UserEventType, UserEvent} from '../../co
 import { AccountsAdmin } from '../../common-app/ui-twbs-ng2/accounts-admin/accounts-admin';
 
 import { Action, ActionType } from "../api";
-import { ModalDialog } from "../../common-app/ui-ng2/modal/modal.component";
+import { ModalDialog } from "../../common-app/ui-twbs-ng2/modal.component";
 import { DealModal } from "../deal-modal/deal-modal";
 import { EditUserProfile } from '../edit-user-profile/edit-user-profile';
 import { EnterGame } from '../enter-game/enter-game';

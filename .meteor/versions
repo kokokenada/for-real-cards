@@ -14,7 +14,7 @@ babel-compiler@6.6.4
 babel-runtime@0.1.8
 barbatus:angular2-runtime@0.2.3_2
 barbatus:typescript@0.3.1
-barbatus:typescript-compiler@0.5.10
+barbatus:typescript-compiler@0.5.12
 barbatus:typescript-runtime@0.1.2
 base64@1.0.8
 binary-heap@1.0.8
