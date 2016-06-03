@@ -4,5 +4,5 @@
 
 export * from "./avatar"
 export * from "./common-popups";
-export * from "./modal.service";
+export * from "../ui-ng2/modal/modal.service.ts";
 export * from "./popover-menu";

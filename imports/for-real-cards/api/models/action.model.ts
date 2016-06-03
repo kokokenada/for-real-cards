@@ -156,10 +156,6 @@ let GameConfigSchema = new SimpleSchema({
     type: Boolean,
     optional: true
   },
-  seeLastCardOnlyOnFaceUpPile: {
-    type:Boolean,
-    optional: true
-  },
   numberOfCardsToPlayerFaceUp: {
     type: Number,
     optional: true

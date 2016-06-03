@@ -9,7 +9,7 @@ export class Tools {
     return Object.assign({}, source);
   };
 
-  static stringify = function (obj, replacer, spaces, cycleReplacer) {
+  static stringify = function (obj, replacer = null, spaces = 2, cycleReplacer=null) {
     function serializer(replacer, cycleReplacer) {
       var stack = [], keys = [];
 

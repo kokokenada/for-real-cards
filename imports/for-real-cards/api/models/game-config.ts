@@ -72,7 +72,6 @@ export class GameConfig {
   deckLocationAfterDeal: DeckLocation;
   turnCardUpAfterDeal:boolean;
   hasTricks: boolean;
-  seeLastCardOnlyOnFaceUpPile:boolean;
   userCommands:UserCommand[];
   constructor(attributes: {
     name:string,
@@ -84,7 +83,6 @@ export class GameConfig {
     hasTricks:boolean,
     userCommands:UserCommand[],
     turnCardUpAfterDeal?:boolean,
-    seeLastCardOnlyOnFaceUpPile?:boolean,
     numberOfCardsToPlayerFaceUp?:number,
     _deck_id?:DeckId
   }) {
@@ -100,7 +98,6 @@ export class GameConfig {
     this.deckLocationAfterDeal=attributes.deckLocationAfterDeal;
     this.turnCardUpAfterDeal=attributes.turnCardUpAfterDeal;
     this.hasTricks=attributes.hasTricks;
-    this.seeLastCardOnlyOnFaceUpPile=attributes.seeLastCardOnlyOnFaceUpPile;
     this.userCommands = attributes.userCommands;
     let returnValue:UserCommand[] = [];
     for (let i=0; i<NUMBER_OF_LOCATIONS; i++) {
@@ -157,7 +154,6 @@ export class GameConfig {
       deckLocationAfterDeal: DeckLocation.CENTER,
       turnCardUpAfterDeal: true,
       hasTricks: false,
-      seeLastCardOnlyOnFaceUpPile: false,
       userCommands: GameConfig.getDefaultUserCommands()
     })
   }
@@ -240,7 +236,6 @@ export let defaultGames:GameConfig[] = [
     deckLocationAfterDeal: DeckLocation.CENTER,
     turnCardUpAfterDeal: true,
     hasTricks: false,
-    seeLastCardOnlyOnFaceUpPile: false,
     userCommands: [
       new UserCommand(CardLocation.DECK, CardLocation.HAND, CardCountAllowed.ONE),  // Take a card from the deck
       new UserCommand(CardLocation.HAND, CardLocation.PILE, CardCountAllowed.ONE),  // Put a card onto pile

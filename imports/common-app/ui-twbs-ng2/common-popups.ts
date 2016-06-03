@@ -6,7 +6,7 @@ import {Observable, Subject, Subscription} from 'rxjs'
 import { Component, Input } from '@angular/core';
 import * as log from 'loglevel';
 
-import { ModalService } from '../../common-app/ui-twbs-ng2/modal.service';
+import { ModalService } from '../ui-ng2/modal/modal.service.ts';
 
 export class CommonPopups {
 

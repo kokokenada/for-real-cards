@@ -201,16 +201,19 @@ import {Deck, DeckId, GameConfig, defaultGames, DeckLocation, UserCommand} from 
   }
 )
 export class DealModal  {
-  @Input() gameConfig: GameConfig;
-  
+  gameConfig: GameConfig;
+  @Input() componentParameters:any;
   constructor(private modalService: ModalService) {
 
   }
 
-  ngOnInit() {
-    this.gameConfig = GameConfig.getDefaultConfig();
+  ngOnChanges(obj) {
+    console.log('onchanges deal modal:');
+       console.log(obj);
+       console.log(this)
+    if (obj.componentParameters && obj.componentParameters.currentValue && obj.componentParameters.currentValue.gameConfig)
+      this.gameConfig = obj.componentParameters.currentValue.gameConfig;
   }
-
   private selectedPreset:string;
 
   getSelectedPreset():string {

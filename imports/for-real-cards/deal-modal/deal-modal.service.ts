@@ -8,6 +8,8 @@ import { Subject } from "rxjs";
 
 import { ModalService, MODAL_PROVIDERS } from "../../common-app/ui-twbs-ng2";
 import { GameConfig } from "../api";
+import {DealModal} from "./deal-modal";
+import {ModalEvent} from "../../common-app/ui-ng2/modal/modal-event.class";
 
 
 @Injectable()
@@ -15,8 +17,8 @@ export class DealModalService {
   constructor(private modalService:ModalService) {
     
   }
-  open(gameConfig:GameConfig):Subject<Object> {
-    return this.modalService.open("frc-deal-modal", {gameConfig: gameConfig});
+  open(gameConfig:GameConfig):Subject<ModalEvent> {
+    return this.modalService.open(DealModal, "frc-deal-modal", {gameConfig: gameConfig});
   }
 }
 

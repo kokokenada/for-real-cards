@@ -13,7 +13,7 @@ import { AccountTools, Menus, MenuItem, UserEventType, UserEvent} from '../../co
 import { AccountsAdmin } from '../../common-app/ui-twbs-ng2/accounts-admin/accounts-admin';
 
 import { Action, ActionType } from "../api";
-
+import { ModalDialog } from "../../common-app/ui-ng2/modal/modal.component";
 import { DealModal } from "../deal-modal/deal-modal";
 import { EditUserProfile } from '../edit-user-profile/edit-user-profile';
 import { EnterGame } from '../enter-game/enter-game';
@@ -26,12 +26,14 @@ import { Start } from "../start/start";
 
 import "../scss/for-real-cards.scss";
 import subscription = Roles.subscription;
+import {ModalService} from "../../common-app/ui-ng2/modal/modal.service";
 
 @Component(
   {
     selector: 'for-real-cards-top-frame',
-    directives: [PopoverMenu, ROUTER_DIRECTIVES],
+    directives: [PopoverMenu, ROUTER_DIRECTIVES, ModalDialog],
     viewProviders: [DragulaService],
+    providers: [ModalService],
     template: `
 <div class="row">
   <label class="col-xs-5">For Real Cards ({{getUserDisplayName()}})</label>
@@ -40,6 +42,7 @@ import subscription = Roles.subscription;
   <popover-menu class="pull-right col-xs-1" [menuId]="'topbar'"></popover-menu>
 </div>
 <router-outlet></router-outlet>
+<modal-dialog></modal-dialog>
       `,
   }
 )

@@ -16,6 +16,7 @@ import { PlayingCard } from "../playing-card/playing-card";
 import { Action, ActionFormatted, Card, CardImageStyle, GameConfig, CardLocation, CardCountAllowed, Hand} from "../api";
 import { DeckView } from "./deck-view";
 import { PileView } from "./pile-view";
+import {ModalEvent, ModalEventType} from "../../common-app/ui-ng2/modal/modal-event.class";
 
 @Component(
   {
@@ -172,9 +173,9 @@ export class RunGameHand extends RunGame {
     if (RunGame.gameState)
       defaultGameConfig = RunGame.gameState.currentGameConfig;
     this.dealModelService.open(defaultGameConfig).subscribe(
-      (result:GameConfig)=> {
-        if (result) {
-          RunGame.gameState.deal(result);
+      (modalEvent:ModalEvent)=> {
+        if (modalEvent.eventType===ModalEventType.CLOSE) {
+          RunGame.gameState.deal(modalEvent.payload);
         }
       },
       (error)=>{
