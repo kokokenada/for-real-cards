@@ -1,8 +1,3 @@
-/**
- * Created by kenono on 2016-05-01.
- */
-//
-
 import { Component } from '@angular/core';
 import { AccountsAdminTools, Field } from '../../api/services/accounts-admin-tools';
 import { User } from '../../api/models/user.model'
@@ -12,7 +7,7 @@ import { PagingTools, FilterDefinition, SortDefinitionSingle } from "../../api/s
 import { UpdateAccountModal } from './update-account-modal';
 import {DeleteAccountModal} from "./delete-account-modal";
 import { Tracker } from 'meteor/tracker'
-import {CommonPopups} from '../common-popups'
+import {CommonPopups} from '../common-popups/common-popups'
 import {InfoAccountModal} from './info-account-modal'
 import {ImpersonateAccountModal} from './impersonate-account-modal';
 import {UpdateRolesModal} from "./update-roles-modal";

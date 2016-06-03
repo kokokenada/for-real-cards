@@ -11,18 +11,17 @@ import { CommonPopups } from "../../common-app/ui-twbs-ng2";
 import { Tools } from "../../common-app/api";
 
 import { RunGame } from './run-game.ts';
-import { DealModalService, DEAL_MODAL_PROVIDERS } from "../deal-modal/deal-modal.service"
+import { DealModalService } from "../deal-modal/deal-modal.service"
 import { PlayingCard } from "../playing-card/playing-card";
 import { Action, ActionFormatted, Card, CardImageStyle, GameConfig, CardLocation, CardCountAllowed, Hand} from "../api";
 import { DeckView } from "./deck-view";
 import { PileView } from "./pile-view";
-import {ModalEvent, ModalEventType} from "../../common-app/ui-ng2/modal/modal-event.class";
 
 @Component(
   {
     selector: 'run-game-hand',
     directives: [DeckView, Dragula, PileView, PlayingCard],
-    providers: [DEAL_MODAL_PROVIDERS],
+    providers: [DealModalService],
     template: `
   <div>
     <button class="btn btn-primary" (click)="deal()">Deal</button>
@@ -172,13 +171,12 @@ export class RunGameHand extends RunGame {
     let defaultGameConfig:GameConfig;
     if (RunGame.gameState)
       defaultGameConfig = RunGame.gameState.currentGameConfig;
-    this.dealModelService.open(defaultGameConfig).subscribe(
-      (modalEvent:ModalEvent)=> {
-        if (modalEvent.eventType===ModalEventType.CLOSE) {
-          RunGame.gameState.deal(modalEvent.payload);
+    this.dealModelService.open(defaultGameConfig).then(
+      (gameConfig:GameConfig)=>{
+        if (gameConfig) {
+          RunGame.gameState.deal(gameConfig);
         }
-      },
-      (error)=>{
+      }, (error)=> {
         CommonPopups.alert(error);
       }
     );
@@ -194,11 +192,15 @@ export class RunGameHand extends RunGame {
 
     let prompt:string = "Undo " + action.actionDescription() + " done by "
       + (action.creatorId === Meteor.userId() ? "yourself" : action.creator());
-    CommonPopups.confirm(prompt).subscribe((result:boolean)=> {
-      if (result) {
-        RunGame.gameState.undo(action._id);
+    CommonPopups.confirm(prompt).then(
+      (result)=> {
+        if (result) {
+          RunGame.gameState.undo(action._id);
+        }
+      }, (error)=> {
+        CommonPopups.alert(error);
       }
-    })
+    );
   }
   
   inHandCardStyle():CardImageStyle {

@@ -275,9 +275,9 @@ export class DealModal  {
   }
   deal() {
     this.gameConfig.pruneUserCommands();
-    this.modalService.close(this.gameConfig);
+    ModalService.close(this.gameConfig);
   }
   cancel() {
-    this.modalService.close(undefined);
+    ModalService.close(undefined);
   }
 }

@@ -12,8 +12,7 @@ import {
 
 } from '@angular/core'
 
-import {ModalService} from "./modal.service.ts";
-import {ModalEvent, ModalEventType} from "./modal-event.class";
+import { ModalEvent } from "./modal-event.class";
 
 // Based on http://blog.lacolaco.net/post/dynamic-component-creation-in-angular-2/     http://plnkr.co/edit/HCz7Kc?p=info
 
@@ -38,10 +37,7 @@ export class ModalOutlet {
     if (!this.creationModalEvent)
       return;
 
-    console.log('DynamicHTMLOutlet ngOnChanges')
-    console.log(this)
     if (this.vcRef.length>=0) {  // TODO investigate somesort of caching approach, and integrate with modal remove/hide in API
-      console.log('cleared')
       this.vcRef.clear();
     }
 

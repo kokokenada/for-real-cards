@@ -9,38 +9,44 @@ import { ModalService } from "../ui-ng2/modal/modal.service"
 @Component({
   selector: 'modal-dialog',
   template: `
-<div>
-  <modal-outlet bs-modal [creationModalEvent]="creationModalEvent"></modal-outlet>
+<div class="modal-backdrop" [ngStyle]="style">
+  <div class="modal" [ngStyle]="style" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <modal-outlet  [creationModalEvent]="creationModalEvent"></modal-outlet>
+        </div>
+    </div>
+  </div>
 </div>
 `,
-  directives: [ModalOutlet],
+  directives: [ModalOutlet, MODAL_DIRECTVES],
   viewProviders:[BS_VIEW_PROVIDERS]
 })
 export class ModalDialog {
   creationModalEvent:ModalEvent;
+  style:Object = {display: 'none'};
 
   constructor(viewContainerRef:ViewContainerRef, private modalService:ModalService) {
-    ModalEvent.subscribe((modalEvent:ModalEvent)=>{
+    ModalService.subscribe((modalEvent:ModalEvent)=> {
       if (modalEvent.eventType === ModalEventType.OPEN) {
+        console.log("open event in ModalDialog")
+        this.style = {display: 'inline-block'};
         this.creationModalEvent = modalEvent
+      } else if (modalEvent.eventType === ModalEventType.CLOSE) {
+        this.style = {display: "none"}
       }
     });
   }
-
-
 }
-/*   constructor(
- //    viewContainerRef:ViewContainerRef,
- //    private modalService:ModalService,
- elementChild:ElementRef,
- rendererChild:Renderer,
- @Inject(DOCUMENT) documentChild:any,
- @Inject(ComponentsHelper) componentsHelperChild:ComponentsHelper)
- {
- super(elementChild, rendererChild, documentChild, componentsHelperChild);
- ModalEvent.subscribe((modalEvent:ModalEvent)=>{
- if (modalEvent.eventType === ModalEventType.OPEN) {
- this.creationModalEvent = modalEvent
+/*    TODO figure out how to automatically add modal-dialog to document, this version requires it to be user defined
+
+ let el = document.getElementById("common-app.modal");
+ if (!el) {
+ let debugInfo:any;
+ el = this.renderer.createElement(document.rootElement, "div", debugInfo);
+ this.renderer.setElementAttribute(el, "id", "common-app.modal");
+ console.log(el)
  }
- });
- }*/
+ this.componentFactory.selector = selector;
+ let componentRef = this.componentFactory.create(this.injector);
+ */

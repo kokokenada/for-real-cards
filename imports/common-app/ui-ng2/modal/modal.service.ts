@@ -1,47 +1,54 @@
-import * as log from 'loglevel';
 
-import { Subject} from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { Injectable, Type } from '@angular/core';
+import * as log from 'loglevel';
 
 import { ModalEvent, ModalEventType } from "./modal-event.class";
 
 @Injectable()
 export class ModalService {
-  private static subject:Subject;
-  private static staticModalInstance;
-  private static template:string;
-  // private  modalElement;
-  private static returnUrl:string;
-  constructor() {
+  private static modalSubject:Subject = new Subject();  // A subject for all modals (for managing display)
+  private static currentModalPromiseResolver = null; // A promise resolver for the current modal (if we need >1, refactor to tie promise to OPEN event)
+  private static currentModalPromiseRejecter = null;
+
+  static open(component:Type, selector:string, params:Object=undefined):Promise {
+    let promise = new Promise((resolve, reject)=>{
+      if (ModalService.currentModalPromiseResolver) {
+        log.error("modal-already-open.  (promise was still present)");
+        ModalService.currentModalPromiseRejecter("modal-already-open.  (promise was still present)");
+      } 
+      ModalService.pushEvent(new ModalEvent(ModalEventType.OPEN, {componentSelector: selector, componentParameters: params, componentType: component}));
+      ModalService.currentModalPromiseResolver = resolve;
+      ModalService.currentModalPromiseRejecter = reject;
+      console.log('open modal')
+    });
+    return promise;
   }
   
-  open(component:Type, selector:string, params:Object=undefined):Subject<ModalEvent> {
-
-    console.log("modal open");
-    ModalEvent.pushEvent(new ModalEvent(ModalEventType.OPEN, {componentSelector: selector, componentParameters: params, componentType: component}))
-
-
-/*    TODO figure out how to automatically add modal-dialog to document, this version requires it to be user defined
-
-let el = document.getElementById("common-app.modal");
-    if (!el) {
-      let debugInfo:any;
-      el = this.renderer.createElement(document.rootElement, "div", debugInfo);
-      this.renderer.setElementAttribute(el, "id", "common-app.modal");
-      console.log(el)
+  static close(result:any=undefined) {
+    ModalService.pushEvent(new ModalEvent(ModalEventType.CLOSE, {payload: result}));
+    if (ModalService.currentModalPromiseResolver) {
+      ModalService.currentModalPromiseResolver(result);
+      ModalService.currentModalPromiseResolver = null;
+      ModalService.currentModalPromiseRejecter = null;
+    } else {
+      log.error("received close without an open (no promise found)");
     }
-    this.componentFactory.selector = selector;
-    let componentRef = this.componentFactory.create(this.injector);
-*/
-    return ModalEvent.modalSubject;
+  }
+
+  static error(error) {
+    ModalService.currentModalPromiseRejecter(error);
+    ModalService.currentModalPromiseResolver = null;
+    ModalService.currentModalPromiseRejecter = null;
+  }
+
+  private static pushEvent(event:ModalEvent):void {
+    console.log('modal push event')
+    console.log(event)
+    ModalService.modalSubject.next(event);
   }
   
-  close(result:any=undefined) {
-    ModalEvent.pushEvent(new ModalEvent(ModalEventType.CLOSE, {payload: result}));
+  static subscribe(onNext:(event:ModalEvent)=>void, onError:(error:any)=>void=null, onComplete:()=>void=null):Subscription {
+    return ModalService.modalSubject.subscribe(onNext, onError, onComplete)
   }
-
 }
-
-export let MODAL_PROVIDERS:any[] = [
-  ModalService
-];
