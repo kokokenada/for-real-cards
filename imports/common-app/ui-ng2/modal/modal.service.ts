@@ -12,7 +12,7 @@ export class ModalService {
   private static currentModalPromiseRejecter = null;
 
   static open(component:Type, selector:string, params:Object=undefined):Promise {
-    let promise = new Promise((resolve, reject)=>{
+    return new Promise((resolve, reject)=>{
       if (ModalService.currentModalPromiseResolver) {
         log.error("modal-already-open.  (promise was still present)");
         ModalService.currentModalPromiseRejecter("modal-already-open.  (promise was still present)");
@@ -22,7 +22,6 @@ export class ModalService {
       ModalService.currentModalPromiseRejecter = reject;
       console.log('open modal')
     });
-    return promise;
   }
   
   static close(result:any=undefined) {
@@ -43,8 +42,6 @@ export class ModalService {
   }
 
   private static pushEvent(event:ModalEvent):void {
-    console.log('modal push event')
-    console.log(event)
     ModalService.modalSubject.next(event);
   }
   

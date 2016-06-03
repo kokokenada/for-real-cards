@@ -29,7 +29,7 @@ export class CommonPopups {
       messageText: message,
       okText: okText
     };
-    return new ModalService.open(AlertModal, 'alert-modal', params);
+    ModalService.open(AlertModal, 'alert-modal', params);
   };
 
   static confirm(messageText:string, titleText:string="", okText:string="OK", cancelText:string="Cancel"):Promise  {
@@ -39,7 +39,7 @@ export class CommonPopups {
       cancelText: cancelText,
       okText: okText
     };
-    return new ModalService.open(ConfirmModal, 'confirm-modal', params);
+    return ModalService.open(ConfirmModal, 'confirm-modal', params);
   }
 }
 

@@ -1,6 +1,4 @@
-import {Subject, Subscription} from 'rxjs';
 import {Type } from '@angular/core';
-import {ModalService} from "./modal.service";
 
 export enum ModalEventType {
   OPEN,
