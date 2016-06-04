@@ -216,6 +216,7 @@ export class RunGameTable extends RunGame {
       + lowerLeft.x.toString() + "," + lowerLeft.y.toString() + " "
       + "L" + upperLeft.x.toString() + "," + upperLeft.y.toString() + " "           // Line to upper left
       + "z";
+    console.log(returnValue);
     return returnValue;
   }
 

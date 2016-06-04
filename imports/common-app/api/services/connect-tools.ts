@@ -1,8 +1,5 @@
-/**
- * Created by kenono on 2016-05-17.
- */
-import {Meteor} from 'meteor/meteor';
-import {Observable, Subject, Subscription} from 'rxjs'
+import { Meteor } from 'meteor/meteor';
+import { Subject, Subscription } from 'rxjs'
 
 declare let localStorage:any;
 declare let window:any;
@@ -16,9 +13,11 @@ export enum ConnectEventType {
 export class ConnectEvent {
   eventType: ConnectEventType;
   message:string;
-  constructor(eventType:ConnectEventType, data:{message?:string}) {
+  retryCount: number;
+  constructor(eventType:ConnectEventType, data:{message?:string, retryCount?:number}) {
     this.eventType = eventType;
     this.message = data.message;
+    this.retryCount = data.retryCount;
   }
 }
   
@@ -35,11 +34,11 @@ export class ConnectTools {
     return ConnectTools.connectStatusSubject.next(event);
   }
 
-  private static pushConnectionAttempt(message:string):void {
+  private static pushConnectionAttempt(message:string, retryCount:number):void {
     ConnectTools.connectionAttempCount++;
     ConnectTools.pushEvent(new ConnectEvent(
       ConnectEventType.CONNECTION_ATTEMPT,
-      {message: message}
+      {message: message, retryCount: retryCount}
     ));
   }
   
@@ -61,16 +60,22 @@ export class ConnectTools {
 
   static checkConnection() {
     if (!ConnectTools.isConnected()) {
-      ConnectTools.pushConnectionAttempt("Not connected. Server =" + ConnectTools.getServerURL() + ". Retrying...");
+      ConnectTools.pushConnectionAttempt(
+        "Not connected. Server =" + ConnectTools.getServerURL() + ". Retrying...",
+        ConnectTools.connectionAttempCount
+      );
       ConnectTools.retryPromise = Meteor.setInterval(()=> {
+        console.log("connect retry")
         if (ConnectTools.isConnected()) {
-          ConnectTools.retryPromise = "";
           ConnectTools.connectionAttempCount = 0;
           Meteor.clearInterval(ConnectTools.retryPromise);
           ConnectTools.retryPromise = null;
           ConnectTools.pushConnectionSuccess();
         } else {
-          ConnectTools.pushConnectionAttempt("Not connected. Server = " + Meteor.absoluteUrl() + ". Retry Count(" + ConnectTools.connectionAttempCount + ")");
+          ConnectTools.pushConnectionAttempt(
+            "Not connected. Server = " + Meteor.absoluteUrl() + ". Retry Count(" + ConnectTools.connectionAttempCount + ")",
+            ConnectTools.connectionAttempCount
+          );
           Meteor.reconnect();
         }
       }, 5000)

@@ -10,79 +10,7 @@ import {CommonPopups} from "../../common-app/ui-twbs-ng2";
 import {UserEvent} from "../../common-app/api/models/user-event.class";
 
 @Component({
-  template: `
-        <div class='xs-col-12'>
-          <div [hidden]="message ? false : true" (click)="setServer()" class="alert alert-danger" role="alert">
-            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-            {{message}} 
-            <br/>
-            Tap to change server.
-          </div>
-          <button type="button" (click)="registerOpenClose()" class="btn btn-default btn-block">
-            Sign Up
-          </button>
-           
-            <form role="form" [hidden]='!registering'>
-              <div class="panel-heading">
-                <h3 class="panel-title">Register</h3>
-              </div>
-              <div class="panel-body">
-                <div class="row">
-                  <div class="form-group col-md-6">
-                    <label for="username">Username:</label>
-                    <input [(ngModel)]="credentials.username" type="text" class="form-control" id="username">
-                  </div>
-                  <div class="form-group col-md-6">
-                    <label for="email">Email</label><span> (optional)</span>
-                    <input [(ngModel)]="credentials.email" type="text" class="form-control" id="email">
-                  </div>
-                  <div class="form-group col-md-6">
-                    <label for="password">Password</label><span> (optional)</span>
-                    <input [(ngModel)]="credentials.password" type="password" class="form-control" id="password">
-                  </div>
-                  <div class="form-group col-md-6">                    
-                    <button (click)="register()" class="btn btn-primary pull-right">OK, Let's Play</button> 
-                  </div>
-                </div>
-              </div>
-            </form>
-
-          <button type="button" (click)="loginOpenClose()" class="btn btn-default btn-block">
-            Login
-          </button>
-          
-            <form role="form" [hidden]='!loggingIn'>
-              <div class="panel-heading">
-                <h3 class="panel-title">Login</h3>
-              </div>
-              <div class="panel-body">
-                <div class="row">
-                  <div class="form-group col-md-6">
-                    <label for="username">Username:</label>
-                    <input [(ngModel)]="credentials.username" type="text" class="form-control" id="username">
-                  </div>
-                  <div class="form-group col-md-6">
-                    <label for="email">Email</label><span> (optional)</span>
-                    <input [(ngModel)]="credentials.email" type="text" class="form-control" id="email">
-                  </div>
-                  <div class="form-group col-md-6">
-                    <label for="password">Password</label><span> (optional)</span>
-                    <input [(ngModel)]="credentials.password" type="password" class="form-control" id="password">
-                  </div>
-                  <div class="form-group col-md-6">                    
-                    <button (click)="login()" class="btn btn-primary pull-right">OK, Let's Play</button> 
-                  </div>
-
-                </div>
-              </div>
-            </form>
-
-          
-          <button type="button" (click)="tempUser()" class="btn btn-default btn-block">
-            Nah, Just Play
-          </button>
-        </div>
-      `
+  templateUrl: '/imports/for-real-cards/start/start.html'
 })
 export class Start {
   message:string;
@@ -90,17 +18,21 @@ export class Start {
   registering:boolean = false;
   credentials:Credentials;
 
-  constructor() {
+  ngOnInit() {
     this.credentials = Credentials.getLastCredentials();
     ConnectTools.subscribe(
       (event:ConnectEvent)=>{
-        this.message = event.message;
+        if (event.retryCount>1)
+          this.message = event.message;
       }
     );
+    console.log("Starting connection check")
     ConnectTools.checkConnection();
-//    $scope.$on('$destroy', function () {
-//      ConnectTools.stopCheckingConnection();
-//    });
+
+  }
+  ngOnDestroy() {
+    console.log("Stopping checking connection")
+    ConnectTools.stopCheckingConnection();
   }
 
   registerOpenClose() {
