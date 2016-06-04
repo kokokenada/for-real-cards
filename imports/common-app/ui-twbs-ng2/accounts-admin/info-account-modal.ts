@@ -4,7 +4,6 @@ import { User } from '../../api/models/user.model';
 
 @Component({
   selector: 'info-account-modal',
-  controller: InfoAccountModal,
   template: `
 
   <div class="modal-header">

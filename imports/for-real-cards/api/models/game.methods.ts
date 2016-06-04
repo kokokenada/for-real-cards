@@ -27,7 +27,7 @@ if (Meteor.isServer) {
      * Adds a new player to a game, returns a Hand
      */
     ForRealCardsJoinGame: function (gameId:string, password:string) {
-      let game:Game = GameCollection.findOne({_id: gameId});
+      let game:Game = <Game>GameCollection.findOne({_id: gameId});
       if (!game) {
         throw new Meteor.Error('gameId-not-found', 'The game Id "' + gameId + '" was not found.');
       }
@@ -36,7 +36,7 @@ if (Meteor.isServer) {
           throw new Meteor.Error('incorrect-password', 'The password "' + password + '" does not match the password for the game.');
         }
       }
-      let existingHand:Hand = HandCollection.findOne({gameId: gameId, userId: this.userId});
+      let existingHand:Hand = <Hand>HandCollection.findOne({gameId: gameId, userId: this.userId});
       if (!existingHand) {  // See if joining user already has a hand
         let position:number = HandCollection.find({gameId: gameId}).count();
         log.debug('adding hand. userID: ' + this.userId + ", gameId:" + gameId + ", pos:" + position);

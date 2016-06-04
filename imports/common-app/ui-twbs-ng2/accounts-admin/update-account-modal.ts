@@ -1,7 +1,5 @@
-/**
- * Created by kenono on 2016-05-01.
- */
 import {Component} from '@angular/core';
+import {Meteor} from 'meteor/meteor';
 import 'meteor/alanning:roles'
 import * as log from 'loglevel';
 
@@ -10,7 +8,6 @@ import {User} from '../../api/models/user.model';
 
 @Component({
   selector: 'update-account-modal',
-  controller: UpdateAccountModal,
   template: `
         <div class="modal-header">
           <h4>Update {{displayName()}}</h4>

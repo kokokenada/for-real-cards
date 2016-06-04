@@ -178,7 +178,7 @@ export class GameConfig {
   }
   
   pruneUserCommands():void {
-    for (let i=0; i<this.userCommands; i ++) {
+    for (let i=0; i<this.userCommands.length; i ++) {
       if (this.userCommands[i].cardCountAllowed===CardCountAllowed.NONE) {
         this.userCommands.splice(i, 1);
       }

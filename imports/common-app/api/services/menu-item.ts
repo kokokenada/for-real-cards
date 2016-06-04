@@ -1,6 +1,5 @@
-/**
- * Created by kenono on 2016-05-31.
- */
+import { Meteor } from 'meteor/meteor';
+
 export interface MenuItemDefintion {
   id:string;
   parentId?: string;

@@ -32,7 +32,7 @@ export class CommonPopups {
     ModalService.open(AlertModal, 'alert-modal', params);
   };
 
-  static confirm(messageText:string, titleText:string="", okText:string="OK", cancelText:string="Cancel"):Promise  {
+  static confirm(messageText:string, titleText:string="", okText:string="OK", cancelText:string="Cancel"):Promise<boolean>  {
     let params:CommonPopupParametersInterface = {
       titleText: titleText,
       messageText: messageText,

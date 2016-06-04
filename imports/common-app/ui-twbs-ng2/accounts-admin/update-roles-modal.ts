@@ -1,13 +1,12 @@
 import { Component } from '@angular/core';
-import {AccountsModal} from './accounts-modal';
+import { AccountsModal } from './accounts-modal';
 import 'meteor/underscore'
 import 'meteor/alanning:roles'
 import * as log from 'loglevel';
-import {Meteor} from 'meteor/meteor';
+import { Meteor } from 'meteor/meteor';
 
 @Component({
 	selector: 'update-roles-modal',
-	controller: UpdateRolesModal,
 	template:
 		`
 	<div class="modal-header">

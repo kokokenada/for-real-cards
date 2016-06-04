@@ -1,9 +1,7 @@
-/**
- * Created by kenono on 2016-05-31.
- */
-import { Mongo } from "meteor/mongo"
+import { Meteor } from 'meteor/meteor';
+import { Mongo } from "meteor/mongo";
+import { Tracker } from 'meteor/tracker';
 import { Subject, Subscription} from 'rxjs';
-
 import { User } from "./user.model";
 import { AccountTools } from "../services/account-tools";
 
@@ -17,7 +15,7 @@ export enum UserEventType {
 }
 
 export class UserEvent {
-  private static loginStatusSubject:Subject = new Subject();
+  private static loginStatusSubject:Subject<UserEvent> = new Subject();
   private static userCursor:Mongo.Cursor;
 
   eventType: UserEventType;

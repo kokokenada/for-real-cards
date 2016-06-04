@@ -1,7 +1,6 @@
-/**
- * Created by kenono on 2016-04-21.
- */
 import { Meteor } from 'meteor/meteor';
+import { Accounts } from 'meteor/accounts-base'
+
 import  'meteor/aldeed:simple-schema';
 import * as log from 'loglevel';
 
@@ -190,7 +189,7 @@ function addTestUser(username:string, email:string, role:string) {
 
 function checkOrCreateRole(roleName) {
   let roles:{}[] = Meteor.roles.find().fetch();
-  let roleIndex:number = _.find(roles, (role)=>{
+  let roleIndex = _.find(roles, (role)=>{
     return roleName===role;
   }) ;
 

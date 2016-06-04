@@ -7,7 +7,6 @@ declare let Meteor:any;  // Meteor.connection barfs
 
 @Component({
   selector: 'impersonate-account-modal',
-  controller: ImpersonateAccountModal,
   template: `
 
   <div class="modal-header">

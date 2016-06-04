@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor';
 import {Component} from '@angular/core';
 import {AccountsModal} from './accounts-modal';
 import {User} from '../../api/models/user.model';
@@ -5,7 +6,6 @@ import * as log from 'loglevel';
 
 @Component({
   selector: 'delete-account-modal',
-  controller: DeleteAccountModal,
   template: `
 	 	<div class="modal-body">
 	 		<h4>Are you sure you want to delete {{displayName()}}?</h4>

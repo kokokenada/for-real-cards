@@ -25,7 +25,7 @@ export class ConnectEvent {
 export class ConnectTools {
   private static retryPromise:any;
   private static connectionAttempCount = 0;
-  private static connectStatusSubject:Subject = new Subject();
+  private static connectStatusSubject:Subject<ConnectEvent> = new Subject();
   
   static subscribe(onNext:(event:ConnectEvent)=>void, onError:(error:any)=>void=null, onComplete:()=>void=null):Subscription {
     return ConnectTools.connectStatusSubject.subscribe(onNext, onError, onComplete);
