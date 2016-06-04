@@ -1,5 +1,5 @@
 # For Real Cards
-An app for learning or demonstrating techniques and the start of a common collection of reusable components.
+An app for learning or demonstrating techniques and the start of a common collection of reusable components.  It uses Angular 2 and Meteor.
  
 ## Common-app
 Reusable commponents to serve a startting point for other apps.  Will be broken off into a seperate repository.
