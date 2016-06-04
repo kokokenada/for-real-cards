@@ -86,7 +86,7 @@ export class AccountsAdmin {
   }
 
   deleteUser(user:User) {
-    DeleteAccountModal.openUser(user).subscribe(
+    DeleteAccountModal.openUser(user).then(
       (payload:boolean)=> {
         if (payload) {
           this.computation.invalidate();
@@ -107,7 +107,7 @@ export class AccountsAdmin {
   }
 
   updateRoles() {
-    UpdateRolesModal.openRoles().subscribe(
+    UpdateRolesModal.openRoles().then(
       (payload:boolean)=> {
         if (payload) {
           this.computation.invalidate();
@@ -147,7 +147,7 @@ export class AccountsAdmin {
     //clean up the session
   }
 
-  sort(key, direction) {
+  doSort(key, direction) {
     this.sort.key = key;
     this.sort.direction = direction;
   }

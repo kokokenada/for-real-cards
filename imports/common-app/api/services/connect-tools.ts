@@ -4,6 +4,10 @@
 import {Meteor} from 'meteor/meteor';
 import {Observable, Subject, Subscription} from 'rxjs'
 
+declare let localStorage:any;
+declare let window:any;
+declare let navigator:any;
+
 export enum ConnectEventType {
   CONNECTION_ATTEMPT,
   CONNECT_SUCCESS

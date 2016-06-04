@@ -1,15 +1,12 @@
 import { Component } from '@angular/core';
 import {AccountsModal} from './accounts-modal';
 import {User} from '../../api/models/user.model';
-import {Subject } from 'rxjs';
-import {AccountTools} from '../../api/services/account-tools';
 import * as log from 'loglevel';
-import {AccountsAdminTools} from '../../api/services/accounts-admin-tools'
+
+declare let Meteor:any;  // Meteor.connection barfs
 
 @Component({
-  module: 'common',
-  selector: 'impersonateAccountModal',
-  controllerAs: 'vm',
+  selector: 'impersonate-account-modal',
   controller: ImpersonateAccountModal,
   template: `
 
@@ -17,43 +14,38 @@ import {AccountsAdminTools} from '../../api/services/accounts-admin-tools'
     <h4>Impersonate Account</h4>
   </div>
   <div class="modal-body">
-    <h4>Do you want to impersonate this account: {{vm.displayName()}}?</h4>
+    <h4>Do you want to impersonate this account: {{displayName()}}?</h4>
   </div>
   <div class="modal-footer">
-    <span ng-show="vm.error.length" class="label label-danger">{{vm.error}}</span>
-    <button type="button" ng-click="vm.dismiss()" class="btn btn-default">Cancel</button>
-    <button type="button" ng-click="vm.impersonate()" class="btn btn-danger">Impersonate</button>
+    <span *ngIf="vm.error?.length" class="label label-danger">{{error}}</span>
+    <button type="button" (click)="cancel()" class="btn btn-default">Cancel</button>
+    <button type="button" (click)="impersonate()" class="btn btn-danger">Impersonate</button>
   </div>
  
 `
 })
 export class ImpersonateAccountModal extends AccountsModal {
-  constructor($scope) {
-    super($scope);
+  constructor() {
+    super();
   }
 
-  static openUser(user:User):Subject {
-    return AccountsModal._open(user, ImpersonateAccountModal);
+  static openUser(user:User):Promise {
+    return AccountsModal._open(ImpersonateAccountModal, 'impersonate-account-modal', user);
   }
   
   impersonate():void {
-    Meteor.call('impersonateUser', AccountsModal.user._id, (error)=> {
+    Meteor.call('impersonateUser', this.user._id, (error)=> {
       if (error) {
         this._error = error.message;
         log.error(error);
       } else {
-        Meteor.connection.setUserId(AccountsModal.user._id);
-        if (AccountsAdminTools.config.impersonationSuccess) {
+        Meteor.connection.setUserId(this.user._id);
+/*        if (AccountsAdminTools.config.impersonationSuccess) {
           AccountsAdminTools.config.impersonationSuccess();
-        }
-        super.complete(true);
+        }*/
+        super.complete();
       }
-      super.timeoutApply();
     });
   }
-  
-  dismiss():void {
-  super.complete(false);
-    }
 }
 

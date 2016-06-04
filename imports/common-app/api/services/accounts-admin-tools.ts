@@ -14,7 +14,7 @@ const SUBSCRIPTION_NAME = 'common-AccountsAdminTools';
 
 export interface AccountsAdminToolsConfig {
   maxUsersPerPage: number;
-  allowImpersonation: boolean
+  allowImpersonation: boolean;
 }
 
 export interface FieldInterface {

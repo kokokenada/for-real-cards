@@ -9,7 +9,7 @@ import { Session } from 'meteor/session';
 import { Subscription } from 'rxjs'
 import { DragulaService} from 'ng2-dragula/ng2-dragula';
 
-import { AccountTools, Menus, MenuItem, UserEventType, UserEvent} from '../../common-app/api';
+import { AccountTools, Menus, MenuItem, User, UserEventType, UserEvent} from '../../common-app/api';
 import { AccountsAdmin } from '../../common-app/ui-twbs-ng2/accounts-admin/accounts-admin';
 
 import { Action, ActionType } from "../api";
@@ -130,7 +130,7 @@ export class ForRealCardsTopFrame {
           this.displayName = "Not logged in";
           this.navigateToStart();
         } else if (event.eventType === UserEventType.LOGIN) {
-          this.displayName = AccountTools.getDisplayName(Meteor.user);
+          this.displayName = AccountTools.getDisplayName(Meteor.user());
           this.navigateToEnter();
         } else if (event.eventType===UserEventType.DISPLAY_NAME_UPDATE && event.userId === Meteor.userId()) {
           this.displayName = event.displayName;

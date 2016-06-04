@@ -7,6 +7,7 @@ import { Component } from '@angular/core';
 
 import {AccountTools, Credentials, ConnectTools, ConnectEvent, ConnectEventType} from "../../common-app/api";
 import {CommonPopups} from "../../common-app/ui-twbs-ng2";
+import {UserEvent} from "../../common-app/api/models/user-event.class";
 
 @Component({
   template: `
@@ -113,7 +114,7 @@ export class Start {
   }
 
   login() {
-    let observable:Observable = AccountTools.login(this.credentials);
+    let observable:Observable<UserEvent> = AccountTools.login(this.credentials);
     observable.subscribe(
       (user)=>{
         // Login event will cause navigation to enter screen

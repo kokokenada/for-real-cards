@@ -11,7 +11,7 @@ import {DealModal} from "./deal-modal";
 
 @Injectable()
 export class DealModalService {
-  open(gameConfig:GameConfig):Promise {
+  open(gameConfig:GameConfig):Promise<GameConfig> {
     return ModalService.open(DealModal, "frc-deal-modal", {gameConfig: gameConfig});
   }
 }

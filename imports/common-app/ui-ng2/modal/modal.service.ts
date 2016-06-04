@@ -7,7 +7,7 @@ import { ModalEvent, ModalEventType } from "./modal-event.class";
 
 @Injectable()
 export class ModalService {
-  private static modalSubject:Subject = new Subject();  // A subject for all modals (for managing display)
+  private static modalSubject:Subject<ModalEvent> = new Subject();  // A subject for all modals (for managing display)
   private static currentModalPromiseResolver = null; // A promise resolver for the current modal (if we need >1, refactor to tie promise to OPEN event)
   private static currentModalPromiseRejecter = null;
 

@@ -1,41 +1,56 @@
-/**
- * Created by kenono on 2016-05-03.
- */
-import {User} from '../../api/models/user.model';
-import {Subject } from 'rxjs';
-import {AccountTools} from '../../api/services/account-tools';
-import {_} from 'meteor/underscore'
-import {Roles} from 'meteor/alanning:roles'
-import {Meteor} from 'meteor/meteor'
+import { Input } from '@angular/core';
+import 'meteor/alanning:roles'
+import {Type} from '@angular/core';
 
-export class AccountsModal  {
-  static user:User;
+import {AccountTools, User} from '../../api';
+import {ModalService} from '../../ui-ng2/modal/modal.service';
+
+export class AccountsModal {
+  @Input() componentParameters;
+  user:User;
   protected _error:string;
-  private $scope:any;
 
-  constructor($scope) {
-    super();
-    this.$scope = $scope;
+  constructor() {
   }
 
-  protected static _open(user:User, me:any):Subject {
-    AccountsModal.user = user;
-    return me.open();
+  ngOnChanges(obj) {
+//    console.log("ngOnChnages accounts modal")
+//    console.log(this)
+    if (obj.componentParameters) {
+      this.user = this.componentParameters.user;
+      if (this.user && !this.user.profile)
+        this.user.profile = {};
+    }
+//    console.log(this)
   }
-  
+
+  protected static _open(component:Type, selector:string, user:User):Promise {
+    return ModalService.open(component, selector, {user: user})
+  }
+
+  cancel() {
+    ModalService.close(false);
+  }
+
+  complete() {
+    ModalService.close(true);
+  }
+
   get error():string {
     return this._error;
   }
-  
+
   allRoles():string[] {
     return _.pluck(Roles.getAllRoles().fetch(), "name");
   }
 
   displayName():string {
-    return AccountTools.getDisplayName(AccountsModal.user._id);
+    if (!this.user)
+      return "";
+    return AccountTools.getDisplayName(this.user._id);
   }
 
   timeoutApply():void {
-    Meteor.setTimeout(()=>{this.$scope.$apply()}, 0)
+    //Meteor.setTimeout(()=>{this.$scope.$apply()}, 0)
   }
 }

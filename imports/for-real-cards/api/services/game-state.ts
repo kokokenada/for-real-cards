@@ -28,7 +28,7 @@ export class GameState {
   currentGameConfig: GameConfig;
   private undoneIds:string[] = [];
 
-  constructor(gameId:string, subject:Subject) {
+  constructor(gameId:string, subject:Subject<Action>) {
     this.gameId = gameId;
     this.subject = subject;
     this.hands = [];
@@ -479,7 +479,7 @@ export class GameState {
       let isReady = subscriptionHandle.ready();
       if (isReady) {
 
-        this.handsOnServer = HandCollection.find({gameId: this.gameId}).fetch();
+        this.handsOnServer = <Hand[]>HandCollection.find({gameId: this.gameId}).fetch();
         this.reconcileHands();
 
 

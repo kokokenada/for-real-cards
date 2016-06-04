@@ -20,7 +20,7 @@ export class RunGame {
   @Input() gameId:string;
   userPassword:string;
   static gameState:GameState;
-  private static subject = new Subject();
+  private static subject:Subject<Action> = new Subject();
   private static gameStreamInitializedToId:string;
   protected static dragAndDropInitialized:boolean = false;
 

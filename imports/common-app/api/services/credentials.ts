@@ -1,6 +1,4 @@
-/**
- * Created by kenono on 2016-05-26.
- */
+declare let localStorage:any;
 
 export class Credentials {
   constructor(

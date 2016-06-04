@@ -142,9 +142,9 @@ export class Player {
 
   clickedAvatar():void {
     if (this.hand.userId === Meteor.userId() ) {
-      alert('clicked self')
+      //alert('clicked self')
     } else {
-      alert('clicked' + this.hand.userId)
+      //alert('clicked' + this.hand.userId)
     }
   }
 

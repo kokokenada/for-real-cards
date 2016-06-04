@@ -103,7 +103,7 @@ import {CommonPopups} from "../../common-app/ui-twbs-ng2"
 
 export class EditUserProfile {
   avatarURL:string;
-  uploader:FileUploader = new FileUploader({url: URL});
+  uploader:FileUploader = new FileUploader({});
   hasBaseDropZoneOver:boolean = false;
 
   credentials:Credentials = new Credentials("", "");
