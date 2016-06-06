@@ -53,7 +53,15 @@ Schema.UserProfile = new SimpleSchema({
     type: String,
     optional: true
   },
-  avatar_id: {
+  "avatar-original": {
+    type: String,
+    optional: true
+  },
+  "avatar-medium": {
+    type: String,
+    optional: true
+  },
+  "avatar-thumb": {
     type: String,
     optional: true
   },
