@@ -3,10 +3,11 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { Subscription } from 'rxjs'
 import { Meteor } from 'meteor/meteor';
 import { FILE_UPLOAD_DIRECTIVES, FileUploader} from 'ng2-file-upload';
+import { User } from "../../common-app/api";
 import * as log from 'loglevel';
 
 import {
@@ -30,7 +31,7 @@ import {CommonPopups} from "../../common-app/ui-twbs-ng2"
   .my-drop-zone { border: dotted 3px lightgray; }
   .nv-file-over { border: dotted 3px red; }
 </style>
-<form role="form">
+<form role="form" *ngIf="userEditted">
   <div class="panel-heading">
     <h3 class="panel-title">User Profile and Account</h3>
   </div>
@@ -38,11 +39,11 @@ import {CommonPopups} from "../../common-app/ui-twbs-ng2"
     <div class="row">
       <div class="form-group col-xs-6">
         <label for="username">Username:</label>
-        <input [(ngModel)]="credentials.username" type="text" class="form-control" id="username">
+        <input [(ngModel)]="userEditted.username" type="text" class="form-control" id="username"/>
       </div>
       <div class="form-group col-xs-6">
         <label for="email">Email</label><span> (optional)</span>
-        <input [(ngModel)]="credentials.email" type="text" class="form-control" id="email">
+        <input [(ngModel)]="userEditted.emails[0].address" type="text" class="form-control" id="email"/>
       </div>
       <div class="form-group col-xs-6">
         <label for="avatar">Click here to select avatar</label>
@@ -88,9 +89,6 @@ import {CommonPopups} from "../../common-app/ui-twbs-ng2"
         
       </div>
       <img [src]="avatarUrl()"/>
-      
-      
-      
       <div class="form-group col-md-6">                    
         <button (click)="save()" class="btn btn-primary pull-right">Save</button> 
       </div>
@@ -106,32 +104,54 @@ export class EditUserProfile {
   uploader:FileUploader = new FileUploader({});
   hasBaseDropZoneOver:boolean = false;
 
-  credentials:Credentials = new Credentials("", "");
   subscription:Subscription;
+  userEditted:User;
 
-  constructor() {
-    this.subscription = UserEvent.startObserving((event:UserEvent)=> {
-      if (event.eventType === UserEventType.AVATAR_UPDATE && event.userId === Meteor.userId()) {
-        this.avatarURL = AvatarTools.getAvatarURL(event.user, "medium");
-      }
-    });
+  constructor(private ngZone:NgZone) {
   }
 
   ngOnInit() {
-    console.log('init EditUserProfile');
-    console.log(this);
-    AccountTools.readCurrentUser();
-  }
-
-  ngOnChanges(obj) {
-    console.log('onchanges EditUserProfile:');
-    console.log(obj);
+    this.subscription = UserEvent.startObserving((event:UserEvent)=> {
+      if (event.eventType === UserEventType.AVATAR_UPDATE && event.userId === Meteor.userId()) {
+        this.ngZone.run(()=>{
+          this.avatarURL = AvatarTools.getAvatarURL(event.user, "medium");
+        });
+      }
+    });
+    AccountTools.readCurrentUser().then(
+      (user:User)=> {
+        this.ngZone.run(()=> {
+          this.addEmptyEmailIfNeeded(user);
+          this.userEditted = user;
+        });
+      }, (error)=> {
+        CommonPopups.alert(error);
+      }
+    );
   }
 
   ngOnDestroy() {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+  }
+
+  private addEmptyEmailIfNeeded(user:User):void {
+    if (!user.emails || user.emails.length===0) { // Make sure template has something to read/write
+      user.emails = [];
+      user.emails.push({address: ""});
+    }
+  }
+
+  save() {
+    if (this.userEditted.emails[0].address.length===0) {  // remove null address
+      this.userEditted.emails.splice(0);
+    }
+    AccountTools.saveUser(this.userEditted).subscribe((user:User)=>{
+      console.log("Saved");
+      console.log(user);
+    });
+    this.addEmptyEmailIfNeeded(this.userEditted);
   }
 
   fileOverBase(e:any):void {

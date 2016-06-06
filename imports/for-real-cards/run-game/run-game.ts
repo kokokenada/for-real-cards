@@ -28,15 +28,10 @@ export class RunGame {
   }
 
   ngOnInit() {
- //   console.log('init rungame');
- //   console.log(this);
     this.dragAndDropInit();
   }
 
   ngOnChanges(obj) {
-//    console.log('onchanges rungame:');
- //   console.log(obj);
- //   console.log(this)
     this.initialize();
   }
 

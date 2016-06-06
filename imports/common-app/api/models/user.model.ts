@@ -9,11 +9,13 @@ export class User {
   username: string;
   emails: {
     address:string;
-    verified:boolean;
+    verified?:boolean;
   }[];
   profile: {
     name: string;
-    avatar_id: string;
+    "avatar-original": string;
+    "avatar-medium": string;
+    "avatar-thumb": string;
     firstName: string;
     lastName: string;
     birthday: Date;
@@ -234,6 +236,15 @@ if (Meteor.isServer) {
         }
       }
     );
+  });
+
+  Meteor.methods({
+    commonAppUpdateUser:function (user:User) {
+      if (user._id !== this.userId) {
+        throw new Meteor.Error("403-profile-update-for-wrong-user", "Only the user can update his/her own profile.");
+      }
+      return Meteor.users.update({_id: user._id}, {$set: user});  // TODO: Check into whether this has the necessary dupe checks, or if they need to be done here
+    }
   });
 
   Meteor.startup(function () {

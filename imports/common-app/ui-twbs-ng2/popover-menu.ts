@@ -2,7 +2,7 @@
  * Created by kenono on 2016-04-16.
  */
 
-import { Component, Input } from '@angular/core';
+import { Component, Input, NgZone } from '@angular/core';
 import { DROPDOWN_DIRECTIVES } from 'ng2-bootstrap/ng2-bootstrap';
 import { Subscription } from 'rxjs'
 
@@ -29,6 +29,8 @@ import { Menus, MenuItem, UserEvent, UserEventType } from "../api"
 })
 export class PopoverMenu {
   @Input() menuId: string;
+  constructor(private ngZone:NgZone) {
+  }
   private menuItems:MenuItem[];
   private subscription:Subscription;
 
@@ -36,7 +38,9 @@ export class PopoverMenu {
     this.subscription = UserEvent.startObserving((event:UserEvent)=>{
       if (event.eventType===UserEventType.LOGIN || event.eventType===UserEventType.ROLL_UPDATE) {
         this.menuItems =null;
-        this.getMenuItems();
+        this.ngZone.run(()=>{
+          this.getMenuItems();
+        })
       }
     });
   }

@@ -3,7 +3,7 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 import { Meteor } from 'meteor/meteor';
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { Routes, Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from '@angular/router'
 import { Session } from 'meteor/session';
 import { Subscription } from 'rxjs'
@@ -60,7 +60,7 @@ export class ForRealCardsTopFrame {
   private gameDescription:string;
   private displayName:string;
   private subscriptions:Subscription[] = [];
-  constructor(private router: Router) {
+  constructor(private router: Router, private ngZone:NgZone) {
 
     Menus.addMenu({id: 'topbar'});
 
@@ -110,7 +110,7 @@ export class ForRealCardsTopFrame {
   }
 
   ngOnInit() {
-    console.log("On Init")
+    console.log("On Init of top frame");
     this.router.navigate(['/start']);
     this.watchingGame();
     this.watchingUserEvents();
@@ -126,6 +126,7 @@ export class ForRealCardsTopFrame {
   
   watchingUserEvents() {
     this.subscriptions.push(UserEvent.startObserving((event:UserEvent)=> {
+      this.ngZone.run(()=>{
         if (event.eventType === UserEventType.LOGOUT) {
           this.displayName = "Not logged in";
           this.navigateToStart();
@@ -135,19 +136,21 @@ export class ForRealCardsTopFrame {
         } else if (event.eventType===UserEventType.DISPLAY_NAME_UPDATE && event.userId === Meteor.userId()) {
           this.displayName = event.displayName;
         }
-      }
-    ));
+      })
+    }));
   }
 
   watchingGame() {
     this.subscriptions.push(RunGame.subscribe((action:Action)=> {
-      if (action.actionType === ActionType.DEAL) {
-        this.setGameDescription(RunGame.gameState.currentGameConfig.name + " (id " + action.gameId + ")");
-      } else if (action.actionType === ActionType.NEW_HAND) {
-        this.setGameDescription(RunGame.gameState.currentGameConfig.name + " (id " + action.gameId + ")");
-      } else if (action.actionType === ActionType.RESET) {
-        this.setGameDescription("New Game (id " + action.gameId + ")");
-      }
+      this.ngZone.run(()=> {
+        if (action.actionType === ActionType.DEAL) {
+          this.setGameDescription(RunGame.gameState.currentGameConfig.name + " (id " + action.gameId + ")");
+        } else if (action.actionType === ActionType.NEW_HAND) {
+          this.setGameDescription(RunGame.gameState.currentGameConfig.name + " (id " + action.gameId + ")");
+        } else if (action.actionType === ActionType.RESET) {
+          this.setGameDescription("New Game (id " + action.gameId + ")");
+        }
+      });
     }));
   }
 

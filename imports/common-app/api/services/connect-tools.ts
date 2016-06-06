@@ -65,7 +65,6 @@ export class ConnectTools {
         ConnectTools.connectionAttempCount
       );
       ConnectTools.retryPromise = Meteor.setInterval(()=> {
-        console.log("connect retry")
         if (ConnectTools.isConnected()) {
           ConnectTools.connectionAttempCount = 0;
           Meteor.clearInterval(ConnectTools.retryPromise);

@@ -1,7 +1,7 @@
 /**
  * Created by kenono on 2016-04-23.
  */
-import { Component, Input } from '@angular/core';
+import { Component, Input, NgZone } from '@angular/core';
 import {  UserEvent, UserEventType } from "../api"
 import { Subscription } from 'rxjs'
 import * as log from 'loglevel';
@@ -21,13 +21,15 @@ export class Avatar {
   private imageURL:string;
   disposable:Subscription;
 
-  constructor() {
+  constructor(private ngZone:NgZone) {
   }
 
   ngOnInit() {
     this.disposable = UserEvent.startObserving((event:UserEvent)=>{
       if (event.eventType===UserEventType.AVATAR_UPDATE && event.userId===this.userId) {
-        this.imageURL = AvatarTools.getAvatarURL(event.user, this.size);
+        this.ngZone.run(()=>{
+          this.imageURL = AvatarTools.getAvatarURL(event.user, this.size);
+        });
       }
     });
   }

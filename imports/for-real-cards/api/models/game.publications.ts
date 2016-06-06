@@ -27,7 +27,7 @@ if (Meteor.isServer) {
       gameUserIds.push(game.userId);
     });
     if (gameUserIds.indexOf(this.userId)===-1) {
-      return this.ready(); // Game only visisble to its players
+      return this.ready(); // Game only visible to its players
     }
     let userCursor =  Meteor.users.find(
       {_id: {$in: gameUserIds}},
@@ -40,7 +40,7 @@ if (Meteor.isServer) {
       }
     );
     let actionCursor = ActionCollection.find({gameId: options.gameId});
-    log.debug("publish gameinfo: " + ", GameId:" + options.gameId +  ", userCount: " + userCursor.count(), ", hands count: " + handsCursor.count(), " action count:" + actionCursor.count())
+//    log.debug("publish gameinfo: " + ", GameId:" + options.gameId +  ", userCount: " + userCursor.count(), ", hands count: " + handsCursor.count(), " action count:" + actionCursor.count())
     return [
       userCursor,
       handsCursor,

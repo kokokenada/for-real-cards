@@ -145,7 +145,6 @@ export class AccountsAdminTools {
         fields['emails'] = 1;
         fields['profile'] = 1;
         queryOptions.fields = fields;
-        queryOptions.reactive = false;
       }
 
       if (options.sort) {
@@ -353,12 +352,6 @@ if (Meteor.isServer) {
     },
 
   });
-
-
-// var plainString = Match.Where(function(x) {
-//   check(x, String);
-//   return !!x.match(/^\w*$/);
-// });
 
   Meteor.publish(SUBSCRIPTION_NAME, function(options:FilterDefinition) {
 

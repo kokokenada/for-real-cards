@@ -37,7 +37,7 @@ export class UserEvent {
     return UserEvent.loginStatusSubject.subscribe(onNext, onError, onComplete)
   }
 
-  static pushAvatarValue(user:User) {
+  private static pushAvatarValue(user:User) {
     UserEvent.pushEvent(
       new UserEvent(UserEventType.AVATAR_UPDATE, {
         userId: user._id,
@@ -46,7 +46,7 @@ export class UserEvent {
     );
   }
 
-  static pushDisplayNameValue(user:User) {
+  private static pushDisplayNameValue(user:User) {
     UserEvent.pushEvent(
       new UserEvent(UserEventType.DISPLAY_NAME_UPDATE, {
         userId: user._id,
@@ -55,6 +55,15 @@ export class UserEvent {
     );
   }
 
+  private static pushRoles(user:User) {
+    UserEvent.pushEvent(
+      new UserEvent(UserEventType.ROLL_UPDATE, {
+        userId: user._id,
+        user: user
+      })
+    );
+  }
+  
 
   static startObserving(onNext:(event:UserEvent)=>void, onError:(error:any)=>void=null, onComplete:()=>void=null):Subscription {
     let returnValue:Subscription = UserEvent.loginStatusSubject.subscribe(onNext, onError, onComplete);
@@ -62,19 +71,24 @@ export class UserEvent {
       ()=>{
         if (!UserEvent.userCursor) {
           UserEvent.userCursor = Meteor.users.find();
-          UserEvent.userCursor.observeChanges({
-            added: (_id, doc:User)=>{
+          UserEvent.userCursor.observe({
+            added: (doc:User)=>{
+//              console.log('rxjs user added')
+//              console.log(doc)
               UserEvent.pushAvatarValue(doc);
               UserEvent.pushDisplayNameValue(doc);
+              UserEvent.pushRoles(doc);
             },
-            changed:(_id,doc)=>{
-              let user:User = Meteor.users.findOne(_id);
-              UserEvent.pushAvatarValue(user);
-              UserEvent.pushDisplayNameValue(user);
-              UserEvent.pushEvent(new UserEvent(UserEventType.ROLL_UPDATE, {userId: _id}))
+            changed:(oldDoc,newDoc)=>{
+//              console.log('rxjs user changed')
+//              console.log(newDoc)
+              UserEvent.pushAvatarValue(newDoc);
+              UserEvent.pushDisplayNameValue(newDoc);
+              UserEvent.pushRoles(newDoc);
             }
           });
         } else {
+          // First time, run through revery one
           UserEvent.userCursor.forEach((user:User)=>{
             UserEvent.pushAvatarValue(user);
             UserEvent.pushDisplayNameValue(user);

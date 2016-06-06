@@ -3,7 +3,7 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 
-import { Component, Input, NgZone } from '@angular/core';
+import { Component, Input, NgZone, ViewEncapsulation } from '@angular/core';
 import { Dragula, DragulaService} from 'ng2-dragula/ng2-dragula';
 
 import { Tools } from "../../common-app/api";
@@ -23,125 +23,8 @@ const TABLE_ZONE_OUTER_RADIUS = 30;
   {
     selector: 'run-game-table',
     directives: [DeckView, Dragula, Player, PlayingCard, PileView],
-    template: `
-
-  <div [ngStyle]="{position: 'relative', width:width, height: height}">
-
-
-  <svg style="position: absolute; z-index: 5" height="100%" width="100%" viewBox="0,0,100,100" preserveAspectRatio="none">
-    <circle cx="50" cy="50" r="40" style="fill:green;stroke:grey;stroke-width:2" />
-    
-    <path    
-      *ngIf="showDropZone()" 
-      [attr.d]="dropZonePath()" 
-      fill="darkgreen">
-    </path>
-            
-  </svg>
-  
-  <!-- TABLE DROP ZONE -->
-  <div
-    style="position: absolute; top: 60%; left: 10%; width:80%; height:30%; z-index: 20;"
-    [dragula]="'drag-and-drop'"
-    data-drop-target="TABLE"
->
-  
-  </div>
-  <!-- PLAYERS AROUND THE TABLE -->
-  <player 
-    *ngFor="let hand of getHands(); let i = index" 
-    [hand]="hand" 
-    [ngStyle]="{
-            position: 'absolute', 
-            'z-index': 100,
-            width:'10%',
-            height:'20%', 
-            top: get100BasedCoordinates(i).y.toString() + '%', 
-            left: get100BasedCoordinates(i).x.toString() + '%'
-            }"
-  >        
-    
-  
-  </player>
-  
-  <!-- CARDS SHOWN BY PLAYERS -->
-  
-  <div
-    style="position: absolute; width:100%; height:100%" 
-    *ngFor="let hand of getHands(); let j=index"
-    data-drop-target="TABLE"
-    data-drag-source="TABLE"
-    [dragula]="'drag-and-drop'"
-  > 
-    <style>
-    
-    .gu-transit {
-      opacity: 0.2;
-      -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
-      filter: alpha(opacity=20);
-      position: absolute;
-      z-index: 30;
-      width: 7.19% !important; height: 10% !important; top: {{getDropCoordinates(hand).y}}% !important; left: {{getDropCoordinates(hand).x}}% !important;
-    }
-    </style>
-    <playing-card 
-        *ngFor="let card of getCardsInHandFaceUp(hand.userId)"
-        [card]="card"
-        [imgStyle]="portraitCardStyle()"
-        [attr.data-card-rank]="card.rank"
-        [attr.data-card-suit]="card.suit"
-        [ngStyle]="{
-              position: 'absolute', 
-              'z-index': 20,
-              width:'7.19%', 
-              height:'10%', 
-              top: getFaceUpCardCoordinate(hand, card).y.toString() + '%', 
-              left: getFaceUpCardCoordinate(hand, card).x.toString() + '%'
-              }"
-      >
-      </playing-card>
-  </div>
-    <!-- DECK -->
-  <deck-view 
-    *ngIf="shouldShowDeck()"
-    [gameId]="gameId" 
-    [imgStyle] ="portraitCardStyle()"
-    style = "
-            position: absolute; 
-            z-index: 10;
-            width:14.38%; height:20%;
-            top:40%;
-            left:33.61%
-    "
-   [dragula]="'drag-and-drop'"
-    data-drag-source="DECK"
-    data-drop-target="DECK"
-  >
-  </deck-view>
-
-  
-  <!-- PILE -->
-  
-  <pile-view 
-    *ngIf="shouldShowPile()" 
-    [dragula]="'drag-and-drop'"
-    style = "
-        position: absolute; 
-        z-index: 10;
-        width:14.38%; height:20%;
-        top:40%;
-        left: 52%;  
-    "
-    [imgStyle]="portraitCardStyle()"
-    [gameId]="gameId"
-    [attr.data-card-rank]="topCardInPile()?.rank"
-    [attr.data-card-suit]="topCardInPile()?.suit"
-    data-drag-source="PILE"
-    data-drop-target="PILE"
-  >
-  </pile-view>
-</div>
-          `,
+    encapsulation: ViewEncapsulation.None, // Require for Dragula .gu-transit
+    templateUrl: '/imports/for-real-cards/run-game/run-game-table.html'
   }
 )
 

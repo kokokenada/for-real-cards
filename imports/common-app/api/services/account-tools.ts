@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base'
-import {Observable, Subject, Subscription} from 'rxjs'
+import { Observable, Subject, Subscription } from 'rxjs'
 import * as log from 'loglevel';
 
 import {User} from '../models/user.model';
@@ -9,13 +9,11 @@ import {Credentials} from "./credentials";
 import {UserEvent, UserEventType} from "../models/user-event.class";
 
 export class AccountTools {
-  static editUserObject:any;
   
   static login(credentials:Credentials):Observable {
     log.debug('Logging in');
-    let observable:Observable = Observable.create(observer=> {
+    let observable:Observable = Observable.create( (observer)=> {
       credentials.saveCredentials();
-      log.debug('Credentials:' + JSON.stringify(credentials) );
       Meteor.loginWithPassword(
         credentials.email ? credentials.email : credentials.username, credentials.password,
         (error)=> {
@@ -34,7 +32,7 @@ export class AccountTools {
   }
 
   static register(credentials:Credentials):Observable {
-    let observable:Observable = Observable.create(observer=> {
+    let observable:Observable = Observable.create( (observer)=> {
       credentials.saveCredentials();
       Accounts.createUser({
         username: credentials.username,
@@ -84,19 +82,19 @@ export class AccountTools {
     return observable;
   }
 
-  static saveCurrentUser():Observable {
-    let observable:Observable = Observable.create(observer=> {
-      Meteor.call('commonUpdateUser',
-        AccountTools.editUserObject,
+  static saveUser(edittedUserObject:User):Observable {
+    let observable:Observable = Observable.create( (observer)=> {
+      console.log("in saveUser execution")
+      Meteor.call('commonAppUpdateUser',
+        edittedUserObject,
         function (error, numberAffected:number) {
           if (error) {
             log.error(error);
             observer.error(error);
           } else {
             if (numberAffected === 1) {
-              observer.next(AccountTools.editUserObject);
+              observer.next(edittedUserObject);
               observer.complete();
-              UserEvent.pushDisplayNameValue(Meteor.user());
             } else {
               let errorDescription:string = 'Unexpected number of records affected. (' + numberAffected + ')';
               log.error(errorDescription);
@@ -114,18 +112,19 @@ export class AccountTools {
     UserEvent.pushEvent(new UserEvent(UserEventType.LOGOUT));
   };
   
-  static readCurrentUser() {
-    // Initialize
-    Meteor.subscribe('user-edit', {reactive: false}, {
-      onReady: ()=> {
-        AccountTools.editUserObject = Tools.deepCopy(Meteor.user()); // Copy Current User
-      },
-      onStop: (error)=> {
-        if (error) {
-          log.error(error);
-          throw error;
+  static readCurrentUser():Promise {
+    return new Promise((resolve, reject)=>{
+      Meteor.subscribe('user-edit', {reactive: false}, {
+        onReady: ()=> {
+          resolve(Tools.deepCopy(Meteor.user())); // Copy Current User
+        },
+        onStop: (error)=> {
+          if (error) {
+            log.error(error);
+            reject(error);
+          }
         }
-      }
+      });
     });
   }
 

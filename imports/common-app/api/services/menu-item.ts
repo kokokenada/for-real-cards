@@ -43,7 +43,7 @@ export class MenuItem implements MenuItemDefintion {
 //    console.log('should render')
 //    console.log(user)
 //    console.log(this)
-    if (!!~this.roles.indexOf('*') || this.roles.length===0) {
+    if (this.roles.indexOf('*')>-1 || this.roles.length===0) { // Roles in menu definition is blank or * so everyone gets it
       return true;
     } else {
       if (!user) {
