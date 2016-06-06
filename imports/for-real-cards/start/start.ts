@@ -26,12 +26,10 @@ export class Start {
           this.message = event.message;
       }
     );
-    console.log("Starting connection check")
     ConnectTools.checkConnection();
 
   }
   ngOnDestroy() {
-    console.log("Stopping checking connection")
     ConnectTools.stopCheckingConnection();
   }
 
