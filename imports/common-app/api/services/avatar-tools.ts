@@ -104,7 +104,7 @@ static updateProfileAvatar(result:UploadFileInfo[]) {
     if (!file) {
       return AvatarTools.defaultAvatarUrl();
     }
-    return file.url;
+    return file;
   }
 
   static defaultAvatarUrl() {

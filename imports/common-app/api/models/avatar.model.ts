@@ -5,14 +5,11 @@ import { Meteor } from 'meteor/meteor';
 import 'meteor/jalik:ufs'; declare let UploadFS:any;
 import { Mongo } from 'meteor/mongo';
 import * as log from 'loglevel'
+declare let require;
 
-import { AccountTools } from "../services/account-tools";
-
-
-declare let gm; //require;
-
-//let gm = require('gm');
-
+if (Meteor.isServer) {
+  let gm = require('gm');
+}
 export const AvatarOriginalCollection = new Mongo.Collection('avatar-original');
 export const AvatarMediumCollection = new Mongo.Collection('avatar-medium');
 export const AvatarThumbCollection = new Mongo.Collection('avatar-thumb');
@@ -34,11 +31,13 @@ export const AvatarMediumStore = new UploadFS.store.GridFS({
       .quality(100)
       .stream()
       .pipe(to);
+    console.log('finished(?) transform medium')
+    console.log(file)
   },
   onFinishUpload: (file)=>{
     console.log('finished upload medium')
     console.log(file)
-    Meteor.users.update({_id: file.userId}, {$set: {'profile.avatar-medium': file}})
+    Meteor.users.update({_id: file.userId}, {$set: {'profile.avatar-medium': file.url}})
   },
 
 });
@@ -53,11 +52,13 @@ export const AvatarThumbsStore = new UploadFS.store.GridFS({
       .quality(75)
       .stream()
       .pipe(to);
+    console.log('finished(?) transform thumb')
+    console.log(file)
   },
   onFinishUpload: (file)=>{
     console.log('finished upload thumb')
     console.log(file)
-    Meteor.users.update({_id: file.userId}, {$set: {'profile.avatar-thumb': file}})
+    Meteor.users.update({_id: file.userId}, {$set: {'profile.avatar-thumb': file.url}})
   },
 
 });
@@ -67,7 +68,7 @@ export const AvatarOriginalStore = new UploadFS.store.GridFS({
   onFinishUpload: (file)=>{
     console.log('finished upload original')
     console.log(file)
-    Meteor.users.update({_id: file.userId}, {$set: {'profile.avatar-original': file}})
+    Meteor.users.update({_id: file.userId}, {$set: {'profile.avatar-original': file.url}})
   },
   filter: new UploadFS.Filter({
     contentTypes: ['image/*']

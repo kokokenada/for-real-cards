@@ -11,7 +11,7 @@ import * as log from 'loglevel';
 
 import {
   AccountTools,
-  AvatarOriginalCollection,
+  AvatarOriginalStore,
   AvatarTools,
   Credentials,
   Uploader,
@@ -153,7 +153,7 @@ export class EditUserProfile {
   addImages(files) {
     log.debug(files);
     let currentFile = files[0];
-    Uploader.uploadFile(currentFile, AvatarOriginalCollection,
+    Uploader.uploadFile(currentFile, AvatarOriginalStore,
       (result) => {
         console.log('upload sucess')
         console.log(result)
