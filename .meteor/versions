@@ -12,9 +12,9 @@ angular2-html-templates@0.5.3
 autoupdate@1.2.9
 babel-compiler@6.6.4
 babel-runtime@0.1.8
-barbatus:angular2-runtime@0.2.3_2
-barbatus:typescript@0.3.1
-barbatus:typescript-compiler@0.5.12
+barbatus:angular2-runtime@0.5.0
+barbatus:typescript@0.3.3
+barbatus:typescript-compiler@0.6.1
 barbatus:typescript-runtime@0.1.2
 base64@1.0.8
 binary-heap@1.0.8
@@ -53,8 +53,8 @@ launch-screen@1.0.11
 livedata@1.0.18
 localstorage@1.0.9
 logging@1.0.12
-matb33:collection-hooks@0.7.15
-mdg:validation-error@0.2.0
+matb33:collection-hooks@0.8.1
+mdg:validation-error@0.5.1
 meteor@1.1.14
 meteor-base@1.0.4
 minifier-css@1.1.11
