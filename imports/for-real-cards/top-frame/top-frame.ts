@@ -154,29 +154,18 @@ export class ForRealCardsTopFrame {
     }));
   }
 
-  navigateToHand(gameId:string, userPassword:string) {
-    Session.set('password', userPassword);
-    this.router.navigate(['/game-hand', {gameId: gameId}]);
-  }
-  navigateToTable(gameId:string, userPassword:string) {
-    Session.set('password', userPassword);
-    this.router.navigate(['/game-table', {gameId: gameId}]);
-  }
-  navigateToEnter() {
+  private navigateToEnter() {
     this.router.navigate(['/enter-game']);
   }
-  navigateToProfile() {
+  private navigateToProfile() {
     this.router.navigate(['/edit-profile']);
   }
-  navigateToStart() {
+  private navigateToStart() {
     this.router.navigate(['/start']);
   }
-
-
   getUserDisplayName():string  {
     return this.displayName;
   }
-
   getGameDescription():string {
     return this.gameDescription;
   }
