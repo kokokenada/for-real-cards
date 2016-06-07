@@ -4,13 +4,16 @@
  */
 
 
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { TAB_DIRECTIVES } from 'ng2-bootstrap/ng2-bootstrap'
 
-import { RunGameHandAndTable} from "./run-game-hand-and-table";
+import { RunGameHandAndTable } from "./run-game-hand-and-table";
 import { RunGameHand } from "./run-game-hand";
 import { RunGameTable } from "./run-game-table";
 import { RunGameContainer } from "./run-game-container";
+import {Action, ActionType} from "../api/models/action.model";
+import {RunGame} from "./run-game";
+import { Router } from '@angular/router';
 
 @Component(
   {
@@ -35,5 +38,19 @@ import { RunGameContainer } from "./run-game-container";
 )
 
 export class RunGameTabs extends RunGameContainer{
+  constructor(private childRouter:Router, private ngZone:NgZone) {
+    super(childRouter);
+  }
+  ngOnInit() {
+    RunGame.subscribe((action:Action)=> {
+      console.log("RunGameTabs subscribe")
+      console.log(action)
+      this.ngZone.run(()=> {
+        if (action.actionType===ActionType.NEW_GAME) {
+          this.gameId = action.gameId;
+        }
+      });
+    });
+  }
 }
 

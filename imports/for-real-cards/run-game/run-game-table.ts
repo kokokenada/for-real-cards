@@ -6,9 +6,9 @@
 import { Component, Input, NgZone, ViewEncapsulation } from '@angular/core';
 import { Dragula, DragulaService} from 'ng2-dragula/ng2-dragula';
 
-import { Tools } from "../../common-app/api";
+import { Tools } from "../../common-app/api/index";
 
-import { Card, Coordinates, Deck, GameRenderingTools, Hand} from "../api";
+import { Card, Coordinates, Deck, GameRenderingTools, Hand} from "../api/index";
 import { RunGame } from './run-game.ts';
 import { Player } from "../player/player";
 import { PlayingCard } from "../playing-card/playing-card";
@@ -99,7 +99,6 @@ export class RunGameTable extends RunGame {
       + lowerLeft.x.toString() + "," + lowerLeft.y.toString() + " "
       + "L" + upperLeft.x.toString() + "," + upperLeft.y.toString() + " "           // Line to upper left
       + "z";
-    console.log(returnValue);
     return returnValue;
   }
 

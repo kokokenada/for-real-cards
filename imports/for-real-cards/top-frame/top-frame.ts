@@ -5,20 +5,19 @@
 import { Meteor } from 'meteor/meteor';
 import { Component, NgZone } from '@angular/core';
 import { Routes, Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from '@angular/router'
-import { Session } from 'meteor/session';
 import { Subscription } from 'rxjs'
 import { DragulaService} from 'ng2-dragula/ng2-dragula';
 
-import { AccountTools, Menus, MenuItem, User, UserEventType, UserEvent} from '../../common-app/api';
+import { AccountTools, Menus, MenuItem, User, UserEventType, UserEvent} from '../../common-app/api/index';
 import { AccountsAdmin } from '../../common-app/ui-twbs-ng2/accounts-admin/accounts-admin';
 
-import { Action, ActionType } from "../api";
+import { Action, ActionType } from "../api/index";
 import { ModalDialog } from "../../common-app/ui-twbs-ng2/modal.component";
 import { DealModal } from "../deal-modal/deal-modal";
 import { EditUserProfile } from '../edit-user-profile/edit-user-profile';
 import { EnterGame } from '../enter-game/enter-game';
 import { GameActionList } from '../debug-tools/game-action-list';
-import { PopoverMenu } from '../../common-app/ui-twbs-ng2';
+import { PopoverMenu } from '../../common-app/ui-twbs-ng2/index';
 import { RunGame } from "../run-game/run-game";
 import { RunGameTableContainer } from "../run-game/run-game-table-container";
 import { RunGameTabs } from "../run-game/run-game-tabs";
@@ -142,12 +141,14 @@ export class ForRealCardsTopFrame {
 
   watchingGame() {
     this.subscriptions.push(RunGame.subscribe((action:Action)=> {
+      console.log("topframe subscribe")
+      console.log(action)
       this.ngZone.run(()=> {
         if (action.actionType === ActionType.DEAL) {
           this.setGameDescription(RunGame.gameState.currentGameConfig.name + " (id " + action.gameId + ")");
         } else if (action.actionType === ActionType.NEW_HAND) {
           this.setGameDescription(RunGame.gameState.currentGameConfig.name + " (id " + action.gameId + ")");
-        } else if (action.actionType === ActionType.RESET) {
+        } else if (action.actionType === ActionType.RESET || action.actionType===ActionType.NEW_GAME) {
           this.setGameDescription("New Game (id " + action.gameId + ")");
         }
       });

@@ -3,10 +3,11 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 
-import { Component, Input } from '@angular/core';
+import { Component, Input, NgZone } from '@angular/core';
+import { DragulaService } from 'ng2-dragula/ng2-dragula';
 
 import {RunGame} from './run-game.ts';
-import {Card, Deck} from "../api";
+import {Card, Deck} from "../api/index";
 import {CardImageStyle} from "../api/interfaces/card-image-style.interface";
 
 @Component(
@@ -49,6 +50,10 @@ import {CardImageStyle} from "../api/interfaces/card-image-style.interface";
 export class DeckView extends RunGame {
   @Input() imgStyle:CardImageStyle;
   @Input() gameId:string;
+
+  constructor(private dragulaServiceChild: DragulaService, private ngZoneChild:NgZone ) {
+    super(dragulaServiceChild, ngZoneChild);
+  }
 
   URL():string {
     return this.cardBackURL();

@@ -7,6 +7,7 @@ import * as log from 'loglevel';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { Component } from '@angular/core';
+import {RunGame} from "../run-game/run-game";
 
 @Component(
   {
@@ -45,6 +46,7 @@ export class NewGame{
       } else {
         Session.set('password', this.password);
         this.router.navigateByUrl('/game-hand/' + result);
+        RunGame.pushNewGameNotification(result);
       }
     });
   }

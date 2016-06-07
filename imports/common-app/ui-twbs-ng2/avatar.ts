@@ -2,7 +2,7 @@
  * Created by kenono on 2016-04-23.
  */
 import { Component, Input, NgZone } from '@angular/core';
-import {  UserEvent, UserEventType } from "../api"
+import {  UserEvent, UserEventType } from "../api/index"
 import { Subscription } from 'rxjs'
 import * as log from 'loglevel';
 import {AvatarTools} from "../api/services/avatar-tools";

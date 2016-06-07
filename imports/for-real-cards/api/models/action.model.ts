@@ -9,7 +9,7 @@ import { Meteor } from 'meteor/meteor';
 import * as log from 'loglevel';
 import * as moment from 'moment';
 
-import {AccountTools} from '../../../common-app/api';
+import {AccountTools} from '../../../common-app/api/index';
 
 import { HandCollection } from '../models/hand.model';
 import {Card} from './card.model'
@@ -19,20 +19,21 @@ import {GameConfig} from './game-config';
 export let ActionCollection = new Mongo.Collection("actions", {transform: decode});
 
 export enum ActionType {
-  RESET,              // 0
-  NEW_HAND,           // 1
-  DEAL,               // 2
-  DECK_TO_HAND,       // 3
-  HAND_TO_TABLE,      // 4
-  DECK_TO_PILE,       // 5
-  HAND_TO_PILE,       // 6
-  HAND_SORT,          // 7
-  PILE_TO_HAND,       // 8
-  PILE_TO_DECK,       // 9
-  HAND_TO_DECK,       // 10
-  TABLE_TO_HAND,      // 11
-  TAKE_TRICK,         // 12
-  UNDO                // 13
+  NEW_GAME,           // 0
+  RESET,              // 1
+  NEW_HAND,           // 2
+  DEAL,               // 3
+  DECK_TO_HAND,       // 4
+  HAND_TO_TABLE,      // 5
+  DECK_TO_PILE,       // 6
+  HAND_TO_PILE,       // 7
+  HAND_SORT,          // 8
+  PILE_TO_HAND,       // 9
+  PILE_TO_DECK,       // 10
+  HAND_TO_DECK,       // 11
+  TABLE_TO_HAND,      // 12
+  TAKE_TRICK,         // 13
+  UNDO                // 14
 }
 
 export enum VisibilityType {

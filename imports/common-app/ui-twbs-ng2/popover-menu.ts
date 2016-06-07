@@ -6,7 +6,7 @@ import { Component, Input, NgZone } from '@angular/core';
 import { DROPDOWN_DIRECTIVES } from 'ng2-bootstrap/ng2-bootstrap';
 import { Subscription } from 'rxjs'
 
-import { Menus, MenuItem, UserEvent, UserEventType } from "../api"
+import { Menus, MenuItem, UserEvent, UserEventType } from "../api/index"
 
 
 @Component({

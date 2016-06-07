@@ -90,12 +90,17 @@ export class ConnectTools {
     let url:string = window.prompt("New server address", ConnectTools.getServerURL());
     if (url !== null) {
       localStorage.setItem('server_url', url);
-      if (navigator && navigator.app) {
-        window.alert("The app will now exit. When you restart, it will use URL: " + url);
-        navigator.app.exitApp();
-      } else {
-        window.alert("Exit the app, restart and then it will use the URL: " + url);
-      }
+      ConnectTools.setServerTo(url);
     }
   };
+
+  static setServerTo(app_url) {
+    Meteor.connection = Meteor.connect(app_url);
+    _.each(['subscribe', 'methods', 'call', 'apply', 'status','reconnect','disconnect'], function (name) {
+      Meteor[name] = _.bind(Meteor.connection[name], Meteor.connection);
+    });
+    Package.reload = false;
+    Accounts.connection = Meteor.connection;
+  }
 }
+

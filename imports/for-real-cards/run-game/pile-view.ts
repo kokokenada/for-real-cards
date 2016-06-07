@@ -3,11 +3,12 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 
-import { Component, Input } from '@angular/core';
+import { Component, Input, NgZone } from '@angular/core';
+import { DragulaService } from 'ng2-dragula/ng2-dragula';
 
 import { RunGame } from './run-game.ts';
 import { PlayingCard } from "../playing-card/playing-card";
-import { CardImageStyle } from "../api";
+import { CardImageStyle } from "../api/index";
 
 @Component(
   {
@@ -40,6 +41,9 @@ import { CardImageStyle } from "../api";
 export class PileView extends RunGame {
   @Input() imgStyle:CardImageStyle;
   @Input() gameId:string;
+  constructor(private dragulaServiceChild: DragulaService, private ngZoneChild:NgZone ) {
+    super(dragulaServiceChild, ngZoneChild);
+  }
   numberOfCards():number {
     return this.getCardsInPile() ? this.getCardsInPile().length : 0;
   }

@@ -6,9 +6,9 @@
 import { Component, Input } from '@angular/core';
 import { DROPDOWN_DIRECTIVES } from 'ng2-bootstrap/ng2-bootstrap';
 
-import { ModalService } from '../../common-app/ui-twbs-ng2';
+import { ModalService } from '../../common-app/ui-twbs-ng2/index';
 
-import {Deck, DeckId, GameConfig, defaultGames, DeckLocation, UserCommand} from "../api";
+import {Deck, DeckId, GameConfig, defaultGames, DeckLocation, UserCommand} from "../api/index";
 
 @Component(
   {

@@ -1,6 +1,6 @@
 import * as log from 'loglevel';
 
-import "/imports/common-app/api"
+import "/imports/common-app/api/index.ts"
 import "/imports/for-real-cards/api/index.ts"
 
 

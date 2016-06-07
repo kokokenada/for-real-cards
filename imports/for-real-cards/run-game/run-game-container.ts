@@ -4,7 +4,7 @@
  */
 
 import { Input } from '@angular/core';
-import { OnActivate, Router, RouteSegment } from '@angular/router';
+import { Router, RouteSegment } from '@angular/router';
 
 
 export class RunGameContainer {

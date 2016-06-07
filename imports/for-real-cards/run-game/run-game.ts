@@ -10,9 +10,9 @@ import { Input, NgZone } from '@angular/core';
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
 //import { MeteorComponent } from 'angular2-meteor';
 
-import { CommonPopups } from "../../common-app/ui-twbs-ng2";
+import { CommonPopups } from "../../common-app/ui-twbs-ng2/index";
 
-import {Action, ActionType, Card, CardCountAllowed, CardLocation, Deck, DeckLocation, DragAndDrop, GameConfig, GameState, GameRenderingTools, Hand} from '../api';
+import {Action, ActionType, Card, CardCountAllowed, CardLocation, Deck, DeckLocation, DragAndDrop, GameConfig, GameState, GameRenderingTools, Hand} from '../api/index';
 import {CardImageStyle} from "../api/interfaces/card-image-style.interface";
 
 const SESSION_GAME_ID_KEY = 'session-game-id';
@@ -28,11 +28,45 @@ export class RunGame {
   }
 
   ngOnInit() {
+    RunGame.subscribe(
+      (action:Action)=> {
+        console.log("RunGame Suscription")
+        console.log(this)
+        console.log(action)
+        if (action.actionType===ActionType.NEW_HAND) {
+          this.ngZone.run(()=>{
+            this.gameId = action.gameId;
+            this.initialize();
+          })
+        } else {
+          if (action.sequencePosition+1===action.sequenceLength ) {
+            this.ngZone.run(()=>{
+              console.log('rendered')
+            });
+          }
+          /*           log.debug('Got subscription callback in run-game.ts. Action:');
+           log.debug(action);
+           log.debug(RunGame.gameState.hands)
+           log.debug(this)*/
+
+        }
+      },
+      (error)=> {
+        log.error(error);
+        CommonPopups.alert(error);
+      }
+    );
     this.dragAndDropInit();
   }
 
   ngOnChanges(obj) {
     this.initialize();
+  }
+  
+  static pushNewGameNotification(id:string) {
+    RunGame.subject.next(
+      new Action({gameId: id, actionType:ActionType.NEW_GAME, creatorId: Meteor.userId()})
+    );
   }
 
   static getActions():Action[] {
@@ -121,23 +155,6 @@ export class RunGame {
       RunGame.gameState = new GameState(this.gameId, RunGame.subject);
       RunGame.gameState.startSubScriptions();
       RunGame.gameStreamInitializedToId = this.gameId;
-      RunGame.subscribe(
-        (action:Action)=> {
-          if (action.sequencePosition+1===action.sequenceLength) {
-            this.ngZone.run(()=>{
-              console.log('rendered')
-            });
-          }
-          /*           log.debug('Got subscription callback in run-game.ts. Action:');
-           log.debug(action);
-           log.debug(RunGame.gameState.hands)
-           log.debug(this)*/
-        },
-        (error)=> {
-          log.error(error);
-          CommonPopups.alert(error);
-        }
-      );
     }
   }
 

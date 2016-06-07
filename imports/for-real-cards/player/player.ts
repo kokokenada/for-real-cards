@@ -6,9 +6,9 @@ import { Component, Input } from '@angular/core';
 import { Meteor } from 'meteor/meteor';
 import { Subscription } from 'rxjs'
 
-import { Avatar } from '../../common-app/ui-twbs-ng2';
-import { UserEvent, UserEventType } from "../../common-app/api";
-import { Card, Hand, GameRenderingTools } from  '../api';
+import { Avatar } from '../../common-app/ui-twbs-ng2/index';
+import { UserEvent, UserEventType } from "../../common-app/api/index";
+import { Card, Hand, GameRenderingTools } from  '../api/index';
 
 @Component(
   {

@@ -4,7 +4,7 @@
 import { Component, Input } from '@angular/core';
 
 import { User } from '../api/models/user.model';
-import { UserEvent, UserEventType }  from '../api';
+import { UserEvent, UserEventType }  from '../api/index';
 import { Avatar } from './avatar';
 
 @Component({

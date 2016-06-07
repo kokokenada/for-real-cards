@@ -7,7 +7,7 @@ import { Component, NgZone } from '@angular/core';
 import { Subscription } from 'rxjs'
 import { Meteor } from 'meteor/meteor';
 import { FILE_UPLOAD_DIRECTIVES, FileUploader} from 'ng2-file-upload';
-import { User } from "../../common-app/api";
+import { User } from "../../common-app/api/index";
 import * as log from 'loglevel';
 
 import {
@@ -19,8 +19,8 @@ import {
   UploadFileInfo,
   UserEvent,
   UserEventType
-} from "../../common-app/api"
-import {CommonPopups} from "../../common-app/ui-twbs-ng2"
+} from "../../common-app/api/index"
+import {CommonPopups} from "../../common-app/ui-twbs-ng2/index"
 
 
 @Component({

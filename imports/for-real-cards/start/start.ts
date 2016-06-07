@@ -5,8 +5,8 @@
 import { Observable } from 'rxjs';
 import { Component } from '@angular/core';
 
-import {AccountTools, Credentials, ConnectTools, ConnectEvent, ConnectEventType} from "../../common-app/api";
-import {CommonPopups} from "../../common-app/ui-twbs-ng2";
+import {AccountTools, Credentials, ConnectTools, ConnectEvent, ConnectEventType} from "../../common-app/api/index";
+import {CommonPopups} from "../../common-app/ui-twbs-ng2/index";
 import {UserEvent} from "../../common-app/api/models/user-event.class";
 
 @Component({

@@ -6,7 +6,7 @@
 import { Component, Input } from '@angular/core';
 
 import { RunGame } from "../run-game/run-game";
-import { Action } from '../api'
+import { Action } from '../api/index'
 import { PlayingCard } from "../playing-card/playing-card"
 import {ActionFormatted} from "../api/models/action.model";
 

@@ -5,8 +5,8 @@
 
 import { Injectable, Inject } from '@angular/core';
 
-import { ModalService  } from "../../common-app/ui-twbs-ng2";
-import { GameConfig } from "../api";
+import { ModalService  } from "../../common-app/ui-twbs-ng2/index";
+import { GameConfig } from "../api/index";
 import {DealModal} from "./deal-modal";
 
 @Injectable()

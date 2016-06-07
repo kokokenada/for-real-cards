@@ -7,13 +7,13 @@ import { Component, Input, NgZone, ViewEncapsulation } from '@angular/core';
 import { Meteor } from 'meteor/meteor';
 import { Dragula, DragulaService } from 'ng2-dragula/ng2-dragula';
 
-import { CommonPopups } from "../../common-app/ui-twbs-ng2";
-import { Tools } from "../../common-app/api";
+import { CommonPopups } from "../../common-app/ui-twbs-ng2/index";
+import { Tools } from "../../common-app/api/index";
 
 import { RunGame } from './run-game.ts';
 import { DealModalService } from "../deal-modal/deal-modal.service"
 import { PlayingCard } from "../playing-card/playing-card";
-import { Action, ActionFormatted, Card, CardImageStyle, GameConfig, CardLocation, CardCountAllowed, Hand} from "../api";
+import { Action, ActionFormatted, Card, CardImageStyle, GameConfig, CardLocation, CardCountAllowed, Hand} from "../api/index";
 import { DeckView } from "./deck-view";
 import { PileView } from "./pile-view";
 

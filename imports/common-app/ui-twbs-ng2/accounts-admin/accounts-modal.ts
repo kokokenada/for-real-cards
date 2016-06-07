@@ -2,7 +2,7 @@ import { Input } from '@angular/core';
 import 'meteor/alanning:roles'
 import {Type} from '@angular/core';
 
-import {AccountTools, User} from '../../api';
+import {AccountTools, User} from '../../api/index';
 import {ModalService} from '../../ui-ng2/modal/modal.service';
 
 export class AccountsModal {

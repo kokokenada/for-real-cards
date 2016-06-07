@@ -425,6 +425,7 @@ export class GameState {
       case ActionType.HAND_SORT:
       case ActionType.NEW_HAND:
       case ActionType.UNDO:
+      case ActionType.NEW_GAME:
         return false;
       default:
       {
@@ -505,7 +506,6 @@ export class GameState {
             } catch (e) {
               log.error('caught exception processing action');
               log.error(e);
-              break;
             }
           }
         }
