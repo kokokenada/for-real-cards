@@ -1,0 +1,8 @@
+TARGET_DIR="../for-real-cards-release-build"
+RELEASE_APK="../for-real-cards-release-build/android/project/build/outputs/apk/android-release-unsigned.apk"
+
+echo "meteor build $TARGET_DIR --server for-real-cards.scalingo.io:80"
+
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore /Users/kenono/Dropbox/Fabrica/app-keys/my-release-key.keystore $RELEASE_APK alias_name
+~/Library/Android/sdk/build-tools/23.0.3/zipalign  -v 4 $RELEASE_APK $TARGET_DIR/ForRealCards.apk
+ls -al $RELEASE_APK $TARGET_DIR/ForRealCards.apk

@@ -45,8 +45,9 @@ export class NewGame{
         log.error(error);
       } else {
         Session.set('password', this.password);
-        this.router.navigateByUrl('/game-hand/' + result);
-        RunGame.pushNewGameNotification(result);
+        this.router.navigateByUrl('/game-hand/' + result).then((navResult)=>{
+          RunGame.pushNewGameNotification(result);
+        });
       }
     });
   }
