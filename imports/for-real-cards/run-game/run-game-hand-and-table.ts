@@ -34,8 +34,6 @@ export class RunGameHandAndTable {
  }
   ngOnInit() {
     RunGame.subscribe((action:Action)=> {
-      console.log("RunGameHandAndTable subscribe")
-      console.log(action)
       this.ngZone.run(()=> {
         if (action.actionType===ActionType.NEW_GAME) {
           this.gameId = action.gameId;

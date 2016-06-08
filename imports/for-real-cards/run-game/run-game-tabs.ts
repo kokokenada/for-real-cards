@@ -43,8 +43,6 @@ export class RunGameTabs extends RunGameContainer{
   }
   ngOnInit() {
     RunGame.subscribe((action:Action)=> {
-      console.log("RunGameTabs subscribe")
-      console.log(action)
       this.ngZone.run(()=> {
         if (action.actionType===ActionType.NEW_GAME) {
           this.gameId = action.gameId;
