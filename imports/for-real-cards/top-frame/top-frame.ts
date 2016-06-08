@@ -110,7 +110,7 @@ export class ForRealCardsTopFrame {
 
   ngOnInit() {
     console.log("On Init of top frame");
-    this.router.navigate(['/start']);
+//    this.router.navigate(['/start']);
     this.watchingGame();
     this.watchingUserEvents();
   }

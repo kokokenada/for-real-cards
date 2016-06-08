@@ -5,9 +5,9 @@
 import { Observable } from 'rxjs';
 import { Component } from '@angular/core';
 
-import {AccountTools, Credentials, ConnectTools, ConnectEvent, ConnectEventType} from "../../common-app/api/index";
+import {AccountTools, Credentials, ConnectEvent, ConnectEvent, ConnectEventType} from "../../common-app/api/index";
 import {CommonPopups} from "../../common-app/ui-twbs-ng2/index";
-import {UserEvent} from "../../common-app/api/models/user-event.class";
+import {UserEvent, UserEventType} from "../../common-app/api/models/user-event.class";
 
 @Component({
   templateUrl: '/imports/for-real-cards/start/start.html'
@@ -20,17 +20,21 @@ export class Start {
 
   ngOnInit() {
     this.credentials = Credentials.getLastCredentials();
-    ConnectTools.subscribe(
+    ConnectEvent.subscribe(
       (event:ConnectEvent)=>{
-        if (event.retryCount>1)
+        if (event.eventType===ConnectEventType.CONNECTION_ATTEMPT && event.retryCount>1)
           this.message = event.message;
+        else if (event.eventType===ConnectEventType.CONNECT_SUCCESS)
+          this.message = "";
+        else if (event.eventType===ConnectEventType.USER_LOGIN)
+          UserEvent.pushEvent(new UserEvent(UserEventType.LOGIN, {userId: Meteor.userId()})); // Will cause navigation
       }
     );
-    ConnectTools.checkConnection();
+    ConnectEvent.checkConnection();
 
   }
   ngOnDestroy() {
-    ConnectTools.stopCheckingConnection();
+    ConnectEvent.stopCheckingConnection();
   }
 
   registerOpenClose() {
@@ -75,6 +79,6 @@ export class Start {
   }
 
   setServer() {
-    ConnectTools.setServer();
+    ConnectEvent.setServer();
   }
 } 
