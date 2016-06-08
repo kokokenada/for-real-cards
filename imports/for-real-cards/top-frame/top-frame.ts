@@ -110,7 +110,12 @@ export class ForRealCardsTopFrame {
 
   ngOnInit() {
     console.log("On Init of top frame");
-//    this.router.navigate(['/start']);
+    Meteor.setTimeout(()=>{
+      if (Meteor.userId()===null) {
+        // If we're not logged in automatically after 500ms, go to login screen
+        this.router.navigate(['/start']);
+      }
+    }, 500)
     this.watchingGame();
     this.watchingUserEvents();
   }
