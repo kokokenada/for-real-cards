@@ -13,14 +13,15 @@ if (!(Meteor.isCordova && cordova.platformId==="android")) {
 import { provide } from '@angular/core';
 import { ROUTER_PROVIDERS, ROUTER_DIRECTIVES } from '@angular/router';
 import { LocationStrategy, HashLocationStrategy, APP_BASE_HREF } from '@angular/common';
-import { bootstrap } from '@angular/platform-browser-dynamic';
-
 import {ForRealCardsTopFrame} from "../imports/for-real-cards/index";
+
+import { bootstrap } from '@angular/platform-browser-dynamic';
 
 console.log("In apps.ts @" + new Date());
 console.log(Meteor.absoluteUrl());
 
-bootstrap(ForRealCardsTopFrame,
+Meteor.setTimeout(()=>{
+  bootstrap(ForRealCardsTopFrame,
     [
       provide(APP_BASE_HREF, { useValue: '/' }),
       ROUTER_PROVIDERS,
@@ -28,4 +29,6 @@ bootstrap(ForRealCardsTopFrame,
       provide(LocationStrategy,
         {useClass: HashLocationStrategy})
     ]
-);
+  );
+
+}, 1000);
