@@ -2,11 +2,10 @@
  * Copyright Ken Ono, Fabrica Technolology 2016
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
-import { Observable } from 'rxjs';
 import { Component } from '@angular/core';
+//import { NgForm }    from '@angular/common';
 
 import {AccountTools, Credentials, ConnectEvent, ConnectEventType} from "../../common-app/api/index";
-import {CommonPopups} from "../../common-app/ui-twbs-ng2/index";
 import {UserEvent, UserEventType} from "../../common-app/api/models/user-event.class";
 
 @Component({
@@ -14,8 +13,6 @@ import {UserEvent, UserEventType} from "../../common-app/api/models/user-event.c
 })
 export class Start {
   message:string;
-  loggingIn:boolean = false;
-  registering:boolean = false;
   credentials:Credentials;
 
   ngOnInit() {
@@ -37,43 +34,32 @@ export class Start {
     ConnectEvent.stopCheckingConnection();
   }
 
-  registerOpenClose() {
-    this.registering = !this.registering;
-    this.loggingIn = false;
-  }
-
-  loginOpenClose() {
-    this.loggingIn = !this.loggingIn;
-    this.registering = false;
-  }
-
   login() {
-    let observable:Observable<UserEvent> = AccountTools.login(this.credentials);
-    observable.subscribe(
+    AccountTools.login(this.credentials).then(
       (user)=>{
         // Login event will cause navigation to enter screen
       }, (error)=> {
-        CommonPopups.alert(error);
+        this.message = error.message;
       }
     );
   }
 
   register() {
-    AccountTools.register(this.credentials).subscribe(
-      ()=>{
+    AccountTools.register(this.credentials).then(
+      (user)=>{
         // Login event will cause navigation to enter screen
       }, (error)=>{
-        CommonPopups.alert(error);
+        this.message = error.message;
       }
     );
   }
 
   tempUser() {
-    AccountTools.createTempUser().subscribe(
-      ()=>{
+    AccountTools.createTempUser().then(
+      (user)=>{
         // Login event will cause navigation to enter screen
       }, (error)=>{
-        CommonPopups.alert(error);
+        this.message = error.message;
       }
     );
   }

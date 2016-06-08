@@ -111,11 +111,22 @@ export class ForRealCardsTopFrame {
   ngOnInit() {
     console.log("On Init of top frame");
     Meteor.setTimeout(()=>{
+      console.log("ngOnInitTimer")
       if (Meteor.userId()===null) {
         // If we're not logged in automatically after 500ms, go to login screen
-        this.router.navigate(['/start']);
+        this.navigateToStart()
+      } else {
+        console.log("this.router.routeTree")
+        console.log(this.router.routeTree);
+        if (!this.router.routeTree._root.children || !this.router.routeTree._root.children.length) {
+          // Navigate to start if we're nowehere, otherwise we assume user came in via URL directly to game
+          console.log(!this.router.routeTree._root.children)
+          console.log(!this.router.routeTree._root.children.length)
+          console.log('navigating to entry screen')
+          this.navigateToEnter();
+        }
       }
-    }, 500)
+    }, 500);
     this.watchingGame();
     this.watchingUserEvents();
   }

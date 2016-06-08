@@ -10,29 +10,27 @@ import {UserEvent, UserEventType} from "../models/user-event.class";
 
 export class AccountTools {
   
-  static login(credentials:Credentials):Observable {
-    log.debug('Logging in');
-    let observable:Observable = Observable.create( (observer)=> {
+  static login(credentials:Credentials):Promise {
+    return new Promise((resolve, reject)=>{
       credentials.saveCredentials();
       Meteor.loginWithPassword(
         credentials.email ? credentials.email : credentials.username, credentials.password,
         (error)=> {
           if (error) {
             log.error(error);
-            observer.error(error);
+            reject(error);
           } else {
             log.info('Login successful.');
             UserEvent.pushEvent(new UserEvent(UserEventType.LOGIN, {userId: Meteor.userId()}));
-            observer.next(Meteor.user());
-            observer.complete();
+            resolve(Meteor.user());
           }
         });
-    });
-    return observable;
+      
+    })
   }
 
-  static register(credentials:Credentials):Observable {
-    let observable:Observable = Observable.create( (observer)=> {
+  static register(credentials:Credentials):Promise {
+    return new Promise((resolve, reject)=>{
       credentials.saveCredentials();
       Accounts.createUser({
         username: credentials.username,
@@ -44,42 +42,38 @@ export class AccountTools {
       }, (error)=> {
         if (error) {
           log.error(error);
-          observer.error(error);
+          reject(error);
         } else {
           UserEvent.pushEvent(new UserEvent(UserEventType.LOGIN, {userId: Meteor.userId()}));
-          observer.next(Meteor.user());
-          observer.complete();
+          resolve(Meteor.user());
         }
       })
     });
-    return observable;
   };
 
-  static createTempUser():Observable {
-    let observable:Observable = Observable.create(observer=> {
+  static createTempUser():Promise {
+    return new Promise((resolve, reject)=>{
       Meteor.call('CommonGetNextSequence', 'temp_user', (error, result)=> {
         if (error) {
-          observer.onError(error);
+          reject(error);
         } else {
           let userId = 'tmp_' + result.toString();
           let credentials:Credentials = new Credentials(
-            "",
             userId,
+            "",
             Math.random().toString()
           );
-          AccountTools.register(credentials).subscribe(
+          AccountTools.register(credentials).then(
             (user) => {
               UserEvent.pushEvent(new UserEvent(UserEventType.LOGIN, {userId: Meteor.userId()}));
-              observer.next(user);
-              observer.complete();
-            }, (error)=> {
-              observer.error(error);
+              resolve(user);
+            }, (error)=> {  // Is this required or can I depend on rejection in AccountTools.register?
+              reject(error);
             }
           );
         }
       });
     });
-    return observable;
   }
 
   static saveUser(edittedUserObject:User):Observable {
@@ -108,8 +102,15 @@ export class AccountTools {
   }
 
   static logOut():void {
-    Meteor.logout();
-    UserEvent.pushEvent(new UserEvent(UserEventType.LOGOUT));
+    Meteor.logout((error)=> {
+      if (error) {
+        log.error('Error logging out')
+        log.error(error)
+      } else {
+        UserEvent.pushEvent(new UserEvent(UserEventType.LOGOUT));
+      }
+      
+    });
   };
   
   static readCurrentUser():Promise {
