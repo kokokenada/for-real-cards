@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import 'zone.js/dist/zone';
+import { Meteor } from 'meteor/meteor';
 /*
- import { Meteor } from 'meteor/meteor';
  declare var cordova:any;
  declare var require:any;
 if (!(Meteor.isCordova && cordova.platformId==="android")) {
@@ -16,6 +16,9 @@ import { LocationStrategy, HashLocationStrategy, APP_BASE_HREF } from '@angular/
 import { bootstrap } from '@angular/platform-browser-dynamic';
 
 import {ForRealCardsTopFrame} from "../imports/for-real-cards/index";
+
+console.log("In apps.ts @" + new Date());
+console.log(Meteor.absoluteUrl());
 
 bootstrap(ForRealCardsTopFrame,
     [
