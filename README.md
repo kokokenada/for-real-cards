@@ -20,8 +20,18 @@ web and mobile progress, to Ionic or React Native on mobile, while preserving al
 # LICENSE
 
 Common-app components are MIT
-For Real Cards are GPL 3.0 
+For Real Cards are Creative Common Attribution-NonCommercial
 All files under import/for-real-cards are released in GPL 3.0.  All other files are MIT.
+
+## To Do
+* Fix avatars not being displayed in mobile app and deployed
+* Fix modal dialogs
+* Use mobile camera for avatar
+* Improve layout of Join Game dialog and use proper Ng approaches, error handling
+* NgMaterial Styling
+* Ionic Styling
+* Re-use API's from React Native
+ 
 
 
 
