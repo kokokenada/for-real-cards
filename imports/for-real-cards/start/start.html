@@ -21,7 +21,7 @@
           <label for="username">Username:</label>
           <input [(ngModel)]="credentials.username" type="text" class="form-control" ngControl="username" #username="ngForm" required id="username">
           <div [hidden]="username.valid || username.pristine" class="alert alert-danger">
-            Password is required
+            Username is required
           </div>
         </div>
         <div class="form-group col-md-6">
@@ -35,8 +35,8 @@
             Password is required
           </div>
         </div>
-        <div class="form-group col-md-6 btn-group">
-          <button (click)="tempUser()" class="btn btn-default pull-right">Skip</button>
+        <div class="col-md-6">
+          <button (click)="tempUser()" class="btn btn-default pull-left">Skip</button>
           <button (click)="register()" [disabled]="!credentialsForm.form.valid" class="btn btn-primary pull-right">Register</button>
           <button (click)="login()" [disabled]="!credentialsForm.form.valid" class="btn btn-primary pull-right">Login</button>
         </div>
