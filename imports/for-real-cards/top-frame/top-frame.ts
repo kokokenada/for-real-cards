@@ -157,8 +157,6 @@ export class ForRealCardsTopFrame {
 
   watchingGame() {
     this.subscriptions.push(RunGame.subscribe((action:Action)=> {
-      console.log("topframe subscribe")
-      console.log(action)
       this.ngZone.run(()=> {
         if (action.actionType === ActionType.DEAL) {
           this.setGameDescription(RunGame.gameState.currentGameConfig.name + " (id " + action.gameId + ")");

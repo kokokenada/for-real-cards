@@ -38,7 +38,7 @@ export class RunGame {
         } else {
           if (action.sequencePosition+1===action.sequenceLength ) {
             this.ngZone.run(()=>{
-              console.log('rendered')
+//              console.log('rendered')
             });
           }
           /*           log.debug('Got subscription callback in run-game.ts. Action:');
