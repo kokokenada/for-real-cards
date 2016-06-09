@@ -30,5 +30,4 @@ Meteor.setTimeout(()=>{
         {useClass: HashLocationStrategy})
     ]
   );
-
 }, 1000);
