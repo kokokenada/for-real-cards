@@ -108,7 +108,7 @@ static updateProfileAvatar(result:UploadFileInfo[]) {
   }
 
   static defaultAvatarUrl() {
-    return Meteor.absoluteUrl('/default-avatar.png');
+    return Meteor.absoluteUrl('default-avatar.png');
   };
 
 }
