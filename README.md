@@ -1,5 +1,7 @@
 # For Real Cards
 An app for learning or demonstrating techniques and the start of a common collection of reusable components.  It uses Angular 2 and Meteor.
+
+I am blogging about my experiences here [www.fabrica.tech](http://www.fabrica.tech)
  
 ## Common-app
 Reusable commponents to serve a startting point for other apps.  Will be broken off into a seperate repository.
@@ -24,7 +26,8 @@ For Real Cards are Creative Common Attribution-NonCommercial
 All files under import/for-real-cards are released in GPL 3.0.  All other files are MIT.
 
 ## To Do
-* Fix avatars not being displayed in mobile app and deployed
+* Fix avatars not being displayed in mobile app and scalingo
+* Fix styling of edit profile
 * Fix modal dialogs
 * Use mobile camera for avatar
 * Improve layout of Join Game dialog and use proper Ng approaches, error handling
