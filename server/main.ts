@@ -6,7 +6,7 @@ import "/imports/for-real-cards/api/index.ts"
 declare var BrowserPolicy;
 
 log.setLevel(0, true)
-// server/BroswerPolicyAndCORS.js
+/* / server/BroswerPolicyAndCORS.js
 Meteor.startup(function() {
   console.log('Configuring content-security-policy');
   BrowserPolicy.content.allowSameOriginForAll();
@@ -18,3 +18,4 @@ Meteor.startup(function() {
   BrowserPolicy.content.allowEval();
   BrowserPolicy.framing.disallow();
 });
+*/
