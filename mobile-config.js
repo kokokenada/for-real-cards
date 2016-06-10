@@ -1,5 +1,5 @@
 App.info({
-  id: 'com.id1c9m5hkmxjq4b11holit.',
+  id: 'com.fabrica.forrealcards1',
   name: 'For Real Cards',
   version: "0.0.2",
   author: "Ken Ono, Fabrica Technology",
