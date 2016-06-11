@@ -197,4 +197,7 @@ export class AccountTools {
     return user._id;
   }
 
+  static isLoggedIn():boolean {
+    return Meteor.userId()===null ? false : true;
+  }
 }

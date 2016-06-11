@@ -34,10 +34,8 @@ import {ModalService} from "../../common-app/ui-ng2/modal/modal.service";
     viewProviders: [DragulaService],
     providers: [ModalService],
     template: `
-<div class="row">
-  <label class="col-xs-5">For Real Cards ({{getUserDisplayName()}})</label>
-  <label class="col-xs-5">{{getGameDescription()}}</label>
-  
+<div>
+  <label><strong>For Real Cards</strong> {{getUserDisplayName()}} {{getGameDescription()}}</label>
   <popover-menu class="pull-right col-xs-1" [menuId]="'topbar'"></popover-menu>
 </div>
 <router-outlet></router-outlet>
@@ -144,6 +142,7 @@ export class ForRealCardsTopFrame {
       this.ngZone.run(()=>{
         if (event.eventType === UserEventType.LOGOUT) {
           this.displayName = "Not logged in";
+          this.setGameDescription("");
           this.navigateToStart();
         } else if (event.eventType === UserEventType.LOGIN) {
           this.displayName = AccountTools.getDisplayName(Meteor.user());
@@ -179,7 +178,9 @@ export class ForRealCardsTopFrame {
     this.router.navigate(['/start']);
   }
   getUserDisplayName():string  {
-    return this.displayName;
+    if (this.displayName && this.displayName.length>0)
+      return "(" + this.displayName + ")";
+    return "";
   }
   getGameDescription():string {
     return this.gameDescription;

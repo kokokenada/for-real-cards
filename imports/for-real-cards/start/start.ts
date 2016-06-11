@@ -14,6 +14,7 @@ import {UserEvent, UserEventType} from "../../common-app/api/models/user-event.c
 export class Start {
   message:string;
   credentials:Credentials;
+  active:boolean = true;
 
   ngOnInit() {
     this.credentials = Credentials.getLastCredentials();
@@ -32,6 +33,11 @@ export class Start {
   }
   ngOnDestroy() {
     ConnectEvent.stopCheckingConnection();
+  }
+  routerOnActivate() {
+    this.active = false;  // Forces reset as per https://angular.io/docs/ts/latest/guide/forms.html
+                          // This is a temporary workaround while we await a proper form reset feature.
+    setTimeout(()=> this.active=true, 0);
   }
 
   login() {

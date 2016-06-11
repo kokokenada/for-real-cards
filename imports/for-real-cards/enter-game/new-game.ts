@@ -13,18 +13,15 @@ import {RunGame} from "../run-game/run-game";
   {
     selector: 'new-game',
     template: `
-<div class="panel panel-default">
-  <form class="form-horizontal">
+<div>
+  <form>
     <div class="panel-heading">
-      <h3 class="panel-title">New Game</h3>
+      <h2 class="panel-title">New Game</h2>
     </div>
     <div class="panel-body">
       <div class="form-group">
-        <div class="col-xs-1"></div>
-        <label class="col-xs-4" for="password">Password (optional):</label>
-        <div class="col-xs-7">
-          <input class="form-control" [(ngModel)]="password" type="text" id="password">
-        </div>
+        <label for="password">Password (optional):</label>
+        <input class="form-control" [(ngModel)]="password" type="text" id="password">
       </div>
       <button type="button" class="btn btn-success btn-block" (click)="newGame()">
         Start Game

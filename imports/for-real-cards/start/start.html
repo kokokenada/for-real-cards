@@ -4,42 +4,40 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 -->
-<div class='xs-col-12'>
+<div *ngIf="active">
   <div [hidden]="message ? false : true" (click)="setServer()" class="alert alert-danger" role="alert">
     <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
     {{message}}
     <br/>
   </div>
 
-  <form role="form"  #credentialsForm="ngForm">
+  <form #credentialsForm="ngForm">
     <div class="panel-heading">
       <h3 class="panel-title">Login or Register</h3>
     </div>
     <div class="panel-body">
-      <div class="row">
-        <div class="form-group col-md-6">
-          <label for="username">Username:</label>
-          <input [(ngModel)]="credentials.username" type="text" class="form-control" ngControl="username" #username="ngForm" required id="username">
-          <div [hidden]="username.valid || username.pristine" class="alert alert-danger">
-            Username is required
-          </div>
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input [(ngModel)]="credentials.username" type="text" class="form-control" ngControl="username" #username="ngForm" required id="username">
+        <div [hidden]="username.valid || username.pristine" class="alert alert-danger">
+          Username is required
         </div>
-        <div class="form-group col-md-6">
-          <label for="email">Email</label><span> (optional)</span>
-          <input [(ngModel)]="credentials.email" type="text" ngControl="email" class="form-control" id="email">
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label><span> (optional)</span>
+        <input [(ngModel)]="credentials.email" type="text" ngControl="email" class="form-control" id="email">
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input [(ngModel)]="credentials.password" type="password" ngControl="password" #password="ngForm" required class="form-control" id="password">
+        <div [hidden]="password.valid || password.pristine" class="alert alert-danger">
+          Password is required
         </div>
-        <div class="form-group col-md-6">
-          <label for="password">Password</label>
-          <input [(ngModel)]="credentials.password" type="password" ngControl="password" #password="ngForm" required class="form-control" id="password">
-          <div [hidden]="password.valid || password.pristine" class="alert alert-danger">
-            Password is required
-          </div>
-        </div>
-        <div class="col-md-6">
-          <button (click)="tempUser()" class="btn btn-default pull-left">Skip</button>
-          <button (click)="register()" [disabled]="!credentialsForm.form.valid" class="btn btn-primary pull-right">Register</button>
-          <button (click)="login()" [disabled]="!credentialsForm.form.valid" class="btn btn-primary pull-right">Login</button>
-        </div>
+      </div>
+      <div>
+        <button (click)="tempUser()" class="btn btn-default pull-left">Skip</button>
+        <button (click)="register()" [disabled]="!credentialsForm.form.valid" class="btn btn-primary pull-right">Register</button>
+        <button (click)="login()" [disabled]="!credentialsForm.form.valid" class="btn btn-primary pull-right">Login</button>
       </div>
     </div>
   </form>

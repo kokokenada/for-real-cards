@@ -14,6 +14,7 @@ import { CommonPopups } from "../../common-app/ui-twbs-ng2/index";
 
 import {Action, ActionType, Card, CardCountAllowed, CardLocation, Deck, DeckLocation, DragAndDrop, GameConfig, GameState, GameRenderingTools, Hand} from '../api/index';
 import {CardImageStyle} from "../api/interfaces/card-image-style.interface";
+import {AccountTools} from "../../common-app/api/services/account-tools";
 
 const SESSION_GAME_ID_KEY = 'session-game-id';
 export class RunGame {
@@ -58,6 +59,10 @@ export class RunGame {
 
   ngOnChanges(obj) {
     this.initialize();
+  }
+
+  isLoggedIn():boolean {
+    return AccountTools.isLoggedIn();
   }
   
   static pushNewGameNotification(id:string) {

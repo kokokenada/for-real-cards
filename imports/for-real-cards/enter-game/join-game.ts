@@ -11,25 +11,19 @@ import { Session } from 'meteor/session';
     selector: 'join-game',
     template: `
  
- <div class="panel panel-default">
-  <form class="form-horizontal">
+ <div>
+  <form>
     <div class="panel-heading">
-      <h3 class="panel-title">Join Game</h3>
+      <h2 class="panel-title">Join Game</h2>
     </div>
     <div class="panel-body">
       <div class="form-group">
-        <div class="col-xs-1"></div>
-        <label class="col-xs-4 control-label" for="game-id">Game Id:</label>
-        <div class="col-xs-7">
-          <input [(ngModel)]="gameId" type="text" class="form-control" id="game-id">
-        </div>
+        <label class="control-label" for="game-id">Game Id:</label>
+        <input [(ngModel)]="gameId" type="text" class="form-control" id="game-id">
       </div>
       <div class="form-group">
-        <div class="col-xs-1"></div>
-        <label class="col-xs-4 control-label" for="password">Password (if required):</label>
-        <div class="col-xs-7">
-          <input [(ngModel)]="password" type="text" class="form-control" id="password">
-        </div>
+        <label class="control-label" for="password">Password (if required):</label>
+        <input [(ngModel)]="password" type="text" class="form-control" id="password">
       </div>
       <button type="button" (click)="joinGame()" class="btn btn-success btn-block">
           Join Game

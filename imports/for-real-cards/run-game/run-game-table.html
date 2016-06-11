@@ -4,7 +4,7 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 -->
-<div [ngStyle]="{position: 'relative', width:width, height: height}">
+<div *ngIf="isLoggedIn()" [ngStyle]="{position: 'relative', width:width, height: height}">
 
 
   <svg style="position: absolute; z-index: 5" height="100%" width="100%" viewBox="0,0,100,100" preserveAspectRatio="none">
