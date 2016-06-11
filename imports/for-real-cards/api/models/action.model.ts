@@ -33,7 +33,8 @@ export enum ActionType {
   HAND_TO_DECK,       // 11
   TABLE_TO_HAND,      // 12
   TAKE_TRICK,         // 13
-  UNDO                // 14
+  UNDO,               // 14
+  ENTER_GAME_FAIL     // 15
 }
 
 export enum VisibilityType {

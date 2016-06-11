@@ -163,6 +163,8 @@ export class ForRealCardsTopFrame {
           this.setGameDescription(RunGame.gameState.currentGameConfig.name + " (id " + action.gameId + ")");
         } else if (action.actionType === ActionType.RESET || action.actionType===ActionType.NEW_GAME) {
           this.setGameDescription("New Game (id " + action.gameId + ")");
+        } else if (action.actionType === ActionType.ENTER_GAME_FAIL) {
+          this.navigateToEnter();
         }
       });
     }));

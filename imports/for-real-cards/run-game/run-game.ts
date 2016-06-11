@@ -144,8 +144,14 @@ export class RunGame {
       this.userPassword = Session.get('password');
       if (!this.amIIncluded()) {
         Meteor.call('ForRealCardsJoinGame', this.gameId, this.userPassword, (error, result:Hand)=> {
+          log.error(error);
           if (error) {
-            log.error(error);
+            if (error.error==="gameId-not-found") {
+              CommonPopups.alert("That game ID does not exist.");
+              RunGame.subject.next(new Action({gameId: this.gameId, creatorId: Meteor.userId(), actionType: ActionType.ENTER_GAME_FAIL}));
+            } else {
+              CommonPopups.alert(error);
+            }
           } else {
             this.setIncluded(result.gameId);
           }

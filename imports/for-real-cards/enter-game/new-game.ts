@@ -16,7 +16,7 @@ import {RunGame} from "../run-game/run-game";
 <div>
   <form>
     <div class="panel-heading">
-      <h2 class="panel-title">New Game</h2>
+      <h2 class="panel-title">Start New Game</h2>
     </div>
     <div class="panel-body">
       <div class="form-group">
