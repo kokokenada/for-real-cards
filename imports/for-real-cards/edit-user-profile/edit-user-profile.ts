@@ -14,7 +14,6 @@ import {
   AccountTools,
   AvatarOriginalStore,
   AvatarTools,
-  Credentials,
   Uploader,
   UploadFileInfo,
   UserEvent,
@@ -36,62 +35,59 @@ import {CommonPopups} from "../../common-app/ui-twbs-ng2/index"
     <h3 class="panel-title">User Profile and Account</h3>
   </div>
   <div class="panel-body">
-    <div class="row">
-      <div class="form-group col-xs-6">
-        <label for="username">Username:</label>
-        <input [(ngModel)]="userEditted.username" type="text" class="form-control" id="username"/>
-      </div>
-      <div class="form-group col-xs-6">
-        <label for="email">Email</label><span> (optional)</span>
-        <input [(ngModel)]="userEditted.emails[0].address" type="text" class="form-control" id="email"/>
-      </div>
-      <div class="form-group col-xs-6">
-        <label for="avatar">Click here to select avatar</label>
-        <input type="file" ng2FileSelect [uploader]="uploader" (onchange)="fileDrop($event)"/>
-        <strong>OR</strong>
-        
-         <div ng2FileDrop
-               [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
-               (fileOver)="fileOverBase($event)"
-               [uploader]="uploader"
-               (onFileDrop)="fileDrop($event)"
-             
-               class="well my-drop-zone">
-              Drop image here
-          </div>
+    <div class="form-group">
+      <label for="username">Username:</label>
+      <input [(ngModel)]="userEditted.username" type="text" class="form-control" id="username"/>
+    </div>
+    <div class="form-group">
+      <label for="email">Email</label><span> (optional)</span>
+      <input [(ngModel)]="userEditted.emails[0].address" type="text" class="form-control" id="email"/>
+    </div>
+    <div class="form-group">                    
+      <button (click)="save()" class="btn btn-primary pull-right">Save</button> 
+    </div>
+
+    <div class="form-group">
+      <label for="avatar">Avatar</label>
+      <input type="file" ng2FileSelect [uploader]="uploader" (onchange)="fileDrop($event)"/>
+      <strong>OR</strong>
+            
+      <div ng2FileDrop
+           [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
+           (fileOver)="fileOverBase($event)"
+           [uploader]="uploader"
+           (onFileDrop)="fileDrop($event)"
          
-          <table class="table">
-                <thead>
-                <tr>
-                    <th width="50%">Name</th>
-                    <th>Size</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let item of uploader.queue">
-                    <td><strong>{{item.file.name}}</strong></td>
-                    <td nowrap>{{item.file.size}}</td>
-                    <td nowrap>
-                        <button type="button" class="btn btn-success btn-xs"
-                                (click)="uploadToFSCollection()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
-                            <span class="glyphicon glyphicon-upload"></span> Upload
-                        </button>
-                        <button type="button" class="btn btn-danger btn-xs"
-                                (click)="item.remove()">
-                            <span class="glyphicon glyphicon-trash"></span> Remove
-                        </button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>        
-        
-        
+           class="well my-drop-zone">
+          Drop image here
+        <img [src]="avatarUrl()"/>
       </div>
-      <img [src]="avatarUrl()"/>
-      <div class="form-group col-md-6">                    
-        <button (click)="save()" class="btn btn-primary pull-right">Save</button> 
-      </div>
+     
+      <table *ngIf="uploader?.queue.length" class="table">
+        <thead>
+          <tr>
+            <th width="50%">Name</th>
+            <th>Size</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of uploader.queue">
+            <td><strong>{{item.file.name}}</strong></td>
+            <td nowrap>{{item.file.size}}</td>
+            <td nowrap>
+              <button type="button" class="btn btn-success btn-xs"
+                      (click)="uploadToFSCollection()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
+                  <span class="glyphicon glyphicon-upload"></span> Upload
+              </button>
+              <button type="button" class="btn btn-danger btn-xs"
+                      (click)="item.remove()">
+                  <span class="glyphicon glyphicon-trash"></span> Remove
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>        
     </div>
   </div>
 </form>
