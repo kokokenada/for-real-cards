@@ -133,8 +133,8 @@ export class RunGame {
   }
 
   private initialize() {
-    console.log("RunGame initialize()")
-    console.log(this);
+    //console.log("RunGame initialize()")
+    //console.log(this);
     if   (this.gameId===undefined) {
       console.log("gameId udefined")
       console.log(this)
