@@ -63,7 +63,7 @@ export class ConnectEvent {
     Tracker.autorun((computation:Tracker.Computation)=> {
       ConnectEvent.computation = computation;
       let userId = Meteor.userId();
-      if (userId!==null) {
+      if (userId!==null && ConnectEvent.isConnected()) {
         ConnectEvent.pushEvent(new ConnectEvent(ConnectEventType.USER_LOGIN))
       }
     });
