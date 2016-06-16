@@ -6,6 +6,7 @@ import "/imports/for-real-cards/api/index.ts"
 declare var BrowserPolicy;
 
 log.setLevel(0, true)
+
 Meteor.startup(function() {
   console.log('Configuring content-security-policy');
   BrowserPolicy.content.allowSameOriginForAll();
