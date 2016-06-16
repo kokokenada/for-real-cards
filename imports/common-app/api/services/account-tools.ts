@@ -45,6 +45,7 @@ export class AccountTools {
           log.error(error);
           reject(error);
         } else {
+          log.info("Register successful.")
           UserEvent.pushEvent(new UserEvent(UserEventType.LOGIN, {userId: Meteor.userId()}));
           resolve(Meteor.user());
         }
@@ -66,6 +67,7 @@ export class AccountTools {
           );
           AccountTools.register(credentials).then(
             (user) => {
+              log.info("Registering tmp user successful.")
               UserEvent.pushEvent(new UserEvent(UserEventType.LOGIN, {userId: Meteor.userId()}));
               resolve(user);
             }, (error)=> {  // Is this required or can I depend on rejection in AccountTools.register?
