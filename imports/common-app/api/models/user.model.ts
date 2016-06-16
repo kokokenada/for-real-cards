@@ -192,9 +192,9 @@ function addTestUser(username:string, email:string, role:string) {
     Meteor.users.remove({_id: existsUser._id});
   }
   const password = "1234";
+  log.info("Created Username:" + username + ", email: " + email +", password:" + password + ", role:" + role );
   var user = Accounts.createUser({username: username, email: email, password: password});
   Roles.addUsersToRoles(user, [role]);
-  log.info("Created Username:" + username + ", email: " + email +", password:" + password + ", role:" + role );
 }
 
 function checkOrCreateRole(roleName) {
