@@ -2,6 +2,11 @@ TARGET_DIR="../for-real-cards-release-build"
 TARGET_FILE="ForRealCards.apk"
 RELEASE_APK="../for-real-cards-release-build/android/project/build/outputs/apk/android-release-unsigned.apk"
 
+rm -rf $TARGET_DIR/android
+rm -rf $TARGET_DIR/ios
+rm $TARGET_DIR/for-real-cards.tar.gz
+rm $TARGET_DIR/ForRealCards.apk
+
 meteor build $TARGET_DIR --server for-real-cards.scalingo.io:80
 rm $TARGET_DIR/$TARGET_FILE
 jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore /Users/kenono/Dropbox/Fabrica/app-keys/my-release-key.keystore $RELEASE_APK alias_name
