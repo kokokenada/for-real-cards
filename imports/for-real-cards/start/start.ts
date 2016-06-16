@@ -3,7 +3,7 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 import { Component } from '@angular/core';
-//import { NgForm }    from '@angular/common';
+import * as log from 'loglevel';
 
 import {AccountTools, Credentials, ConnectEvent, ConnectEventType} from "../../common-app/api/index";
 import {UserEvent, UserEventType} from "../../common-app/api/models/user-event.class";
@@ -18,14 +18,17 @@ export class Start {
 
   ngOnInit() {
     this.credentials = Credentials.getLastCredentials();
+    log.debug("in ngOnInit() of Start")
     ConnectEvent.subscribe(
       (event:ConnectEvent)=>{
         if (event.eventType===ConnectEventType.CONNECTION_ATTEMPT && event.retryCount>1)
           this.message = event.message;
         else if (event.eventType===ConnectEventType.CONNECT_SUCCESS)
           this.message = "";
-        else if (event.eventType===ConnectEventType.USER_LOGIN)
+        else if (event.eventType===ConnectEventType.USER_LOGIN) {
+          log.debug("ConnectEventType.USER_LOGIN event detected, pushing login event");
           UserEvent.pushEvent(new UserEvent(UserEventType.LOGIN, {userId: Meteor.userId()})); // Will cause navigation
+        }
       }
     );
     ConnectEvent.checkConnection();
