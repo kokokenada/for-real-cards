@@ -26,6 +26,7 @@ import { Start } from "../start/start";
 import "../scss/for-real-cards.scss";
 import subscription = Roles.subscription;
 import {ModalService} from "../../common-app/ui-ng2/modal/modal.service";
+import {ConnectEvent} from "../../common-app/api/models/connect-event.class";
 
 @Component(
   {
@@ -100,6 +101,7 @@ export class ForRealCardsTopFrame {
     Menus.addSubMenuItem('topbar', {
       id: 'logout',
       title: 'Logout',
+      roles: ['*'],
       callback: (menuItem:MenuItem)=> {
         UserEvent.pushEvent(new UserEvent(UserEventType.LOG_OUT_REQUEST));
       }
@@ -110,17 +112,21 @@ export class ForRealCardsTopFrame {
     console.log("On Init of top frame");
     Meteor.setTimeout(()=>{
       console.log("ngOnInitTimer")
-      if (Meteor.userId()===null) {
+      if (Meteor.userId()===null || ConnectEvent.isConnected()===false) {
         // If we're not logged in automatically after 500ms, go to login screen
+        console.log('navigating to start screen')
+        console.log(Meteor.userId())
+        console.log(Meteor.status().connected)
         this.navigateToStart()
       } else {
         console.log("this.router.routeTree")
+        console.log(Meteor.userId())
+        console.log(Meteor.status().connected)
         console.log(this.router.routeTree);
         if (!this.router.routeTree._root.children || !this.router.routeTree._root.children.length) {
-          // Navigate to start if we're nowehere, otherwise we assume user came in via URL directly to game
+          // Navigate to start if we're nowhere, otherwise we assume user came in via URL directly to game
           console.log(!this.router.routeTree._root.children)
           console.log(!this.router.routeTree._root.children.length)
-          console.log('navigating to entry screen')
           this.navigateToEnter();
         }
       }
