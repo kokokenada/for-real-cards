@@ -96,7 +96,11 @@ static updateProfileAvatar(result:UploadFileInfo[]) {
     let profile = user.profile;
     if (!profile)
       return AvatarTools.defaultAvatarUrl();
-    
+
+    if (size!=='original') {
+      size="original";
+      log.warn("Using original size to work work around no gm in prodction");
+    }
     let file = profile['avatar-' + size];
     if (!file) {
       file = profile['avatar-medium'];
