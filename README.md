@@ -29,8 +29,10 @@ All files under import/for-real-cards are released in GPL 3.0.  All other files 
 ### Framework
 * Fix avatars when running from scalingo
 * Fix styling of edit profile
+* Change Password
 * Password recovery
 * Fix modal dialogs
+* Login with Facebook (etc)
 * App in Google Store
 * App in Apple Store
 * Welcome page with links to apps
