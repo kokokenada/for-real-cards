@@ -31,6 +31,7 @@ export class AccountTools {
 
   static register(credentials:Credentials):Promise {
     return new Promise((resolve, reject)=>{
+      log.debug("Creating user:" + credentials.username + ", " + credentials.email);
       credentials.saveCredentials();
       Accounts.createUser({
         username: credentials.username,
