@@ -133,8 +133,8 @@ export class RunGame {
   }
 
   private initialize() {
-   // console.log("initialize()")
-    //console.log(this);
+    console.log("RunGame initialize()")
+    console.log(this);
     if   (this.gameId===undefined) {
       console.log("gameId udefined")
       console.log(this)
@@ -144,8 +144,9 @@ export class RunGame {
       this.userPassword = Session.get('password');
       if (!this.amIIncluded()) {
         Meteor.call('ForRealCardsJoinGame', this.gameId, this.userPassword, (error, result:Hand)=> {
-          log.error(error);
           if (error) {
+            log.error('ForRealCardsJoinGame returned error');
+            log.error(error);
             if (error.error==="gameId-not-found") {
               CommonPopups.alert("That game ID does not exist.");
               RunGame.subject.next(new Action({gameId: this.gameId, creatorId: Meteor.userId(), actionType: ActionType.ENTER_GAME_FAIL}));
@@ -153,6 +154,8 @@ export class RunGame {
               CommonPopups.alert(error);
             }
           } else {
+            log.debug('ForRealCardsJoinGame returned OK');
+            log.debug(result);
             this.setIncluded(result.gameId);
           }
         })
