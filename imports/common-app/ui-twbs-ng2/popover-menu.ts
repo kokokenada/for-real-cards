@@ -15,7 +15,7 @@ import { Menus, MenuItem, UserEvent, UserEventType } from "../api/index"
   template: `
 
     <span dropdown (on-toggle)="toggled($event)">
-      <span dropdownToggle class="glyphicon glyphicon-menu-hamburger"  aria-hidden="true"></span>
+      <span dropdownToggle class="glyphicon glyphicon-menu-hamburger" style="font-size: x-large" aria-hidden="true"></span>
       <ul class="dropdown-menu dropdown-menu-right" >
         <li
             *ngFor="let item of getMenuItems()"
