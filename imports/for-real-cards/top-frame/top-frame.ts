@@ -36,7 +36,7 @@ import {ConnectEvent} from "../../common-app/api/models/connect-event.class";
     providers: [ModalService],
     template: `
 <div>
-  <label><strong>For Real Cards One</strong> {{getUserDisplayName()}} {{getGameDescription()}}</label>
+  <label><strong>For Real Cards 1</strong> {{getUserDisplayName()}} {{getGameDescription()}}</label>
   <popover-menu class="pull-right col-xs-1" [menuId]="'topbar'"></popover-menu>
 </div>
 <router-outlet></router-outlet>
