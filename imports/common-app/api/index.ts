@@ -14,5 +14,6 @@ export * from "./services/credentials";
 export * from "./services/menus";
 export * from "./services/menu-item";
 export * from "./services/page-tools";
+export * from "./services/platform-tools";
 export * from "./services/tools";
 export * from "./services/uploader";

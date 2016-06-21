@@ -3,7 +3,9 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 import { Meteor } from 'meteor/meteor';
-import { Component, NgZone } from '@angular/core';
+import { Component, NgZone, provide } from '@angular/core';
+import { LocationStrategy, HashLocationStrategy, APP_BASE_HREF } from '@angular/common';
+import { bootstrap } from '@angular/platform-browser-dynamic';
 import { Routes, Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from '@angular/router'
 import { Subscription } from 'rxjs'
 import { DragulaService} from 'ng2-dragula/ng2-dragula';
@@ -24,9 +26,9 @@ import { RunGameTabs } from "../run-game/run-game-tabs";
 import { Start } from "../start/start";
 
 import "../scss/for-real-cards.scss";
-import subscription = Roles.subscription;
 import {ModalService} from "../../common-app/ui-ng2/modal/modal.service";
 import {ConnectEvent} from "../../common-app/api/models/connect-event.class";
+import {TopFrame} from "./top-frame.base";
 
 @Component(
   {
@@ -54,12 +56,9 @@ import {ConnectEvent} from "../../common-app/api/models/connect-event.class";
   {path: '/accounts-admin',  component: AccountsAdmin},
   {path: '/game-action-list',  component: GameActionList}
 ])
-export class ForRealCardsTopFrame {
-  private gameDescription:string;
-  private displayName:string;
-  private subscriptions:Subscription[] = [];
+export class ForRealCardsTopFrame extends TopFrame {
   constructor(private router: Router, private ngZone:NgZone) {
-
+    super();
     Menus.addMenu({id: 'topbar'});
 
     Menus.addSubMenuItem('topbar', {
@@ -136,11 +135,7 @@ export class ForRealCardsTopFrame {
   }
   
   ngOnDestroy() {
-    if (this.subscriptions) {
-      this.subscriptions.forEach((subscription:Subscription)=>{
-        subscription.unsubscribe();
-      })
-    }
+    this.cleanSubScriptions();
   }
   
   watchingUserEvents() {
@@ -163,14 +158,24 @@ export class ForRealCardsTopFrame {
   watchingGame() {
     this.subscriptions.push(RunGame.subscribe((action:Action)=> {
       this.ngZone.run(()=> {
-        if (action.actionType === ActionType.DEAL) {
-          this.setGameDescription(RunGame.gameState.currentGameConfig.name + " (id " + action.gameId + ")");
-        } else if (action.actionType === ActionType.NEW_HAND) {
-          this.setGameDescription(RunGame.gameState.currentGameConfig.name + " (id " + action.gameId + ")");
-        } else if (action.actionType === ActionType.RESET || action.actionType===ActionType.NEW_GAME) {
-          this.setGameDescription("New Game (id " + action.gameId + ")");
-        } else if (action.actionType === ActionType.ENTER_GAME_FAIL) {
-          this.navigateToEnter();
+        this.setGameDescriptionFromAction(action);
+        switch (action.actionType) {
+          case ActionType.NEW_GAME: {
+            this.router.navigateByUrl('/game-hand/' + action.gameId);
+            break;
+          }
+          case ActionType.ENTER_GAME_FAIL: {
+            this.navigateToEnter();
+            break;
+          }
+          case ActionType.ENTER_GAME_AT_HAND_NOTIFY:{
+            this.router.navigate(['/game-hand', action.gameId]);
+            break;
+          }
+          case ActionType.ENTER_GAME_AT_TABLE_NOTIFY: {
+            this.router.navigate(['/game-table', action.gameId]);
+            break;
+          }
         }
       });
     }));
@@ -190,11 +195,16 @@ export class ForRealCardsTopFrame {
       return "(" + this.displayName + ")";
     return "";
   }
-  getGameDescription():string {
-    return this.gameDescription;
-  }
-  private setGameDescription(newDescription:string):void {
-    this.gameDescription = newDescription;
-  }
 }
   
+export function run() {
+  bootstrap(ForRealCardsTopFrame,
+    [
+      provide(APP_BASE_HREF, { useValue: '/' }),
+      ROUTER_PROVIDERS,
+      ROUTER_DIRECTIVES,
+      provide(LocationStrategy,
+        {useClass: HashLocationStrategy})
+    ]
+  );
+}

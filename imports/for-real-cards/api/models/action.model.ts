@@ -34,7 +34,9 @@ export enum ActionType {
   TABLE_TO_HAND,      // 12
   TAKE_TRICK,         // 13
   UNDO,               // 14
-  ENTER_GAME_FAIL     // 15
+  ENTER_GAME_FAIL,    // 15
+  ENTER_GAME_AT_HAND_NOTIFY,  // 16
+  ENTER_GAME_AT_TABLE_NOTIFY  // 17
 }
 
 export enum VisibilityType {

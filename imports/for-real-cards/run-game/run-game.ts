@@ -66,8 +66,12 @@ export class RunGame {
   }
   
   static pushNewGameNotification(id:string) {
+    RunGame.pushGameNotification(id, ActionType.NEW_GAME);
+  }
+  
+  static pushGameNotification(gameId, actionType:ActionType):void {
     RunGame.subject.next(
-      new Action({gameId: id, actionType:ActionType.NEW_GAME, creatorId: Meteor.userId()})
+      new Action({gameId: gameId, actionType:actionType, creatorId: Meteor.userId()})
     );
   }
 
@@ -131,6 +135,29 @@ export class RunGame {
       });
     }
   }
+  
+  static joinGame(gameId:string, password:string):Promise {
+    Session.set('password', password);
+    return new Promise( (resolve, reject)=>{
+      Meteor.call('ForRealCardsJoinGame', gameId, password, (error, result:Hand)=> {
+        if (error) {
+          log.error('ForRealCardsJoinGame returned error');
+          log.error(error);
+          if (error.error==="gameId-not-found") {
+            CommonPopups.alert("That game ID does not exist.");
+            RunGame.subject.next(new Action({gameId: gameId, creatorId: Meteor.userId(), actionType: ActionType.ENTER_GAME_FAIL}));
+          } else {
+            CommonPopups.alert(error);
+          }
+          reject(error);
+        } else {
+          log.debug('ForRealCardsJoinGame returned OK');
+          log.debug(result);
+          resolve(result);
+        }
+      })
+    })
+  }
 
   private initialize() {
     //console.log("RunGame initialize()")
@@ -143,22 +170,12 @@ export class RunGame {
     if (RunGame.gameStreamInitializedToId !== this.gameId) {
       this.userPassword = Session.get('password');
       if (!this.amIIncluded()) {
-        Meteor.call('ForRealCardsJoinGame', this.gameId, this.userPassword, (error, result:Hand)=> {
-          if (error) {
-            log.error('ForRealCardsJoinGame returned error');
-            log.error(error);
-            if (error.error==="gameId-not-found") {
-              CommonPopups.alert("That game ID does not exist.");
-              RunGame.subject.next(new Action({gameId: this.gameId, creatorId: Meteor.userId(), actionType: ActionType.ENTER_GAME_FAIL}));
-            } else {
-              CommonPopups.alert(error);
-            }
-          } else {
-            log.debug('ForRealCardsJoinGame returned OK');
-            log.debug(result);
+        RunGame.joinGame(this.gameId, this.userPassword).then(
+          (result)=>{
             this.setIncluded(result.gameId);
           }
-        })
+        );
+
       }
 
       console.log('subscribing to game' + this.gameId);

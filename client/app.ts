@@ -2,13 +2,20 @@ import 'reflect-metadata';
 import 'zone.js/dist/zone';
 import { Meteor } from 'meteor/meteor';
 import * as log from 'loglevel';
+import ionicSelector from 'ionic-selector';
 
-import { provide, enableProdMode } from '@angular/core';
-import { ROUTER_PROVIDERS, ROUTER_DIRECTIVES } from '@angular/router';
-import { LocationStrategy, HashLocationStrategy, APP_BASE_HREF } from '@angular/common';
-import {ForRealCardsTopFrame} from "../imports/for-real-cards/index";
+import { PlatformTools, TargetPlatformId } from '../imports/common-app/api/index';
+console.log("Setting platform")
+if (Meteor.isCordova) {
+  PlatformTools.setTargetPlatform(TargetPlatformId.IONIC)
+} else {
+  PlatformTools.setTargetPlatform(TargetPlatformId.TWBS_WEB)
+}
 
-import { bootstrap } from '@angular/platform-browser-dynamic';
+import { enableProdMode } from '@angular/core';
+import { run as runWeb } from "../imports/for-real-cards/top-frame/top-frame.web";
+import { run as runMobile } from "../imports/for-real-cards/top-frame/top-frame.ionic";
+
 
 console.log("In apps.ts @" + new Date());
 console.log(Meteor.absoluteUrl());
@@ -22,14 +29,14 @@ if (Meteor.isProduction) {
   log.setLevel(LogLevel.INFO);
 }
 
-Meteor.setTimeout(()=>{
-  bootstrap(ForRealCardsTopFrame,
-    [
-      provide(APP_BASE_HREF, { useValue: '/' }),
-      ROUTER_PROVIDERS,
-      ROUTER_DIRECTIVES,
-      provide(LocationStrategy,
-        {useClass: HashLocationStrategy})
-    ]
-  );
-}, 1000);
+console.log("Setting platform")
+if (Meteor.isCordova) {
+  document.addEventListener('deviceready', () => {
+    ionicSelector('for-real-cards-top-frame');
+    runMobile();
+//    setClass('mobile');
+  });
+} else {
+  runWeb();
+//  setClass('web');
+}

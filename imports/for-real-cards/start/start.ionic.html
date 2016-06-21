@@ -1,0 +1,60 @@
+<!--
+/**
+ * Copyright Ken Ono, Fabrica Technolology 2016
+ * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
+ */
+-->
+
+<ion-navbar *navbar>
+  <ion-title>
+    Login or Register
+  </ion-title>
+</ion-navbar>
+
+<ion-content padding>
+  <ion-list *ngIf="active" inset>
+    <div [hidden]="message ? false : true" (click)="setServer()" danger>
+      <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+      {{message}}
+      <br/>
+    </div>
+
+    <form #credentialsForm="ngForm">
+      <ion-item>
+        <ion-label floating>Username:</ion-label>
+        <ion-input
+                [(ngModel)]="credentials.username"
+                type="text" ngControl="username" #username="ngForm" required id="username">
+        </ion-input>
+      </ion-item>
+      <p [hidden]="username.valid || username.pristine" danger>
+        Username is required
+      </p>
+      <ion-item>
+        <ion-label floating>Email</ion-label><span> (optional)</span>
+        <ion-input [(ngModel)]="credentials.email" type="text" ngControl="email" id="email"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating >Password</ion-label>
+        <ion-input
+                [(ngModel)]="credentials.password"
+                type="password"
+                ngControl="password" #password="ngForm" required id="password">
+        </ion-input>
+        <p [hidden]="password.valid || password.pristine" danger>
+          Password is required
+        </p>
+      </ion-item>
+      <ion-item>
+        <button large full (click)="register()" [disabled]="!credentialsForm.form.valid" >Register</button>
+      </ion-item>
+      <ion-item>
+        <button large full (click)="login()" [disabled]="!credentialsForm.form.valid" >Login</button>
+      </ion-item>
+      <ion-item>
+        <button large full (click)="tempUser()" light outline>Skip</button>
+      </ion-item>
+    </form>
+  </ion-list>
+</ion-content>
+

@@ -35,8 +35,12 @@ All files under import/for-real-cards are released in GPL 3.0.  All other files 
 * App in Google Store
 * App in Apple Store
 * Welcome page with links to apps
+* Upgrades (Meteor 1.3.3 and Angular rc2)
+* Get pagination working (ng2-paginate)
+* Fix null in login field bug
 * Fix delayed paint on user admin
 * Use mobile camera for avatar
+* Add cropping of Avatar
 * NgMaterial Styling
 * Ionic Styling
 * Re-use API's for native app (Reactive Native Script???)

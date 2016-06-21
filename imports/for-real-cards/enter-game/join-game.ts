@@ -3,8 +3,9 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 import { Component, Input } from '@angular/core';
-import { Router } from '@angular/router'
 import { Session } from 'meteor/session';
+import {RunGame} from "../run-game/run-game";
+import {ActionType, Action} from "../api/models/action.model";
 
 @Component(
   {
@@ -54,14 +55,14 @@ import { Session } from 'meteor/session';
 export class JoinGame{
   password:string;
   gameId:string;
-  constructor(private router:Router) {
+  constructor() {
   }
   joinGame() {
-    Session.set('password', this.password);
-    this.router.navigate(['/game-hand', this.gameId]);
+    RunGame.joinGame(this.gameId, this.password);
+    RunGame.pushGameNotification(this.gameId, ActionType.ENTER_GAME_AT_HAND_NOTIFY);
   };
   displayGame() {
     Session.set('password', this.password);
-    this.router.navigate(['/game-table', this.gameId]);
-  }; 
+    RunGame.pushGameNotification(this.gameId, ActionType.ENTER_GAME_AT_TABLE_NOTIFY);
+  };
 }

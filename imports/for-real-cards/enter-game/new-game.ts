@@ -2,7 +2,7 @@
  * Copyright Ken Ono, Fabrica Technolology 2016
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
-import { Router } from '@angular/router'
+
 import * as log from 'loglevel';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
@@ -33,8 +33,6 @@ import {RunGame} from "../run-game/run-game";
   }
 )
 export class NewGame{
-  constructor(private router:Router) {
-  }
   password: string;
   newGame() {
     Meteor.call('ForRealCardsNewGame', this.password, (error, result)=>{
@@ -42,9 +40,7 @@ export class NewGame{
         log.error(error);
       } else {
         Session.set('password', this.password);
-        this.router.navigateByUrl('/game-hand/' + result).then((navResult)=>{
-          RunGame.pushNewGameNotification(result);
-        });
+        RunGame.pushNewGameNotification(result);
       }
     });
   }
