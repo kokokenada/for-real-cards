@@ -26,7 +26,7 @@ if (Meteor.isProduction) {
   enableProdMode();
 } else {
   console.log("Development environment detected.  Log level set to info");
-  log.setLevel(LogLevel.INFO);
+  log.setLevel(LogLevel.TRACE);
 }
 
 console.log("Setting platform")
