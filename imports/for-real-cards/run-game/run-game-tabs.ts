@@ -4,7 +4,7 @@
  */
 
 
-import { Component, NgZone } from '@angular/core';
+import { Component, NgZone, Type } from '@angular/core';
 import { TAB_DIRECTIVES } from 'ng2-bootstrap/ng2-bootstrap'
 
 import { RunGameHandAndTable } from "./run-game-hand-and-table";
@@ -13,42 +13,51 @@ import { RunGameTable } from "./run-game-table";
 import { RunGameContainer } from "./run-game-container";
 import {Action, ActionType} from "../api/models/action.model";
 import {RunGame} from "./run-game";
-import { Router } from '@angular/router';
+import {TargetPlatformId, PlatformTools} from "../../common-app/api/services/platform-tools";
+
+function template():string {
+  switch (PlatformTools.getTargetPlatforrm()) {
+    case TargetPlatformId.IONIC:
+      return `
+<ion-tabs>
+  <ion-tab [root]="ionTab1" tabTitle="Hand and Table"></ion-tab>
+  <ion-tab [root]="ionTab1" tabTitle="Hand"></ion-tab>
+  <ion-tab [root]="ionTab1" tabTitle="Table"></ion-tab>
+</ion-tabs>
+`;
+    case TargetPlatformId.TWBS_CORDOVA:
+    case TargetPlatformId.TWBS_WEB:
+      return `
+ 
+  <tabset active="active">
+    <tab index="0" heading="Hand and Table">
+      <run-game-hand-and-table></run-game-hand-and-table>
+    </tab>
+    <tab index="1" heading="Hand">
+      <run-game-hand showTableProxy="true"></run-game-hand>    
+    </tab> 
+    <tab index="2" heading="Table">
+     <run-game-table height="90vw" width="100hw"></run-game-table>  
+    </tab>
+  </tabset>
+      `;
+    default:
+      log.error('Styling not developed for target platform')
+  }
+}
 
 @Component(
   {
     selector: 'run-game-tabs',
     directives: [RunGameHandAndTable, RunGameHand, RunGameTable, TAB_DIRECTIVES],
-    template: `
-
-  <tabset active="active">
-    <tab index="0" heading="Hand and Table">
-      <run-game-hand-and-table [gameId]="gameId"></run-game-hand-and-table>
-    </tab>
-    <tab index="1" heading="Hand">
-      <run-game-hand showTableProxy="true" [gameId]="gameId"></run-game-hand>    
-    </tab> 
-    <tab index="2" heading="Table">
-     <run-game-table height="90vw" width="100hw" [gameId]="gameId"></run-game-table>  
-    </tab>
-  </tabset>
-  
-          `,
+    template: template()
   }
 )
 
 export class RunGameTabs extends RunGameContainer{
-  constructor(private childRouter:Router, private ngZone:NgZone) {
-    super(childRouter);
-  }
-  ngOnInit() {
-    RunGame.subscribe((action:Action)=> {
-      this.ngZone.run(()=> {
-        if (action.actionType===ActionType.NEW_GAME) {
-          this.gameId = action.gameId;
-        }
-      });
-    });
+  ionTab1:Type = RunGameHandAndTable;
+  constructor(private ngZone:NgZone) {
+    super(ngZone);
   }
 }
 

@@ -38,7 +38,12 @@ export class Start {
   ngOnDestroy() {
     ConnectEvent.stopCheckingConnection();
   }
-  routerOnActivate() {
+
+  ngAfterContentInit() {
+    this.reset();
+  }
+  
+  private reset() {
     this.active = false;  // Forces reset as per https://angular.io/docs/ts/latest/guide/forms.html
                           // This is a temporary workaround while we await a proper form reset feature.
     setTimeout(()=> this.active=true, 0);

@@ -5,6 +5,7 @@
 import { Component, NgZone, ViewChild } from '@angular/core';
 import { ionicBootstrap, App, Platform, MenuController, NavController } from 'ionic-angular';
 import { Subscription } from 'rxjs'
+import { DragulaService} from 'ng2-dragula/ng2-dragula';
 
 import { Start } from '../start/start';
 import { UserEvent, UserEventType } from "../../common-app/api/models/user-event.class";
@@ -12,10 +13,12 @@ import { AccountTools } from "../../common-app/api/services/account-tools";
 import { RunGame } from "../run-game/run-game";
 import { Action, ActionType } from "../api/models/action.model";
 import { TopFrame } from "./top-frame.base";
-import {EnterGame} from "../enter-game/enter-game";
+import { EnterGame } from "../enter-game/enter-game";
+import { RunGameTabs } from "../run-game/run-game-tabs";
 
 @Component({
-  template: '<ion-nav  #myNav [root]="rootPage" swipe-back-enabled="true"></ion-nav>'
+  template: '<ion-nav  #myNav [root]="rootPage" swipe-back-enabled="true"></ion-nav>',
+  viewProviders: [DragulaService]
 })
 class ForRealCardsTopFrame extends TopFrame {
   private subscriptions:Subscription[] = [];
@@ -62,6 +65,8 @@ class ForRealCardsTopFrame extends TopFrame {
             break;
           }
           case ActionType.ENTER_GAME_AT_HAND_NOTIFY:{
+            console.log("Ionic nav ENTER_GAME_AT_HAND_NOTIFY")
+            this.nav.push(RunGameTabs);
 //            this.router.navigate(['/game-hand', action.gameId]);
             break;
           }

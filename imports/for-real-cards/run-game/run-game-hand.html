@@ -24,7 +24,6 @@
           data-drag-source="DECK"
           data-drop-target="DECK"
           [imgStyle]="landscapeCardStyle()"
-          [gameId]="gameId"
   >
   </deck-view>
   <!-- PILE -->
@@ -35,7 +34,6 @@
           style="height:15vh;"
           [imgStyle]="landscapeCardStyle()"
           [card]="topCardInPile()"
-          [gameId]="gameId"
           [attr.data-card-rank]="topCardInPile()?.rank"
           [attr.data-card-suit]="topCardInPile()?.suit"
           data-drag-source="PILE"
@@ -78,7 +76,6 @@
           [imgStyle]="inHandCardStyle()"
           style="display:inline-block ; width: 71px; height: 100px; padding-left: 1px; padding-right: 1px "
           [card]="card"
-          [gameId]="gameId"
           [attr.data-card-rank]="card.rank"
           [attr.data-card-suit]="card.suit"
           data-drag-source="HAND"

@@ -49,7 +49,6 @@ import {CardImageStyle} from "../api/interfaces/card-image-style.interface";
 )
 export class DeckView extends RunGame {
   @Input() imgStyle:CardImageStyle;
-  @Input() gameId:string;
 
   constructor(private dragulaServiceChild: DragulaService, private ngZoneChild:NgZone ) {
     super(dragulaServiceChild, ngZoneChild);

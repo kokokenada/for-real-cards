@@ -28,7 +28,6 @@ import { PileView } from "./pile-view";
 )
 export class RunGameHand extends RunGame {
   @Input() showTableProxy:string;
-  @Input() gameId:string;
   undoAction:Action;
 
   constructor(private dealModelService:DealModalService, private dragulaServiceChild: DragulaService, private ngZoneChild:NgZone ) {

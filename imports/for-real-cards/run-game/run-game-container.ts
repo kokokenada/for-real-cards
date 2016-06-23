@@ -3,16 +3,31 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 
-import { Input } from '@angular/core';
-import { Router, RouteSegment } from '@angular/router';
+import { NgZone } from '@angular/core';
+import {RunGame} from "./run-game";
+import {Action, ActionType} from "../api/models/action.model";
+import { Subscription } from 'rxjs';
 
 
 export class RunGameContainer {
-  @Input() gameId:string;
-  constructor(private router: Router) {
+  protected gameId:string;
+  private subscription:Subscription;
+  constructor(private ngZone:NgZone) {
+    this.subscription = RunGame.subscribe((action:Action)=> {
+      this.ngZone.run(()=> {
+        if (action.actionType===ActionType.NEW_GAME) {
+          console.log('setting gameId in RunGameController')
+          console.log(action)
+          this.gameId = action.gameId;
+        }
+      });
+    });
+  }
 
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
-  routerOnActivate(curr: RouteSegment) {
-    this.gameId = curr.getParam('id');
-  }
+  
 }

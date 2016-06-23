@@ -6,7 +6,7 @@ import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
 import { Subject, Subscription } from 'rxjs';
 import * as log from 'loglevel';
-import { Input, NgZone } from '@angular/core';
+import { NgZone } from '@angular/core';
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
 //import { MeteorComponent } from 'angular2-meteor';
 
@@ -18,7 +18,7 @@ import {AccountTools} from "../../common-app/api/services/account-tools";
 
 const SESSION_GAME_ID_KEY = 'session-game-id';
 export class RunGame {
-  @Input() gameId:string;
+  protected gameId:string;
   userPassword:string;
   static gameState:GameState;
   private static subject:Subject = new Subject();
@@ -29,12 +29,22 @@ export class RunGame {
   }
 
   ngOnInit() {
+    log.debug('RunGame rx.subscribing in RunGame ngOnInit')
+    log.debug(this)
     RunGame.subscribe(
       (action:Action)=> {
-        if (action.actionType===ActionType.NEW_HAND) {
+        log.debug('Got subscription callback in run-game.ts. Action:');
+        log.debug(action);
+        log.debug(this)
+        if (
+          action.actionType===ActionType.NEW_HAND ||
+          action.actionType===ActionType.ENTER_GAME_AT_HAND_NOTIFY ||
+          action.actionType===ActionType.ENTER_GAME_AT_TABLE_NOTIFY
+        ) {
           this.ngZone.run(()=>{
             this.gameId = action.gameId;
             this.initialize();
+            log.debug(RunGame.gameState)
           })
         } else {
           if (action.sequencePosition+1===action.sequenceLength ) {
@@ -42,11 +52,6 @@ export class RunGame {
 //              console.log('rendered')
             });
           }
-          /*           log.debug('Got subscription callback in run-game.ts. Action:');
-           log.debug(action);
-           log.debug(RunGame.gameState.hands)
-           log.debug(this)*/
-
         }
       },
       (error)=> {
@@ -54,11 +59,8 @@ export class RunGame {
         CommonPopups.alert(error);
       }
     );
-    this.dragAndDropInit();
-  }
-
-  ngOnChanges(obj) {
     this.initialize();
+    this.dragAndDropInit();
   }
 
   isLoggedIn():boolean {
@@ -160,10 +162,10 @@ export class RunGame {
   }
 
   private initialize() {
-    //console.log("RunGame initialize()")
-    //console.log(this);
+    console.log("RunGame initialize()")
+    console.log(this);
     if   (this.gameId===undefined) {
-      console.log("gameId udefined")
+      console.log("gameId undefined")
       console.log(this)
       return;
     }
@@ -178,7 +180,7 @@ export class RunGame {
 
       }
 
-      console.log('subscribing to game' + this.gameId);
+      console.log('subscribing to game ' + this.gameId);
 
       RunGame.gameState = new GameState(this.gameId, RunGame.subject);
       RunGame.gameState.startSubScriptions();
@@ -187,7 +189,8 @@ export class RunGame {
   }
 
   getHands():Hand[] {
-    return RunGame.gameState.hands;
+    if (RunGame.gameState)
+      return RunGame.gameState.hands;
   }
 
   private amIIncluded():boolean {

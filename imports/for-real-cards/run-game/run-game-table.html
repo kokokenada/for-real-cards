@@ -83,7 +83,6 @@
   <!-- DECK -->
   <deck-view
           *ngIf="shouldShowDeck()"
-          [gameId]="gameId"
           [imgStyle] ="portraitCardStyle()"
           style = "
             position: absolute; 
@@ -112,7 +111,6 @@
         left: 52%;  
     "
           [imgStyle]="portraitCardStyle()"
-          [gameId]="gameId"
           [attr.data-card-rank]="topCardInPile()?.rank"
           [attr.data-card-suit]="topCardInPile()?.suit"
           data-drag-source="PILE"

@@ -19,10 +19,9 @@ import {Action, ActionType} from "../api/models/action.model";
     forPlayer="true" 
     height="45vh" 
     width="100hw" 
-    [gameId]="gameId">  
+   >  
   </run-game-table>
   <run-game-hand 
-    [gameId]="gameId" 
     style="width:100vw; height: 45vh">
   </run-game-hand>
           `

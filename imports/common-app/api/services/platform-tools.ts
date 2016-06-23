@@ -40,6 +40,10 @@ export class PlatformTools {
     PlatformTools.targetPlatForm = targetPlatformId;
     PlatformTools.importSCSS();
   }
+  
+  static getTargetPlatforrm():TargetPlatformId {
+    return PlatformTools.targetPlatForm;
+  }
 
   static isIonic():boolean {
     if (PlatformTools.targetPlatForm===undefined)

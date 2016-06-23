@@ -19,7 +19,6 @@ import { CardImageStyle } from "../api/index";
 <playing-card 
   [hidden]="!numberOfCards()"
   [card]="topCardInPile()" 
-  [gameId]="gameId"
   [imgStyle]="imgStyle"
   [attr.data-card-rank]="topCardInPile()?.rank"
   [attr.data-card-suit]="topCardInPile()?.suit"
@@ -40,7 +39,6 @@ import { CardImageStyle } from "../api/index";
 )
 export class PileView extends RunGame {
   @Input() imgStyle:CardImageStyle;
-  @Input() gameId:string;
   constructor(private dragulaServiceChild: DragulaService, private ngZoneChild:NgZone ) {
     super(dragulaServiceChild, ngZoneChild);
   }

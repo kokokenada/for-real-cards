@@ -32,7 +32,6 @@ export class RunGameTable extends RunGame {
   @Input() width:string;
   @Input() height:string;
   @Input() forPlayer:string;
-  @Input() gameId:string;
   
   constructor(private dragulaServiceChild: DragulaService, private ngZoneChild:NgZone) {
     super(dragulaServiceChild, ngZoneChild);

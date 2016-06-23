@@ -4,15 +4,36 @@
  */
 
 import * as log from 'loglevel';
-import { Meteor } from 'meteor/meteor';
-import { Session } from 'meteor/session';
-import { Component } from '@angular/core';
+import {Meteor} from 'meteor/meteor';
+import {Session} from 'meteor/session';
+import {Component} from '@angular/core';
 import {RunGame} from "../run-game/run-game";
+import {PlatformTools, TargetPlatformId} from "../../common-app/api/services/platform-tools";
 
-@Component(
-  {
-    selector: 'new-game',
-    template: `
+function template():string {
+  switch (PlatformTools.getTargetPlatforrm()) {
+    case TargetPlatformId.IONIC:
+      return `
+<ion-list>
+  <form>
+    <ion-list-header>
+      Start New Game
+    </ion-list-header>
+    <ion-item>
+      <ion-label for="password">Password (optional):</ion-label>
+      <ion-input class="form-control" [(ngModel)]="password" type="text" id="password"></ion-input>
+    </ion-item>
+    <ion-item>
+      <button large block (click)="newGame()">
+        Start Game
+      </button>
+    </ion-item>
+  </form>
+</ion-list>
+`;
+    case TargetPlatformId.TWBS_CORDOVA:
+    case TargetPlatformId.TWBS_WEB:
+      return `
 <div>
   <form>
     <div class="panel-heading">
@@ -29,13 +50,23 @@ import {RunGame} from "../run-game/run-game";
       </div>
   </form>
 </div>
-`
+`;
+    default:
+      log.error('Styling not developed for target platform')
+  }
+}
+
+@Component(
+  {
+    selector: 'new-game',
+    template: template()
   }
 )
-export class NewGame{
-  password: string;
+export class NewGame {
+  password:string;
+
   newGame() {
-    Meteor.call('ForRealCardsNewGame', this.password, (error, result)=>{
+    Meteor.call('ForRealCardsNewGame', this.password, (error, result)=> {
       if (error) {
         log.error(error);
       } else {

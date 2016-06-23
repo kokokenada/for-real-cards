@@ -161,7 +161,7 @@ export class ForRealCardsTopFrame extends TopFrame {
         this.setGameDescriptionFromAction(action);
         switch (action.actionType) {
           case ActionType.NEW_GAME: {
-            this.router.navigateByUrl('/game-hand/' + action.gameId);
+            this.router.navigateByUrl('/game-hand/' + action.gameId);  // gameId parameter in URL for refresh feature (not yet implemented)
             break;
           }
           case ActionType.ENTER_GAME_FAIL: {
@@ -169,11 +169,11 @@ export class ForRealCardsTopFrame extends TopFrame {
             break;
           }
           case ActionType.ENTER_GAME_AT_HAND_NOTIFY:{
-            this.router.navigate(['/game-hand', action.gameId]);
+            this.router.navigate(['/game-hand', action.gameId]); // gameId parameter in URL for refresh feature (not yet implemented)
             break;
           }
           case ActionType.ENTER_GAME_AT_TABLE_NOTIFY: {
-            this.router.navigate(['/game-table', action.gameId]);
+            this.router.navigate(['/game-table', action.gameId]); // gameId parameter in URL for refresh feature (not yet implemented)
             break;
           }
         }

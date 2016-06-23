@@ -6,12 +6,47 @@ import { Component, Input } from '@angular/core';
 import { Session } from 'meteor/session';
 import {RunGame} from "../run-game/run-game";
 import {ActionType, Action} from "../api/models/action.model";
+import {TargetPlatformId, PlatformTools} from "../../common-app/api/services/platform-tools";
 
-@Component(
-  {
-    selector: 'join-game',
-    template: `
- 
+function template():string {
+  switch (PlatformTools.getTargetPlatforrm()) {
+    case TargetPlatformId.IONIC: return `
+     <div>
+<ion-list>
+  <form>
+    <ion-list-header>
+      Join Existing Game
+    </ion-list-header>
+    <ion-item>
+        <ion-label>Game Id:</ion-label>
+        <ion-input 
+          [(ngModel)]="gameId" 
+          type="text" 
+        ></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Password (if required):</ion-label>
+      <ion-input [(ngModel)]="password" type="text"></ion-input>
+    </ion-item>
+    <ion-item>
+      <button 
+        (click)="joinGame()" 
+        block large>
+          Join Game
+      </button>
+      <button 
+        (click)="displayGame()" 
+        block light large>
+          Display Game Table
+      </button>
+    </ion-item>
+  </form>
+</ion-list>
+
+    `;
+    case TargetPlatformId.TWBS_CORDOVA:
+    case TargetPlatformId.TWBS_WEB:
+      return `
  <div>
   <form #joinGameForm="ngForm">
     <div class="panel-heading">
@@ -49,8 +84,16 @@ import {ActionType, Action} from "../api/models/action.model";
     </div>
   </form>
 </div>
+      `;
+    default:
+      log.error('Styling not developed for target platform')
+  }
+}
 
-    `
+@Component(
+  {
+    selector: 'join-game',
+    template: template()
 })
 export class JoinGame{
   password:string;
@@ -58,8 +101,13 @@ export class JoinGame{
   constructor() {
   }
   joinGame() {
-    RunGame.joinGame(this.gameId, this.password);
-    RunGame.pushGameNotification(this.gameId, ActionType.ENTER_GAME_AT_HAND_NOTIFY);
+    RunGame.joinGame(this.gameId, this.password).then(
+      (result) => {
+        console.log('Join game promis resolved')
+        console.log(result)
+        RunGame.pushGameNotification(this.gameId, ActionType.ENTER_GAME_AT_HAND_NOTIFY);
+      }
+    );
   };
   displayGame() {
     Session.set('password', this.password);
