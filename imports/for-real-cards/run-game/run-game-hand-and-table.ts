@@ -8,13 +8,22 @@ import {RunGameTable} from "./run-game-table";
 import {RunGameHand} from "./run-game-hand";
 import {RunGame} from "./run-game";
 import {Action, ActionType} from "../api/models/action.model";
+import {PlatformTools} from "../../common-app/api/services/platform-tools";
 
-@Component(
-  {
-    selector: 'run-game-hand-and-table',
-    directives: [RunGameTable, RunGameHand],
-    template: `
 
+function template():string {
+  let templateStr:string = '';
+  if (PlatformTools.isIonic()) {
+    templateStr += `
+<ion-navbar *navbar>
+  <ion-title>
+    Game ID ...
+  </ion-title>
+</ion-navbar>
+    `
+  }
+  templateStr +=
+    `
   <run-game-table 
     forPlayer="true" 
     height="45vh" 
@@ -24,7 +33,16 @@ import {Action, ActionType} from "../api/models/action.model";
   <run-game-hand 
     style="width:100vw; height: 45vh">
   </run-game-hand>
-          `
+`
+;
+  return templateStr;
+}
+
+@Component(
+  {
+    selector: 'run-game-hand-and-table',
+    directives: [RunGameTable, RunGameHand],
+    template: template()
   }
 )
 export class RunGameHandAndTable {

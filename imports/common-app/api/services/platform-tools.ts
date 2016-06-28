@@ -51,6 +51,12 @@ export class PlatformTools {
     return PlatformTools.targetPlatForm===TargetPlatformId.IONIC
   }
 
+  static isTWBS():boolean {
+    if (PlatformTools.targetPlatForm===undefined)
+      throw "Call setTargetPlatform() to set platform";
+    return (PlatformTools.targetPlatForm===TargetPlatformId.TWBS_CORDOVA || PlatformTools.targetPlatForm===TargetPlatformId.TWBS_WEB);
+  }
+
   static platformNameSegment():string {
     switch (PlatformTools.targetPlatForm) {
       case TargetPlatformId.IONIC: return "ionic";

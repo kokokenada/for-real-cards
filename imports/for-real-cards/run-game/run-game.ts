@@ -4,7 +4,7 @@
  */
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
-import { Subject, Subscription } from 'rxjs';
+import { ReplaySubject, Subscription } from 'rxjs';
 import * as log from 'loglevel';
 import { NgZone } from '@angular/core';
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
@@ -21,7 +21,7 @@ export class RunGame {
   protected gameId:string;
   userPassword:string;
   static gameState:GameState;
-  private static subject:Subject = new Subject();
+  private static subject:ReplaySubject = new ReplaySubject();
   private static gameStreamInitializedToId:string;
   protected static dragAndDropInitialized:boolean = false;
 

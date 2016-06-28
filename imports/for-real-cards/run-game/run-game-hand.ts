@@ -9,6 +9,7 @@ import { Dragula, DragulaService } from 'ng2-dragula/ng2-dragula';
 
 import { CommonPopups } from "../../common-app/ui-twbs-ng2/index";
 import { Tools } from "../../common-app/api/index";
+import {CommonAppButton} from "../../common-app/ui-ng2/button/common-app-button";
 
 import { RunGame } from './run-game.ts';
 import { DealModalService } from "../deal-modal/deal-modal.service"
@@ -20,7 +21,7 @@ import { PileView } from "./pile-view";
 @Component(
   {
     selector: 'run-game-hand',
-    directives: [DeckView, Dragula, PileView, PlayingCard],
+    directives: [DeckView, Dragula, PileView, PlayingCard, CommonAppButton],
     providers: [DealModalService],
     encapsulation: ViewEncapsulation.None, // Require for Dragula .gu-transit
     templateUrl: '/imports/for-real-cards/run-game/run-game-hand.html',

@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from "meteor/mongo";
 import { Tracker } from 'meteor/tracker';
-import { Subject, Subscription} from 'rxjs';
+import { ReplaySubject, Subscription} from 'rxjs';
 import { User } from "./user.model";
 import { AccountTools } from "../services/account-tools";
 
@@ -15,7 +15,7 @@ export enum UserEventType {
 }
 
 export class UserEvent {
-  private static loginStatusSubject:Subject<UserEvent> = new Subject();
+  private static loginStatusSubject:ReplaySubject<UserEvent> = new ReplaySubject();
   private static userCursor:Mongo.Cursor;
 
   eventType: UserEventType;

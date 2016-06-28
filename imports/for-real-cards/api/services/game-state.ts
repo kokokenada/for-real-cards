@@ -5,7 +5,7 @@
 import { Meteor} from 'meteor/meteor';
 import { Mongo} from 'meteor/mongo'
 import { Tracker } from 'meteor/tracker';
-import { Subject} from 'rxjs'
+import { ReplaySubject} from 'rxjs'
 import * as log from 'loglevel';
 
 import { GAME_SUBSCRPTION_NAME, GameSubscriptionOptions} from "../models/game.publications.ts";
@@ -18,7 +18,7 @@ import {CardSuit, CardRank} from "../models/card.model";
 
 export class GameState {
   private gameId:string;
-  private subject:Subject;
+  private subject:ReplaySubject;
   private lastNotified:Date;
   private handsOnServer:Hand[];
   hands:Hand[];
@@ -28,7 +28,7 @@ export class GameState {
   currentGameConfig: GameConfig;
   private undoneIds:string[] = [];
 
-  constructor(gameId:string, subject:Subject<Action>) {
+  constructor(gameId:string, subject:ReplaySubject<Action>) {
     this.gameId = gameId;
     this.subject = subject;
     this.hands = [];

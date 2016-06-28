@@ -30,7 +30,7 @@ function createComponentFactory(resolver: ComponentResolver, metadata: Component
 })
 export class ModalOutlet {
   @Input() creationModalEvent:ModalEvent;
-    constructor(private vcRef: ViewContainerRef, private resolver: ComponentResolver) {
+  constructor(private vcRef: ViewContainerRef, private resolver: ComponentResolver) {
   }
 
   ngOnChanges() {

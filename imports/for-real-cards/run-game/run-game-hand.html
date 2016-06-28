@@ -5,7 +5,7 @@
  */
 -->
 <div>
-  <button class="btn btn-primary" (click)="deal()">Deal</button>
+  <common-app-button color="primary" label="Deal" (click)="deal()"></common-app-button>
   <button *ngIf="canShowHand()" class="btn btn-primary" (click)="showHand()">Show Hand</button>
   <button *ngIf="shouldShowTakeTrick()" class="btn btn-primary" (click)="takeTrick()">Take Trick</button>
   <button *ngIf="shouldShowSort()" class="btn btn-primary" (click)="sort()">Sort Hand</button>

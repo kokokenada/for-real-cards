@@ -11,8 +11,6 @@ import { RunGameHandAndTable } from "./run-game-hand-and-table";
 import { RunGameHand } from "./run-game-hand";
 import { RunGameTable } from "./run-game-table";
 import { RunGameContainer } from "./run-game-container";
-import {Action, ActionType} from "../api/models/action.model";
-import {RunGame} from "./run-game";
 import {TargetPlatformId, PlatformTools} from "../../common-app/api/services/platform-tools";
 
 function template():string {
@@ -21,8 +19,8 @@ function template():string {
       return `
 <ion-tabs>
   <ion-tab [root]="ionTab1" tabTitle="Hand and Table"></ion-tab>
-  <ion-tab [root]="ionTab1" tabTitle="Hand"></ion-tab>
-  <ion-tab [root]="ionTab1" tabTitle="Table"></ion-tab>
+  <ion-tab [root]="ionTab2" tabTitle="Hand"></ion-tab>
+  <ion-tab [root]="ionTab3" tabTitle="Table"></ion-tab>
 </ion-tabs>
 `;
     case TargetPlatformId.TWBS_CORDOVA:
@@ -56,6 +54,8 @@ function template():string {
 
 export class RunGameTabs extends RunGameContainer{
   ionTab1:Type = RunGameHandAndTable;
+  ionTab2:Type = RunGameHand;
+  ionTab3:Type = RunGameTable;
   constructor(private ngZone:NgZone) {
     super(ngZone);
   }

@@ -2,7 +2,7 @@
  * Copyright Ken Ono, Fabrica Technolology 2016
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
-import { Component } from '@angular/core';
+import { Component, Optional } from '@angular/core';
 
 import {NewGame} from './new-game';
 import {JoinGame} from './join-game';
@@ -12,14 +12,19 @@ function template():string {
   switch (PlatformTools.getTargetPlatforrm()) {
     case TargetPlatformId.IONIC:
       return `
-<ion-navbar *navbar>
-  <ion-title>
-    Enter Game
-  </ion-title>
-</ion-navbar>
-
+<ion-header>
+  <ion-navbar *navbar>
+    <button menuToggle>MN
+     <ion-icon name='menu'></ion-icon>
+    </button>
+    <ion-title>
+      Enter Game
+    </ion-title>
+  </ion-navbar>
+</ion-header>
   <new-game></new-game>
   <join-game></join-game>
+
 
 `;
     case TargetPlatformId.TWBS_CORDOVA:
