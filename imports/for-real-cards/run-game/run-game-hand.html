@@ -6,10 +6,10 @@
 -->
 <div>
   <common-app-button color="primary" label="Deal" (click)="deal()"></common-app-button>
-  <button *ngIf="canShowHand()" class="btn btn-primary" (click)="showHand()">Show Hand</button>
-  <button *ngIf="shouldShowTakeTrick()" class="btn btn-primary" (click)="takeTrick()">Take Trick</button>
-  <button *ngIf="shouldShowSort()" class="btn btn-primary" (click)="sort()">Sort Hand</button>
-  <button *ngIf="shouldShowUndo()" class="btn btn-default pull-right" (click)="undo()">Undo</button>
+  <common-app-button *ngIf="canShowHand()" color="primary" (click)="showHand()" label="Show Hand"></common-app-button>
+  <common-app-button *ngIf="shouldShowTakeTrick()" color="primary" (click)="takeTrick()" label="Take Trick"></common-app-button>
+  <common-app-button *ngIf="shouldShowSort()" color="primary" (click)="sort()" label="Sort Hand"></common-app-button>
+  <common-app-button *ngIf="shouldShowUndo()" color="outline pull-right" (click)="undo()" label="Undo"></common-app-button>
 </div>
 <div *ngIf="shouldShowTableProxy()"
      style="height:15vh"

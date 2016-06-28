@@ -60,5 +60,14 @@ export class MenuItem implements MenuItemDefintion {
     }
     return false;
   };
+  
+  /*
+   * Execute the user's choice
+   */
+  selected():void {
+    if (this.callback) {
+      this.callback(this);
+    }
+  }
 }
 

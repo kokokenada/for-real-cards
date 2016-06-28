@@ -22,9 +22,9 @@ function template():string {
     </ion-title>
   </ion-navbar>
 </ion-header>
+
   <new-game></new-game>
   <join-game></join-game>
-
 
 `;
     case TargetPlatformId.TWBS_CORDOVA:

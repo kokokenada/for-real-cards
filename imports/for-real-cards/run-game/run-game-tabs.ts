@@ -17,11 +17,21 @@ function template():string {
   switch (PlatformTools.getTargetPlatforrm()) {
     case TargetPlatformId.IONIC:
       return `
-<ion-tabs>
-  <ion-tab [root]="ionTab1" tabTitle="Hand and Table"></ion-tab>
-  <ion-tab [root]="ionTab2" tabTitle="Hand"></ion-tab>
-  <ion-tab [root]="ionTab3" tabTitle="Table"></ion-tab>
-</ion-tabs>
+<ion-header>
+  <ion-navbar *navbar>
+    <button menuToggle>MN
+     <ion-icon name='menu'></ion-icon>
+    </button>
+    <ion-title>
+      Game ID !!!
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+  <ion-tabs>
+    <ion-tab [root]="ionTab1" tabTitle="Hand and Table"></ion-tab>
+    <ion-tab [root]="ionTab2" tabTitle="Hand"></ion-tab>
+    <ion-tab [root]="ionTab3" tabTitle="Table"></ion-tab>
+  </ion-tabs>
 `;
     case TargetPlatformId.TWBS_CORDOVA:
     case TargetPlatformId.TWBS_WEB:

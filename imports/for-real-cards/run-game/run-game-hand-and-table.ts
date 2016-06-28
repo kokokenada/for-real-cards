@@ -12,18 +12,7 @@ import {PlatformTools} from "../../common-app/api/services/platform-tools";
 
 
 function template():string {
-  let templateStr:string = '';
-  if (PlatformTools.isIonic()) {
-    templateStr += `
-<ion-navbar *navbar>
-  <ion-title>
-    Game ID ...
-  </ion-title>
-</ion-navbar>
-    `
-  }
-  templateStr +=
-    `
+return `
   <run-game-table 
     forPlayer="true" 
     height="45vh" 
@@ -33,9 +22,7 @@ function template():string {
   <run-game-hand 
     style="width:100vw; height: 45vh">
   </run-game-hand>
-`
-;
-  return templateStr;
+`;
 }
 
 @Component(

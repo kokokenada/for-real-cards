@@ -11,7 +11,6 @@ import {TargetPlatformId, PlatformTools} from "../../common-app/api/services/pla
 function template():string {
   switch (PlatformTools.getTargetPlatforrm()) {
     case TargetPlatformId.IONIC: return `
-     <div>
 <ion-list>
   <form>
     <ion-list-header>

@@ -71,13 +71,7 @@ export class PopoverMenu {
   }
 
   itemSelected(menuItem:MenuItem) {
-//    console.log(menuItem);
-    if (menuItem.event) {
-//      this.$rootScope.$broadcast(menuItem.event);
-    }
-    if (menuItem.callback) {
-      menuItem.callback(menuItem);
-    }
+    menuItem.selected();
   }
 
 }

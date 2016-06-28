@@ -19,6 +19,8 @@ import {MenuItem} from "../../common-app/api/services/menu-item";
 import {Menus} from "../../common-app/api/services/menus";
 import {GameActionList} from "../debug-tools/game-action-list";
 import {EditUserProfile} from "../edit-user-profile/edit-user-profile";
+import {MenuFilterPipe} from "../../common-app/ui-ng2/menu-filter/menu-filter";
+import {RunGameTableContainer} from "../run-game/run-game-table-container";
 
 @Component({
   template: `
@@ -26,21 +28,13 @@ import {EditUserProfile} from "../edit-user-profile/edit-user-profile";
 <ion-menu id="topFrameMenu" [content]="myNav">
 
   <ion-toolbar>
-    <ion-title>Menu</ion-title>
+    <ion-title>For Real Cards</ion-title>
   </ion-toolbar>
 
   <ion-content class="outer-content">
 
     <ion-list>
-      <ion-list-header>
-        Navigate
-      </ion-list-header>
-      <button ion-item menuClose *ngFor="let menu of menuItems()" (click)="openPage(menu)">
-        TEMP TEST
-      </button>
-
-
-      <button ion-item menuClose *ngFor="let menu of menuItems()" (click)="openPage(menu)">
+      <button ion-item menuClose *ngFor="let menu of (menuItems() | menuFilter)" (click)="openPage(menu)">
         {{menu.title}}
       </button>
     </ion-list>
@@ -50,12 +44,13 @@ import {EditUserProfile} from "../edit-user-profile/edit-user-profile";
 
 <ion-nav  #myNav [root]="rootPage" swipe-back-enabled="true"></ion-nav>
 `,
-  viewProviders: [DragulaService]
+  viewProviders: [DragulaService],
+  pipes: [MenuFilterPipe]
 })
 class ForRealCardsTopFrame extends TopFrame {
   private subscriptions:Subscription[] = [];
   private displayName:string;
-  @ViewChild('myNav') nav;
+  @ViewChild('myNav') nav: NavController;
 
   rootPage: any;
   constructor(app: App, platform: Platform, private menu: MenuController, private ngZone:NgZone) {
@@ -115,11 +110,11 @@ class ForRealCardsTopFrame extends TopFrame {
   }
 
   menuItems():MenuItem[] {
-    return Menus.getMenus();
+    return Menus.getMenuFromId('topbar').items;
   }
 
   openPage(menuItem:MenuItem) {
-    console.log(menuItem);
+    menuItem.selected();
   }
 
   watchingUserEvents() {
@@ -147,7 +142,7 @@ class ForRealCardsTopFrame extends TopFrame {
         switch (action.actionType) {
           case ActionType.NEW_GAME: {
             console.log("Ionic nav NEW_GAME")
-            this.nav.push(RunGameTabs);
+            this.nav.setRoot(RunGameTabs);
             break;
           }
           case ActionType.ENTER_GAME_FAIL: {
@@ -156,12 +151,11 @@ class ForRealCardsTopFrame extends TopFrame {
           }
           case ActionType.ENTER_GAME_AT_HAND_NOTIFY:{
             console.log("Ionic nav ENTER_GAME_AT_HAND_NOTIFY")
-            this.nav.push(RunGameTabs);
-//            this.router.navigate(['/game-hand', action.gameId]);
+            this.nav.setRoot(RunGameTabs);
             break;
           }
           case ActionType.ENTER_GAME_AT_TABLE_NOTIFY: {
-//            this.router.navigate(['/game-table', action.gameId]);
+            this.nav.setRoot(RunGameTableContainer);
             break;
           }
         }
@@ -170,16 +164,14 @@ class ForRealCardsTopFrame extends TopFrame {
   }
 
   navigateToStart() {
-
+    this.nav.setRoot(Start);
   }
 
   navigateToEnter() {
-    console.log('ionic nav to enter')
-    this.nav.push(EnterGame);
+    this.nav.setRoot(EnterGame);
   }
 
 }
-
 
 export function run(): void {
   ionicBootstrap(ForRealCardsTopFrame, [
