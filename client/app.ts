@@ -14,9 +14,9 @@ if (Meteor.isCordova) {
 }
 
 import { enableProdMode } from '@angular/core';
-import { run as runWeb } from "../imports/for-real-cards/top-frame/top-frame.web";
+import { run as runWeb } from "../imports/for-real-cards/top-frame/top-frame.twbs.ts";
 import { run as runMobile } from "../imports/for-real-cards/top-frame/top-frame.ionic";
-import { prepare as prepareWeb } from "../imports/for-real-cards/top-frame/top-frame.web";
+import { prepare as prepareWeb } from "../imports/for-real-cards/top-frame/top-frame.twbs.ts";
 import { prepare as prepareMobile } from "../imports/for-real-cards/top-frame/top-frame.ionic";
 
 

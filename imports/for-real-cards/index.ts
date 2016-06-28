@@ -4,5 +4,5 @@
  */
 
 
-export * from "./top-frame/top-frame.web";
+export * from "./top-frame/top-frame.twbs";
 
