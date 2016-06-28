@@ -181,11 +181,11 @@ export function run(): void {
 declare let cordova:any;
 export function prepare():void {
 
-  console.log(cordova);
-  if (!cordova) {
+  if (typeof cordova==='undefined') {
     console.log("cordova not defined.  We must be running ionic similation in browser. Calling run() in 500ms");
     Meteor.setTimeout(run, 500);
   } else {
     console.log('cordova detected')
+    console.log(cordova);
   }
 }

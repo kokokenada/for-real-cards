@@ -14,18 +14,19 @@ function template():string {
       return `
 <ion-header>
   <ion-navbar *navbar>
-    <button menuToggle>MN
-     <ion-icon name='menu'></ion-icon>
+    <button menuToggle>
+       <ion-icon name='menu'></ion-icon>
     </button>
     <ion-title>
       Enter Game
     </ion-title>
   </ion-navbar>
 </ion-header>
-
+<ion-content>
+<p>test</p>
   <new-game></new-game>
   <join-game></join-game>
-
+</ion-content>
 `;
     case TargetPlatformId.TWBS_CORDOVA:
     case TargetPlatformId.TWBS_WEB:

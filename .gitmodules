@@ -1,0 +1,3 @@
+[submodule "packages/meteor-scss"]
+	path = packages/meteor-scss
+	url = https://github.com/kokokenada/meteor-scss.git

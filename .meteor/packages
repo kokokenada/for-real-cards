@@ -18,7 +18,7 @@ ecmascript              # Enable ECMAScript2015+ syntax in app code
 
 angular2-compilers
 barbatus:angular2-runtime
-fourseven:scss
+
 aldeed:collection2
 fongandrew:find-and-modify
 session
@@ -28,3 +28,4 @@ jalik:ufs
 jalik:ufs-gridfs
 browser-policy
 mys:fonts
+fourseven:scss

@@ -19,8 +19,8 @@ function template():string {
       return `
 <ion-header>
   <ion-navbar *navbar>
-    <button menuToggle>MN
-     <ion-icon name='menu'></ion-icon>
+    <button menuToggle>
+       <ion-icon name='menu'></ion-icon>
     </button>
     <ion-title>
       Game ID !!!
