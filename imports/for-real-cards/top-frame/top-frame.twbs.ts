@@ -14,7 +14,7 @@ import { AccountTools, Menus, MenuItem, User, UserEventType, UserEvent} from '..
 import { AccountsAdmin } from '../../common-app/ui-twbs-ng2/accounts-admin/accounts-admin';
 
 import { Action, ActionType } from "../api/index";
-import { ModalDialog } from "../../common-app/ui-twbs-ng2/modal.component";
+import { ModalDialog } from "../../common-app/ui-twbs-ng2/modal/modal.component";
 import { DealModal } from "../deal-modal/deal-modal.twbs";
 import { EditUserProfile } from '../edit-user-profile/edit-user-profile';
 import { EnterGame } from '../enter-game/enter-game';

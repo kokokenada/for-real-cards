@@ -1,21 +1,20 @@
-import { ModalService } from '../../common-app/ui-ng2/index';
+import {Deck, GameConfig, defaultGames, DeckLocation, UserCommand} from "../api/index";
+import {ModalBase} from "../../common-app/ui-ng2/modal/modal-base.class";
 
-import {Deck, DeckId, GameConfig, defaultGames, DeckLocation, UserCommand} from "../api/index";
-
-export class DealModalBase  {
+export class DealModalBase extends ModalBase {
   gameConfig: GameConfig;
-  constructor(private modalService: ModalService) {
+  selectedPreset:string;
 
+  constructor() {
+    super();
   }
 
-  ngOnChanges(obj) {
-    console.log('onchanges deal modal:');
-    console.log(obj);
+  onModalInit(componentParameters:any) {
+    console.log('ngOnModalInit deal modal:');
+    console.log(componentParameters);
     console.log(this)
-    if (obj.componentParameters && obj.componentParameters.currentValue && obj.componentParameters.currentValue.gameConfig)
-      this.gameConfig = obj.componentParameters.currentValue.gameConfig;
+    this.gameConfig = componentParameters.gameConfig;
   }
-  private selectedPreset:string;
 
   getSelectedPreset():string {
     if (this.selectedPreset)
@@ -23,6 +22,8 @@ export class DealModalBase  {
     return "Tap to select a game pre-set"
   }
   getPresets():GameConfig[] {
+    console.log('in getPresets')
+    console.log(defaultGames)
     return defaultGames;
   }
   selectPreset(presetIndex:number):void {
@@ -76,9 +77,9 @@ export class DealModalBase  {
   }
   deal() {
     this.gameConfig.pruneUserCommands();
-    ModalService.close(this.gameConfig);
+    this.close(this.gameConfig);
   }
   cancel() {
-    ModalService.close(undefined);
+    this.close(undefined);
   }
 }

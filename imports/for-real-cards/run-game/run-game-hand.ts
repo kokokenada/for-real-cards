@@ -7,7 +7,7 @@ import { Component, Input, NgZone, ViewEncapsulation } from '@angular/core';
 import { Meteor } from 'meteor/meteor';
 import { Dragula, DragulaService } from 'ng2-dragula/ng2-dragula';
 
-import { CommonPopups } from "../../common-app/ui-twbs-ng2/index";
+import { CommonPopups } from "../../common-app/ui-ng2/index";
 import { Tools } from "../../common-app/api/index";
 import {CommonAppButton} from "../../common-app/ui-ng2/button/common-app-button";
 
@@ -24,7 +24,7 @@ import { PileView } from "./pile-view";
     directives: [DeckView, Dragula, PileView, PlayingCard, CommonAppButton],
     providers: [DealModalService],
     encapsulation: ViewEncapsulation.None, // Require for Dragula .gu-transit
-    templateUrl: '/imports/for-real-cards/run-game/run-game-hand.html',
+    templateUrl: '/imports/for-real-cards/run-game/run-game-hand.html'
   }
 )
 export class RunGameHand extends RunGame {

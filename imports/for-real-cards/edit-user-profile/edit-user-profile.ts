@@ -19,7 +19,7 @@ import {
   UserEvent,
   UserEventType
 } from "../../common-app/api/index"
-import {CommonPopups} from "../../common-app/ui-twbs-ng2/index"
+import {CommonPopups} from "../../common-app/ui-ng2/index"
 import {PlatformTools} from "../../common-app/api/services/platform-tools";
 
 

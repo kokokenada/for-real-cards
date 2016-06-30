@@ -1,0 +1,87 @@
+<ion-toolbar>
+  <ion-title>
+    Deal
+  </ion-title>
+</ion-toolbar>
+
+<ion-content *ngIf="gameConfig">
+  <ion-list >
+    <ion-item>
+      <button (click)="cancel()" outline>Never Mind</button>
+      <button (click)="deal()">Deal</button>
+    </ion-item>
+    <ion-item>
+      <ion-label>Preset Game</ion-label>
+      <ion-select [(ngModel)]='selectedPreset'>
+        <ion-option *ngFor="let preset of getPresets();">{{preset?.name}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Game Name</ion-label>
+      <ion-input [(ngModel)]="gameConfig.name" type="text"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Min # of Players</ion-label>
+      <ion-input
+              [(ngModel)]="gameConfig.minimumNumberOfPlayers"
+              type="number"
+              ></ion-input>
+      </ion-item>
+    <ion-item>
+      <ion-label>Max # of Players</ion-label>
+      <ion-input
+              [(ngModel)]="gameConfig.maximumNumberOfPlayers"
+              type="number"
+              ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Deck Type</ion-label>
+      <ion-select [(ngModel)]="ionDeck">
+        <ion-option  *ngFor="let deck of getDecks()" value="deck.name">{{deck?.name}}</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Number of Cards to Players</ion-label>
+        <ion-input
+            [(ngModel)]="gameConfig.numberOfCardsToPlayer"
+            type="number"
+         ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Deck Location After Deal</ion-label>
+      <ion-select [(ngModel)]="ionDeckLoc">
+        <ion-option *ngFor="let location of getLocations()" value="location"></ion-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Turn Up Card After Deal</ion-label>
+      <ion-checkbox [(ngModel)]="ionTurnUpCard"></ion-checkbox>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Has Tricks</ion-label>
+      <ion-checkbox [(ngModel)]="ionHasTricks"></ion-checkbox>
+    </ion-item>
+    <ion-list-header>
+      Users can move cards:
+    </ion-list-header>
+  </ion-list>
+    <ion-list *ngFor="let userCommand of getUserCommands()" radio-group>
+      <ion-list-header>From {{userCommand?.fromDescription()}} to {{userCommand?.toDescription()}}</ion-list-header>
+      <ion-item *ngFor="let desc of getCardCountAllowedOptions()">
+        <ion-label>{{desc}}</ion-label>
+        <ion-radio checked="true" value="go"></ion-radio>
+      </ion-item>
+    </ion-list>
+</ion-content>
+<!--
+/**
+ * Copyright Ken Ono, Fabrica Technolology 2016
+ * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
+ */
+-->
+
