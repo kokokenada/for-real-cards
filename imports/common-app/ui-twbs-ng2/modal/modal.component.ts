@@ -1,8 +1,8 @@
 import { Component, ViewContainerRef } from "@angular/core"
 
-import { ModalOutlet} from "../ui-ng2/modal/modal-outlet.component";
-import { ModalEvent, ModalEventType} from "../ui-ng2/modal/modal-event.class";
-import { ModalService } from "../ui-ng2/modal/modal.service"
+import { ModalOutlet} from "./modal-outlet.component";
+import { ModalEvent, ModalEventType} from "../../ui-ng2/modal/modal-event.class";
+import { ModalService } from "../../ui-ng2/modal/modal.service"
 
 @Component({
   selector: 'modal-dialog',

@@ -1,7 +1,8 @@
 import {Type } from '@angular/core';
 
 export enum ModalEventType {
-  OPEN,
+  OPEN, 
+  DISPLAY,
   CLOSE
 }
 export class ModalEvent {

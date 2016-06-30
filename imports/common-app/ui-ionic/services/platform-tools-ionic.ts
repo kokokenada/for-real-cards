@@ -9,15 +9,27 @@ import {Modal} from 'ionic-angular';
 
 @Injectable()
 export class PlatformToolsIonic {
-  static initializeWithRouter(router:any) {
+  private static nav:any;  
+  static initializeWithRouter(nav:any) {
+    PlatformToolsIonic.nav = nav;
     let modalInstance;
     ModalService.subscribe((modalEvent:ModalEvent)=> {
       if (modalEvent.eventType === ModalEventType.OPEN) {
         modalInstance = Modal.create(modalEvent.componentType, modalEvent.componentParameters);
-        router.present(modalInstance);
+        nav.present(modalInstance).then(
+          (result)=>{
+            ModalService.notifyDisplayed();
+          }
+        );
       } else if (modalEvent.eventType === ModalEventType.CLOSE) {
         modalInstance.dismiss();
       }
     });
+  }
+  static getNav():any {
+    if (!PlatformToolsIonic.nav) {
+      throw "not initialized. Call initializeWithRouter";
+    }
+    return PlatformToolsIonic.nav;
   }
 }

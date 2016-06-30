@@ -10,6 +10,7 @@ export class ModalService {
   private static modalSubject:Subject<ModalEvent> = new Subject();  // A subject for all modals (for managing display)
   private static currentModalPromiseResolver = null; // A promise resolver for the current modal (if we need >1, refactor to tie promise to OPEN event)
   private static currentModalPromiseRejecter = null;
+  private static currentComponentParameters:Object = null;
 
   static open(component:Type, selector:string, params:Object=undefined):Promise {
     return new Promise((resolve, reject)=>{
@@ -20,8 +21,12 @@ export class ModalService {
       ModalService.pushEvent(new ModalEvent(ModalEventType.OPEN, {componentSelector: selector, componentParameters: params, componentType: component}));
       ModalService.currentModalPromiseResolver = resolve;
       ModalService.currentModalPromiseRejecter = reject;
-      console.log('open modal')
+      ModalService.currentComponentParameters = params;
     });
+  }
+  
+  static notifyDisplayed():void {
+    ModalService.pushEvent(new ModalEvent(ModalEventType.DISPLAY, {componentParameters: this.currentComponentParameters}));
   }
   
   static close(result:any=undefined) {

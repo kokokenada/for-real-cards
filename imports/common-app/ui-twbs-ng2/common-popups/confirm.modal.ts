@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-import { CommonPopupModal } from "./common-popup.class";
+import { CommonPopupModal } from "../../ui-ng2/common-popups/common-popup.class";
 
 @Component(
   {

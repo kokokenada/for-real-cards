@@ -1,1 +1,2 @@
-export * from "./modal/modal.service.ts";
+export * from "./modal/modal.service";
+export * from "./common-popups/common-popups";

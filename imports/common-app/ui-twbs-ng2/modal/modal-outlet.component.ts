@@ -12,7 +12,8 @@ import {
 
 } from '@angular/core'
 
-import { ModalEvent } from "./modal-event.class";
+import { ModalEvent } from "../../ui-ng2/modal/modal-event.class";
+import {ModalService} from "../../ui-ng2/modal/modal.service";
 
 // Based on http://blog.lacolaco.net/post/dynamic-component-creation-in-angular-2/     http://plnkr.co/edit/HCz7Kc?p=info
 
@@ -53,6 +54,7 @@ export class ModalOutlet {
       .then(factory => {
         const injector = ReflectiveInjector.fromResolvedProviders([], this.vcRef.parentInjector);
         this.vcRef.createComponent(factory, 0, injector, []);
+        ModalService.notifyDisplayed();
       });
   }
 }
