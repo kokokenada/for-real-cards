@@ -35,7 +35,7 @@ if (Meteor.isProduction) {
 if (Meteor.isCordova) {
   prepareMobile();
   document.addEventListener('deviceready', () => {
-    ionicSelector('for-real-cards-top-frame');
+    //ionicSelector('for-real-cards-top-frame');
     runMobile();
 //    setClass('mobile');
   });

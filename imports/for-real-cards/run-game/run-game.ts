@@ -29,13 +29,13 @@ export class RunGame {
   }
 
   ngOnInit() {
-    log.debug('RunGame rx.subscribing in RunGame ngOnInit')
-    log.debug(this)
+    //log.debug('RunGame rx.subscribing in RunGame ngOnInit')
+    //log.debug(this)
     RunGame.subscribe(
       (action:Action)=> {
-        log.debug('Got subscription callback in run-game.ts. Action:');
-        log.debug(action);
-        log.debug(this)
+        //log.debug('Got subscription callback in run-game.ts. Action:');
+        //log.debug(action);
+        //log.debug(this)
         if (
           action.actionType===ActionType.NEW_HAND ||
           action.actionType===ActionType.ENTER_GAME_AT_HAND_NOTIFY ||
@@ -44,7 +44,7 @@ export class RunGame {
           this.ngZone.run(()=>{
             this.gameId = action.gameId;
             this.initialize();
-            log.debug(RunGame.gameState)
+            //log.debug(RunGame.gameState)
           })
         } else {
           if (action.sequencePosition+1===action.sequenceLength ) {
@@ -114,8 +114,8 @@ export class RunGame {
         accepts: accepts,
         invalid: invalid
       };
-      console.log('setOPtions')
-      console.log(options)
+//      console.log('setOPtions')
+//      console.log(options)
       this.dragulaService.setOptions('drag-and-drop',
         options
       );
@@ -129,8 +129,8 @@ export class RunGame {
           dragAndDrop.logError("Drop received an element that should not have been allowed");
           return;
         }
-        console.log('drop')
-        console.log(dragAndDrop)
+//        console.log('drop')
+//        console.log(dragAndDrop)
 
         dragAndDrop.runActions(RunGame.gameState);        
         
@@ -162,8 +162,8 @@ export class RunGame {
   }
 
   private initialize() {
-    console.log("RunGame initialize()")
-    console.log(this);
+    //console.log("RunGame initialize()")
+    //console.log(this);
     if   (this.gameId===undefined) {
       console.log("gameId undefined")
       console.log(this)

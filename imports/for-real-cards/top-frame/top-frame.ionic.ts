@@ -3,7 +3,7 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 import { Component, NgZone, ViewChild } from '@angular/core';
-import { ionicBootstrap, App, Platform, Menu, MenuController, NavController } from 'ionic-angular';
+import { ionicBootstrap, Platform, MenuController, NavController } from 'ionic-angular';
 import { Subscription } from 'rxjs'
 import { DragulaService} from 'ng2-dragula/ng2-dragula';
 
@@ -14,13 +14,14 @@ import { RunGame } from "../run-game/run-game";
 import { Action, ActionType } from "../api/models/action.model";
 import { TopFrame } from "./top-frame.base";
 import { EnterGame } from "../enter-game/enter-game";
-import { RunGameTabs } from "../run-game/run-game-tabs";
+import { RunGameTabs } from "../run-game/run-game-tabs.ionic";
 import {MenuItem} from "../../common-app/api/services/menu-item";
 import {Menus} from "../../common-app/api/services/menus";
 import {GameActionList} from "../debug-tools/game-action-list";
 import {EditUserProfile} from "../edit-user-profile/edit-user-profile";
 import {MenuFilterPipe} from "../../common-app/ui-ng2/menu-filter/menu-filter";
 import {RunGameTableContainer} from "../run-game/run-game-table-container";
+import {PlatformToolsIonic} from "../../common-app/ui-ionic/index";
 
 @Component({
   template: `
@@ -53,7 +54,7 @@ class ForRealCardsTopFrame extends TopFrame {
   @ViewChild('myNav') nav: NavController;
 
   rootPage: any;
-  constructor(app: App, platform: Platform, private menu: MenuController, private ngZone:NgZone) {
+  constructor( platform: Platform, private menu: MenuController, private ngZone:NgZone) {
     super();
 
     Menus.addMenu({id: 'topbar'});
@@ -101,8 +102,7 @@ class ForRealCardsTopFrame extends TopFrame {
     this.watchingGame();
     this.watchingUserEvents();
     this.menu.enable(true, 'topFrameMenu');
-    console.log('enabling menu')
-    console.log(this.menu)
+    PlatformToolsIonic.initializeWithRouter(this.nav);
   }
   
   ngOnDestroy() {

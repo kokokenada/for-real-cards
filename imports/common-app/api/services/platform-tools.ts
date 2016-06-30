@@ -1,4 +1,3 @@
-import { Injectable } from '@angular/core';
 //import { require } from 'meteor/modules'
 declare var require:any;
 
@@ -10,7 +9,6 @@ export enum TargetPlatformId {
   IONIC
 }
 
-//@Injectable()
 export class PlatformTools {
   private static targetPlatForm:TargetPlatformId;
 
@@ -19,6 +17,7 @@ export class PlatformTools {
       case TargetPlatformId.IONIC:
       {
         require('../../ui-ionic/scss/ionic.scss');
+        //require('../../ui-ionic/scss/test.css');
         break;
       }
       case TargetPlatformId.TWBS_CORDOVA:
@@ -40,7 +39,7 @@ export class PlatformTools {
     PlatformTools.targetPlatForm = targetPlatformId;
     PlatformTools.importSCSS();
   }
-  
+
   static getTargetPlatforrm():TargetPlatformId {
     return PlatformTools.targetPlatForm;
   }

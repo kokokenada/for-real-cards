@@ -1,0 +1,23 @@
+//import { require } from 'meteor/modules'
+declare var require:any;
+
+import { Injectable } from '@angular/core'
+
+import {ModalEventType, ModalEvent} from "../../ui-ng2/modal/modal-event.class";
+import {ModalService} from "../../ui-ng2/modal/modal.service";
+import {Modal} from 'ionic-angular';
+
+@Injectable()
+export class PlatformToolsIonic {
+  static initializeWithRouter(router:any) {
+    let modalInstance;
+    ModalService.subscribe((modalEvent:ModalEvent)=> {
+      if (modalEvent.eventType === ModalEventType.OPEN) {
+        modalInstance = Modal.create(modalEvent.componentType, modalEvent.componentParameters);
+        router.present(modalInstance);
+      } else if (modalEvent.eventType === ModalEventType.CLOSE) {
+        modalInstance.dismiss();
+      }
+    });
+  }
+}

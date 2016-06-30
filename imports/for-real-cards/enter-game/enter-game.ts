@@ -22,10 +22,16 @@ function template():string {
     </ion-title>
   </ion-navbar>
 </ion-header>
-<ion-content>
-<p>test</p>
+
   <new-game></new-game>
   <join-game></join-game>
+
+<ion-content>
+  <button>Test 1</button>
+  <button>Test 2</button>
+  <button>Test 3</button>
+  <button>Test 4</button>
+
 </ion-content>
 `;
     case TargetPlatformId.TWBS_CORDOVA:

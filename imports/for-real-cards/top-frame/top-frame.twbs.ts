@@ -15,14 +15,14 @@ import { AccountsAdmin } from '../../common-app/ui-twbs-ng2/accounts-admin/accou
 
 import { Action, ActionType } from "../api/index";
 import { ModalDialog } from "../../common-app/ui-twbs-ng2/modal.component";
-import { DealModal } from "../deal-modal/deal-modal";
+import { DealModal } from "../deal-modal/deal-modal.twbs";
 import { EditUserProfile } from '../edit-user-profile/edit-user-profile';
 import { EnterGame } from '../enter-game/enter-game';
 import { GameActionList } from '../debug-tools/game-action-list';
 import { PopoverMenu } from '../../common-app/ui-twbs-ng2/index';
 import { RunGame } from "../run-game/run-game";
 import { RunGameTableContainer } from "../run-game/run-game-table-container";
-import { RunGameTabs } from "../run-game/run-game-tabs";
+import { RunGameTabs } from "../run-game/run-game-tabs.twbs";
 import { Start } from "../start/start";
 
 import "../scss/for-real-cards.scss";
