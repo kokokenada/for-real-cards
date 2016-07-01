@@ -3,7 +3,7 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 import { Component, NgZone, ViewChild } from '@angular/core';
-import { ionicBootstrap, Platform, MenuController, NavController } from 'ionic-angular';
+import { ionicBootstrap, Platform, MenuController, NavController, NavParams } from 'ionic-angular';
 import { Subscription } from 'rxjs'
 import { DragulaService} from 'ng2-dragula/ng2-dragula';
 
@@ -13,15 +13,15 @@ import { AccountTools } from "../../common-app/api/services/account-tools";
 import { RunGame } from "../run-game/run-game";
 import { Action, ActionType } from "../api/models/action.model";
 import { TopFrame } from "./top-frame.base";
+import { GameActionList } from "../debug-tools/game-action-list";
+import { EditUserProfile } from "../edit-user-profile/edit-user-profile";
 import { EnterGame } from "../enter-game/enter-game";
 import { RunGameTabs } from "../run-game/run-game-tabs.ionic";
-import {MenuItem} from "../../common-app/api/services/menu-item";
-import {Menus} from "../../common-app/api/services/menus";
-import {GameActionList} from "../debug-tools/game-action-list";
-import {EditUserProfile} from "../edit-user-profile/edit-user-profile";
-import {MenuFilterPipe} from "../../common-app/ui-ng2/menu-filter/menu-filter";
-import {RunGameTableContainer} from "../run-game/run-game-table-container";
-import {PlatformToolsIonic} from "../../common-app/ui-ionic/index";
+import { MenuItem } from "../../common-app/api/services/menu-item";
+import { Menus } from "../../common-app/api/services/menus";
+import { MenuFilterPipe } from "../../common-app/ui-ng2/menu-filter/menu-filter";
+import { RunGameTableContainer } from "../run-game/run-game-table-container";
+import { PlatformToolsIonic } from "../../common-app/ui-ionic/index";
 
 @Component({
   template: `
@@ -54,7 +54,7 @@ class ForRealCardsTopFrame extends TopFrame {
   @ViewChild('myNav') nav: NavController;
 
   rootPage: any;
-  constructor( platform: Platform, private menu: MenuController, private ngZone:NgZone) {
+  constructor( platform: Platform, private menu: MenuController, private ngZone:NgZone) { //, private navParams:NavParams) {
     super();
 
     Menus.addMenu({id: 'topbar'});

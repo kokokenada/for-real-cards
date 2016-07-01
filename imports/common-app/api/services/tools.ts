@@ -39,6 +39,8 @@ export class Tools {
   static stringToBool(stringValue:string):boolean {
     if (typeof stringValue === 'string') {
       return !(stringValue.toLowerCase() === 'false' || stringValue.toLocaleLowerCase() === "no");
+    } else if (typeof stringValue === 'boolean') {
+      return stringValue ? true : false;
     }
     return false;
   }

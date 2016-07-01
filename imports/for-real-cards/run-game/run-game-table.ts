@@ -3,7 +3,7 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 
-import { Component, Input, NgZone, ViewEncapsulation } from '@angular/core';
+import { Component, Injector, Input, NgZone, ViewEncapsulation } from '@angular/core';
 import { Dragula, DragulaService} from 'ng2-dragula/ng2-dragula';
 
 import { Tools } from "../../common-app/api/index";
@@ -14,11 +14,12 @@ import { Player } from "../player/player";
 import { PlayingCard } from "../playing-card/playing-card";
 import { DeckView } from "./deck-view";
 import { PileView } from "./pile-view";
+import {PlatformToolsIonic} from "../../common-app/ui-ionic/services/platform-tools-ionic";
+import {PlatformTools} from "../../common-app/api/services/platform-tools";
 
 const TABLE_ZONE_CENTER_RADIUS = 20;
 const TABLE_ZONE_OUTER_RADIUS = 30;
 
-//object-fit: contain !important;
 @Component(
   {
     selector: 'run-game-table',
@@ -33,8 +34,15 @@ export class RunGameTable extends RunGame {
   @Input() height:string;
   @Input() forPlayer:string;
   
-  constructor(private dragulaServiceChild: DragulaService, private ngZoneChild:NgZone) {
+  constructor(private dragulaServiceChild: DragulaService, private ngZoneChild:NgZone, private injector: Injector) {
     super(dragulaServiceChild, ngZoneChild);
+    if (PlatformTools.isIonic())  {
+      let navParams = PlatformToolsIonic.getNavParams(injector);
+      if (navParams) {
+        this.width = navParams.data.width;
+        this.height = navParams.data.height;
+      }
+    }
   }
 
   private forPlayerBool():boolean {

@@ -27,8 +27,8 @@ import { RunGameContainer } from "./run-game-container";
 </ion-header>
   <ion-tabs>
     <ion-tab [root]="ionTab1" tabTitle="Hand and Table"></ion-tab>
-    <ion-tab [root]="ionTab2" tabTitle="Hand"></ion-tab>
-    <ion-tab [root]="ionTab3" tabTitle="Table"></ion-tab>
+    <ion-tab [root]="ionTab2" [rootParams]="handParams" tabTitle="Hand"></ion-tab>
+    <ion-tab [root]="ionTab3" [rootParams]="tableParams" tabTitle="Table"></ion-tab>
   </ion-tabs>
 `
   }
@@ -38,8 +38,15 @@ export class RunGameTabs extends RunGameContainer{
   ionTab1:Type = RunGameHandAndTable;
   ionTab2:Type = RunGameHand;
   ionTab3:Type = RunGameTable;
+  handParams = {
+    showTableProxy: true
+  };
+  tableParams = {
+    height:"90vw",
+    width:"100hw"
+  };
   constructor(private ngZone:NgZone) {
     super(ngZone);
-  }
+  };
 }
 

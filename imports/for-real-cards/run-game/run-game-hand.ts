@@ -3,9 +3,10 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 
-import { Component, Input, NgZone, ViewEncapsulation } from '@angular/core';
+import { Component, Input, Injector, NgZone, Optional, ViewEncapsulation } from '@angular/core';
 import { Meteor } from 'meteor/meteor';
 import { Dragula, DragulaService } from 'ng2-dragula/ng2-dragula';
+
 
 import { CommonPopups } from "../../common-app/ui-ng2/index";
 import { Tools } from "../../common-app/api/index";
@@ -17,6 +18,8 @@ import { PlayingCard } from "../playing-card/playing-card";
 import { Action, ActionFormatted, Card, CardImageStyle, GameConfig, CardLocation, CardCountAllowed, Hand} from "../api/index";
 import { DeckView } from "./deck-view";
 import { PileView } from "./pile-view";
+import {PlatformTools} from "../../common-app/api/services/platform-tools";
+import {PlatformToolsIonic} from "../../common-app/ui-ionic/services/platform-tools-ionic";
 
 @Component(
   {
@@ -31,7 +34,14 @@ export class RunGameHand extends RunGame {
   @Input() showTableProxy:string;
   undoAction:Action;
 
-  constructor(private dealModelService:DealModalService, private dragulaServiceChild: DragulaService, private ngZoneChild:NgZone ) {
+  constructor(private dealModelService:DealModalService, private dragulaServiceChild: DragulaService, private ngZoneChild:NgZone,
+              private injector: Injector) {
+    if (PlatformTools.isIonic())  {
+      let navParams = PlatformToolsIonic.getNavParams(injector);
+      if (navParams) {
+        this.showTableProxy = navParams.data.showTableProxy;
+      }
+    }
     super(dragulaServiceChild, ngZoneChild);
   }
 
