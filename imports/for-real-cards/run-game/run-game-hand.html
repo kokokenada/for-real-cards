@@ -13,14 +13,12 @@
 </div>
 <div *ngIf="shouldShowTableProxy()"
      style="height:15vh"
-     class="row"
 >
   <!-- DECK -->
   <deck-view
           *ngIf="shouldShowDeck()"
           [dragula]="'drag-and-drop'"
-          [class]="'col-xs-' + numberOfColumns()"
-          style="height:15vh;"
+          [ngStyle]="dropAreaStyle()"
           data-drag-source="DECK"
           data-drop-target="DECK"
           [imgStyle]="landscapeCardStyle()"
@@ -30,8 +28,7 @@
   <pile-view
           *ngIf="shouldShowPile()"
           [dragula]="'drag-and-drop'"
-          [class]="'col-xs-' + numberOfColumns()"
-          style="height:15vh;"
+          [ngStyle]="dropAreaStyle()"
           [imgStyle]="landscapeCardStyle()"
           [card]="topCardInPile()"
           [attr.data-card-rank]="topCardInPile()?.rank"
@@ -45,11 +42,10 @@
           *ngIf="shouldShowTableDrop()"
           [dragula]="'drag-and-drop'"
           data-drop-target="TABLE"
-          style="height:15vh;"
-          class="well"
-          [class]="'col-xs-' + numberOfColumns()"
-          style="text-align: center">
-    Drag here to place card on table
+          [ngStyle]="dropAreaStyle()">
+    <div style="width:100%; height: 100%; background-color: green; border-color: grey; border-width: 5px; border-style: solid; margin: 5px">
+      Drag here to place card on table
+    </div>
   </div>
 
 </div>

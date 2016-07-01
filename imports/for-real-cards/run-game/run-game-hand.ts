@@ -57,12 +57,28 @@ export class RunGameHand extends RunGame {
       return RunGame.gameState && RunGame.gameState.currentGameConfig && RunGame.gameState.currentGameConfig.hasTricks && RunGame.gameState.trickReady();
   }
   
-  numberOfColumns():string {
+  private numberOfBoxes():number {
     let numberOfBoxes = 
       (this.shouldShowDeck() ? 1 : 0) +
       (this.shouldShowPile() ? 1 : 0) +
       (this.shouldShowTableDrop() ? 1 : 0);
-    return (numberOfBoxes===0 ? "4" : (12/numberOfBoxes).toString());
+    return numberOfBoxes;
+  }
+  
+  dropAreaStyle():Object {
+    let numberOfBoxes = this.numberOfBoxes();
+    if (numberOfBoxes===0)
+      return "height:0px";
+
+    let width = Math.round(1/numberOfBoxes*100);
+    return {
+      height:"15vh",
+      width: width.toString() + '%',
+      "text-align": "center",
+      float: "left",
+      position: 'relative',
+      padding: "15px"
+    };
   }
   
   takeTrick():void {
