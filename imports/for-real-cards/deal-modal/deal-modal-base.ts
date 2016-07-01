@@ -10,9 +10,6 @@ export class DealModalBase extends ModalBase {
   }
 
   onModalInit(componentParameters:any) {
-    console.log('ngOnModalInit deal modal:');
-    console.log(componentParameters);
-    console.log(this)
     this.gameConfig = componentParameters.gameConfig;
   }
 
