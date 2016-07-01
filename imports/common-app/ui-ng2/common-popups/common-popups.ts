@@ -17,7 +17,7 @@ export class CommonPopups {
   }
   static alert(messageOrError, titleText:string="", okText:string="OK"):void {
     CommonPopups.init();
-    CommonPopups.instance.alertmessage(messageOrError, titleText, okText)
+    CommonPopups.instance.alert(messageOrError, titleText, okText)
   }
   static confirm(messageText:string, titleText:string="", okText:string="OK", cancelText:string="Cancel"):Promise<boolean> {
     CommonPopups.init();
