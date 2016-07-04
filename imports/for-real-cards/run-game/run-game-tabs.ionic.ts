@@ -9,11 +9,12 @@ import { RunGameHandAndTable } from "./run-game-hand-and-table";
 import { RunGameHand } from "./run-game-hand";
 import { RunGameTable } from "./run-game-table";
 import { RunGameContainer } from "./run-game-container";
+import {TopFrameHeader} from "../top-frame/top-frame-header";
 
 @Component(
   {
     selector: 'run-game-tabs',
-    directives: [RunGameHandAndTable, RunGameHand, RunGameTable],
+    directives: [RunGameHandAndTable, RunGameHand, RunGameTable, TopFrameHeader],
     template: `
 <ion-header>
   <ion-navbar *navbar>
@@ -21,7 +22,7 @@ import { RunGameContainer } from "./run-game-container";
        <ion-icon name='menu'></ion-icon>
     </button>
     <ion-title>
-      Game ID !!!
+      <top-frame-header></top-frame-header>      
     </ion-title>
   </ion-navbar>
 </ion-header>

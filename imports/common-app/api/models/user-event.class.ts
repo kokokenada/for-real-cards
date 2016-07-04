@@ -15,7 +15,7 @@ export enum UserEventType {
 }
 
 export class UserEvent {
-  private static loginStatusSubject:ReplaySubject<UserEvent> = new ReplaySubject();
+  static loginStatusSubject:ReplaySubject<UserEvent> = new ReplaySubject();
   private static userCursor:Mongo.Cursor;
 
   eventType: UserEventType;

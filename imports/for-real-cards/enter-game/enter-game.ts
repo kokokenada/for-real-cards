@@ -7,6 +7,7 @@ import { Component, Optional } from '@angular/core';
 import {NewGame} from './new-game';
 import {JoinGame} from './join-game';
 import {PlatformTools, TargetPlatformId} from "../../common-app/api/services/platform-tools";
+import {TopFrameHeader} from "../top-frame/top-frame-header";
 
 function template():string {
   switch (PlatformTools.getTargetPlatforrm()) {
@@ -18,7 +19,7 @@ function template():string {
        <ion-icon name='menu'></ion-icon>
     </button>
     <ion-title>
-      Enter Game
+      <top-frame-header></top-frame-header>      
     </ion-title>
   </ion-navbar>
 </ion-header>
@@ -47,7 +48,7 @@ function template():string {
 
 @Component({
   selector: 'enter-game',
-  directives: [NewGame, JoinGame],
+  directives: [NewGame, JoinGame, TopFrameHeader],
   template: template()
 })
 export class EnterGame {

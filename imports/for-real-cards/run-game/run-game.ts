@@ -21,7 +21,7 @@ export class RunGame {
   protected gameId:string;
   userPassword:string;
   static gameState:GameState;
-  private static subject:ReplaySubject = new ReplaySubject();
+  static subject:ReplaySubject<Action> = new ReplaySubject();
   private static gameStreamInitializedToId:string;
   protected static dragAndDropInitialized:boolean = false;
 
