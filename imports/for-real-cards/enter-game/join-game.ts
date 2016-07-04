@@ -102,8 +102,6 @@ export class JoinGame{
   joinGame() {
     RunGame.joinGame(this.gameId, this.password).then(
       (result) => {
-        console.log('Join game promis resolved')
-        console.log(result)
         RunGame.pushGameNotification(this.gameId, ActionType.ENTER_GAME_AT_HAND_NOTIFY);
       }, (error)=> {
         console.log('join game promise was rejected')
