@@ -10,33 +10,37 @@
   </ion-navbar>
 </ion-header>
 
-
+<!--<ion-content>-->
   <style>
     .my-drop-zone { border: dotted 3px lightgray; }
     .nv-file-over { border: dotted 3px red; }
   </style>
   <form role="form" *ngIf="userEditted">
-    <div class="panel-heading">
-      <h3 class="panel-title">User Profile and Account</h3>
-    </div>
-    <div class="panel-body">
-      <div class="form-group">
-        <label for="username">Username:</label>
-        <input [(ngModel)]="userEditted.username" type="text" class="form-control" id="username"/>
-      </div>
-      <div class="form-group">
-        <label for="email">Email</label><span> (optional)</span>
-        <input [(ngModel)]="userEditted.emails[0].address" type="text" class="form-control" id="email"/>
-      </div>
-      <div class="form-group">
-        <button (click)="save()" class="btn btn-primary pull-right">Save</button>
-      </div>
+    <ion-list>
+      <ion-item>
+        <ion-label>Username</ion-label>
+        <ion-input [(ngModel)]="userEditted.username" type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Email</ion-label>
+        <ion-input [(ngModel)]="userEditted.emails[0].address" type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <button (click)="save()" block>Save</button>
+      </ion-item>
 
-      <div class="form-group">
-        <label for="avatar">Avatar</label>
+      <ion-list-header>
+        Avatar
+      </ion-list-header>
+
+      <ion-item>
+        <ion-label for="avatar">Avatar</ion-label>
         <input type="file" ng2FileSelect [uploader]="uploader" (onchange)="fileDrop($event)"/>
+      </ion-item>
+      <ion-item>
         <strong>OR</strong>
-
+      </ion-item>
+      <ion-item>
         <div ng2FileDrop
              [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
              (fileOver)="fileOverBase($event)"
@@ -48,7 +52,7 @@
           <img [src]="avatarUrl()"/>
         </div>
 
-        <table *ngIf="uploader?.queue.length" class="table">
+        <table *ngIf="uploader?.queue.length">
           <thead>
           <tr>
             <th width="50%">Name</th>
@@ -73,6 +77,7 @@
           </tr>
           </tbody>
         </table>
-      </div>
-    </div>
+      </ion-item>
+    </ion-list>
   </form>
+<!--</ion-content>-->
