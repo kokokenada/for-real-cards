@@ -65,7 +65,6 @@ export class CommonAppButton {
     }
     html += this.label;
     html += "</button>";
-console.log(html)
     const metadata = new ComponentMetadata({
       selector: 'dynamic-html',
       template: html
