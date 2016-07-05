@@ -11,10 +11,6 @@
 </ion-header>
 
 <!--<ion-content>-->
-  <style>
-    .my-drop-zone { border: dotted 3px lightgray; }
-    .nv-file-over { border: dotted 3px red; }
-  </style>
   <form role="form" *ngIf="userEditted">
     <ion-list>
       <ion-item>
@@ -34,22 +30,11 @@
       </ion-list-header>
 
       <ion-item>
-        <ion-label for="avatar">Avatar</ion-label>
-        <input type="file" ng2FileSelect [uploader]="uploader" (onchange)="fileDrop($event)"/>
+        <strong>Tap Image to set Avatar</strong>
       </ion-item>
       <ion-item>
-        <strong>OR</strong>
-      </ion-item>
-      <ion-item>
-        <div ng2FileDrop
-             [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
-             (fileOver)="fileOverBase($event)"
-             [uploader]="uploader"
-             (onFileDrop)="fileDrop($event)"
-
-             class="well my-drop-zone">
-          Drop image here
-          <img [src]="avatarUrl()"/>
+        <div (click)="getPicture()">
+                    <img [src]="avatarUrl()"/>
         </div>
 
         <table *ngIf="uploader?.queue.length">

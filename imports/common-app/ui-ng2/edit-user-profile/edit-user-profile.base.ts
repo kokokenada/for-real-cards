@@ -1,35 +1,13 @@
-/**
- * Copyright Ken Ono, Fabrica Technolology 2016
- * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
- */
-
-import { Component, NgZone } from '@angular/core';
 import { Subscription } from 'rxjs'
+import { NgZone } from '@angular/core';
 import { Meteor } from 'meteor/meteor';
-import { FILE_UPLOAD_DIRECTIVES, FileUploader} from 'ng2-file-upload';
-import { User } from "../../common-app/api/index";
 import * as log from 'loglevel';
 
-import {
-  AccountTools,
-  AvatarOriginalStore,
-  AvatarTools,
-  Uploader,
-  UploadFileInfo,
-  UserEvent,
-  UserEventType
-} from "../../common-app/api/index"
-import {CommonPopups} from "../../common-app/ui-ng2/index"
-import {PlatformTools} from "../../common-app/api/services/platform-tools";
+import { FileUploader} from 'ng2-file-upload';
+import { AccountTools, AvatarOriginalStore, AvatarTools, Uploader, User, UserEvent, UserEventType } from '../../api/index';
+import { CommonPopups } from '../index'
 
-
-@Component({
-  selector: 'edit-user-profile',
-  directives: [FILE_UPLOAD_DIRECTIVES],
-  templateUrl: '/imports/for-real-cards/edit-user-profile/edit-user-profile.' + PlatformTools.platformNameSegment() + '.html'
-})
-
-export class EditUserProfile {
+export abstract class EditUserProfileBase {
   avatarURL:string;
   uploader:FileUploader = new FileUploader({});
   hasBaseDropZoneOver:boolean = false;
@@ -103,9 +81,9 @@ export class EditUserProfile {
   addImages(files) {
     log.debug(files);
     let currentFile = files[0];
-    Uploader.uploadFile(currentFile, AvatarOriginalStore,
+    Uploader.uploadFile(currentFile, AvatarOriginalStore).then(
       (result) => {
-        console.log('upload sucess')
+        console.log('upload success')
         console.log(result)
       }, (error) => {
         log.error("Error uploading");

@@ -14,7 +14,7 @@ import { Start } from '../start/start';
 import { UserEvent, UserEventType } from "../../common-app/api/models/user-event.class";
 import { TopFrame } from "./top-frame.base";
 import { GameActionList } from "../debug-tools/game-action-list";
-import { EditUserProfile } from "../edit-user-profile/edit-user-profile";
+import { EditUserProfileIonic } from "../edit-user-profile/edit-user-profile.ionic";
 import { EnterGame } from "../enter-game/enter-game";
 import { RunGameTabs } from "../run-game/run-game-tabs.ionic";
 import { RunGameTableContainer } from "../run-game/run-game-table-container";
@@ -78,7 +78,7 @@ class ForRealCardsTopFrame extends TopFrame {
       id: 'edit-user-profile',
       title: 'Profile',
       callback: ()=>{
-        this.nav.push(EditUserProfile);
+        this.nav.push(EditUserProfileIonic);
       }
     });
 

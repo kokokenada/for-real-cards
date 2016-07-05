@@ -14,7 +14,7 @@ import { AccountsAdmin } from '../../common-app/ui-twbs-ng2/accounts-admin/accou
 
 import { ModalDialog } from "../../common-app/ui-twbs-ng2/modal/modal.component";
 import { DealModal } from "../deal-modal/deal-modal.twbs";
-import { EditUserProfile } from '../edit-user-profile/edit-user-profile';
+import { EditUserProfileTWBS } from '../edit-user-profile/edit-user-profile.twbs';
 import { EnterGame } from '../enter-game/enter-game';
 import { GameActionList } from '../debug-tools/game-action-list';
 import { PopoverMenu } from '../../common-app/ui-twbs-ng2/index';
@@ -47,8 +47,8 @@ import {TopFrameHeader} from "./top-frame-header";
   {path: '/start', component: Start},
   {path: '/enter-game', component: EnterGame},
   {path: '/game-hand/:id', component: RunGameTabs},
-  {path: '/game-table/:id', component: RunGameTableContainer },
-  {path: '/edit-profile', component: EditUserProfile},
+  {path: '/game-table/:id', component: RunGameTableContainer},
+  {path: '/edit-profile', component: EditUserProfileTWBS},
   {path: '/frc-deal-modal', component: DealModal},
   {path: '/accounts-admin',  component: AccountsAdmin},
   {path: '/game-action-list',  component: GameActionList}
