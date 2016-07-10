@@ -11,6 +11,7 @@ import {CommonPopups} from '../common-popups/common-popups.twbs'
 import {InfoAccountModal} from './info-account-modal'
 import {ImpersonateAccountModal} from './impersonate-account-modal';
 import {UpdateRolesModal} from "./update-roles-modal";
+import {AccountTools} from "../../api/index";
 
 @Component({
   selector: 'accounts-admin',
@@ -71,7 +72,7 @@ export class AccountsAdmin {
       this.computation = computation;
       let subscriptionHandle =AccountsAdminTools.subscribeToPublication(this.currentFilter());
       if (subscriptionHandle.ready()) {
-        let cursor:any = AccountsAdminTools.filteredUserQuery(Meteor.userId(), this.currentFilter()); // Cursor
+        let cursor:any = AccountsAdminTools.filteredUserQuery(AccountTools.userId(), this.currentFilter()); // Cursor
         this.usersArray = cursor.fetch();
       }
     })
