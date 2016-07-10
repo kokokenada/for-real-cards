@@ -21,7 +21,7 @@ export class AccountTools {
             reject(error);
           } else {
             log.info('Login successful.');
-            UserEvent.pushEvent(new UserEvent(UserEventType.LOGIN, {userId: Meteor.userId()}));
+            UserEvent.pushEvent(new UserEvent(UserEventType.LOGIN, {userId: AccountTools.userId()}));
             resolve(Meteor.user());
           }
         });
@@ -46,7 +46,7 @@ export class AccountTools {
           reject(error);
         } else {
           log.info("Register successful.")
-          UserEvent.pushEvent(new UserEvent(UserEventType.LOGIN, {userId: Meteor.userId()}));
+          UserEvent.pushEvent(new UserEvent(UserEventType.LOGIN, {userId: AccountTools.userId()}));
           resolve(Meteor.user());
         }
       })
@@ -68,7 +68,7 @@ export class AccountTools {
           AccountTools.register(credentials).then(
             (user) => {
               log.info("Registering tmp user successful.")
-              UserEvent.pushEvent(new UserEvent(UserEventType.LOGIN, {userId: Meteor.userId()}));
+              UserEvent.pushEvent(new UserEvent(UserEventType.LOGIN, {userId: AccountTools.userId()}));
               resolve(user);
             }, (error)=> {  // Is this required or can I depend on rejection in AccountTools.register?
               reject(error);
@@ -132,41 +132,10 @@ export class AccountTools {
     });
   }
 
-/* CollectionFS Related
-  static getToken(options = undefined) // reference https://github.com/CollectionFS/Meteor-CollectionFS/blob/b46cb20d2d86a806e19e9ffbd72955c2a4ae37e7/packages/access-point/access-point-common.js#L64
-  {
-    options = options || {};
-    let authToken = "";
-    if (Meteor.isClient && typeof Accounts !== "undefined" && typeof Accounts._storedLoginToken === "function") {
-      if (options.auth !== false) {
-        // Add reactive deps on the user
-        Meteor.userId();
-
-        var authObject = {
-          authToken: Accounts._storedLoginToken() || ''
-        };
-
-        // If it's a number, we use that as the expiration time (in seconds)
-        if (options.auth === +options.auth) {
-          authObject.expiration = FS.HTTP.now() + options.auth * 1000;
-        }
-
-        // Set the authToken
-        var authString = JSON.stringify(authObject);
-        authToken = FS.Utility.btoa(authString);
-      }
-    } else if (typeof options.auth === "string") {
-      // If the user supplies auth token the user will be responsible for
-      // updating
-      authToken = options.auth;
-    }
-    return authToken;
-  }
-  */
-  
+ 
   private static _user(userId:string = undefined) {
     if (!userId) {
-      userId = Meteor.userId();
+      userId = AccountTools.userId();
       if (!userId) {
         return null;
       }
@@ -201,6 +170,10 @@ export class AccountTools {
   }
 
   static isLoggedIn():boolean {
-    return Meteor.userId()===null ? false : true;
+    return AccountTools.userId()===null ? false : true;
+  }
+  
+  static userId():string {
+    return Meteor.userId();
   }
 }

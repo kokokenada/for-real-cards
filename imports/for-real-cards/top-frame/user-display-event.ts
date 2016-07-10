@@ -17,9 +17,17 @@ export class UserDisplayEvent {
   static subscribe(onNext:(userDisplayEvent:UserDisplayEvent)=>void):Subscription {
     return UserEvent.loginStatusSubject
     .filter((userEvent:UserEvent)=> {
-      return (userEvent.eventType === UserEventType.LOGOUT ||
-        userEvent.eventType === UserEventType.LOGIN ||
-        userEvent.eventType === UserEventType.DISPLAY_NAME_UPDATE);
+      return (
+        (
+          userEvent.eventType === UserEventType.LOGOUT ||
+          userEvent.eventType === UserEventType.LOGIN ||
+          userEvent.eventType === UserEventType.DISPLAY_NAME_UPDATE
+        )
+        &&
+        ( 
+          userEvent.userId === AccountTools.userId()
+        )
+      );
     })
     .map( (userEvent:UserEvent)=>{
       if (userEvent.eventType === UserEventType.LOGOUT) {
