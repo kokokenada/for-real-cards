@@ -4,6 +4,7 @@
 import {Subject, } from 'rxjs'
 import 'meteor/jalik:ufs';
 declare let UploadFS:any;
+let windowSuppressWarning:any = window; // Make TypeScript compiler stop complaining
 
 import * as log from 'loglevel';
 
@@ -111,46 +112,92 @@ export class Uploader {
     return new Promise( (resolve, reject)=>{
       console.log("in uploadFileURI reading " + file)
       /*
-      const uploader = new UploadFS.Uploader({
-        store: collection,
-        adaptive: true,
-        // Define the upload capacity (if upload speed is 1MB/s, then it will try to maintain upload at 80%, so 800KB/s)
-        // (used only if adaptive = true)
-        capacity: 0.8, // 80%
-        // The size of each chunk sent to the server
-        chunkSize: 8 * 1024, // 8k
-        // The max chunk size (used only if adaptive = true)
-        maxChunkSize: 128 * 1024, // 128k
-        // This tells how many tries to do if an error occurs during upload
-        maxTries: 5,
-        // The file data
+;*/
 
-      });*/
 
-      var url = file;
-      var attributes = { name: 'Camera Picture', description: 'Picture take from device camera' };
-
-      UploadFS.importFromURL(url, attributes, collection, function (err, fileId) {
-        if (err) {
-          log.error(err);
-        } else {
-          console.log('Photo saved ', fileId);
-        }
-      });
-
-/*      window.resolveLocalFileSystemURI(file, (entry)=>{
-        var reader = new FileReader();
+      windowSuppressWarning.resolveLocalFileSystemURL(file, (entry)=>{
+/*        var reader = new FileReader();
         reader.onload = function (ev) {
           console.log('file reader onload in uploadFileURI')
           console.log(ev)
-        };
+        };*/
         entry.file( (f)=>{
-          reader.readAsDataURL(f);
+          console.log('entry.file( (f)')
+          console.log(f)
+
+          var reader:any = new FileReader();
+          reader = reader.__zone_symbol__originalInstance; // Why on earth do I need to do this???
+
+          reader.onload = (ev:any)=> {
+            console.log('reader.onload')
+            console.log(ev)
+            const uploader = new UploadFS.Uploader({
+              store: collection,
+              adaptive: true,
+              // Define the upload capacity (if upload speed is 1MB/s, then it will try to maintain upload at 80%, so 800KB/s)
+              // (used only if adaptive = true)
+              capacity: 0.8, // 80%
+              // The size of each chunk sent to the server
+              chunkSize: 8 * 1024, // 8k
+              // The max chunk size (used only if adaptive = true)
+              maxChunkSize: 128 * 1024, // 128k
+              // This tells how many tries to do if an error occurs during upload
+              maxTries: 5,
+              // The file data
+              file:f,
+
+              data: ev.target.result,
+              onError: function (err) {
+                console.error(err);
+              },
+              onAbort: function (file) {
+                console.log(file.name + ' upload has been aborted');
+              },
+              onComplete: function (file) {
+                console.log(file.name + ' has been uploaded');
+              },
+              onCreate: function (file) {
+                console.log(file.name + ' has been created with ID ' + file._id);
+              },
+              onProgress: function (file, progress) {
+                console.log(file.name + ' ' + (progress*100) + '% uploaded');
+              },
+              onStart: function (file) {
+                console.log(file.name + ' started');
+              },
+              onStop: function (file) {
+                console.log(file.name + ' stopped');
+              }
+
+            });
+            uploader.start();
+
+
+          };
+          reader.onerror = (e)=>{
+            log.error('FilerReader error');
+            log.error(e);
+            reject(e);
+          }
+          reader.onabort = (e)=> {
+            log.info('FilerReader abort');
+            reject(e);
+          }
+          reader.onloadstart = (o)=>{
+            log.debug('FilerReader onloadstart');
+          }
+          reader.onloadend = (o)=>{
+            log.debug('FilerReader onloadend');
+          }
+
+          reader.readAsArrayBuffer(f);
+
+
 
         });
 
       });
-      */
+
 /*
       var reader = new FileReader();
       reader.onload = function (ev) {
