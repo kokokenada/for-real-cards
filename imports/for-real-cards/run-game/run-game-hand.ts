@@ -18,8 +18,7 @@ import { PlayingCard } from "../playing-card/playing-card";
 import { Action, ActionFormatted, Card, CardImageStyle, GameConfig, CardLocation, CardCountAllowed, Hand} from "../api/index";
 import { DeckView } from "./deck-view";
 import { PileView } from "./pile-view";
-import {PlatformTools} from "../../common-app/api/services/platform-tools";
-import {PlatformToolsIonic} from "../../common-app/ui-ionic/services/platform-tools-ionic";
+import {PlatformTools} from "../../common-app/ui-ng2/index";
 
 @Component(
   {
@@ -37,7 +36,7 @@ export class RunGameHand extends RunGame {
   constructor(private dealModelService:DealModalService, private dragulaServiceChild: DragulaService, private ngZoneChild:NgZone,
               private injector: Injector) {
     if (PlatformTools.isIonic())  {
-      let navParams = PlatformToolsIonic.getNavParams(injector);
+      let navParams = PlatformTools.getNavParams(injector);
       if (navParams) {
         this.showTableProxy = navParams.data.showTableProxy;
       }

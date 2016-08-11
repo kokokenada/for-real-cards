@@ -29,6 +29,7 @@
     <div class="form-group">
       <label for="avatar">Avatar</label>
       <input type="file" ng2FileSelect [uploader]="uploader" (onchange)="fileDrop($event)"/>
+      <button *ngIf="showCameraOption()">Camera</button>
       <strong>OR</strong>
 
       <div ng2FileDrop

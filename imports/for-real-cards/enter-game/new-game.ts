@@ -8,7 +8,7 @@ import {Meteor} from 'meteor/meteor';
 import {Session} from 'meteor/session';
 import {Component} from '@angular/core';
 import {RunGame} from "../run-game/run-game";
-import {PlatformTools, TargetPlatformId} from "../../common-app/api/services/platform-tools";
+import {PlatformTools, TargetPlatformId} from "../../common-app/ui-ng2/index";
 
 function template():string {
   switch (PlatformTools.getTargetPlatforrm()) {

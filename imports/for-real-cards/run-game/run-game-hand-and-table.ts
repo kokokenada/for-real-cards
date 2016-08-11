@@ -8,7 +8,6 @@ import {RunGameTable} from "./run-game-table";
 import {RunGameHand} from "./run-game-hand";
 import {RunGame} from "./run-game";
 import {Action, ActionType} from "../api/models/action.model";
-import {PlatformTools} from "../../common-app/api/services/platform-tools";
 
 
 function template():string {

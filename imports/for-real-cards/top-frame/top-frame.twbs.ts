@@ -6,7 +6,7 @@ import { Meteor } from 'meteor/meteor';
 import { Component, provide, NgZone } from '@angular/core';
 import { LocationStrategy, HashLocationStrategy, APP_BASE_HREF } from '@angular/common';
 import { bootstrap } from '@angular/platform-browser-dynamic';
-import { Routes, Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from '@angular/router'
+import { provideRouter, ROUTER_DIRECTIVES, RouterConfig, Router } from '@angular/router'
 import { DragulaService} from 'ng2-dragula/ng2-dragula';
 
 import {  Menus, MenuItem,  UserEventType, UserEvent} from '../../common-app/api/index';
@@ -27,6 +27,23 @@ import {ModalService} from "../../common-app/ui-ng2/modal/modal.service";
 import {ConnectEvent} from "../../common-app/api/models/connect-event.class";
 import {TopFrame} from "./top-frame.base";
 import {TopFrameHeader} from "./top-frame-header";
+
+
+const routes:RouterConfig = [
+  {path: 'start', component: Start},
+  {path: 'enter-game', component: EnterGame},
+  {path: 'game-hand/:id', component: RunGameTabs},
+  {path: 'game-table/:id', component: RunGameTableContainer},
+  {path: 'edit-profile', component: EditUserProfileTWBS},
+  {path: 'frc-deal-modal', component: DealModal},
+  {path: 'accounts-admin',  component: AccountsAdmin},
+  {path: 'game-action-list',  component: GameActionList}
+];
+
+const appRouterProviders = [
+  provideRouter(routes)
+];
+
 @Component(
   {
     selector: 'for-real-cards-top-frame',
@@ -43,16 +60,6 @@ import {TopFrameHeader} from "./top-frame-header";
       `,
   }
 )
-@Routes([
-  {path: '/start', component: Start},
-  {path: '/enter-game', component: EnterGame},
-  {path: '/game-hand/:id', component: RunGameTabs},
-  {path: '/game-table/:id', component: RunGameTableContainer},
-  {path: '/edit-profile', component: EditUserProfileTWBS},
-  {path: '/frc-deal-modal', component: DealModal},
-  {path: '/accounts-admin',  component: AccountsAdmin},
-  {path: '/game-action-list',  component: GameActionList}
-])
 export class ForRealCardsTopFrame extends TopFrame {
   constructor(private router: Router, private ngZone:NgZone) {
     super();
@@ -167,11 +174,11 @@ export class ForRealCardsTopFrame extends TopFrame {
 export function run() {
   bootstrap(ForRealCardsTopFrame,
     [
-      provide(APP_BASE_HREF, { useValue: '/' }),
-      ROUTER_PROVIDERS,
-      ROUTER_DIRECTIVES,
-      provide(LocationStrategy,
-        {useClass: HashLocationStrategy})
+      appRouterProviders
+//      provide(APP_BASE_HREF, { useValue: '/' }),
+//      ROUTER_DIRECTIVES,
+//      provide(LocationStrategy,
+//        {useClass: HashLocationStrategy})
     ]
   );
 }

@@ -7,7 +7,7 @@ import * as log from 'loglevel';
 
 import {AccountTools, Credentials, ConnectEvent, ConnectEventType} from "../../common-app/api/index";
 import {UserEvent, UserEventType} from "../../common-app/api/models/user-event.class";
-import {PlatformTools} from "../../common-app/api/services/platform-tools";
+import {PlatformTools} from "../../common-app/ui-ng2/index";
 
 @Component({
   templateUrl: '/imports/for-real-cards/start/start.' + PlatformTools.platformNameSegment() + '.html'

@@ -14,8 +14,7 @@ import { Player } from "../player/player";
 import { PlayingCard } from "../playing-card/playing-card";
 import { DeckView } from "./deck-view";
 import { PileView } from "./pile-view";
-import {PlatformToolsIonic} from "../../common-app/ui-ionic/services/platform-tools-ionic";
-import {PlatformTools} from "../../common-app/api/services/platform-tools";
+import {PlatformTools} from "../../common-app/ui-ng2/index";
 
 const TABLE_ZONE_CENTER_RADIUS = 20;
 const TABLE_ZONE_OUTER_RADIUS = 30;
@@ -37,7 +36,7 @@ export class RunGameTable extends RunGame {
   constructor(private dragulaServiceChild: DragulaService, private ngZoneChild:NgZone, private injector: Injector) {
     super(dragulaServiceChild, ngZoneChild);
     if (PlatformTools.isIonic())  {
-      let navParams = PlatformToolsIonic.getNavParams(injector);
+      let navParams = PlatformTools.getNavParams(injector);
       if (navParams) {
         this.width = navParams.data.width;
         this.height = navParams.data.height;
