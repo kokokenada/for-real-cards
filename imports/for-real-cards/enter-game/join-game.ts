@@ -6,7 +6,7 @@ import { Component, Input } from '@angular/core';
 import { Session } from 'meteor/session';
 import {RunGame} from "../run-game/run-game";
 import {ActionType, Action} from "../api/models/action.model";
-import {TargetPlatformId, PlatformTools} from "../../common-app/ui-ng2/index";
+import {TargetPlatformId, PlatformTools} from "common-app";
 
 function template():string {
   switch (PlatformTools.getTargetPlatforrm()) {

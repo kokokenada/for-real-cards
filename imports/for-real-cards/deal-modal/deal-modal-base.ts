@@ -1,5 +1,5 @@
 import {Deck, GameConfig, defaultGames, DeckLocation, UserCommand} from "../api/index";
-import {ModalBase} from "../../common-app/ui-ng2/modal/modal-base.class";
+import {ModalBase} from "common-app";
 
 export class DealModalBase extends ModalBase {
   gameConfig: GameConfig;

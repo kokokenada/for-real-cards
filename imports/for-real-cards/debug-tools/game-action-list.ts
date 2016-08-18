@@ -8,8 +8,8 @@ import { Component, Input } from '@angular/core';
 import { RunGame } from "../run-game/run-game";
 import { Action } from '../api/index'
 import { PlayingCard } from "../playing-card/playing-card"
-import {ActionFormatted} from "../api/models/action.model";
-import {PlatformTools} from "../../common-app/ui-ng2/index";
+import {ActionFormatted} from "../ui/action-formatted.class";
+import {PlatformTools} from "common-app";
 import {TopFrameHeader} from "../top-frame/top-frame-header";
 
 function genericTableContent():string {

@@ -4,9 +4,10 @@
  */
 import { Observable, Subscription } from 'rxjs';
 
+import {UserEvent, UserEventType} from "common-app";
+
 import {Action, ActionType} from "../api/models/action.model";
 import {RunGame} from "../run-game/run-game";
-import {UserEvent, UserEventType} from "../../common-app/api/models/user-event.class";
 
 export class GameDescriptionEvent {
   description:string;

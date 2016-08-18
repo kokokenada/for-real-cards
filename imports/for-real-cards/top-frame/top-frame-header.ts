@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs';
 import {GameDescriptionEvent} from "./game-description-event";
 import {RunGame} from "../run-game/run-game";
 import {UserDisplayEvent} from "./user-display-event";
-import {PlatformTools} from "../../common-app/ui-ng2/index";
+import {PlatformTools} from "common-app";
 
 function template():string {
   if (PlatformTools.isIonic())

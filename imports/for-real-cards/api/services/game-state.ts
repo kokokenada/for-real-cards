@@ -9,7 +9,8 @@ import { ReplaySubject} from 'rxjs'
 import * as log from 'loglevel';
 
 import { GAME_SUBSCRPTION_NAME, GameSubscriptionOptions} from "../models/game.publications.ts";
-import { Action, ActionCollection, ActionType, VisibilityType, ActionFormatted} from '../models/action.model'
+import { Action, ActionCollection, ActionType, VisibilityType } from '../models/action.model'
+import {ActionFormatted} from "../../ui/action-formatted.class";
 import { GameConfig, DeckLocation} from '../models/game-config';
 import { Hand, HandCollection} from '../models/hand.model';
 import { Card} from '../models/card.model';

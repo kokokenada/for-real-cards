@@ -4,9 +4,7 @@
  */
 
 import { Component, NgZone } from '@angular/core';
-import { CameraTools, CommonPopups, EditUserProfileBase } from "../../common-app/ui-ng2/index";
-
-import { AvatarOriginalStore } from "../../common-app/api/index";
+import { CameraTools, CommonPopups, EditUserProfileBase, AvatarOriginalStore } from "common-app";
 
 @Component({
   selector: 'edit-user-profile',

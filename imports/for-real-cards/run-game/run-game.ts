@@ -10,11 +10,10 @@ import { NgZone } from '@angular/core';
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
 //import { MeteorComponent } from 'angular2-meteor';
 
-import { CommonPopups } from "../../common-app/ui-ng2/index";
+import { AccountTools, CommonPopups } from "common-app";
 
 import {Action, ActionType, Card, CardCountAllowed, CardLocation, Deck, DeckLocation, DragAndDrop, GameConfig, GameState, GameRenderingTools, Hand} from '../api/index';
 import {CardImageStyle} from "../api/interfaces/card-image-style.interface";
-import {AccountTools} from "../../common-app/api/services/account-tools";
 
 const SESSION_GAME_ID_KEY = 'session-game-id';
 export class RunGame {

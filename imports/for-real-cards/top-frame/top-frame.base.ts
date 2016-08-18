@@ -4,11 +4,18 @@
  */
 
 import { Subscription } from 'rxjs'
-import {UserEventType, UserEvent} from "../../common-app/api/models/user-event.class";
+import {UserEventType, UserEvent, IAppState} from "common-app";
+//import {UserEventType, UserEvent, BaseApp, ConnectModule} from "../../common-app/api";
 import {RunGame} from "../run-game/run-game";
 import {Action, ActionType} from "../api/models/action.model";
+//import {NgRedux} from "../../common-app/node_modules/ng2-redux/lib/components/ng-redux";
 
-export abstract class TopFrame {
+export abstract class TopFrame { //extends BaseApp {
+
+//  constructor(private ngRedux: NgRedux<IAppState>, private connectModule:ConnectModule) {
+//    super([connectModule], ngRedux);
+//  }
+
   protected subscriptions:Subscription[] = [];
   
   protected cleanSubScriptions():void {

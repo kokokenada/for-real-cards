@@ -6,7 +6,8 @@
 import { Meteor } from 'meteor/meteor';
 import * as log from 'loglevel';
 
-import { getNextSequence } from '../../../common-app/api/index';
+//import { getNextSequence } from 'common-app';
+declare let getNextSequence:any;
 
 import { Game, GameCollection } from './game.model.ts';
 import { HandCollection, Hand } from './hand.model.ts';

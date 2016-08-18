@@ -6,12 +6,9 @@ import { Component, NgZone, ViewChild } from '@angular/core';
 import { ionicBootstrap, MenuController, NavController } from 'ionic-angular';
 import { DragulaService} from 'ng2-dragula/ng2-dragula';
 
-import { PlatformToolsIonic } from "../../common-app/ui-ionic/index";
-import { MenuItem, Menus } from "../../common-app/api/index";
-import { MenuFilterPipe } from "../../common-app/ui-ng2/menu-filter/menu-filter";
+import { PlatformToolsIonic, MenuItem, Menus, MenuFilterPipe, UserEvent, UserEventType } from "common-app";
 
 import { Start } from '../start/start';
-import { UserEvent, UserEventType } from "../../common-app/api/models/user-event.class";
 import { TopFrame } from "./top-frame.base";
 import { GameActionList } from "../debug-tools/game-action-list";
 import { EditUserProfileIonic } from "../edit-user-profile/edit-user-profile.ionic";

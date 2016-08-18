@@ -5,7 +5,7 @@
 
 import { Component, Input } from '@angular/core';
 
-import { ModalService } from '../../common-app/ui-ng2/index';
+import { ModalService } from 'common-app';
 
 import {DealModalBase} from "./deal-modal-base";
 

@@ -8,23 +8,19 @@ import { LocationStrategy, HashLocationStrategy, APP_BASE_HREF } from '@angular/
 import { bootstrap } from '@angular/platform-browser-dynamic';
 import { provideRouter, ROUTER_DIRECTIVES, RouterConfig, Router } from '@angular/router'
 import { DragulaService} from 'ng2-dragula/ng2-dragula';
+import { NgRedux } from 'ng2-redux';
 
-import {  Menus, MenuItem,  UserEventType, UserEvent} from '../../common-app/api/index';
-import { AccountsAdmin } from '../../common-app/ui-twbs-ng2/accounts-admin/accounts-admin';
+import {  AccountsAdmin, ConnectEvent, Menus, MenuItem, ModalDialog, ModalService, PopoverMenu, UserEventType, UserEvent} from 'common-app';
 
-import { ModalDialog } from "../../common-app/ui-twbs-ng2/modal/modal.component";
 import { DealModal } from "../deal-modal/deal-modal.twbs";
 import { EditUserProfileTWBS } from '../edit-user-profile/edit-user-profile.twbs';
 import { EnterGame } from '../enter-game/enter-game';
 import { GameActionList } from '../debug-tools/game-action-list';
-import { PopoverMenu } from '../../common-app/ui-twbs-ng2/index';
 import { RunGameTableContainer } from "../run-game/run-game-table-container";
 import { RunGameTabs } from "../run-game/run-game-tabs.twbs";
 import { Start } from "../start/start";
 
 import "../scss/for-real-cards.scss";
-import {ModalService} from "../../common-app/ui-ng2/modal/modal.service";
-import {ConnectEvent} from "../../common-app/api/models/connect-event.class";
 import {TopFrame} from "./top-frame.base";
 import {TopFrameHeader} from "./top-frame-header";
 
@@ -174,6 +170,7 @@ export class ForRealCardsTopFrame extends TopFrame {
 export function run() {
   bootstrap(ForRealCardsTopFrame,
     [
+      NgRedux,
       appRouterProviders
 //      provide(APP_BASE_HREF, { useValue: '/' }),
 //      ROUTER_DIRECTIVES,

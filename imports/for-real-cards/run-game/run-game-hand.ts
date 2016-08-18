@@ -8,17 +8,16 @@ import { Meteor } from 'meteor/meteor';
 import { Dragula, DragulaService } from 'ng2-dragula/ng2-dragula';
 
 
-import { CommonPopups } from "../../common-app/ui-ng2/index";
-import { Tools } from "../../common-app/api/index";
-import {CommonAppButton} from "../../common-app/ui-ng2/button/common-app-button";
+import { CommonAppButton, CommonPopups, Tools } from "common-app";
 
 import { RunGame } from './run-game.ts';
 import { DealModalService } from "../deal-modal/deal-modal.service"
 import { PlayingCard } from "../playing-card/playing-card";
-import { Action, ActionFormatted, Card, CardImageStyle, GameConfig, CardLocation, CardCountAllowed, Hand} from "../api/index";
+import { Action, Card, CardImageStyle, GameConfig, CardLocation, CardCountAllowed, Hand} from "../api/index";
+import {ActionFormatted} from "../ui/action-formatted.class";
 import { DeckView } from "./deck-view";
 import { PileView } from "./pile-view";
-import {PlatformTools} from "../../common-app/ui-ng2/index";
+import {PlatformTools} from "common-app";
 
 @Component(
   {

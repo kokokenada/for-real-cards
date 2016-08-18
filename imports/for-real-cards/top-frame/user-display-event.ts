@@ -5,8 +5,7 @@
 
 import { Subscription } from 'rxjs';
 
-import {UserEvent, UserEventType} from "../../common-app/api/models/user-event.class";
-import {AccountTools} from "../../common-app/api/services/account-tools";
+import {AccountTools, UserEvent, UserEventType} from "common-app";
 
 export class UserDisplayEvent {
   displayName:string;

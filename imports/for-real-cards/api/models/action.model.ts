@@ -7,9 +7,6 @@ import 'meteor/aldeed:simple-schema';
 import { Mongo } from 'meteor/mongo';
 import { Meteor } from 'meteor/meteor';
 import * as log from 'loglevel';
-import * as moment from 'moment';
-
-import {AccountTools} from '../../../common-app/api/index';
 
 import { HandCollection } from '../models/hand.model';
 import {Card} from './card.model'
@@ -86,33 +83,6 @@ export class Action {
     this.cards = initialValues.cards || [];
     this.gameConfig = initialValues.gameConfig;
     this.relatedActionId = initialValues.relatedActionId;
-  }
-}
-
-export class ActionFormatted extends Action {
-
-  actionDescription():string {
-    return ActionType[this.actionType];
-  }
-  actionTime():string {
-    if (!this.dateCreated)
-      return "";
-    return moment(this.dateCreated).format("HH:mm:ss:SSS");
-  }
-  creator():string {
-    return AccountTools.getDisplayName(this.creatorId);
-  }
-  toPlayer():string {
-    if (this.toPlayerId)
-      return AccountTools.getDisplayName(this.toPlayerId);
-  }
-  fromPlayer():string {
-    if (this.fromPlayerId)
-      return AccountTools.getDisplayName(this.fromPlayerId);
-  }
-  visibilityTypeDescription():string {
-    if (this.visibilityType)
-      return VisibilityType[this.visibilityType];
   }
 }
 

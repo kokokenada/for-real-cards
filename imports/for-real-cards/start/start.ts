@@ -5,9 +5,7 @@
 import { Component } from '@angular/core';
 import * as log from 'loglevel';
 
-import {AccountTools, Credentials, ConnectEvent, ConnectEventType} from "../../common-app/api/index";
-import {UserEvent, UserEventType} from "../../common-app/api/models/user-event.class";
-import {PlatformTools} from "../../common-app/ui-ng2/index";
+import {AccountTools, Credentials, ConnectEvent, ConnectEventType, PlatformTools, UserEvent, UserEventType} from "common-app";
 
 @Component({
   templateUrl: '/imports/for-real-cards/start/start.' + PlatformTools.platformNameSegment() + '.html'

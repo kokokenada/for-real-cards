@@ -6,7 +6,7 @@
 import { Component, Input } from '@angular/core';
 import { DROPDOWN_DIRECTIVES } from 'ng2-bootstrap/ng2-bootstrap';
 
-import { ModalService } from '../../common-app/ui-ng2/index';
+import { ModalService } from 'common-app';
 
 import {DealModalBase} from "./deal-modal-base";
 
