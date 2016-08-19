@@ -2,9 +2,9 @@
  * Copyright Ken Ono, Fabrica Technolology 2016
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
-import {Card, CardSuit, CardRank} from "../models/card.model";
-import {GameConfig, CardLocation, CardCountAllowed} from "../models/game-config";
-import {VisibilityType} from "../models/action.model";
+import {Card, CardSuit, CardRank} from "../../api/models/card.model";
+import {GameConfig, CardLocation, CardCountAllowed} from "../../api/models/game-config";
+import {VisibilityType} from "../../api/models/action.model";
 import {GameState} from './game-state';
   
 export class DragAndDrop {

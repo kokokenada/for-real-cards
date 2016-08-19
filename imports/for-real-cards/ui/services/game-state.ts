@@ -8,14 +8,14 @@ import { Tracker } from 'meteor/tracker';
 import { ReplaySubject} from 'rxjs'
 import * as log from 'loglevel';
 
-import { GAME_SUBSCRPTION_NAME, GameSubscriptionOptions} from "../models/game.publications.ts";
-import { Action, ActionCollection, ActionType, VisibilityType } from '../models/action.model'
-import {ActionFormatted} from "../../ui/action-formatted.class";
-import { GameConfig, DeckLocation} from '../models/game-config';
-import { Hand, HandCollection} from '../models/hand.model';
-import { Card} from '../models/card.model';
-import { Deck, DeckId} from '../models/deck.model';
-import {CardSuit, CardRank} from "../models/card.model";
+import { GAME_SUBSCRPTION_NAME, GameSubscriptionOptions} from "../../api/models/game.publications.ts";
+import { Action, ActionCollection, ActionType, VisibilityType } from '../../api/models/action.model'
+import {ActionFormatted} from "../action-formatted.class";
+import { GameConfig, DeckLocation} from '../../api/models/game-config';
+import { Hand, HandCollection} from '../../api/models/hand.model';
+import { Card} from '../../api/models/card.model';
+import { Deck, DeckId} from '../../api/models/deck.model';
+import {CardSuit, CardRank} from "../../api/models/card.model";
 
 export class GameState {
   private gameId:string;

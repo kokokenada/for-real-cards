@@ -1,6 +1,5 @@
 import * as log from 'loglevel';
 
-//import "common-app/api/index.ts"
 import "/imports/for-real-cards/api/index.ts"
 
 declare var BrowserPolicy;

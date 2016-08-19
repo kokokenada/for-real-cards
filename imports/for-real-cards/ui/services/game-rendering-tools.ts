@@ -3,7 +3,7 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 import {Meteor} from 'meteor/meteor';
-import { Coordinates } from "../models/coordinates.class"
+import { Coordinates } from "../../api/models/coordinates.class"
  
 export class GameRenderingTools {
   private static getPointOnEllipse(centerX:number, centerY:number, radius:number, degrees:number, xSquash:number=1, ySquash:number=1):Coordinates {
