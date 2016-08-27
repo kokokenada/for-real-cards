@@ -1,6 +1,0 @@
-[submodule "packages/meteor-scss"]
-	path = packages/meteor-scss
-	url = https://github.com/kokokenada/meteor-scss.git
-[submodule "imports/common-app"]
-	path = imports/common-app
-	url = https://github.com/kokokenada/common-app.git
