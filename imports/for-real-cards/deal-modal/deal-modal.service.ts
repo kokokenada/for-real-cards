@@ -7,7 +7,7 @@ declare var require:any;
 
 import { Injectable, Inject } from '@angular/core';
 
-import { ModalService, PlatformTools } from "common-app";
+import { ModalService, PlatformTools } from '/imports/common-app';
 
 import { GameConfig } from "../api/index";
 

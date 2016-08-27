@@ -4,13 +4,13 @@
  */
 import { Meteor } from 'meteor/meteor';
 import { Component, provide, NgZone } from '@angular/core';
-import { LocationStrategy, HashLocationStrategy, APP_BASE_HREF } from '@angular/common';
+//import { LocationStrategy, HashLocationStrategy, APP_BASE_HREF } from '@angular/common';
 import { bootstrap } from '@angular/platform-browser-dynamic';
 import { provideRouter, ROUTER_DIRECTIVES, RouterConfig, Router } from '@angular/router'
 import { DragulaService} from 'ng2-dragula/ng2-dragula';
 import { NgRedux } from 'ng2-redux';
 
-import {  AccountsAdmin, ConnectEvent, Menus, MenuItem, ModalDialog, ModalService, PopoverMenu, UserEventType, UserEvent} from 'common-app';
+import {  AccountsAdmin, ConnectEvent, Menus, MenuItem, ModalDialog, ModalService, PopoverMenu, UserEventType, UserEvent} from '/imports/common-app';
 
 import { DealModal } from "../deal-modal/deal-modal.twbs";
 import { EditUserProfileTWBS } from '../edit-user-profile/edit-user-profile.twbs';
@@ -26,6 +26,7 @@ import {TopFrameHeader} from "./top-frame-header";
 
 
 const routes:RouterConfig = [
+  {path: '', component: Start},
   {path: 'start', component: Start},
   {path: 'enter-game', component: EnterGame},
   {path: 'game-hand/:id', component: RunGameTabs},
@@ -122,11 +123,10 @@ export class ForRealCardsTopFrame extends TopFrame {
         console.log("this.router.routeTree")
         console.log(Meteor.userId())
         console.log(Meteor.status().connected)
-        console.log(this.router.routeTree);
-        if (!this.router.routeTree._root.children || !this.router.routeTree._root.children.length) {
+        console.log(this.router.routerState);
+        if (!this.router.routerState.root || !this.router.routerState.children.length) {
           // Navigate to start if we're nowhere, otherwise we assume user came in via URL directly to game
-          console.log(!this.router.routeTree._root.children)
-          console.log(!this.router.routeTree._root.children.length)
+          console.log('navigating to entry since requested state not detected')
           this.navigateToEnter();
         }
       }

@@ -5,7 +5,7 @@
 
 import { Component, NgZone } from '@angular/core';
 import { FILE_UPLOAD_DIRECTIVES } from 'ng2-file-upload';
-import { EditUserProfileBase } from "common-app";
+import { EditUserProfileBase } from '/imports/common-app';
 
 
 @Component({

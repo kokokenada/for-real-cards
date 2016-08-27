@@ -5,10 +5,14 @@
 import { Component } from '@angular/core';
 import * as log from 'loglevel';
 
-import {AccountTools, Credentials, ConnectEvent, ConnectEventType, PlatformTools, UserEvent, UserEventType} from "common-app";
+import {AccountTools, Credentials, ConnectEvent, ConnectEventType, PlatformTools, UserEvent, UserEventType} from '/imports/common-app';
+
+import templateTWBS from './start.twbs.html';
+import templateIonic from './start.ionic.html';
 
 @Component({
-  templateUrl: '/imports/for-real-cards/start/start.' + PlatformTools.platformNameSegment() + '.html'
+  template: PlatformTools.isIonic() ? templateIonic : templateTWBS,
+  selector: 'start'
 })
 export class Start {
   message:string;
@@ -17,7 +21,7 @@ export class Start {
 
   ngOnInit() {
     this.credentials = Credentials.getLastCredentials();
-    log.debug("in ngOnInit() of Start")
+    log.debug("in ngOnInit() of Start. this.PlatformTools.platformNameSegment()=" + PlatformTools.platformNameSegment())
     ConnectEvent.subscribe(
       (event:ConnectEvent)=>{
         if (event.eventType===ConnectEventType.CONNECTION_ATTEMPT && event.retryCount>1)

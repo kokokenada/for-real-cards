@@ -1,5 +1,5 @@
 import {Deck, GameConfig, defaultGames, DeckLocation, UserCommand} from "../api/index";
-import {ModalBase} from "common-app";
+import {ModalBase} from "/imports/common-app";
 
 export class DealModalBase extends ModalBase {
   gameConfig: GameConfig;

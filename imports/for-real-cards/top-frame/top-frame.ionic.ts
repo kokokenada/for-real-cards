@@ -6,7 +6,7 @@ import { Component, NgZone, ViewChild } from '@angular/core';
 import { ionicBootstrap, MenuController, NavController } from 'ionic-angular';
 import { DragulaService} from 'ng2-dragula/ng2-dragula';
 
-import { PlatformToolsIonic, MenuItem, Menus, MenuFilterPipe, UserEvent, UserEventType } from "common-app";
+import { PlatformToolsIonic, MenuItem, Menus, MenuFilterPipe, UserEvent, UserEventType } from '/imports/common-app';
 
 import { Start } from '../start/start';
 import { TopFrame } from "./top-frame.base";

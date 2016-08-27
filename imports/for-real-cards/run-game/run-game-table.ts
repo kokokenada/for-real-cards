@@ -6,7 +6,7 @@
 import { Component, Injector, Input, NgZone, ViewEncapsulation } from '@angular/core';
 import { Dragula, DragulaService} from 'ng2-dragula/ng2-dragula';
 
-import { Tools } from "common-app";
+import { Tools } from '/imports/common-app';
 
 import { Card, Coordinates, Deck, GameRenderingTools, Hand} from "../api/index";
 import { RunGame } from './run-game.ts';
@@ -14,7 +14,7 @@ import { Player } from "../player/player";
 import { PlayingCard } from "../playing-card/playing-card";
 import { DeckView } from "./deck-view";
 import { PileView } from "./pile-view";
-import {PlatformTools} from "common-app";
+import {PlatformTools} from '/imports/common-app';
 
 const TABLE_ZONE_CENTER_RADIUS = 20;
 const TABLE_ZONE_OUTER_RADIUS = 30;

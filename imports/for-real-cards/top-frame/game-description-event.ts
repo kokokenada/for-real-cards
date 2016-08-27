@@ -4,7 +4,7 @@
  */
 import { Observable, Subscription } from 'rxjs';
 
-import {UserEvent, UserEventType} from "common-app";
+import {UserEvent, UserEventType} from '/imports/common-app';
 
 import {Action, ActionType} from "../api/models/action.model";
 import {RunGame} from "../run-game/run-game";

@@ -6,7 +6,7 @@ import { Component, Input } from '@angular/core';
 import { Meteor } from 'meteor/meteor';
 import { Subscription } from 'rxjs'
 
-import { Avatar, UserEvent, UserEventType } from "common-app";
+import { Avatar, UserEvent, UserEventType } from '/imports/common-app';
 import { Card, Hand, GameRenderingTools } from  '../api/index';
 
 @Component(

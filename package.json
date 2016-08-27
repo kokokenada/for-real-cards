@@ -12,9 +12,9 @@
     "@angular/http": "2.0.0-rc.4",
     "@angular/platform-browser": "2.0.0-rc.4",
     "@angular/platform-browser-dynamic": "2.0.0-rc.4",
-    "@angular/router": "3.0.0-beta.2",
+    "@angular/router": "3.0.0-alpha.8",
     "angular2-meteor-polyfills": "^0.1.1",
-    "bootstrap-sass": "^3.3.7",
+    "bootstrap": "^4.0.0-alpha.3",
     "dragula": "^3.7.1",
     "es6-shim": "^0.35.1",
     "gm": "^1.23.0",
@@ -27,18 +27,17 @@
     "ng2-bootstrap": "^1.0.16",
     "ng2-dragula": "^1.1.9",
     "ng2-file-upload": "^1.0.3",
-    "ng2-redux": "^3.3.5",
+    "ng2-redux": "3.3.5",
     "redux": "^3.5.2",
-    "redux-observable": "^0.9.0",
+    "redux-observable": "0.9.0",
     "reflect-metadata": "0.1.8",
     "rxjs": "5.0.0-beta.6",
     "seedrandom": "^2.4.2",
+    "spawn-sync": "^1.0.15",
+    "try-thread-sleep": "^1.0.0",
     "typed-immutable-record": "0.0.5",
     "typings": "^1.3.2",
     "underscore": "^1.8.3",
-    "zone.js": "0.6.12",
-
-    "common-app": "~0.0.1",
-    "common-app-api": "~0.0.1"
+    "zone.js": "0.6.12"
   }
 }

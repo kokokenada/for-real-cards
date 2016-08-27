@@ -10,7 +10,7 @@ import { NgZone } from '@angular/core';
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
 //import { MeteorComponent } from 'angular2-meteor';
 
-import { AccountTools, CommonPopups } from "common-app";
+import { AccountTools, CommonPopups } from '/imports/common-app';
 
 import {Action, ActionType, Card, CardCountAllowed, CardLocation, Deck, DeckLocation, DragAndDrop, GameConfig, GameState, GameRenderingTools, Hand} from '../api/index';
 import {CardImageStyle} from "../api/interfaces/card-image-style.interface";

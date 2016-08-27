@@ -8,7 +8,7 @@ import { Meteor } from 'meteor/meteor';
 import { Dragula, DragulaService } from 'ng2-dragula/ng2-dragula';
 
 
-import { CommonAppButton, CommonPopups, Tools } from "common-app";
+import { CommonAppButton, CommonPopups, Tools } from '/imports/common-app';
 
 import { RunGame } from './run-game.ts';
 import { DealModalService } from "../deal-modal/deal-modal.service"
@@ -17,7 +17,7 @@ import { Action, Card, CardImageStyle, GameConfig, CardLocation, CardCountAllowe
 import {ActionFormatted} from "../ui/action-formatted.class";
 import { DeckView } from "./deck-view";
 import { PileView } from "./pile-view";
-import {PlatformTools} from "common-app";
+import {PlatformTools} from '/imports/common-app';
 
 @Component(
   {

@@ -4,7 +4,7 @@
  */
 
 import { Subscription } from 'rxjs'
-import {UserEventType, UserEvent, IAppState} from "common-app";
+import {UserEventType, UserEvent, IAppState} from '/imports/common-app';
 //import {UserEventType, UserEvent, BaseApp, ConnectModule} from "../../common-app/api";
 import {RunGame} from "../run-game/run-game";
 import {Action, ActionType} from "../api/models/action.model";

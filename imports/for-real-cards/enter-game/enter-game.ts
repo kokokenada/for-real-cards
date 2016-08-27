@@ -6,7 +6,7 @@ import { Component, Optional } from '@angular/core';
 
 import {NewGame} from './new-game';
 import {JoinGame} from './join-game';
-import {PlatformTools, TargetPlatformId} from "common-app";
+import {PlatformTools, TargetPlatformId} from '/imports/common-app';
 import {TopFrameHeader} from "../top-frame/top-frame-header";
 
 function template():string {
