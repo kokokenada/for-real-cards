@@ -2,17 +2,7 @@ import { Component, ComponentMetadata, ComponentFactory, ComponentResolver, Dire
 import { PlatformTools } from "../platform-tools/platform-tools";
 
 
-function createComponentFactory(resolver: ComponentResolver, metadata: ComponentMetadata, parent:CommonAppButton): Promise<ComponentFactory<any>> {
-  const cmpClass = class DynamicComponent {
-    @Output() click = new EventEmitter();
-    onClick(o:any) {
-      this.parent.onCABClick(o);  // Passing parent in seems simpler than figuring out how to dynamically define event hanlders
-    }
-    parent:CommonAppButton = parent;
-  };
-  const decoratedCmp:Type = <Type>Component(metadata)(cmpClass);
-  return resolver.resolveComponent(decoratedCmp);
-}
+
 
 @Directive({
   selector: 'common-app-button'
@@ -25,6 +15,18 @@ export class CommonAppButton {
   @Output() click = new EventEmitter();
   constructor(private vcRef: ViewContainerRef, private resolver: ComponentResolver) {
   }
+
+  createComponentFactory(resolver: ComponentResolver, metadata: ComponentMetadata, parent:CommonAppButton): Promise<ComponentFactory<any>> {
+  const cmpClass = class DynamicComponent {
+    @Output() click = new EventEmitter();
+    onClick(o:any) {
+      this.parent.onCABClick(o);  // Passing parent in seems simpler than figuring out how to dynamically define event hanlders
+    }
+    parent:CommonAppButton = parent;
+  };
+  const decoratedCmp:Type = <Type>Component(metadata)(cmpClass);
+  return resolver.resolveComponent(decoratedCmp);
+}
 
   ngOnChanges() {
 
@@ -69,7 +71,7 @@ export class CommonAppButton {
       selector: 'dynamic-html',
       template: html
     });
-    createComponentFactory(this.resolver, metadata, this)
+    this.createComponentFactory(this.resolver, metadata, this)
       .then(factory => {
         this.vcRef.createComponent(factory, 0);
       });

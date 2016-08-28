@@ -4,7 +4,8 @@
  */
 
 import { Component, NgZone } from '@angular/core';
-import { CameraTools, CommonPopups, EditUserProfileBase, AvatarOriginalStore } from '/imports/common-app';
+import { CameraTools, CommonPopups, EditUserProfileBase } from '../../common-app';
+import { AvatarOriginalStore } from '../../common-app-api';
 
 @Component({
   selector: 'edit-user-profile',
@@ -13,7 +14,7 @@ import { CameraTools, CommonPopups, EditUserProfileBase, AvatarOriginalStore } f
 
 export class EditUserProfileIonic extends EditUserProfileBase {
 
-  constructor(private ngZone:NgZone) {
+  constructor(ngZone:NgZone) {
     super(ngZone);
   }
 

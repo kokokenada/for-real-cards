@@ -8,13 +8,16 @@ import { Dragula, DragulaService} from 'ng2-dragula/ng2-dragula';
 
 import { Tools } from '/imports/common-app';
 
-import { Card, Coordinates, Deck, GameRenderingTools, Hand} from "../api/index";
+import { GameRenderingTools } from "../ui/index";
+import { Card, Coordinates, Deck, Hand} from "../api/index";
 import { RunGame } from './run-game.ts';
 import { Player } from "../player/player";
 import { PlayingCard } from "../playing-card/playing-card";
 import { DeckView } from "./deck-view";
 import { PileView } from "./pile-view";
 import {PlatformTools} from '/imports/common-app';
+
+import template from "./run-game-table.html"
 
 const TABLE_ZONE_CENTER_RADIUS = 20;
 const TABLE_ZONE_OUTER_RADIUS = 30;
@@ -24,7 +27,7 @@ const TABLE_ZONE_OUTER_RADIUS = 30;
     selector: 'run-game-table',
     directives: [DeckView, Dragula, Player, PlayingCard, PileView],
     encapsulation: ViewEncapsulation.None, // Require for Dragula .gu-transit
-    templateUrl: '/imports/for-real-cards/run-game/run-game-table.html'
+    template: template
   }
 )
 

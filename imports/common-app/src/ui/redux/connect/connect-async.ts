@@ -33,7 +33,7 @@ export class ConnectEpics {
       });
   }
 
-  attempt(action$: Observable<IPayloadAction>, store: Store) {
+  attempt(action$: Observable<IPayloadAction>, store: Store<IAppState>) {
     return action$.filter(({ type }) => type === ConnectActions.CONNECT_ATTEMPT)
       .flatMap(({ payload }) => {
         let connectState:IConnectState = store.getState().connect;

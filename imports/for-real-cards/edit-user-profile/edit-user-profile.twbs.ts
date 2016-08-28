@@ -5,17 +5,18 @@
 
 import { Component, NgZone } from '@angular/core';
 import { FILE_UPLOAD_DIRECTIVES } from 'ng2-file-upload';
-import { EditUserProfileBase } from '/imports/common-app';
+import { EditUserProfileBase } from '../../common-app/index';
 
+import template from "./edit-user-profile.twbs.html";
 
 @Component({
   selector: 'edit-user-profile',
   directives: [FILE_UPLOAD_DIRECTIVES],
-  templateUrl: '/imports/for-real-cards/edit-user-profile/edit-user-profile.twbs.html'
+  template: tempalte
 })
 
 export class EditUserProfileTWBS extends EditUserProfileBase {
-  constructor(private ngZone:NgZone) {
+  constructor(ngZone:NgZone) {
     super(ngZone);
   }
 }

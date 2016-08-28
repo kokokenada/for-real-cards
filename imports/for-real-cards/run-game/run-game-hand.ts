@@ -19,13 +19,15 @@ import { DeckView } from "./deck-view";
 import { PileView } from "./pile-view";
 import {PlatformTools} from '/imports/common-app';
 
+import template from "./run-game-hand.html"
+
 @Component(
   {
     selector: 'run-game-hand',
     directives: [DeckView, Dragula, PileView, PlayingCard, CommonAppButton],
     providers: [DealModalService],
     encapsulation: ViewEncapsulation.None, // Require for Dragula .gu-transit
-    templateUrl: '/imports/for-real-cards/run-game/run-game-hand.html'
+    template: template
   }
 )
 export class RunGameHand extends RunGame {
@@ -34,13 +36,13 @@ export class RunGameHand extends RunGame {
 
   constructor(private dealModelService:DealModalService, private dragulaServiceChild: DragulaService, private ngZoneChild:NgZone,
               private injector: Injector) {
+    super(dragulaServiceChild, ngZoneChild);
     if (PlatformTools.isIonic())  {
       let navParams = PlatformTools.getNavParams(injector);
       if (navParams) {
         this.showTableProxy = navParams.data.showTableProxy;
       }
     }
-    super(dragulaServiceChild, ngZoneChild);
   }
 
   private showTableProxyBool():boolean {

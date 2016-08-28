@@ -12,9 +12,11 @@ import { Subscription } from 'rxjs';
 export class RunGameContainer {
   protected gameId:string;
   private subscription:Subscription;
-  constructor(private ngZone:NgZone) {
+  ngZoneBase:NgZone
+  constructor(ngZone  :NgZone) {
+    this.ngZoneBase = ngZone;
     this.subscription = RunGame.subscribe((action:Action)=> {
-      this.ngZone.run(()=> {
+      this.ngZoneBase.run(()=> {
         if (action.actionType===ActionType.NEW_GAME) {
           console.log('setting gameId in RunGameController')
           console.log(action)

@@ -7,7 +7,8 @@ import { Meteor } from 'meteor/meteor';
 import { Subscription } from 'rxjs'
 
 import { Avatar, UserEvent, UserEventType } from '/imports/common-app';
-import { Card, Hand, GameRenderingTools } from  '../api/index';
+import { Card, Hand } from  '../api/index';
+import { GameRenderingTools } from  '../ui';
 
 @Component(
   {

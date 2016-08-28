@@ -5,10 +5,14 @@
 import { Component } from '@angular/core';
 import * as log from 'loglevel';
 
-import {AccountTools, Credentials, ConnectEvent, ConnectEventType, PlatformTools, UserEvent, UserEventType} from '/imports/common-app';
+import {AccountTools, Credentials, ConnectEvent, ConnectEventType, PlatformTools, UserEvent, UserEventType} from '../../common-app/index';
 
+//import * as templateTWBS from './start.twbs.html';  //This also works and doesn't cause webstorm to complain
+//import * as templateIonic from './start.ionic.html';
+//  template: PlatformTools.isIonic() ? templateIonic.default.toString() : templateTWBS.default.toString(),
 import templateTWBS from './start.twbs.html';
 import templateIonic from './start.ionic.html';
+
 
 @Component({
   template: PlatformTools.isIonic() ? templateIonic : templateTWBS,

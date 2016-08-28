@@ -10,12 +10,14 @@ import { ModalService } from '/imports/common-app';
 
 import {DealModalBase} from "./deal-modal-base";
 
+import template from "./deal-modal.twbs.html";
+
 @Component(
   {
     selector: 'frc-deal-modal',
     directives: [DROPDOWN_DIRECTIVES],
     providers: [ModalService],
-    templateUrl: '/imports/for-real-cards/deal-modal/deal-modal.twbs.html'
+    template: template
   }
 )
 export class DealModal extends DealModalBase {

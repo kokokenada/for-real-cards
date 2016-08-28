@@ -18,21 +18,23 @@ export abstract class EditUserProfileBase {
 
   subscription:Subscription;
   userEditted:User;
+  ngZoneBase:NgZone;
 
-  constructor(private ngZone:NgZone) {
+  constructor(ngBase:NgZone) {
+    this.ngZoneBase = ngBase;
   }
 
   ngOnInit() {
     this.subscription = UserEvent.startObserving((event:UserEvent)=> {
       if (event.eventType === UserEventType.AVATAR_UPDATE && event.userId === Meteor.userId()) {
-        this.ngZone.run(()=>{
+        this.ngZoneBase.run(()=>{
           this.avatarURL = AvatarTools.getAvatarURL(event.user, "medium");
         });
       }
     });
     AccountTools.readCurrentUser().then(
       (user:User)=> {
-        this.ngZone.run(()=> {
+        this.ngZoneBase.run(()=> {
           this.addEmptyEmailIfNeeded(user);
           this.userEditted = user;
         });

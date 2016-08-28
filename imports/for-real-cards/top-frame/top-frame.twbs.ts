@@ -48,8 +48,8 @@ const appRouterProviders = [
     viewProviders: [DragulaService],
     providers: [ModalService],
     template: `
-<div>
-  <top-frame-header></top-frame-header>
+<div class="row">
+  <top-frame-header class="col-xs-10"></top-frame-header>
   <popover-menu class="pull-right col-xs-1" [menuId]="'topbar'"></popover-menu>
 </div>
 <router-outlet></router-outlet>

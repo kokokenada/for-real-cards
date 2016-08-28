@@ -12,7 +12,10 @@ import { DragulaService } from 'ng2-dragula/ng2-dragula';
 
 import { AccountTools, CommonPopups } from '/imports/common-app';
 
-import {Action, ActionType, Card, CardCountAllowed, CardLocation, Deck, DeckLocation, DragAndDrop, GameConfig, GameState, GameRenderingTools, Hand} from '../api/index';
+import { Action, ActionType, Card, CardCountAllowed, CardLocation, Deck, DeckLocation, GameConfig, Hand } from '../api/index';
+import { DragAndDrop, GameState, GameRenderingTools } from '../ui/index';
+
+
 import {CardImageStyle} from "../api/interfaces/card-image-style.interface";
 
 const SESSION_GAME_ID_KEY = 'session-game-id';
