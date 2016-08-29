@@ -1,10 +1,9 @@
 
 import { Action } from 'redux';
-import { ConnectActions } from './connect/connect-actions';
+import { ConnectActions } from './connect/connect-actions.class';
 
-export interface IAction extends Action {
+export interface IAction extends IPayloadAction {
   type: string;
-  payload?:any;
   error?:boolean;
   meta?:any;
 }

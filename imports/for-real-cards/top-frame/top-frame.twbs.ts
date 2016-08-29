@@ -4,13 +4,24 @@
  */
 import { Meteor } from 'meteor/meteor';
 import { Component, provide, NgZone } from '@angular/core';
-//import { LocationStrategy, HashLocationStrategy, APP_BASE_HREF } from '@angular/common';
 import { bootstrap } from '@angular/platform-browser-dynamic';
 import { provideRouter, ROUTER_DIRECTIVES, RouterConfig, Router } from '@angular/router'
 import { DragulaService} from 'ng2-dragula/ng2-dragula';
 import { NgRedux } from 'ng2-redux';
 
-import {  AccountsAdmin, ConnectEvent, Menus, MenuItem, ModalDialog, ModalService, PopoverMenu, UserEventType, UserEvent} from '/imports/common-app';
+import {
+  AccountsAdmin, ConnectEvent, UserEventType, UserEvent, // <-depricated
+  LoginActions,
+  LoginAsync,
+  LoginModule,
+  ConnectActions,
+  ConnectAsync,
+  ConnectModule,
+  Menus,
+  MenuItem,
+  ModalDialog,
+  ModalService,
+  PopoverMenu} from '../../common-app';
 
 import { DealModal } from "../deal-modal/deal-modal.twbs";
 import { EditUserProfileTWBS } from '../edit-user-profile/edit-user-profile.twbs';
@@ -23,6 +34,7 @@ import { Start } from "../start/start";
 import "../scss/for-real-cards.scss";
 import {TopFrame} from "./top-frame.base";
 import {TopFrameHeader} from "./top-frame-header";
+import {IAppState} from "../../common-app/src/ui/redux/state.interface";
 
 
 const routes:RouterConfig = [
@@ -46,7 +58,7 @@ const appRouterProviders = [
     selector: 'for-real-cards-top-frame',
     directives: [PopoverMenu, ROUTER_DIRECTIVES, ModalDialog, TopFrameHeader],
     viewProviders: [DragulaService],
-    providers: [ModalService],
+    providers: [ModalService, ConnectModule, ConnectAsync, ConnectActions, LoginActions, LoginAsync, LoginModule],
     template: `
 <div class="row">
   <top-frame-header class="col-xs-10"></top-frame-header>
@@ -58,8 +70,8 @@ const appRouterProviders = [
   }
 )
 export class ForRealCardsTopFrame extends TopFrame {
-  constructor(private router: Router, private ngZone:NgZone) {
-    super();
+  constructor(private router: Router, private ngZone:NgZone, ngRedux:NgRedux<IAppState>, connectModule:ConnectModule, loginModule:LoginModule) {
+    super(connectModule, loginModule, ngRedux);
     Menus.addMenu({id: 'topbar'});
 
     Menus.addSubMenuItem('topbar', {
@@ -124,7 +136,7 @@ export class ForRealCardsTopFrame extends TopFrame {
         console.log(Meteor.userId())
         console.log(Meteor.status().connected)
         console.log(this.router.routerState);
-        if (!this.router.routerState.root || !this.router.routerState.children.length) {
+        if (!this.router.routerState.root) { //} || !this.router.routerState.children.length) {
           // Navigate to start if we're nowhere, otherwise we assume user came in via URL directly to game
           console.log('navigating to entry since requested state not detected')
           this.navigateToEnter();

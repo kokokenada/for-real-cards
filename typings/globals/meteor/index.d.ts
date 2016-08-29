@@ -85,6 +85,8 @@ declare module "meteor/accounts-base" {
     function loginServicesConfigured(): boolean;
 
     function onPageLoadLogin(func: Function): void;
+
+    var connection:any;
   }
 }
 declare module Accounts {
@@ -950,6 +952,7 @@ declare module Meteor {
   var isServer: boolean;
   var isProduction: boolean;
   var release: string;
+  var connection:any;
   var settings: {
     public: {
       [id: string]: any
@@ -1036,6 +1039,8 @@ declare module Meteor {
     stop(): void;
   }
   /** Pub/Sub **/
+
+  function connect(url:string);
 }
 
 declare module "meteor/meteor" {
@@ -1049,6 +1054,7 @@ declare module "meteor/meteor" {
     var isServer: boolean;
     var isProduction: boolean;
     var release: string;
+    var connection:any;
     var settings: {
       public: {
         [id: string]: any
@@ -1135,6 +1141,7 @@ declare module "meteor/meteor" {
       stop(): void;
     }
     /** Pub/Sub **/
+    function connect(url:string);
   }
 }
 

@@ -3,7 +3,7 @@ import { makeTypedFactory } from 'typed-immutable-record';
 
 
 import { IPayloadAction } from '../action.interface';
-import { ConnectActions } from './connect-actions';
+import { ConnectActions } from './connect-actions.class';
 import {IConnectState, IConnectRecord, IConnectAction} from './connect.types'
 
 

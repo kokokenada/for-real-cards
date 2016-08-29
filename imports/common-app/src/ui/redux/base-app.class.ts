@@ -7,14 +7,20 @@ import { createEpicMiddleware } from 'redux-observable';
 
 export class BaseApp<T> {
   private reducers:ReducersMapObject = {};
-  private epics: any[]; // TODO: How to I properly type this?
-  private enhancers: any[];
+  private epics: any[] =[]; // TODO: How to I properly type this?
+  private enhancers: any[] = [];
+  private ngRedux: NgRedux<IAppState>
   constructor (
     modules:ReduxModule<T>[],
-    private ngRedux: NgRedux<IAppState>
+    ngRedux: NgRedux<IAppState>
   ) {
+    this.ngRedux = ngRedux;
     modules.forEach((module:ReduxModule<T>)=> {
-      this.reducers = Object.assign(this.reducers, module.reducer);
+
+      let reducer:ReducersMapObject = {};
+      let stopTypeScriptComplaint:any = module.reducer; // tsc compiler Doesn't like .name (even though it's declared as a function and works just fine...)
+      reducer[stopTypeScriptComplaint.name] = module.reducer;
+      this.reducers = Object.assign(this.reducers, reducer);
       module.epics.forEach( (epic)=>{this.epics.push( createEpicMiddleware(epic) )});
       module.enhancers.forEach( (enhancer)=>{this.enhancers.push(enhancer)});
     });

@@ -4,17 +4,17 @@
  */
 
 import { Subscription } from 'rxjs'
-import {UserEventType, UserEvent, IAppState} from '/imports/common-app';
-//import {UserEventType, UserEvent, BaseApp, ConnectModule} from "../../common-app/api";
+import {UserEventType, UserEvent, IAppState, BaseApp, ConnectModule} from "../../common-app";
 import {RunGame} from "../run-game/run-game";
 import {Action, ActionType} from "../api/models/action.model";
-//import {NgRedux} from "../../common-app/node_modules/ng2-redux/lib/components/ng-redux";
+import {NgRedux} from "ng2-redux";
+import {LoginModule} from "../../common-app";
 
-export abstract class TopFrame { //extends BaseApp {
+export abstract class TopFrame extends BaseApp<IAppState> {
 
-//  constructor(private ngRedux: NgRedux<IAppState>, private connectModule:ConnectModule) {
-//    super([connectModule], ngRedux);
-//  }
+  constructor(connectModule:ConnectModule, loginModule:LoginModule, ngRedux: NgRedux<IAppState>) {
+    super([connectModule, loginModule], ngRedux);
+  }
 
   protected subscriptions:Subscription[] = [];
   
@@ -46,7 +46,7 @@ export abstract class TopFrame { //extends BaseApp {
       switch (action.actionType) {
         case ActionType.NEW_GAME: {
           console.log("Ionic nav NEW_GAME")
-          this.navigateToGamePlayer();
+          this.navigateToGamePlayer('');
           break;
         }
         case ActionType.ENTER_GAME_FAIL: {
@@ -68,7 +68,7 @@ export abstract class TopFrame { //extends BaseApp {
 
   protected abstract navigateToStart():void;
   protected abstract navigateToEnter():void;
-  protected abstract navigateToGameTable(gameId:string=''):void;
-  protected abstract navigateToGamePlayer(gameId:string=''):void;
+  protected abstract navigateToGameTable(gameId:string):void;
+  protected abstract navigateToGamePlayer(gameId:string):void;
 
 }

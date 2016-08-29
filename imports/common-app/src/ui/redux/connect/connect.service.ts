@@ -1,6 +1,6 @@
-declare let Meteor:any; //import { Meteor } from 'meteor/meteor'; // Typings library did not define Meteor.connection
+import { Meteor } from 'meteor/meteor';
 declare let Package:any; // Couldn't find typings
-declare let Accounts:any; // Couldn't find typings
+import { Accounts } from 'meteor/accounts-base';
 
 // Make an abstract parent and children that implement specific backend
 // For now, this is Meteor specific

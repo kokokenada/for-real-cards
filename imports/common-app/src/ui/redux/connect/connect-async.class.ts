@@ -8,15 +8,15 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/catch';
 //import 'rxjs/add/observable/delay';
 
-import { ConnectService } from "./connect-service";
-import { ConnectActions } from "./connect-actions";
+import { ConnectService } from "./connect.service";
+import { ConnectActions } from "./connect-actions.class";
 import {IAppState} from "../state.interface";
 import {IConnectState} from "./connect.types";
 
 
 @Injectable()
-export class ConnectEpics {
-  constructor(private connectService: ConnectService, private connectActions: ConnectActions) {}
+export class ConnectAsync {
+  constructor(private connectActions: ConnectActions) {}
 
   connect (action$: Observable<IPayloadAction>) {
     return action$.filter(({ type }) => type === ConnectActions.CONNECT_START)

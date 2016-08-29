@@ -12,7 +12,7 @@ import template from "./edit-user-profile.twbs.html";
 @Component({
   selector: 'edit-user-profile',
   directives: [FILE_UPLOAD_DIRECTIVES],
-  template: tempalte
+  template: template
 })
 
 export class EditUserProfileTWBS extends EditUserProfileBase {
