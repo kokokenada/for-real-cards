@@ -15,8 +15,9 @@ export class LoginActions {
   static REGISTRATION_REQUEST = LoginActions.prefix + 'REG_REQUEST';
   static TEMP_USER_REQUEST = LoginActions.prefix + 'TEMP_USER_REQUEST';
   static LOGGED_IN = LoginActions.prefix + 'LOGGED_IN';
-  static LOG_OUT_REQUEST = LoginActions.prefix + 'LOG_OUT_REQUEST';
-  static LOGOUT = LoginActions.prefix + 'LOGOUT';
+  static LOGOUT_REQUEST = LoginActions.prefix + 'LOGOUT_REQUEST';
+  static LOGGED_OUT = LoginActions.prefix + 'LOGGED_OUT';
+  static LOGIN_ERROR = LoginActions.prefix + 'LOGIN_ERROR';
   static AVATAR_UPDATE = LoginActions.prefix + 'AVATAR_UPDATE';
   static DISPLAY_NAME_UPDATE = LoginActions + 'DISPLAY_NAME_UPDATE';
   static ROLL_UPDATE = LoginActions + 'ROLL_UPDATE';
@@ -33,6 +34,10 @@ export class LoginActions {
     this.ngRedux.dispatch({ type: LoginActions.LOGIN_REQUEST, payload: {credentials: credentials}});
   }
 
+  logout():void {
+    this.ngRedux.dispatch({ type: LoginActions.LOGOUT_REQUEST});
+  }
+
   register(credentials:Credentials):void {
     this.ngRedux.dispatch({ type: LoginActions.REGISTRATION_REQUEST, payload: {credentials: credentials}});
   }
@@ -43,5 +48,9 @@ export class LoginActions {
 
   static loginSuccessFactory(user:User):IPayloadAction {
     return {type: LoginActions.LOGGED_IN, payload: {user: user}};
+  }
+
+  static logedOutFactory():IPayloadAction {
+    return {type: LoginActions.LOGGED_OUT};
   }
 }

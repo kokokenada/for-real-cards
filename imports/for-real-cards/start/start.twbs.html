@@ -5,9 +5,9 @@
  */
 -->
 <div *ngIf="active">
-  <div [hidden]="message ? false : true" (click)="setServer()" class="alert alert-danger" role="alert">
+  <div [hidden]="state?.errorMessage ? false : true" (click)="setServer()" class="alert alert-danger" role="alert">
     <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-    {{message}}
+    {{state?.errorMessage}}
     <br/>
   </div>
 

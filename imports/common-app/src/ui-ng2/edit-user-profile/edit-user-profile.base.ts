@@ -5,7 +5,7 @@ import * as log from 'loglevel';
 
 import { FileUploader} from 'ng2-file-upload';
 import { AvatarTools, UserEvent, UserEventType } from '../../ui';
-import { AvatarOriginalStore, User } from '/imports/common-app-api';
+import { AvatarOriginalStore, User } from '../../../../common-app-api';
 import { AccountTools } from "../../ui/services/account-tools";
 import { Uploader } from '../../ui/uploader'
 import { CommonPopups } from '../common-popups/common-popups'

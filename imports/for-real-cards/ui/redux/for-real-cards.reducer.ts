@@ -17,10 +17,10 @@ export function forRealCardsReducer(
 
   let payload:IForRealCardsAction = action.payload;
   switch (action.type) {
-    case ForRealCardsActions.SET_TOPFRAME:
+/*    case ForRealCardsActions.SET_TOPFRAME:
       return state.merge({
         topFrame: payload.topFrame
-      });
+      });*/
     default:
       return state;
   }

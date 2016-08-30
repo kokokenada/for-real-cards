@@ -8,7 +8,6 @@ import {TopFrame} from "../../top-frame/top-frame.base";
 @Injectable()
 export class ForRealCardsActions {
   private static prefix = 'FRC_';
-  static SET_TOPFRAME = ForRealCardsActions.prefix + 'SET_TOPFRAME';
   static NAV_TO_ENTER = ForRealCardsActions.prefix + 'NAV_TO_ENTER';
   static NAV_TO_PROFILE = ForRealCardsActions.prefix + 'NAV_TO_PROFILE';
   static NAV_TO_START = ForRealCardsActions.prefix + 'NAV_TO_START';
@@ -18,11 +17,7 @@ export class ForRealCardsActions {
   constructor(private ngRedux: NgRedux<IAppState>) {
   }
 
-  setTopFrame(topFrame:TopFrame) {
-    this.ngRedux.dispatch({ type: ForRealCardsActions.SET_TOPFRAME, payload: {topFrame: topFrame}});
-  }
-
-  navigate(to:string) {
+  navigate(to:string, gamdId:string='') {
     this.ngRedux.dispatch({type:to});
   }
 }

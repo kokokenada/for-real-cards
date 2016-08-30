@@ -4,33 +4,46 @@
  */
 
 import { Subscription } from 'rxjs'
-import { IAppState, BaseApp, ConnectModule, LoginModule} from "../../common-app";
+import { IAppState, IPayloadAction, BaseApp, ConnectModule, LoginModule} from "../../common-app";
 import {RunGame} from "../run-game/run-game";
 import { Action } from "redux";
 import {Action as OLDAction, ActionType} from "../api/models/action.model";
 import {NgRedux} from "ng2-redux";
-import {ForRealCardsModule} from "../ui";
+import {ForRealCardsModule, ForRealCardsActions} from "../ui";
 import {LoginActions} from "../../common-app";
 
 export abstract class TopFrame extends BaseApp<IAppState> {
 
   topFrameConfigure(connectModule:ConnectModule, loginModule:LoginModule, forRealCardsModule:ForRealCardsModule, ngRedux: NgRedux<IAppState>) {
+    this.turnOnConsoleLogging();
 
-
-    const navigatorMiddleware = store => next => (action:Action) => {
+    const navigatorMiddleware = store => next => (action:IPayloadAction) => {
       switch (action.type)  {
         case LoginActions.LOGGED_IN:
           this.navigateToEnter();
           break;
+        case LoginActions.LOGGED_OUT:
+          this.navigateToStart();
+          break;
+        case ForRealCardsActions.NAV_TO_ENTER:
+          this.navigateToEnter();
+          break;
+        case ForRealCardsActions.NAV_TO_START:
+          this.navigateToStart();
+          break;
+        case ForRealCardsActions.NAV_TO_HAND:
+          this.navigateToGamePlayer(action.payload.gameId);
+          break;
+        case ForRealCardsActions.NAV_TO_TABLE:
+          this.navigateToGameTable(action.payload.gameId);
+          break;
       }
-      let result = next(action)
-      return result
+      return next(action);
     };
 
     forRealCardsModule.middlewares.push(navigatorMiddleware);
     this.configure([connectModule, loginModule, forRealCardsModule], ngRedux);
 
-    forRealCardsModule.actions.setTopFrame(this);
     loginModule.actions.checkAutoLogin();
   }
 

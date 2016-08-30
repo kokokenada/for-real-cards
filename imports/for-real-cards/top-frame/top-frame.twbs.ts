@@ -104,35 +104,6 @@ export class ForRealCardsTopFrame extends TopFrame {
   )
   {
     super();
-
-    let navToEnter = (action$: Observable<IPayloadAction>, store: Store<IForRealCardsState>):Observable<Action> => {
-      console.log('navToEnter')
-      return action$
-        .filter(({type}) => type === LoginActions.LOGGED_IN)
-        .flatMap(({payload}) => {
-          this.navigateToEnter();
-          return new NeverObservableAction();
-        });
-//      return new NeverObservableAction();
-    };
-
-    /**
-     * Logs all actions and states after they are dispatched.
-     */
-    const logger = store => next => action => {
-      console.group(action.type);
-      console.info('Logger: dispatching:', action)
-      let result = next(action);
-      console.log('Logger: next state', store.getState())
-      console.groupEnd();
-      return result
-    }
-
-    let navEpics:Epic[] = [
-      navToEnter
-    ];
-//    forRealCardsModule.epics.push(navToEnter);
-    forRealCardsModule.middlewares.push(logger);
     this.topFrameConfigure(connectModule, loginModule, forRealCardsModule, ngRedux);
 
     console.log('after super')
@@ -179,7 +150,7 @@ export class ForRealCardsTopFrame extends TopFrame {
       title: 'Logout',
       roles: ['*'],
       callback: (menuItem:MenuItem)=> {
-        UserEvent.pushEvent(new UserEvent(UserEventType.LOG_OUT_REQUEST));
+        loginModule.actions.logout();
       }
     });
   }

@@ -14,5 +14,6 @@ export class LoginModule extends ReduxModule<IAppState>  {
     super();
     this.epics.push(loginEpics.checkAutoLogin);
     this.epics.push(loginEpics.login);
+    this.epics.push(loginEpics.logout);
   }
 }

@@ -8,20 +8,23 @@ import {User} from '../../../../../common-app-api';
 import {Tools} from "../../services/tools";
 import {ILoginAction} from "./login.types";
 import {LoginActions} from "./login-actions.class";
+import {IPayloadAction} from "../action.interface";
+import {BaseApp} from "../base-app.class";
 let random = require("random-js");
 
 // Make an abstract parent and children that implement specific backend
 // For now, this is Meteor specific
 export class LoginService {
-  static login(credentials:Credentials):Promise<User> {
+
+  static login(credentials:Credentials):Promise<IPayloadAction> {
     return new Promise((resolve, reject)=>{
       credentials.saveCredentials();
       Meteor.loginWithPassword(
         credentials.email ? credentials.email : credentials.username, credentials.password,
         (error)=> {
           if (error) {
-            log.error(error);
-            reject(error);
+            log.info(error);
+            resolve(BaseApp.errorFactory(LoginActions.LOGIN_ERROR, error)); //Rejecting kills the stream if used in fromPromise
           } else {
             log.info('Login successful.');
             resolve(
@@ -35,7 +38,7 @@ export class LoginService {
     })
   }
 
-  static register(credentials:Credentials):Promise<User> {
+  static register(credentials:Credentials):Promise<IPayloadAction> {
     return new Promise((resolve, reject)=>{
       log.debug("Creating user:" + credentials.username + ", " + credentials.email);
       credentials.saveCredentials();
@@ -49,7 +52,7 @@ export class LoginService {
       }, (error)=> {
         if (error) {
           log.error(error);
-          reject(error);
+          resolve(BaseApp.errorFactory(LoginActions.LOGIN_ERROR, error)); //Rejecting kills the stream if used in fromPromise
         } else {
           log.info("Register successful.")
           resolve(Meteor.user());
@@ -58,11 +61,11 @@ export class LoginService {
     });
   };
 
-  static createTempUser():Promise<User> {
+  static createTempUser():Promise<IPayloadAction> {
     return new Promise((resolve, reject)=>{
       Meteor.call('CommonGetNextSequence', 'temp_user', (error, result)=> {
         if (error) {
-          reject(error);
+          resolve(BaseApp.errorFactory(LoginActions.LOGIN_ERROR, error)); //Rejecting kills the stream if used in fromPromise
         } else {
           let userId = 'tmp_' + result.toString();
           let credentials:Credentials = new Credentials(
@@ -108,16 +111,18 @@ export class LoginService {
     return observable;
   }
 
-  static logOut():void {
-    Meteor.logout((error)=> {
-      if (error) {
-        log.error('Error logging out')
-        log.error(error)
-      } else {
-//        UserEvent.pushEvent(new UserEvent(UserEventType.LOGOUT));
-      }
-
-    });
+  static logOut():Promise<IPayloadAction> {
+    return new Promise((resolve, reject)=> {
+      Meteor.logout((error)=> {
+        if (error) {
+          log.error('Error logging out')
+          log.error(error)
+          reject(error);
+        } else {
+          resolve(LoginActions.logedOutFactory());
+        }
+      });
+    })
   };
 
   static readCurrentUser():Promise<User> {

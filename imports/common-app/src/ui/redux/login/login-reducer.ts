@@ -1,44 +1,46 @@
 
-import { makeTypedFactory } from 'typed-immutable-record';
-
-
 import { IPayloadAction } from '../action.interface';
 import { LoginActions } from './login-actions.class';
-import {ILoginState, ILoginRecord, ILoginAction} from './login.types'
+import {ILoginState, ILoginAction} from './login.types'
 import {LoginService} from "./login.service";
 
-
-export const ConnectFactory = makeTypedFactory<ILoginState, ILoginRecord>({
+const INITIAL_STATE = {
   loggedIn: false,
   loggingIn: false,
   userId: null,
   displayName: null,
-  user: undefined
-});
-
-export const INITIAL_STATE = ConnectFactory();
-
+  user: null,
+  errorMessage: ''
+};
 
 export function loginReducer(
-  state: ILoginRecord = INITIAL_STATE,
-  action: IPayloadAction): ILoginRecord {
+  state: ILoginState = INITIAL_STATE,
+  action: IPayloadAction): ILoginState {
 
   let payload:ILoginAction = action.payload;
   switch (action.type) {
     case LoginActions.LOGIN_REQUEST:
-      return state.merge({
-        loggingIn: true
-      });
+      return Object.assign(state, {loggingIn: true});
     case LoginActions.LOGGED_IN:
-      return state.merge({
+      return {
         loggingIn: false,
         loggedIn: true,
         userId: action.payload.user._id,
         displayName: LoginService.getDisplayNameNoLookup(action.payload.user),  // OK because it's synchronous
-        user: action.payload.user
-      });
-    case LoginActions.LOGOUT:
+        user: action.payload.user,
+        errorMessage: ''
+      };
+    case LoginActions.LOGGED_OUT:
       return INITIAL_STATE;
+    case LoginActions.LOGIN_ERROR:
+      return {
+        loggingIn: false,
+        loggedIn: false,
+        userId: '',
+        displayName: '',
+        user: null,
+        errorMessage: action.error.message
+      };
     default:
       return state;
   }
