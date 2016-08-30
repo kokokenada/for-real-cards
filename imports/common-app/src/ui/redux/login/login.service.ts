@@ -1,11 +1,13 @@
 import { Meteor } from 'meteor/meteor'; declare let require:any;
 import { Accounts } from 'meteor/accounts-base';
 import { Observable } from 'rxjs'
+import * as log from 'loglevel';
 
 import {Credentials} from "../../services/credentials";
 import {User} from '../../../../../common-app-api';
 import {Tools} from "../../services/tools";
 import {ILoginAction} from "./login.types";
+import {LoginActions} from "./login-actions.class";
 let random = require("random-js");
 
 // Make an abstract parent and children that implement specific backend
@@ -22,7 +24,11 @@ export class LoginService {
             reject(error);
           } else {
             log.info('Login successful.');
-            resolve(Meteor.user());
+            resolve(
+              LoginActions.loginSuccessFactory(
+                LoginService.userFromMeteorUser(Meteor.user())
+              )
+            );
           }
         });
 
@@ -168,7 +174,7 @@ export class LoginService {
   }
 
   static isLoggedIn():boolean {
-    return LoginService.userId()===null ? false : true;
+    return LoginService.user()===null ? false : true;
   }
 
   static userId():string {
@@ -185,8 +191,9 @@ export class LoginService {
     return '';
   }
 
-  static user():User {
-    let userMeteor = LoginService._user();
+  static userFromMeteorUser(userMeteor:Meteor.User):User {
+    if (!userMeteor)
+      return null;
     let user:User = new User();
     user._id = LoginService.userId();
     user.emails = userMeteor.emails;
@@ -195,6 +202,10 @@ export class LoginService {
     user.username = userMeteor.username;
 //    user.roles = userMeteor.roles;
     return user;
+  }
+
+  static user():User {
+    return LoginService.userFromMeteorUser(LoginService._user());
   }
 
 }

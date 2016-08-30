@@ -1,17 +1,26 @@
 
 import { Action } from 'redux';
-import { ConnectActions } from './connect/connect-actions.class';
-
-export interface IAction extends IPayloadAction {
-  type: string;
-  error?:boolean;
-  meta?:any;
-}
 
 
 export interface IPayloadAction extends Action {
   payload?: any;
 }
 
-export const ACTION_PROVIDERS = [ ConnectActions ];
-export { ConnectActions };
+/*
+TODO: How do I use ActionsObservable with typed actions?
+ import { Operator } from 'rxjs/Operator';
+ import { ActionsObservable } from 'redux-observable';
+
+export class ActionsPayloadObservable implements ActionsObservable {
+  private actionsObservable:ActionsObservable;
+  constructor(action:IPayloadAction) {
+    this.actionsObservable = new ActionsObservable(action);
+  }
+  lift(operator: Operator<any, Action>) {
+    this.actionsObservable.lift(operator);
+  }
+  ofType(...key: any[]){
+    this.actionsObservable.ofType(key)
+  }
+
+} */

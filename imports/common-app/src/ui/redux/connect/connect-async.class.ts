@@ -18,7 +18,7 @@ import {IConnectState} from "./connect.types";
 export class ConnectAsync {
   constructor(private connectActions: ConnectActions) {}
 
-  connect (action$: Observable<IPayloadAction>) {
+  connect = (action$: Observable<IPayloadAction>) => {
     return action$.filter(({ type }) => type === ConnectActions.CONNECT_START)
       .flatMap(({ payload }) => {
         console.log("in CONNECT_START epic")
@@ -33,7 +33,7 @@ export class ConnectAsync {
       });
   }
 
-  attempt(action$: Observable<IPayloadAction>, store: Store<IAppState>) {
+  attempt= (action$: Observable<IPayloadAction>, store: Store<IAppState>) => {
     return action$.filter(({ type }) => type === ConnectActions.CONNECT_ATTEMPT)
       .flatMap(({ payload }) => {
         let connectState:IConnectState = store.getState().connect;
@@ -46,7 +46,7 @@ export class ConnectAsync {
       });
   }
 
-  setNewServer(action$: Observable<IPayloadAction>) {
+  setNewServer= (action$: Observable<IPayloadAction>) => {
     return action$.filter(({ type }) => type === ConnectActions.CONNECT_SET_SERVER)
       .flatMap(({ payload }) => {
         ConnectService.disconnect();

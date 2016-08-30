@@ -4,12 +4,13 @@ import { ReduxModule} from '../redux-module.class';
 import {connectReducer} from "./connect-reducer";
 import {ConnectAsync} from "./connect-async.class";
 import {IAppState} from "../state.interface";
+import {ConnectActions} from "./connect-actions.class";
 
 @Injectable()
 export class ConnectModule extends ReduxModule<IAppState>  {
   reducer=connectReducer;
 
-  constructor(private connectEpics:ConnectAsync) {
+  constructor(private connectEpics:ConnectAsync, public actions:ConnectActions) {
     super();
     this.epics.push(connectEpics.attempt);
     this.epics.push(connectEpics.connect);

@@ -20,19 +20,26 @@ import {User} from "../../../../../common-app-api/src/api/models/user.model";
 export class LoginAsync {
   constructor(private loginActions: LoginActions) {}
 
-  checkAutoLogin(action$: Observable<IPayloadAction>) {
-    return action$.filter(({type}) => type === LoginActions.CHECK_AUTO_LOGIN)
+  checkAutoLogin = (action$: Observable<IPayloadAction>) => {
+    let loginActions:LoginActions = this.loginActions;
+    return action$
+      .filter(({type}) => {
+        return type === LoginActions.CHECK_AUTO_LOGIN
+      })
       .flatMap(({payload}) => {
         console.log("login check")
         if (LoginService.isLoggedIn()) {
-          // Yes, we're logged in to fire off a logged in event
-          return Observable.from([this.loginActions.loginSuccessFactory(LoginService.user())])
+          console.log(LoginService.user());
+          // Yes, we're logged in, so fire off a logged in event
+          return Observable.from([loginActions.loginSuccessFactory(LoginService.user())]); // this is window (!)
         }
+        console.log("not logged in");
+        return Observable.never();
       });
-  }
+  };
 
 
-  login (action$: Observable<IPayloadAction>) {
+  login = (action$: Observable<IPayloadAction>) => {
     return action$.filter(({ type }) => type === LoginActions.LOGIN_REQUEST)
       .flatMap(({ payload }) => {
         console.log("login request. payload:")
@@ -41,5 +48,5 @@ export class LoginAsync {
           LoginService.login(payload.credentials)
         )
       });
-  }
+  };
 }

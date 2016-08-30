@@ -17,6 +17,12 @@ import { PlatformToolsIonic, MenuItem, Menus, MenuFilterPipe, UserEvent, UserEve
   ConnectModule,
 } from '../../common-app';
 
+import {
+  ForRealCardsActions,
+  ForRealCardsAsync,
+  ForRealCardsModule
+} from '../ui';
+
 import { Start } from '../start/start';
 import { TopFrame } from "./top-frame.base";
 import { GameActionList } from "../debug-tools/game-action-list";
@@ -52,14 +58,31 @@ import {TopFrameHeader} from "./top-frame-header";
   viewProviders: [DragulaService],
   pipes: [MenuFilterPipe],
   directives: [TopFrameHeader],
-  providers: [ConnectModule, ConnectAsync, ConnectActions, LoginActions, LoginAsync, LoginModule],
+  providers: [
+    ConnectActions,
+    ConnectAsync,
+    ConnectModule,
+    LoginActions,
+    LoginAsync,
+    LoginModule,
+    ForRealCardsActions,
+    ForRealCardsAsync,
+    ForRealCardsModule
+  ]
 })
 class ForRealCardsTopFrame extends TopFrame {
   @ViewChild('myNav') nav: NavController;
 
   rootPage: any;
-  constructor( private menu: MenuController, private ngZone:NgZone, ngRedux:NgRedux<IAppState>, connectModule:ConnectModule, loginModule:LoginModule) { //, private navParams:NavParams) {
-    super(connectModule, loginModule, ngRedux);
+  constructor(
+    private menu: MenuController,
+    private ngZone:NgZone,
+    connectModule:ConnectModule,
+    loginModule:LoginModule,
+    forRealCardsModule:ForRealCardsModule,
+    ngRedux:NgRedux<IAppState>
+) { //, private navParams:NavParams) {
+    super(connectModule, loginModule, forRealCardsModule, ngRedux);
 
     Menus.addMenu({id: 'topbar'});
 
@@ -104,7 +127,6 @@ class ForRealCardsTopFrame extends TopFrame {
 
   ngAfterViewInit() { // Defer until after the view initializad and all components available
     this.watchGame();
-    this.watchUserEvents();
     this.menu.enable(true, 'topFrameMenu');
     PlatformToolsIonic.initializeWithRouter(this.nav);
   }
@@ -117,25 +139,25 @@ class ForRealCardsTopFrame extends TopFrame {
     menuItem.selected();
   }
 
-  protected navigateToStart():void {
+  navigateToStart():void {
     this.ngZone.run( ()=> {
       this.nav.setRoot(Start);
     });
   }
 
-  protected navigateToEnter():void {
+  navigateToEnter():void {
     this.ngZone.run( ()=> {
       this.nav.setRoot(EnterGame);
     });
   }
 
-  protected navigateToGamePlayer(gameId:string=''):void {
+  navigateToGamePlayer(gameId:string=''):void {
     this.ngZone.run( ()=> {
       this.nav.setRoot(RunGameTabs);
     });
   }
 
-  protected navigateToGameTable(gameId:string=''):void {
+  navigateToGameTable(gameId:string=''):void {
     this.ngZone.run( ()=> {
       this.nav.setRoot(RunGameTableContainer);
     });

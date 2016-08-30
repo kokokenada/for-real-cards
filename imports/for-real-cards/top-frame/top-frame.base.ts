@@ -4,16 +4,34 @@
  */
 
 import { Subscription } from 'rxjs'
-import {UserEventType, UserEvent, IAppState, BaseApp, ConnectModule} from "../../common-app";
+import { IAppState, BaseApp, ConnectModule, LoginModule} from "../../common-app";
 import {RunGame} from "../run-game/run-game";
-import {Action, ActionType} from "../api/models/action.model";
+import { Action } from "redux";
+import {Action as OLDAction, ActionType} from "../api/models/action.model";
 import {NgRedux} from "ng2-redux";
-import {LoginModule} from "../../common-app";
+import {ForRealCardsModule} from "../ui";
+import {LoginActions} from "../../common-app";
 
 export abstract class TopFrame extends BaseApp<IAppState> {
 
-  constructor(connectModule:ConnectModule, loginModule:LoginModule, ngRedux: NgRedux<IAppState>) {
-    super([connectModule, loginModule], ngRedux);
+  topFrameConfigure(connectModule:ConnectModule, loginModule:LoginModule, forRealCardsModule:ForRealCardsModule, ngRedux: NgRedux<IAppState>) {
+
+
+    const navigatorMiddleware = store => next => (action:Action) => {
+      switch (action.type)  {
+        case LoginActions.LOGGED_IN:
+          this.navigateToEnter();
+          break;
+      }
+      let result = next(action)
+      return result
+    };
+
+    forRealCardsModule.middlewares.push(navigatorMiddleware);
+    this.configure([connectModule, loginModule, forRealCardsModule], ngRedux);
+
+    forRealCardsModule.actions.setTopFrame(this);
+    loginModule.actions.checkAutoLogin();
   }
 
   protected subscriptions:Subscription[] = [];
@@ -29,20 +47,10 @@ export abstract class TopFrame extends BaseApp<IAppState> {
   ngOnDestroy() {
     this.cleanSubScriptions();
   }
-  
-  watchUserEvents():void {
-    this.subscriptions.push(UserEvent.startObserving((event:UserEvent)=> {
-      if (event.eventType === UserEventType.LOGOUT) {
-        this.navigateToStart();
-      } else if (event.eventType === UserEventType.LOGIN) {
-        console.log('UserEventType.LOGIN detected')
-        this.navigateToEnter();
-      }
-    }));
-  }
+
 
   watchGame() {
-    this.subscriptions.push(RunGame.subscribe((action:Action)=> {
+    this.subscriptions.push(RunGame.subscribe((action:OLDAction)=> {
       switch (action.actionType) {
         case ActionType.NEW_GAME: {
           console.log("Ionic nav NEW_GAME")
@@ -66,9 +74,9 @@ export abstract class TopFrame extends BaseApp<IAppState> {
     }));
   }
 
-  protected abstract navigateToStart():void;
-  protected abstract navigateToEnter():void;
-  protected abstract navigateToGameTable(gameId:string):void;
-  protected abstract navigateToGamePlayer(gameId:string):void;
+  abstract navigateToStart():void;
+  abstract navigateToEnter():void;
+  abstract navigateToGameTable(gameId:string):void;
+  abstract navigateToGamePlayer(gameId:string):void;
 
 }

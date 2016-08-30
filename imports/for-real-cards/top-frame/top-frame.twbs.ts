@@ -8,20 +8,33 @@ import { bootstrap } from '@angular/platform-browser-dynamic';
 import { provideRouter, ROUTER_DIRECTIVES, RouterConfig, Router } from '@angular/router'
 import { DragulaService} from 'ng2-dragula/ng2-dragula';
 import { NgRedux } from 'ng2-redux';
-
+import { Epic } from 'redux-observable';
+import { Observable } from 'rxjs/Observable';
+import { Action, Store } from "redux";
 import {
   AccountsAdmin, ConnectEvent, UserEventType, UserEvent, // <-depricated
-  LoginActions,
-  LoginAsync,
-  LoginModule,
   ConnectActions,
   ConnectAsync,
   ConnectModule,
+  LoginActions,
+  LoginAsync,
+  LoginModule,
+  IAppState,
+  IPayloadAction,
   Menus,
   MenuItem,
   ModalDialog,
   ModalService,
-  PopoverMenu} from '../../common-app';
+  NeverObservableAction,
+  PopoverMenu
+} from '../../common-app';
+
+import {
+  ForRealCardsActions,
+  ForRealCardsAsync,
+  ForRealCardsModule,
+  IForRealCardsState
+} from '../ui';
 
 import { DealModal } from "../deal-modal/deal-modal.twbs";
 import { EditUserProfileTWBS } from '../edit-user-profile/edit-user-profile.twbs';
@@ -34,7 +47,8 @@ import { Start } from "../start/start";
 import "../scss/for-real-cards.scss";
 import {TopFrame} from "./top-frame.base";
 import {TopFrameHeader} from "./top-frame-header";
-import {IAppState} from "../../common-app/src/ui/redux/state.interface";
+
+
 
 
 const routes:RouterConfig = [
@@ -58,7 +72,17 @@ const appRouterProviders = [
     selector: 'for-real-cards-top-frame',
     directives: [PopoverMenu, ROUTER_DIRECTIVES, ModalDialog, TopFrameHeader],
     viewProviders: [DragulaService],
-    providers: [ModalService, ConnectModule, ConnectAsync, ConnectActions, LoginActions, LoginAsync, LoginModule],
+    providers: [
+      ModalService,
+      ConnectActions,
+      ConnectAsync,
+      ConnectModule,
+      LoginActions,
+      LoginAsync,
+      LoginModule,
+      ForRealCardsActions,
+      ForRealCardsAsync,
+      ForRealCardsModule],
     template: `
 <div class="row">
   <top-frame-header class="col-xs-10"></top-frame-header>
@@ -70,8 +94,48 @@ const appRouterProviders = [
   }
 )
 export class ForRealCardsTopFrame extends TopFrame {
-  constructor(private router: Router, private ngZone:NgZone, ngRedux:NgRedux<IAppState>, connectModule:ConnectModule, loginModule:LoginModule) {
-    super(connectModule, loginModule, ngRedux);
+  constructor(
+    private router: Router,
+    private ngZone:NgZone,
+    ngRedux:NgRedux<IAppState>,
+    connectModule:ConnectModule,
+    loginModule:LoginModule,
+    forRealCardsModule:ForRealCardsModule
+  )
+  {
+    super();
+
+    let navToEnter = (action$: Observable<IPayloadAction>, store: Store<IForRealCardsState>):Observable<Action> => {
+      console.log('navToEnter')
+      return action$
+        .filter(({type}) => type === LoginActions.LOGGED_IN)
+        .flatMap(({payload}) => {
+          this.navigateToEnter();
+          return new NeverObservableAction();
+        });
+//      return new NeverObservableAction();
+    };
+
+    /**
+     * Logs all actions and states after they are dispatched.
+     */
+    const logger = store => next => action => {
+      console.group(action.type);
+      console.info('Logger: dispatching:', action)
+      let result = next(action);
+      console.log('Logger: next state', store.getState())
+      console.groupEnd();
+      return result
+    }
+
+    let navEpics:Epic[] = [
+      navToEnter
+    ];
+//    forRealCardsModule.epics.push(navToEnter);
+    forRealCardsModule.middlewares.push(logger);
+    this.topFrameConfigure(connectModule, loginModule, forRealCardsModule, ngRedux);
+
+    console.log('after super')
     Menus.addMenu({id: 'topbar'});
 
     Menus.addSubMenuItem('topbar', {
@@ -122,7 +186,7 @@ export class ForRealCardsTopFrame extends TopFrame {
 
   ngOnInit() {
     console.log("On Init of top frame");
-    Meteor.setTimeout(()=>{
+/*    Meteor.setTimeout(()=>{
       console.log("ngOnInitTimer")
       if (Meteor.userId()===null || ConnectEvent.isConnected()===false) {
         // If we're not logged in automatically after 500ms, go to login screen 
@@ -142,37 +206,36 @@ export class ForRealCardsTopFrame extends TopFrame {
           this.navigateToEnter();
         }
       }
-    }, 500);
+    }, 500);*/
     this.watchGame();
-    this.watchUserEvents();
   }
   
  
-  protected navigateToEnter() {
+  navigateToEnter() {
     this.ngZone.run( ()=>{
       this.router.navigate(['/enter-game']);
     });
   }
 
-  protected navigateToProfile() {
+  navigateToProfile() {
     this.ngZone.run( ()=> {
       this.router.navigate(['/edit-profile']);
     });
   }
 
-  protected navigateToStart() {
+  navigateToStart() {
     this.ngZone.run( ()=> {
       this.router.navigate(['/start']);
     });
   }
 
-  protected navigateToGameTable(gameId:string=''):void {
+  navigateToGameTable(gameId:string=''):void {
     this.ngZone.run( ()=> {
       this.router.navigate(['/game-table/', gameId]); // gameId parameter in URL for refresh feature (not yet implemented)
     });
   }
 
-  protected navigateToGamePlayer(gameId:string=''):void {
+  navigateToGamePlayer(gameId:string=''):void {
     this.ngZone.run( ()=> {
       this.router.navigateByUrl('/game-hand/' + gameId);  // gameId parameter in URL for refresh feature (not yet implemented)
     });
@@ -195,3 +258,4 @@ export function run() {
 export function prepare():void {
   
 }
+

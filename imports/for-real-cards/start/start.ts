@@ -5,7 +5,7 @@
 import { Component } from '@angular/core';
 import * as log from 'loglevel';
 
-import {AccountTools, Credentials, ConnectEvent, ConnectEventType, PlatformTools, UserEvent, UserEventType} from '../../common-app/index';
+import {LoginActions, Credentials, ConnectEvent, ConnectEventType, PlatformTools, UserEvent, UserEventType} from '../../common-app';
 
 //import * as templateTWBS from './start.twbs.html';  //This also works and doesn't cause webstorm to complain
 //import * as templateIonic from './start.ionic.html';
@@ -22,7 +22,7 @@ export class Start {
   message:string;
   credentials:Credentials;
   active:boolean = true;
-
+  constructor(private loginActions:LoginActions) {}
   ngOnInit() {
     this.credentials = Credentials.getLastCredentials();
     log.debug("in ngOnInit() of Start. this.PlatformTools.platformNameSegment()=" + PlatformTools.platformNameSegment())
@@ -56,34 +56,17 @@ export class Start {
   }
 
   login() {
-    AccountTools.login(this.credentials).then(
-      (user)=>{
-        // Login event will cause navigation to enter screen
-      }, (error)=> {
-        this.message = error.message;
-      }
-    );
+    this.loginActions.login(this.credentials);
   }
 
   register() {
-    AccountTools.register(this.credentials).then(
-      (user)=>{
-        // Login event will cause navigation to enter screen
-      }, (error)=>{
-        this.message = error.message;
-      }
-    );
+    this.loginActions.register(this.credentials)
   }
 
   tempUser() {
-    AccountTools.createTempUser().then(
-      (user)=>{
-        // Login event will cause navigation to enter screen
-      }, (error)=>{
-        this.message = error.message;
-      }
-    );
+    this.loginActions.loginAsTemporaryUser()
   }
+//        this.message = error.message; TODO: Figure out how to display login errors
 
   setServer() {
     ConnectEvent.setServer();
