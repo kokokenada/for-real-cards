@@ -24,7 +24,7 @@ export class LoginService {
         (error)=> {
           if (error) {
             log.info(error);
-            resolve(BaseApp.errorFactory(LoginActions.LOGIN_ERROR, error)); //Rejecting kills the stream if used in fromPromise
+            reject(BaseApp.errorFactory(LoginActions.LOGIN_ERROR, error));
           } else {
             log.info('Login successful.');
             resolve(
@@ -52,7 +52,7 @@ export class LoginService {
       }, (error)=> {
         if (error) {
           log.error(error);
-          resolve(BaseApp.errorFactory(LoginActions.LOGIN_ERROR, error)); //Rejecting kills the stream if used in fromPromise
+          reject(BaseApp.errorFactory(LoginActions.LOGIN_ERROR, error));
         } else {
           log.info("Register successful.")
           resolve(Meteor.user());
@@ -65,7 +65,7 @@ export class LoginService {
     return new Promise((resolve, reject)=>{
       Meteor.call('CommonGetNextSequence', 'temp_user', (error, result)=> {
         if (error) {
-          resolve(BaseApp.errorFactory(LoginActions.LOGIN_ERROR, error)); //Rejecting kills the stream if used in fromPromise
+          reject(BaseApp.errorFactory(LoginActions.LOGIN_ERROR, error));
         } else {
           let userId = 'tmp_' + result.toString();
           let credentials:Credentials = new Credentials(
@@ -78,7 +78,7 @@ export class LoginService {
               log.info("Registering tmp user successful.")
               resolve(user);
             }, (error)=> {  // Is this required or can I depend on rejection in AccountTools.register?
-              reject(error);
+              reject(BaseApp.errorFactory(LoginActions.LOGIN_ERROR, error));
             }
           );
         }
@@ -86,29 +86,27 @@ export class LoginService {
     });
   }
 
-  static saveUser(edittedUserObject:User):Observable<User> {
-    let observable:Observable<User> = Observable.create( (observer)=> {
+  static saveUser(edittedUserObject:User):Promise<IPayloadAction> {
+    return new Promise( (resolve, reject)=> {
       console.log("in saveUser execution")
       Meteor.call('commonAppUpdateUser',
         edittedUserObject,
         function (error, numberAffected:number) {
           if (error) {
             log.error(error);
-            observer.error(error);
+            reject(BaseApp.errorFactory(LoginActions.LOGIN_ERROR, error));
           } else {
             if (numberAffected === 1) {
-              observer.next(edittedUserObject);
-              observer.complete();
+              resolve(LoginActions.saveUserResponseFactory(edittedUserObject));
             } else {
               let errorDescription:string = 'Unexpected number of records affected. (' + numberAffected + ')';
               log.error(errorDescription);
-              observer.error(new Meteor.Error('error-updating-user', errorDescription));
+              reject(BaseApp.errorFactory(LoginActions.LOGIN_ERROR, error));
             }
           }
         }
       );
     });
-    return observable;
   }
 
   static logOut():Promise<IPayloadAction> {
@@ -117,7 +115,7 @@ export class LoginService {
         if (error) {
           log.error('Error logging out')
           log.error(error)
-          reject(error);
+          reject(BaseApp.errorFactory(LoginActions.LOGIN_ERROR, error));
         } else {
           resolve(LoginActions.logedOutFactory());
         }
@@ -125,16 +123,16 @@ export class LoginService {
     })
   };
 
-  static readCurrentUser():Promise<User> {
+  static readCurrentUser():Promise<IPayloadAction> {
     return new Promise((resolve, reject)=>{
       Meteor.subscribe('user-edit', {reactive: false}, {
         onReady: ()=> {
-          resolve(Tools.deepCopy(Meteor.user())); // Copy Current User
+          resolve(LoginActions.readCurUserResponseFactory(LoginService.user())); // Copy Current User
         },
         onStop: (error)=> {
           if (error) {
             log.error(error);
-            reject(error);
+            reject(BaseApp.errorFactory(LoginActions.LOGIN_ERROR, error));
           }
         }
       });

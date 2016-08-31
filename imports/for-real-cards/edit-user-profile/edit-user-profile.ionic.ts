@@ -4,18 +4,88 @@
  */
 
 import { Component, NgZone } from '@angular/core';
-import { CameraTools, CommonPopups, EditUserProfileBase } from '../../common-app';
+import { select } from 'ng2-redux';
+
+import { CameraTools, CommonPopups, EditUserProfileBase, LoginActions } from '../../common-app';
 import { AvatarOriginalStore } from '../../common-app-api';
 
 @Component({
   selector: 'edit-user-profile',
-  templateUrl: '/imports/for-real-cards/edit-user-profile/edit-user-profile.ionic.html'
+  template: `
+<ion-header>
+  <ion-navbar>
+    <ion-title>Edit User Profile</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<!--<ion-content>-->
+  <form role="form" *ngIf="userEditted">
+    <ion-list>
+      <ion-item>
+        <ion-label>Username</ion-label>
+        <ion-input [(ngModel)]="userEditted.username" type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Email</ion-label>
+        <ion-input [(ngModel)]="userEditted.emails[0].address" type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <button (click)="save()" block>Save</button>
+      </ion-item>
+
+      <ion-list-header>
+        Avatar
+      </ion-list-header>
+
+      <ion-item>
+        <strong>Tap Image to set Avatar</strong>
+      </ion-item>
+      <ion-item>
+        <div (click)="getPicture()">
+                    <img [src]="avatarUrl()"/>
+        </div>
+
+        <table *ngIf="uploader?.queue.length">
+          <thead>
+          <tr>
+            <th width="50%">Name</th>
+            <th>Size</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let item of uploader.queue">
+            <td><strong>{{item.file.name}}</strong></td>
+            <td nowrap>{{item.file.size}}</td>
+            <td nowrap>
+              <button type="button" class="btn btn-success btn-xs"
+                      (click)="uploadToFSCollection()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
+                <span class="glyphicon glyphicon-upload"></span> Upload
+              </button>
+              <button type="button" class="btn btn-danger btn-xs"
+                      (click)="item.remove()">
+                <span class="glyphicon glyphicon-trash"></span> Remove
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </ion-item>
+    </ion-list>
+  </form>
+  
+`
 })
 
 export class EditUserProfileIonic extends EditUserProfileBase {
+  @select() loginReducer;
+  constructor(private ngZone:NgZone,private loginActions:LoginActions) {
+    super();
+  }
 
-  constructor(ngZone:NgZone) {
-    super(ngZone);
+  ngOnInit()
+  {
+    this.initialize(this.ngZone, this.loginReducer, this.loginActions);
   }
 
   getPicture() {

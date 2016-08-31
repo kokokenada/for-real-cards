@@ -4,8 +4,12 @@
  */
 
 import { Component, NgZone } from '@angular/core';
+import { select } from 'ng2-redux';
+
+//import { FormGroup, FormControl } from '@angular/forms';
 import { FILE_UPLOAD_DIRECTIVES } from 'ng2-file-upload';
 import { EditUserProfileBase } from '../../common-app/index';
+import {LoginActions} from "../../common-app/src/ui/redux/login/login-actions.class";
 
 @Component({
   selector: 'edit-user-profile',
@@ -82,7 +86,15 @@ import { EditUserProfileBase } from '../../common-app/index';
 })
 
 export class EditUserProfileTWBS extends EditUserProfileBase {
-  constructor(ngZone:NgZone) {
-    super(ngZone);
+  @select() loginReducer;
+
+  constructor(private ngZone:NgZone, private loginActions:LoginActions) {
+    super();
   }
+  ngOnInit()
+  {
+    this.initialize(this.ngZone, this.loginReducer, this.loginActions);
+  }
+
 }
+

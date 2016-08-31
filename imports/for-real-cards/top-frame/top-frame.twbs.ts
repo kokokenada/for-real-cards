@@ -5,12 +5,10 @@
 import { Meteor } from 'meteor/meteor';
 import { Component, provide, NgZone } from '@angular/core';
 import { bootstrap } from '@angular/platform-browser-dynamic';
+import { NgRedux } from 'ng2-redux';
 import { provideRouter, ROUTER_DIRECTIVES, RouterConfig, Router } from '@angular/router'
 import { DragulaService} from 'ng2-dragula/ng2-dragula';
-import { NgRedux } from 'ng2-redux';
-import { Epic } from 'redux-observable';
-import { Observable } from 'rxjs/Observable';
-import { Action, Store } from "redux";
+
 import {
   AccountsAdmin, ConnectEvent, UserEventType, UserEvent, // <-depricated
   ConnectActions,

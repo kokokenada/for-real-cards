@@ -18,6 +18,10 @@ export class LoginActions {
   static LOGOUT_REQUEST = LoginActions.prefix + 'LOGOUT_REQUEST';
   static LOGGED_OUT = LoginActions.prefix + 'LOGGED_OUT';
   static LOGIN_ERROR = LoginActions.prefix + 'LOGIN_ERROR';
+  static READ_CUR_USER_REQUEST = LoginActions.prefix + 'READ_USER_REQ';
+  static READ_CUR_USER_RESPONSE = LoginActions.prefix + 'READ_USER_RESP';
+  static SAVE_USER_REQUEST = LoginActions.prefix + 'SAVE_USER_REQ';
+  static SAVE_USER_RESPONSE = LoginActions.prefix + ' SAVE_USER_RESP';
   static AVATAR_UPDATE = LoginActions.prefix + 'AVATAR_UPDATE';
   static DISPLAY_NAME_UPDATE = LoginActions + 'DISPLAY_NAME_UPDATE';
   static ROLL_UPDATE = LoginActions + 'ROLL_UPDATE';
@@ -44,6 +48,22 @@ export class LoginActions {
 
   loginAsTemporaryUser():void {
     this.ngRedux.dispatch({ type: LoginActions.TEMP_USER_REQUEST});
+  }
+
+  readCurrrentUser(): void {
+    this.ngRedux.dispatch({type: LoginActions.READ_CUR_USER_REQUEST});
+  }
+
+  saveUser(user:User): void {
+    this.ngRedux.dispatch({type: LoginActions.SAVE_USER_REQUEST, payload: {user: user}});
+  }
+
+  static readCurUserResponseFactory(user:User):IPayloadAction {
+    return {type: LoginActions.READ_CUR_USER_RESPONSE, payload: {user: user}};
+  }
+
+  static saveUserResponseFactory(user:User):IPayloadAction {
+    return {type: LoginActions.SAVE_USER_REQUEST, payload: {user: user}};
   }
 
   static loginSuccessFactory(user:User):IPayloadAction {

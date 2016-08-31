@@ -20,7 +20,7 @@ export function loginReducer(
   let payload:ILoginAction = action.payload;
   switch (action.type) {
     case LoginActions.LOGIN_REQUEST:
-      return Object.assign(state, {loggingIn: true});
+      return Object.assign({}, state, {loggingIn: true});
     case LoginActions.LOGGED_IN:
       return {
         loggingIn: false,
@@ -41,6 +41,9 @@ export function loginReducer(
         user: null,
         errorMessage: action.error.message
       };
+    case LoginActions.SAVE_USER_RESPONSE: // Fall through
+    case LoginActions.READ_CUR_USER_RESPONSE:
+      return Object.assign({}, state, {user: payload.user});
     default:
       return state;
   }

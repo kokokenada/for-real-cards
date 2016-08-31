@@ -9,7 +9,7 @@ export class Credentials {
 
   }
   saveCredentials() {
-    if (this.email && this.email.toString().length>0)
+    if (this.email && this.email.length>0)
       localStorage.setItem("account-tools.last_email", this.email);
     else
       localStorage.removeItem("account-tools.last_email");

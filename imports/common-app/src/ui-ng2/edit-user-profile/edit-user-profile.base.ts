@@ -1,4 +1,4 @@
-import { Subscription } from 'rxjs'
+import { Observable, Subscription } from 'rxjs'
 import { NgZone } from '@angular/core';
 import { Meteor } from 'meteor/meteor';
 import * as log from 'loglevel';
@@ -6,48 +6,34 @@ import * as log from 'loglevel';
 import { FileUploader} from 'ng2-file-upload';
 import { AvatarTools, UserEvent, UserEventType } from '../../ui';
 import { AvatarOriginalStore, User } from '../../../../common-app-api';
-import { AccountTools } from "../../ui/services/account-tools";
 import { Uploader } from '../../ui/uploader'
 import { CommonPopups } from '../common-popups/common-popups'
 import {PlatformTools} from "../platform-tools/platform-tools";
+import {LoginActions, ILoginState} from "../../ui";
 
 export abstract class EditUserProfileBase {
   avatarURL:string;
   uploader:FileUploader = new FileUploader({});
   hasBaseDropZoneOver:boolean = false;
-
-  subscription:Subscription;
   userEditted:User;
-  ngZoneBase:NgZone;
+  private ngZoneBase:NgZone;
+  private loginActionsBase:LoginActions
 
-  constructor(ngBase:NgZone) {
+  initialize(ngBase:NgZone, stateObserver:Observable<ILoginState>, loginActions:LoginActions) {
     this.ngZoneBase = ngBase;
-  }
-
-  ngOnInit() {
+    this.loginActionsBase = loginActions;
+    stateObserver.subscribe( (loginState:ILoginState)=>{
+      this.userEditted = loginState.user;
+    });
+/*
     this.subscription = UserEvent.startObserving((event:UserEvent)=> {
       if (event.eventType === UserEventType.AVATAR_UPDATE && event.userId === Meteor.userId()) {
         this.ngZoneBase.run(()=>{
           this.avatarURL = AvatarTools.getAvatarURL(event.user, "medium");
         });
       }
-    });
-    AccountTools.readCurrentUser().then(
-      (user:User)=> {
-        this.ngZoneBase.run(()=> {
-          this.addEmptyEmailIfNeeded(user);
-          this.userEditted = user;
-        });
-      }, (error)=> {
-        CommonPopups.alert(error);
-      }
-    );
-  }
-
-  ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    });*/
+    loginActions.readCurrrentUser();
   }
 
   private addEmptyEmailIfNeeded(user:User):void {
@@ -61,10 +47,7 @@ export abstract class EditUserProfileBase {
     if (this.userEditted.emails[0].address.length===0) {  // remove null address
       this.userEditted.emails.splice(0);
     }
-    AccountTools.saveUser(this.userEditted).subscribe((user:User)=>{
-      console.log("Saved");
-      console.log(user);
-    });
+    this.loginActionsBase.saveUser(this.userEditted);
     this.addEmptyEmailIfNeeded(this.userEditted);
   }
 

@@ -2,7 +2,6 @@
  * Created by kenono on 2016-04-16.
  */
 
-import {Meteor} from 'meteor/meteor';
 import 'underscore'
 import * as log from 'loglevel';
 import { MenuItem, MenuItemDefintion } from "./menu-item";

@@ -37,6 +37,7 @@ export class MenuItem implements MenuItemDefintion {
     _.extend(this, options);
     //this.menu=options;
   }
+
   shouldRender () {
 
     let user = Meteor.user();
