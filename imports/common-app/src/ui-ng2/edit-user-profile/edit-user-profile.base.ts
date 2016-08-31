@@ -1,10 +1,8 @@
 import { Observable, Subscription } from 'rxjs'
 import { NgZone } from '@angular/core';
-import { Meteor } from 'meteor/meteor';
 import * as log from 'loglevel';
 
 import { FileUploader} from 'ng2-file-upload';
-import { AvatarTools, UserEvent, UserEventType } from '../../ui';
 import { AvatarOriginalStore, User } from '../../../../common-app-api';
 import { Uploader } from '../../ui/uploader'
 import { CommonPopups } from '../common-popups/common-popups'

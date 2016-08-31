@@ -973,6 +973,7 @@ declare module Meteor {
     createdAt ? : number;
     profile ? : any;
     services ? : any;
+    roles ? : string[];
   }
 
   function user(): User;
@@ -1075,6 +1076,7 @@ declare module "meteor/meteor" {
       createdAt ? : number;
       profile ? : any;
       services ? : any;
+      roles ? : string[];
     }
 
     function user(): User;

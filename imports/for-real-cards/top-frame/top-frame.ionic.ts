@@ -7,7 +7,7 @@ import { ionicBootstrap, MenuController, NavController } from 'ionic-angular';
 import { DragulaService} from 'ng2-dragula/ng2-dragula';
 import { NgRedux } from 'ng2-redux';
 
-import { PlatformToolsIonic, MenuItem, Menus, MenuFilterPipe, UserEvent, UserEventType,
+import { PlatformToolsIonic, MenuItem, Menus, MenuFilterPipe,
   IAppState,
   LoginActions,
   LoginAsync,
@@ -82,7 +82,8 @@ class ForRealCardsTopFrame extends TopFrame {
     forRealCardsModule:ForRealCardsModule,
     ngRedux:NgRedux<IAppState>
 ) { //, private navParams:NavParams) {
-    super(connectModule, loginModule, forRealCardsModule, ngRedux);
+    super()
+    this.topFrameConfigure(connectModule, loginModule, forRealCardsModule, ngRedux);
 
     Menus.addMenu({id: 'topbar'});
 
@@ -118,7 +119,7 @@ class ForRealCardsTopFrame extends TopFrame {
       title: 'Logout',
       roles: ['*'],
       callback: (menuItem:MenuItem)=> {
-        UserEvent.pushEvent(new UserEvent(UserEventType.LOG_OUT_REQUEST));
+        loginModule.actions.logout();
       }
     });
 

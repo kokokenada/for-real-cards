@@ -1,4 +1,5 @@
-import { Meteor } from 'meteor/meteor';
+
+import {User} from "../../../../common-app-api";
 
 export interface MenuItemDefintion {
   id:string;
@@ -38,11 +39,9 @@ export class MenuItem implements MenuItemDefintion {
     //this.menu=options;
   }
 
-  shouldRender () {
-
-    let user = Meteor.user();
-//    console.log('should render')
-//    console.log(user)
+  shouldRender (user:User) {
+//     console.log('should render')
+//     console.log(user)
 //    console.log(this)
     if (this.roles.indexOf('*')>-1 || this.roles.length===0) { // Roles in menu definition is blank or * so everyone gets it
       return true;

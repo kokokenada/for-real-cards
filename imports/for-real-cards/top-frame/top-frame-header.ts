@@ -5,11 +5,12 @@
 
 import { Component, NgZone } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { select } from 'ng2-redux';
 
 import {GameDescriptionEvent} from "./game-description-event";
 import {RunGame} from "../run-game/run-game";
-import {UserDisplayEvent} from "./user-display-event";
-import {PlatformTools} from '/imports/common-app';
+import {PlatformTools} from '../../common-app';
+import {ILoginState} from "../../common-app/src/ui/redux/login/login.types";
 
 function template():string {
   if (PlatformTools.isIonic())
@@ -22,28 +23,25 @@ function template():string {
   template: template()
 })
 export class TopFrameHeader {
+  @select() loginReducer;
   gameDescription:string;
   displayName:string;
   private subscriptionGameDesc:Subscription;
-  private subscriptionUserDisplay:Subscription;
   constructor(private ngZone:NgZone) {
     this.subscriptionGameDesc = GameDescriptionEvent.subscribe(RunGame.subject, (gameDescription:GameDescriptionEvent)=>{
       this.ngZone.run(()=>{
         this.gameDescription = gameDescription.description;
       });
     });
-    this.subscriptionUserDisplay = UserDisplayEvent.subscribe( (userDisplayEvent:UserDisplayEvent)=> {
-      this.ngZone.run(()=>{
-        this.displayName = userDisplayEvent.displayName;
-      });
-    });
+  }
+  ngInit() {
+    this.loginReducer.subscribe( (loginState:ILoginState)=>{
+      this.displayName = loginState.displayName;
+    } );
   }
   ngOnDestroy() {
     if (this.subscriptionGameDesc) {
       this.subscriptionGameDesc.unsubscribe();
-    }
-    if (this.subscriptionUserDisplay) {
-      this.subscriptionUserDisplay.unsubscribe();
     }
   }
 }

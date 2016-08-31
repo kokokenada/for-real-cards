@@ -27,15 +27,3 @@ export class ForRealCardsAsync {
       });
   }
 }
-/*
-  watchUserEvents():void {
-    this.subscriptions.push(UserEvent.startObserving((event:UserEvent)=> {
-      if (event.eventType === UserEventType.LOGOUT) {
-        this.navigateToStart();
-      } else if (event.eventType === UserEventType.LOGIN) {
-        console.log('UserEventType.LOGIN detected')
-        this.navigateToEnter();
-      }
-    }));
-  }
-  */

@@ -26,8 +26,6 @@ export class LoginActions {
   static DISPLAY_NAME_UPDATE = LoginActions + 'DISPLAY_NAME_UPDATE';
   static ROLL_UPDATE = LoginActions + 'ROLL_UPDATE';
 
-  // static CONNECT_AUTOLOGIN = ConnectActions.prefix + 'AUTO_LOGIN';  // Move to Login module
-
   constructor(private ngRedux: NgRedux<IAppState>) {}
 
   checkAutoLogin() : void {
@@ -63,7 +61,7 @@ export class LoginActions {
   }
 
   static saveUserResponseFactory(user:User):IPayloadAction {
-    return {type: LoginActions.SAVE_USER_REQUEST, payload: {user: user}};
+    return {type: LoginActions.SAVE_USER_RESPONSE, payload: {user: user}};
   }
 
   static loginSuccessFactory(user:User):IPayloadAction {

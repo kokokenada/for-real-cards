@@ -60,7 +60,7 @@ export class LoginAsync {
   };
 
   saveUser = (action$: Observable<IPayloadAction>) => {
-    return action$.filter(({ type }) => type === LoginActions.SAVE_USER_RESPONSE)
+    return action$.filter(({ type }) => type === LoginActions.SAVE_USER_REQUEST)
       .flatMap(({ payload }) => {
         return Observable.fromPromise(
           LoginService.saveUser(payload.user)

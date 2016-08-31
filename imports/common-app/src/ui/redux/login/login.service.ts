@@ -1,18 +1,15 @@
 import { Meteor } from 'meteor/meteor'; declare let require:any;
 import { Accounts } from 'meteor/accounts-base';
-import { Observable } from 'rxjs'
 import * as log from 'loglevel';
 
 import {Credentials} from "../../services/credentials";
 import {User} from '../../../../../common-app-api';
-import {Tools} from "../../services/tools";
-import {ILoginAction} from "./login.types";
 import {LoginActions} from "./login-actions.class";
 import {IPayloadAction} from "../action.interface";
 import {BaseApp} from "../base-app.class";
 let random = require("random-js");
 
-// Make an abstract parent and children that implement specific backend
+// Later, we can make an abstract parent and children that implement specific backend
 // For now, this is Meteor specific
 export class LoginService {
 
@@ -203,7 +200,7 @@ export class LoginService {
     user.profile = userMeteor.profile;
     user.services = userMeteor.services;
     user.username = userMeteor.username;
-//    user.roles = userMeteor.roles;
+    user.roles = userMeteor.roles;
     return user;
   }
 

@@ -10,7 +10,7 @@ import { provideRouter, ROUTER_DIRECTIVES, RouterConfig, Router } from '@angular
 import { DragulaService} from 'ng2-dragula/ng2-dragula';
 
 import {
-  AccountsAdmin, ConnectEvent, UserEventType, UserEvent, // <-depricated
+  AccountsAdmin,  // <-depricated
   ConnectActions,
   ConnectAsync,
   ConnectModule,
@@ -103,8 +103,6 @@ export class ForRealCardsTopFrame extends TopFrame {
   {
     super();
     this.topFrameConfigure(connectModule, loginModule, forRealCardsModule, ngRedux);
-
-    console.log('after super')
     Menus.addMenu({id: 'topbar'});
 
     Menus.addSubMenuItem('topbar', {
@@ -154,7 +152,6 @@ export class ForRealCardsTopFrame extends TopFrame {
   }
 
   ngOnInit() {
-    console.log("On Init of top frame");
 /*    Meteor.setTimeout(()=>{
       console.log("ngOnInitTimer")
       if (Meteor.userId()===null || ConnectEvent.isConnected()===false) {

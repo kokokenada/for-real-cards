@@ -4,21 +4,22 @@
 
 import { Component, Input, NgZone } from '@angular/core';
 import { DROPDOWN_DIRECTIVES } from 'ng2-bootstrap/ng2-bootstrap';
-import { Subscription } from 'rxjs'
 
-import { Menus, MenuItem, UserEvent, UserEventType } from "../ui/index"
+import { Menus, MenuItem } from "../ui/index";
+import { MenuFilterPipe}  from '../ui-ng2';
 
 
 @Component({
   selector: 'popover-menu',
   directives: [DROPDOWN_DIRECTIVES],
+  pipes: [MenuFilterPipe],
   template: `
 
     <span dropdown (on-toggle)="toggled($event)">
       <span dropdownToggle class="glyphicon glyphicon-menu-hamburger" style="font-size: x-large" aria-hidden="true"></span>
       <ul class="dropdown-menu dropdown-menu-right" >
         <li
-            *ngFor="let item of getMenuItems()"
+            *ngFor="let item of getMenuItems() | menuFilter"
             (click)="itemSelected(item)"
         >
           <p>{{item.title}}</p>
@@ -32,23 +33,6 @@ export class PopoverMenu {
   constructor(private ngZone:NgZone) {
   }
   private menuItems:MenuItem[];
-  private subscription:Subscription;
-
-  ngOnInit() {
-    this.subscription = UserEvent.startObserving((event:UserEvent)=>{
-      if (event.eventType===UserEventType.LOGIN || event.eventType===UserEventType.ROLL_UPDATE) {
-        this.menuItems =null;
-        this.ngZone.run(()=>{
-          this.getMenuItems();
-        })
-      }
-    });
-  }
-  ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
-  }
 
   getMenuItems():MenuItem[] {
     if (!this.menuItems) {
@@ -61,9 +45,7 @@ export class PopoverMenu {
       if (menuItem){
         this.menuItems = [];
         menuItem.items.forEach((subMenuItem:MenuItem)=>{
-          if (subMenuItem.shouldRender()) {
-            this.menuItems.push(subMenuItem);
-          }
+          this.menuItems.push(subMenuItem);
         });
       }
     }
