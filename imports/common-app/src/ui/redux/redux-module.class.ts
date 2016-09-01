@@ -7,5 +7,6 @@ export abstract class ReduxModule<T> {
   epics:Epic[]=[];        // Stream based middleware
   middlewares:any[]=[];   // Normal redux middleware
   enhancers:any[]=[];
-  actions:Object
+  actions:Object;
+  abstract initialize():void;
 }

@@ -1312,6 +1312,7 @@ declare module "meteor/meteor" {
     /** Pub/Sub **/
     function subscribe(name: string, ...args: any[]): Meteor.SubscriptionHandle;
     /** Pub/Sub **/
+
   }
 }
 declare module Meteor {
@@ -1371,6 +1372,7 @@ declare module "meteor/meteor" {
     userId: string;
   }
 }
+
 declare module Mongo {
   interface Selector {
     [key: string]: any;
@@ -1379,7 +1381,7 @@ declare module Mongo {
   interface Modifier {}
   interface SortSpecifier {}
   interface FieldSpecifier {
-    [id: string]: Number;
+    [id: string]: boolean;
   }
 
   var Collection: CollectionStatic;
@@ -1441,6 +1443,7 @@ declare module Mongo {
     _dropIndex(keys: {
       [key: string]: number | string
     } | string): void;
+    attachSchema(any);
   }
 
   var Cursor: CursorStatic;

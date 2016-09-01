@@ -16,4 +16,8 @@ export class ConnectModule extends ReduxModule<IAppState>  {
     this.epics.push(connectEpics.connect);
     this.epics.push(connectEpics.setNewServer);
   }
+
+  initialize():void {
+
+  }
 }

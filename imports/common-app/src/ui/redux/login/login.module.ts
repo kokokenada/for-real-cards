@@ -20,4 +20,6 @@ export class LoginModule extends ReduxModule<IAppState>  {
       loginEpics.saveUser
     );
   }
+
+  initialize():void {}
 }

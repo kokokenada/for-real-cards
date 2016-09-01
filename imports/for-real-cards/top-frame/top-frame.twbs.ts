@@ -2,7 +2,7 @@
  * Copyright Ken Ono, Fabrica Technolology 2016
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
-import { Meteor } from 'meteor/meteor';
+
 import { Component, provide, NgZone } from '@angular/core';
 import { bootstrap } from '@angular/platform-browser-dynamic';
 import { NgRedux } from 'ng2-redux';
@@ -24,6 +24,9 @@ import {
   ModalDialog,
   ModalService,
   NeverObservableAction,
+  UsersModule,
+  UsersActions,
+  UsersAsync,
   PopoverMenu
 } from '../../common-app';
 
@@ -45,8 +48,6 @@ import { Start } from "../start/start";
 import "../scss/for-real-cards.scss";
 import {TopFrame} from "./top-frame.base";
 import {TopFrameHeader} from "./top-frame-header";
-
-
 
 
 const routes:RouterConfig = [
@@ -80,7 +81,11 @@ const appRouterProviders = [
       LoginModule,
       ForRealCardsActions,
       ForRealCardsAsync,
-      ForRealCardsModule],
+      ForRealCardsModule,
+      UsersModule,
+      UsersAsync,
+      UsersActions
+    ],
     template: `
 <div class="row">
   <top-frame-header class="col-xs-10"></top-frame-header>
@@ -98,11 +103,12 @@ export class ForRealCardsTopFrame extends TopFrame {
     ngRedux:NgRedux<IAppState>,
     connectModule:ConnectModule,
     loginModule:LoginModule,
-    forRealCardsModule:ForRealCardsModule
+    forRealCardsModule:ForRealCardsModule,
+    usersModule:UsersModule
   )
   {
     super();
-    this.topFrameConfigure(connectModule, loginModule, forRealCardsModule, ngRedux);
+    this.topFrameConfigure(connectModule, loginModule, forRealCardsModule, usersModule, ngRedux);
     Menus.addMenu({id: 'topbar'});
 
     Menus.addSubMenuItem('topbar', {

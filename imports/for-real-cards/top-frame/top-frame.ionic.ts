@@ -15,6 +15,9 @@ import { PlatformToolsIonic, MenuItem, Menus, MenuFilterPipe,
   ConnectActions,
   ConnectAsync,
   ConnectModule,
+  UsersModule,
+  UsersAsync,
+  UsersActions
 } from '../../common-app';
 
 import {
@@ -67,7 +70,10 @@ import {TopFrameHeader} from "./top-frame-header";
     LoginModule,
     ForRealCardsActions,
     ForRealCardsAsync,
-    ForRealCardsModule
+    ForRealCardsModule,
+    UsersModule,
+    UsersAsync,
+    UsersActions
   ]
 })
 class ForRealCardsTopFrame extends TopFrame {
@@ -80,10 +86,11 @@ class ForRealCardsTopFrame extends TopFrame {
     connectModule:ConnectModule,
     loginModule:LoginModule,
     forRealCardsModule:ForRealCardsModule,
+    usersModule:UsersModule,
     ngRedux:NgRedux<IAppState>
 ) { //, private navParams:NavParams) {
     super()
-    this.topFrameConfigure(connectModule, loginModule, forRealCardsModule, ngRedux);
+    this.topFrameConfigure(connectModule, loginModule, forRealCardsModule, usersModule, ngRedux);
 
     Menus.addMenu({id: 'topbar'});
 

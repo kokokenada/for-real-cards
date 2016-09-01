@@ -16,4 +16,6 @@ export class ForRealCardsModule extends ReduxModule<IAppState>  {
     super();
 //    this.epics.push(forRealCardsEpics.loginNavigation);
   }
+
+  initialize():void {}
 }

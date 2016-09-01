@@ -208,4 +208,27 @@ export class LoginService {
     return LoginService.userFromMeteorUser(LoginService._user());
   }
 
+  static getAvatarURL(user:User, size:string="thumb"):string {
+    if (!user) {
+      return LoginService.defaultAvatarUrl();
+    }
+    let profile = user.profile;
+    if (!profile)
+      return LoginService.defaultAvatarUrl();
+
+    let file = profile['avatar-' + size];
+    if (!file) {
+      file = profile['avatar-medium'];
+    }
+    if (!file) {
+      return LoginService.defaultAvatarUrl();
+    }
+    return file;
+  }
+
+  static defaultAvatarUrl() {
+    return Meteor.absoluteUrl('default-avatar.png');
+  };
+
+
 }

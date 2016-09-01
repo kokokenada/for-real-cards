@@ -3,12 +3,14 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 import { Component, Input } from '@angular/core';
-import { Meteor } from 'meteor/meteor';
 import { Subscription } from 'rxjs'
+import { select } from 'ng2-redux';
 
-import { Avatar, UserEvent, UserEventType } from '/imports/common-app';
+import { Avatar } from '../../common-app';
+import { User } from '../../common-app-api';
 import { Card, Hand } from  '../api/index';
 import { GameRenderingTools } from  '../ui';
+import {IUsersState} from "../../common-app/src/ui/redux/users/users.types";
 
 @Component(
   {
@@ -83,17 +85,15 @@ import { GameRenderingTools } from  '../ui';
 )
 export class Player {
   @Input() hand:Hand;
+  @select() usersReducer;
   disposable:Subscription;  
   private _displayName:string;
 
   ngOnInit() {
-//    console.log('player on init')
-//    console.log(this)
-    this.disposable = UserEvent.startObserving((event:UserEvent)=>{
-      if (event.eventType===UserEventType.DISPLAY_NAME_UPDATE && event.userId===this.hand.userId) {
-        this._displayName = event.displayName;
-      }
-    });
+    this.usersReducer.subscribe( (usersState:IUsersState)=>{
+      let user:User = usersState.users.get(this.hand.userId);
+      this._displayName= User.getDisplayName(user);
+    } );
   }
   ngOnDestroy() {
     if (this.disposable) {
@@ -138,14 +138,6 @@ export class Player {
     if (!this.hand.cardsInHand)
       return 0;
     return this.hand.cardsInHand.length;
-  }
-
-  clickedAvatar():void {
-    if (this.hand.userId === Meteor.userId() ) {
-      //alert('clicked self')
-    } else {
-      //alert('clicked' + this.hand.userId)
-    }
   }
 
 }

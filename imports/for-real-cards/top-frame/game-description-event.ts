@@ -4,8 +4,6 @@
  */
 import { Observable, Subscription } from 'rxjs';
 
-import {UserEvent, UserEventType} from '/imports/common-app';
-
 import {Action, ActionType} from "../api/models/action.model";
 import {RunGame} from "../run-game/run-game";
 
@@ -41,8 +39,10 @@ export class GameDescriptionEvent {
     .subscribe(onNext);
   }
 }
-UserEvent.startObserving( (userEvent:UserEvent)=>{
+
+/*UserEvent.startObserving( (userEvent:UserEvent)=>{
   if (userEvent.eventType===UserEventType.LOGOUT) {
     RunGame.pushGameNotification(null, ActionType.LEAVE_GAME);
   }
-});
+
+});*/

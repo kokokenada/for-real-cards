@@ -1,3 +1,6 @@
+///<reference path='../../../../../node_modules/immutable/dist/immutable.d.ts'/>
+import Immutable = require('immutable');
+
 import {combineReducers, Reducer, ReducersMapObject} from 'redux';
 import {NgRedux} from "ng2-redux";
 
@@ -50,9 +53,20 @@ export class BaseApp<T> {
     const rootReducer = combineReducers<IAppState>(this.reducers);
 
     ngRedux.configureStore(rootReducer, {}, this.middlewares, this.enhancers);
+    modules.forEach((module: ReduxModule<T>)=> {
+      module.initialize();
+    })
   }
 
   static errorFactory(actionType:string, error:IActionError):IPayloadAction {
     return {type: actionType, error: error };
+  }
+
+  static arrayToMap<T>(arr:any[], key:string="_id"):Immutable.Map<string, T> {
+    let obj:Object = {};
+    arr.forEach( (item:any)=>{
+      obj[key] = item;
+    });
+    return Immutable.fromJS(obj);
   }
 }

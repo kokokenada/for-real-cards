@@ -5,7 +5,7 @@ import { Component, Input, NgZone } from '@angular/core';
 import {  UserEvent, UserEventType } from "../ui/index"
 import { Subscription } from 'rxjs'
 import * as log from 'loglevel';
-import {AvatarTools} from "../ui/services/avatar-tools";
+import {LoginService} from "../ui/";
 
 @Component({
   selector: 'avatar',
@@ -28,7 +28,7 @@ export class Avatar {
     this.disposable = UserEvent.startObserving((event:UserEvent)=>{
       if (event.eventType===UserEventType.AVATAR_UPDATE && event.userId===this.userId) {
         this.ngZone.run(()=>{
-          this.imageURL = AvatarTools.getAvatarURL(event.user, this.size);
+          this.imageURL = LoginService.getAvatarURL(event.user, this.size);
         });
       }
     });

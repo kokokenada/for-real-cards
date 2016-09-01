@@ -4,7 +4,7 @@ import { LoginActions } from './login-actions.class';
 import {ILoginState, ILoginAction} from './login.types'
 import {LoginService} from "./login.service";
 
-const INITIAL_STATE = {
+const INITIAL_STATE:ILoginState = {
   loggedIn: false,
   loggingIn: false,
   userId: null,

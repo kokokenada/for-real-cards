@@ -5,6 +5,18 @@ import  'meteor/aldeed:simple-schema';
 import * as log from 'loglevel';
 
 export class User {
+
+  static getDisplayName(user: User) {
+    if (!user) {
+      return 'Not Logged In';
+    }
+    if (user.username)
+      return user.username;
+    if (user.emails && user.emails.length > 0)
+      return user.emails[0].address;
+    return user._id;
+  }
+
   _id: string;
   username: string;
   emails: {

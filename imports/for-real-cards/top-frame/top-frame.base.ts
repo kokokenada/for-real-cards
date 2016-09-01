@@ -4,17 +4,15 @@
  */
 
 import { Subscription } from 'rxjs'
-import { IAppState, IPayloadAction, BaseApp, ConnectModule, LoginModule} from "../../common-app";
+import { IAppState, IPayloadAction, BaseApp, ConnectModule, LoginActions, LoginModule, UsersModule} from "../../common-app";
 import {RunGame} from "../run-game/run-game";
-import { Action } from "redux";
 import {Action as OLDAction, ActionType} from "../api/models/action.model";
 import {NgRedux} from "ng2-redux";
 import {ForRealCardsModule, ForRealCardsActions} from "../ui";
-import {LoginActions} from "../../common-app";
 
 export abstract class TopFrame extends BaseApp<IAppState> {
 
-  topFrameConfigure(connectModule:ConnectModule, loginModule:LoginModule, forRealCardsModule:ForRealCardsModule, ngRedux: NgRedux<IAppState>) {
+  topFrameConfigure(connectModule:ConnectModule, loginModule:LoginModule, forRealCardsModule:ForRealCardsModule, usersModule:UsersModule, ngRedux: NgRedux<IAppState>) {
     this.turnOnConsoleLogging();
 
     const navigatorMiddleware = store => next => (action:IPayloadAction) => {
@@ -42,7 +40,7 @@ export abstract class TopFrame extends BaseApp<IAppState> {
     };
 
     forRealCardsModule.middlewares.push(navigatorMiddleware);
-    this.configure([connectModule, loginModule, forRealCardsModule], ngRedux);
+    this.configure([connectModule, loginModule, forRealCardsModule, usersModule], ngRedux);
 
     loginModule.actions.checkAutoLogin();
   }
