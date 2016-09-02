@@ -1,12 +1,15 @@
 import { Meteor } from 'meteor/meteor'; declare let require:any;
 import { Accounts } from 'meteor/accounts-base';
 import * as log from 'loglevel';
+import { Observable } from 'rxjs';
 
 import {Credentials} from "../../services/credentials";
 import {User} from '../../../../../common-app-api';
 import {LoginActions} from "./login-actions.class";
 import {IPayloadAction} from "../action.interface";
 import {BaseApp} from "../base-app.class";
+import {IDocumentChange} from "../../reactive-data/document-change.interface";
+import {MeteorCursorObservers} from "../../reactive-data/meteor-cursor-observers";
 let random = require("random-js");
 
 // Later, we can make an abstract parent and children that implement specific backend
@@ -120,10 +123,12 @@ export class LoginService {
     })
   };
 
-  static readCurrentUser():Promise<IPayloadAction> {
+  static watchCurrentUser():Promise<IPayloadAction> {
     return new Promise((resolve, reject)=>{
-      Meteor.subscribe('user-edit', {reactive: false}, {
+      Meteor.subscribe('user-edit', {reactive: true}, {
         onReady: ()=> {
+          console.log('about to resolve')
+          console.log()
           resolve(LoginActions.readCurUserResponseFactory(LoginService.user())); // Copy Current User
         },
         onStop: (error)=> {
@@ -136,6 +141,10 @@ export class LoginService {
     });
   }
 
+  static createUserObserver(userId:string):Observable<IDocumentChange<User>>
+  {
+    return MeteorCursorObservers.createCursorObserver<User>(Meteor.users.find({_id: userId}));
+  }
 
   private static _user(userId:string = undefined) {
     if (!userId) {
@@ -174,7 +183,7 @@ export class LoginService {
   }
 
   static isLoggedIn():boolean {
-    return LoginService.user()===null ? false : true;
+    return LoginService.userId()===null ? false : true;
   }
 
   static userId():string {
@@ -207,28 +216,4 @@ export class LoginService {
   static user():User {
     return LoginService.userFromMeteorUser(LoginService._user());
   }
-
-  static getAvatarURL(user:User, size:string="thumb"):string {
-    if (!user) {
-      return LoginService.defaultAvatarUrl();
-    }
-    let profile = user.profile;
-    if (!profile)
-      return LoginService.defaultAvatarUrl();
-
-    let file = profile['avatar-' + size];
-    if (!file) {
-      file = profile['avatar-medium'];
-    }
-    if (!file) {
-      return LoginService.defaultAvatarUrl();
-    }
-    return file;
-  }
-
-  static defaultAvatarUrl() {
-    return Meteor.absoluteUrl('default-avatar.png');
-  };
-
-
 }

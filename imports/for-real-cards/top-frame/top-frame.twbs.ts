@@ -27,6 +27,9 @@ import {
   UsersModule,
   UsersActions,
   UsersAsync,
+  UploaderModule,
+  UploaderActions,
+  UploaderAsync,
   PopoverMenu
 } from '../../common-app';
 
@@ -82,6 +85,9 @@ const appRouterProviders = [
       ForRealCardsActions,
       ForRealCardsAsync,
       ForRealCardsModule,
+      UploaderModule,
+      UploaderActions,
+      UploaderAsync,
       UsersModule,
       UsersAsync,
       UsersActions
@@ -104,11 +110,12 @@ export class ForRealCardsTopFrame extends TopFrame {
     connectModule:ConnectModule,
     loginModule:LoginModule,
     forRealCardsModule:ForRealCardsModule,
-    usersModule:UsersModule
+    usersModule:UsersModule,
+    uploaderModule:UploaderModule
   )
   {
     super();
-    this.topFrameConfigure(connectModule, loginModule, forRealCardsModule, usersModule, ngRedux);
+    this.topFrameConfigure(connectModule, loginModule, forRealCardsModule, usersModule, uploaderModule, ngRedux);
     Menus.addMenu({id: 'topbar'});
 
     Menus.addSubMenuItem('topbar', {
@@ -155,10 +162,12 @@ export class ForRealCardsTopFrame extends TopFrame {
         loginModule.actions.logout();
       }
     });
+
+    this.watchGame();
   }
 
-  ngOnInit() {
-/*    Meteor.setTimeout(()=>{
+/*  ngOnInit() {
+    Meteor.setTimeout(()=>{
       console.log("ngOnInitTimer")
       if (Meteor.userId()===null || ConnectEvent.isConnected()===false) {
         // If we're not logged in automatically after 500ms, go to login screen 
@@ -178,10 +187,10 @@ export class ForRealCardsTopFrame extends TopFrame {
           this.navigateToEnter();
         }
       }
-    }, 500);*/
+    }, 500);
     this.watchGame();
   }
-  
+  */
  
   navigateToEnter() {
     this.ngZone.run( ()=>{

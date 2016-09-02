@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
 import { select } from 'ng2-redux';
 import * as log from 'loglevel';
 
-import {LoginActions, Credentials, ConnectEvent, ConnectEventType, PlatformTools, UserEvent, UserEventType} from '../../common-app';
+import {LoginActions, Credentials, ConnectEvent, ConnectEventType, PlatformTools } from '../../common-app';
 
 //import * as templateTWBS from './start.twbs.html';  //This also works and doesn't cause webstorm to complain
 //import * as templateIonic from './start.ionic.html';
@@ -33,6 +33,7 @@ export class Start {
     });
     this.credentials = Credentials.getLastCredentials();
     log.debug("in ngOnInit() of Start. this.PlatformTools.platformNameSegment()=" + PlatformTools.platformNameSegment())
+    /*
     ConnectEvent.subscribe(
       (event:ConnectEvent)=>{
         if (event.eventType===ConnectEventType.CONNECTION_ATTEMPT && event.retryCount>1) {}
@@ -44,7 +45,7 @@ export class Start {
           UserEvent.pushEvent(new UserEvent(UserEventType.LOGIN, {userId: Meteor.userId()})); // Will cause navigation
         }
       }
-    );
+    );*/
     ConnectEvent.checkConnection();
 
   }

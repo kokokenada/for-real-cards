@@ -10,6 +10,7 @@ import { select } from 'ng2-redux';
 import { FILE_UPLOAD_DIRECTIVES } from 'ng2-file-upload';
 import { EditUserProfileBase } from '../../common-app/index';
 import {LoginActions} from "../../common-app/src/ui/redux/login/login-actions.class";
+import {UploaderActions} from "../../common-app/src/ui/redux/uploader/uploader-actions.class";
 
 @Component({
   selector: 'edit-user-profile',
@@ -52,6 +53,13 @@ import {LoginActions} from "../../common-app/src/ui/redux/login/login-actions.cl
         Drop image here
         <img [src]="avatarUrl()"/>
       </div>
+      
+      <div *ngIf="uploaderState?.uploadInProgress">
+        Uploading...
+      </div>
+      <div *ngIf="uploaderState?.lastUploadErrorMessage?.length>0" class="glyphicon glyphicon-exclamation-sign">
+         {{uploaderState?.lastUploadErrorMessage}}
+      </div>
 
       <table *ngIf="uploader?.queue.length" class="table">
         <thead>
@@ -62,20 +70,20 @@ import {LoginActions} from "../../common-app/src/ui/redux/login/login-actions.cl
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let item of uploader.queue">
-          <td><strong>{{item.file.name}}</strong></td>
-          <td nowrap>{{item.file.size}}</td>
-          <td nowrap>
-            <button type="button" class="btn btn-success btn-xs"
-                    (click)="uploadToFSCollection()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
-              <span class="glyphicon glyphicon-upload"></span> Upload
-            </button>
-            <button type="button" class="btn btn-danger btn-xs"
-                    (click)="item.remove()">
-              <span class="glyphicon glyphicon-trash"></span> Remove
-            </button>
-          </td>
-        </tr>
+          <tr *ngFor="let item of uploader.queue">
+            <td><strong>{{item.file.name}}</strong></td>
+            <td nowrap>{{item.file.size}}</td>
+            <td nowrap>
+              <button type="button" class="btn btn-success btn-xs"
+                      (click)="uploadToFSCollection()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
+                <span class="glyphicon glyphicon-upload"></span> Upload
+              </button>
+              <button type="button" class="btn btn-danger btn-xs"
+                      (click)="item.remove()">
+                <span class="glyphicon glyphicon-trash"></span> Remove
+              </button>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -87,13 +95,14 @@ import {LoginActions} from "../../common-app/src/ui/redux/login/login-actions.cl
 
 export class EditUserProfileTWBS extends EditUserProfileBase {
   @select() loginReducer;
+  @select() uploaderReducer;
 
-  constructor(private ngZone:NgZone, private loginActions:LoginActions) {
+  constructor(private ngZone:NgZone, private loginActions:LoginActions, private uploaderActions:UploaderActions) {
     super();
   }
   ngOnInit()
   {
-    this.initialize(this.ngZone, this.loginReducer, this.loginActions);
+    this.initialize(this.ngZone, this.loginReducer, this.loginActions, this.uploaderActions, this.uploaderReducer);
   }
 
 }

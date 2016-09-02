@@ -1,5 +1,6 @@
 export * from "./connect";
 export * from "./login";
+export * from "./uploader";
 export * from "./users";
 
 export * from "./action.interface";

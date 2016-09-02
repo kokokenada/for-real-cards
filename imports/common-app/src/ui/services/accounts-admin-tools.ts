@@ -4,7 +4,7 @@
 import  'meteor/alanning:roles'
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
-import { User} from '/imports/common-app-api';
+import { User} from '../../../../common-app-api';
 import { check, Match } from 'meteor/check'
 
 import { PagingTools, FilterDefinition} from "./page-tools"
@@ -118,9 +118,9 @@ export class AccountsAdminTools {
 //  filter - alphanumeric string to search users name and email for
 //  skip - skip the first n values
 //  sort - return the users in the order specified by this sort object
-  static filteredUserQuery(userId, options:FilterDefinition):Mongo.Cursor {
+  static filteredUserQuery(userId, options:FilterDefinition):Mongo.Cursor<Meteor.User> {
 
-    let cursor:Mongo.Cursor;
+    let cursor:Mongo.Cursor<Meteor.User>;
     // if not an admin user don't show any other user
     if (!Roles.userIsInRole(userId, ['admin'])) {
       cursor = Meteor.users.find(userId, {reactive: false, fields: {username:1}});
@@ -357,7 +357,7 @@ if (Meteor.isServer) {
 
     PagingTools.check(options);
 
-    let cursorUsers:Mongo.Cursor = AccountsAdminTools.filteredUserQuery(this.userId, options);
+    let cursorUsers:Mongo.Cursor<Meteor.User> = AccountsAdminTools.filteredUserQuery(this.userId, options);
 
     return [
       cursorUsers,

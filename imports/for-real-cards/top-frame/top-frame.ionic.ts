@@ -15,6 +15,9 @@ import { PlatformToolsIonic, MenuItem, Menus, MenuFilterPipe,
   ConnectActions,
   ConnectAsync,
   ConnectModule,
+  UploaderModule,
+  UploaderActions,
+  UploaderAsync,
   UsersModule,
   UsersAsync,
   UsersActions
@@ -71,6 +74,9 @@ import {TopFrameHeader} from "./top-frame-header";
     ForRealCardsActions,
     ForRealCardsAsync,
     ForRealCardsModule,
+    UploaderModule,
+    UploaderActions,
+    UploaderAsync,
     UsersModule,
     UsersAsync,
     UsersActions
@@ -87,10 +93,11 @@ class ForRealCardsTopFrame extends TopFrame {
     loginModule:LoginModule,
     forRealCardsModule:ForRealCardsModule,
     usersModule:UsersModule,
+    uploaderModule:UploaderModule,
     ngRedux:NgRedux<IAppState>
 ) { //, private navParams:NavParams) {
     super()
-    this.topFrameConfigure(connectModule, loginModule, forRealCardsModule, usersModule, ngRedux);
+    this.topFrameConfigure(connectModule, loginModule, forRealCardsModule, usersModule, uploaderModule, ngRedux);
 
     Menus.addMenu({id: 'topbar'});
 

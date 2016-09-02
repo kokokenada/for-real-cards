@@ -1,8 +1,7 @@
-/**
- * Created by kenono on 2016-04-21.
- */
-import {Subject } from 'rxjs'
+
 import 'meteor/jalik:ufs';
+import {Camera, File} from 'ionic-native';
+
 declare let UploadFS:any;
 declare let window:any; // Make TypeScript compiler stop complaining
 
@@ -14,12 +13,7 @@ export interface UploadFileInfo {
   width?:number
 }
 
-export class Uploader {
-  private subject:Subject;
-
-  constructor() {
-    this.subject = new Subject();
-  }
+export class UploaderService {
 
   /**
    * Converts DataURL to Blob object
@@ -29,7 +23,7 @@ export class Uploader {
    * @param  {String} dataURL
    * @return {Blob}
    */
-  static dataURLToBlob(dataURL) {
+  private static dataURLToBlob(dataURL):any {
     const BASE64_MARKER = ';base64,';
 
     if (dataURL.indexOf(BASE64_MARKER) === -1) {
@@ -86,16 +80,16 @@ export class Uploader {
    * @param  {Function} resolve [description]
    * @param  {Function} reject  [description]
    */
-  static uploadDataUrl(dataUrl, name, collection, resolve, reject) {
+  private static uploadDataUrl(dataUrl, name, collection, resolve, reject) {
     // convert to Blob
-    let blob = Uploader.dataURLToBlob(dataUrl);
+    let blob = UploaderService.dataURLToBlob(dataUrl);
     blob.name = name;
 
     // pick from an object only: name, type and size
     const file = _.pick(blob, 'name', 'type', 'size');
 
     // convert to ArrayBuffer
-    Uploader.blobToArrayBuffer(blob, (data) => {
+    UploaderService.blobToArrayBuffer(blob, (data) => {
       const upload = new UploadFS.Uploader({
         data,
         file,
@@ -108,19 +102,16 @@ export class Uploader {
     }, reject);
   }
 
-  static uploadFileURI(file, collection):Promise {
+  private static uploadFileURI(file, collection):Promise<any> {
     return new Promise( (resolve, reject)=>{
       console.log("in uploadFileURI reading " + file)
-      /*
-;*/
-
 
       window.resolveLocalFileSystemURL(file, (entry)=>{
-/*        var reader = new FileReader();
-        reader.onload = function (ev) {
-          console.log('file reader onload in uploadFileURI')
-          console.log(ev)
-        };*/
+        /*        var reader = new FileReader();
+         reader.onload = function (ev) {
+         console.log('file reader onload in uploadFileURI')
+         console.log(ev)
+         };*/
         entry.file( (f)=>{
           console.log('entry.file( (f)')
           console.log(f)
@@ -198,19 +189,21 @@ export class Uploader {
 
       });
 
-/*
-      var reader = new FileReader();
-      reader.onload = function (ev) {
-        console.log('file reader onload in uploadFileURI')
-        console.log(ev)
-      };
-      reader.readAsDataURL(file);
-*/
+      /*
+       var reader = new FileReader();
+       reader.onload = function (ev) {
+       console.log('file reader onload in uploadFileURI')
+       console.log(ev)
+       };
+       reader.readAsDataURL(file);
+       */
+
     });
   }
 
-  static uploadFile(currentFile, collection):Promise{
+  static uploadFile(currentFile, collection):Promise<any>{
     return new Promise( (resolve, reject)=>{
+      log.debug('uploadFile');
       let reader = new FileReader();
       let dataURL:any;
 //    reader.onload = (function(aImg) { return function(e) { aImg.src = e.target.result; }; })(img);
@@ -218,7 +211,7 @@ export class Uploader {
         console.log('onload')
         console.log(e)
         dataURL = dataURL = reader.result;
-        Uploader.uploadDataUrl(  //TODO: Upload file in chunks to void this memory intensive approach
+        UploaderService.uploadDataUrl(  //TODO: Upload file in chunks to void this memory intensive approach
           dataURL,
           currentFile.name,
           collection,
@@ -234,6 +227,51 @@ export class Uploader {
         console.log(e)
       }
       reader.readAsDataURL(currentFile);
+    });
+  }
+
+  static uploadImageFromCamera(collection, options = {
+    quality: 50,
+    destinationType: Camera.DestinationType.FILE_URI,
+    sourceType: Camera.PictureSourceType.CAMERA,
+    allowEdit: true,
+    encodingType: Camera.EncodingType.PNG,
+    targetWidth: 100,
+    targetHeight: 100,
+//    popoverOptions: CameraPopoverOptions,
+    saveToPhotoAlbum: false,
+    correctOrientation: true
+  }):Promise<any> {
+    return new Promise((resolve, reject)=> {
+      if (!Meteor.isCordova) {
+        reject('This is a cordova only function');
+      } else {
+        Camera.getPicture(options).then(
+          (imageFile)=> {
+            console.log('camera success')
+            console.log(imageFile)
+            File.checkFile(imageFile, '').then(
+              (result)=> {
+                console.log('checkFile')
+                console.log(result)
+                UploaderService.uploadFileURI(imageFile, collection).then(
+                  (result)=> {
+                    resolve(result);
+                  }, (error)=> {
+                    log.error(error);
+                    reject(error);
+                  }
+                );
+              },
+              (error)=>{
+                console.error(error)
+              }
+            );
+          }, (error)=> {
+            log.error(error);
+            reject(error);
+          });
+      }
     });
   }
 

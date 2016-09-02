@@ -8,9 +8,8 @@ import { ReplaySubject, Subscription } from 'rxjs';
 import * as log from 'loglevel';
 import { NgZone } from '@angular/core';
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
-//import { MeteorComponent } from 'angular2-meteor';
 
-import { AccountTools, CommonPopups } from '/imports/common-app';
+import {CommonPopups} from '../../common-app';
 
 import { Action, ActionType, Card, CardCountAllowed, CardLocation, Deck, DeckLocation, GameConfig, Hand } from '../api/index';
 import { DragAndDrop, GameState, GameRenderingTools } from '../ui/index';
@@ -23,7 +22,7 @@ export class RunGame {
   protected gameId:string;
   userPassword:string;
   static gameState:GameState;
-  static subject:ReplaySubject<Action> = new ReplaySubject();
+  static subject:ReplaySubject<Action> = new ReplaySubject<Action>();
   private static gameStreamInitializedToId:string;
   protected static dragAndDropInitialized:boolean = false;
 
@@ -65,10 +64,6 @@ export class RunGame {
     this.dragAndDropInit();
   }
 
-  isLoggedIn():boolean {
-    return AccountTools.isLoggedIn();
-  }
-  
   static pushNewGameNotification(id:string) {
     RunGame.pushGameNotification(id, ActionType.NEW_GAME);
   }
@@ -140,7 +135,7 @@ export class RunGame {
     }
   }
   
-  static joinGame(gameId:string, password:string):Promise {
+  static joinGame(gameId:string, password:string):Promise<any> {
     Session.set('password', password);
     return new Promise( (resolve, reject)=>{
       Meteor.call('ForRealCardsJoinGame', gameId, password, (error, result:Hand)=> {

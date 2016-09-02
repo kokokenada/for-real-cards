@@ -2,8 +2,7 @@ import { Input } from '@angular/core';
 import 'meteor/alanning:roles'
 import {Type} from '@angular/core';
 
-import { AccountTools } from '../../ui/index';
-import { User} from '/imports/common-app-api';
+import { User} from '../../../../common-app-api';
 import {ModalService} from '../../ui-ng2/modal/modal.service';
 
 export class AccountsModal {
@@ -48,7 +47,7 @@ export class AccountsModal {
   displayName():string {
     if (!this.user)
       return "";
-    return AccountTools.getDisplayName(this.user._id);
+    return User.getDisplayName(this.user._id);
   }
 
   timeoutApply():void {

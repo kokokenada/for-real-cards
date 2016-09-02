@@ -1,16 +1,20 @@
 import { Injectable } from '@angular/core';
 import { IPayloadAction  } from '../action.interface';
 import { Observable } from 'rxjs/Observable';
-import { Action } from "redux";
+import { Action, Store } from "redux";
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/catch';
-//import 'rxjs/add/observable/delay';
+import 'rxjs/add/operator/delay';
 
+import { IDocumentChange } from "../../reactive-data/document-change.interface"
 import { LoginActions } from "./login-actions.class";
 import {LoginService} from "./login.service";
 import {NeverObservableAction} from "../neverObservableAction.class";
+import {ILoginAction, ILoginState} from "./login.types"
+import {User} from "../../../../../common-app-api/src/api/models/user.model";
+import {IAppState} from "../state.interface";
 
 @Injectable()
 export class LoginAsync {
@@ -22,7 +26,7 @@ export class LoginAsync {
       .filter(({type}) => {
         return type === LoginActions.CHECK_AUTO_LOGIN
       })
-      .flatMap(({payload}) => {
+      .flatMap( ({payload}) => {
         if (LoginService.isLoggedIn()) {
           // Yes, we're logged in, so fire off a logged in event
           return Observable.from([LoginActions.loginSuccessFactory(LoginService.user())]);
@@ -35,9 +39,17 @@ export class LoginAsync {
     return action$
       .filter(({ type }) => type === LoginActions.LOGIN_REQUEST)
       .flatMap(({ payload }) => {
-        return Observable.fromPromise(
-          LoginService.login(payload.credentials)
-        ).catch(error => Observable.of(error));
+        return Observable
+          .fromPromise(
+            LoginService.login(payload.credentials)
+          )
+          .do( (payloadAction:IPayloadAction) => {
+            console.log('payloadAction')
+            console.log(payloadAction)
+            this.loginActions.watchUser();
+            LoginService.watchCurrentUser();
+          } )
+          .catch(error => Observable.of(error));
       });
   };
 
@@ -50,21 +62,32 @@ export class LoginAsync {
       });
   };
 
-  readUser = (action$: Observable<IPayloadAction>) => {
-    return action$.filter(({ type }) => type === LoginActions.READ_CUR_USER_REQUEST)
-      .flatMap(({ payload }) => {
-        return Observable.fromPromise(
-          LoginService.readCurrentUser()
-        ).catch(error => Observable.of(error));
-      });
-  };
-
   saveUser = (action$: Observable<IPayloadAction>) => {
     return action$.filter(({ type }) => type === LoginActions.SAVE_USER_REQUEST)
       .flatMap(({ payload }) => {
         return Observable.fromPromise(
           LoginService.saveUser(payload.user)
         ).catch(error => Observable.of(error));
+      });
+  };
+
+  watchUser = (action$: Observable<IPayloadAction>, store: Store<IAppState>) => {
+    return action$.filter(({ type }) => type === LoginActions.WATCH_USER)
+      .flatMap(({ payload }) => {
+        LoginService.watchCurrentUser();
+        return LoginService
+          .createUserObserver(LoginService.userId()).map( (change:IDocumentChange<User>)=>{
+            console.log('store.getState() when in watchUser' );
+            console.log(store.getState());
+            let loginState:ILoginState = store.getState().loginReducer;
+            if (loginState.neverLoggedIn) {
+              // Never logged in, yet the current user is populated, must be automatic login
+              return LoginActions.loginSuccessFactory(change.newDocument);
+            } else {
+              return LoginActions.changeFactory(change);
+            }
+          })
+          .catch(error => Observable.of(error));
       });
   };
 }

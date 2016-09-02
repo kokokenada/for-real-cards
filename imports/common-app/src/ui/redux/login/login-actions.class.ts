@@ -6,6 +6,7 @@ import { IAppState } from '../state.interface';
 import { IPayloadAction} from "../action.interface";
 import {Credentials} from "../../services/credentials";
 import {User} from "../../../../../common-app-api";
+import {IDocumentChange} from "../../reactive-data/document-change.interface";
 
 @Injectable()
 export class LoginActions {
@@ -18,13 +19,11 @@ export class LoginActions {
   static LOGOUT_REQUEST = LoginActions.prefix + 'LOGOUT_REQUEST';
   static LOGGED_OUT = LoginActions.prefix + 'LOGGED_OUT';
   static LOGIN_ERROR = LoginActions.prefix + 'LOGIN_ERROR';
-  static READ_CUR_USER_REQUEST = LoginActions.prefix + 'READ_USER_REQ';
   static READ_CUR_USER_RESPONSE = LoginActions.prefix + 'READ_USER_RESP';
   static SAVE_USER_REQUEST = LoginActions.prefix + 'SAVE_USER_REQ';
-  static SAVE_USER_RESPONSE = LoginActions.prefix + ' SAVE_USER_RESP';
-  static AVATAR_UPDATE = LoginActions.prefix + 'AVATAR_UPDATE';
-  static DISPLAY_NAME_UPDATE = LoginActions + 'DISPLAY_NAME_UPDATE';
-  static ROLL_UPDATE = LoginActions + 'ROLL_UPDATE';
+  static SAVE_USER_RESPONSE = LoginActions.prefix + 'SAVE_USER_RESP';
+  static WATCH_USER = LoginActions.prefix + 'WATCH_USER';
+  static WATCHED_USER_CHANGED = LoginActions.prefix + 'WATCHED_USER_CHANGED';
 
   constructor(private ngRedux: NgRedux<IAppState>) {}
 
@@ -48,12 +47,12 @@ export class LoginActions {
     this.ngRedux.dispatch({ type: LoginActions.TEMP_USER_REQUEST});
   }
 
-  readCurrrentUser(): void {
-    this.ngRedux.dispatch({type: LoginActions.READ_CUR_USER_REQUEST});
-  }
-
   saveUser(user:User): void {
     this.ngRedux.dispatch({type: LoginActions.SAVE_USER_REQUEST, payload: {user: user}});
+  }
+
+  watchUser() : void {
+    this.ngRedux.dispatch({type: LoginActions.WATCH_USER});
   }
 
   static readCurUserResponseFactory(user:User):IPayloadAction {
@@ -70,5 +69,9 @@ export class LoginActions {
 
   static logedOutFactory():IPayloadAction {
     return {type: LoginActions.LOGGED_OUT};
+  }
+
+  static changeFactory(documentChange:IDocumentChange<User>):IPayloadAction {
+    return {type: LoginActions.WATCHED_USER_CHANGED, payload: {documentChange:documentChange}};
   }
 }

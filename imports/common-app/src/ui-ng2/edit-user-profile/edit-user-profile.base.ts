@@ -4,34 +4,32 @@ import * as log from 'loglevel';
 
 import { FileUploader} from 'ng2-file-upload';
 import { AvatarOriginalStore, User } from '../../../../common-app-api';
-import { Uploader } from '../../ui/uploader'
-import { CommonPopups } from '../common-popups/common-popups'
 import {PlatformTools} from "../platform-tools/platform-tools";
-import {LoginActions, ILoginState} from "../../ui";
+import { LoginActions, ILoginState, UploaderActions } from "../../ui";
+import {IUploaderState} from "../../ui/redux/uploader/uploader.types";
 
 export abstract class EditUserProfileBase {
   avatarURL:string;
   uploader:FileUploader = new FileUploader({});
   hasBaseDropZoneOver:boolean = false;
   userEditted:User;
+  uploaderState:IUploaderState;
   private ngZoneBase:NgZone;
-  private loginActionsBase:LoginActions
+  private loginActionsBase:LoginActions;
+  private uploaderActionsBase:UploaderActions;
 
-  initialize(ngBase:NgZone, stateObserver:Observable<ILoginState>, loginActions:LoginActions) {
+  initialize(ngBase:NgZone, loginStateObserver:Observable<ILoginState>, loginActions:LoginActions, uploaderActions:UploaderActions, uploadStateObserver:Observable<IUploaderState>) {
     this.ngZoneBase = ngBase;
     this.loginActionsBase = loginActions;
-    stateObserver.subscribe( (loginState:ILoginState)=>{
+    this.uploaderActionsBase = uploaderActions;
+    loginStateObserver.subscribe( (loginState:ILoginState)=>{
+      console.log('loginState in EditUserProfileBase')
+      console.log(loginState)
       this.userEditted = loginState.user;
     });
-/*
-    this.subscription = UserEvent.startObserving((event:UserEvent)=> {
-      if (event.eventType === UserEventType.AVATAR_UPDATE && event.userId === Meteor.userId()) {
-        this.ngZoneBase.run(()=>{
-          this.avatarURL = AvatarTools.getAvatarURL(event.user, "medium");
-        });
-      }
-    });*/
-    loginActions.readCurrrentUser();
+    uploadStateObserver.subscribe( (uploadState:IUploaderState)=>{
+      this.uploaderState = uploadState;
+    });
   }
 
   private addEmptyEmailIfNeeded(user:User):void {
@@ -65,19 +63,12 @@ export abstract class EditUserProfileBase {
     this.addImages(files);
   }
 
-  addImages(files) {
+  private addImages(files) {
     log.debug(files);
     let currentFile = files[0];
-    Uploader.uploadFile(currentFile, AvatarOriginalStore).then(
-      (result) => {
-        console.log('upload success')
-        console.log(result)
-      }, (error) => {
-        log.error("Error uploading");
-        log.error(error);
-        CommonPopups.alert(error);
-      }
-    );
+
+    this.uploaderActionsBase.uploadFile(currentFile, AvatarOriginalStore);
+
   }
 
   avatarUrl():string {

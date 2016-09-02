@@ -2,17 +2,24 @@
  * Copyright Ken Ono, Fabrica Technolology 2016
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
-
+import { Meteor } from 'meteor/meteor';
 import { Subscription } from 'rxjs'
-import { IAppState, IPayloadAction, BaseApp, ConnectModule, LoginActions, LoginModule, UsersModule} from "../../common-app";
+import { IAppState, IPayloadAction, BaseApp, ConnectModule, LoginActions, LoginModule, UploaderModule, UsersModule} from "../../common-app";
 import {RunGame} from "../run-game/run-game";
 import {Action as OLDAction, ActionType} from "../api/models/action.model";
 import {NgRedux} from "ng2-redux";
 import {ForRealCardsModule, ForRealCardsActions} from "../ui";
 
 export abstract class TopFrame extends BaseApp<IAppState> {
-
-  topFrameConfigure(connectModule:ConnectModule, loginModule:LoginModule, forRealCardsModule:ForRealCardsModule, usersModule:UsersModule, ngRedux: NgRedux<IAppState>) {
+  private loginModule:LoginModule;
+  topFrameConfigure(
+    connectModule:ConnectModule,
+    loginModule:LoginModule,
+    forRealCardsModule:ForRealCardsModule,
+    usersModule:UsersModule,
+    uploaderModule:UploaderModule,
+    ngRedux: NgRedux<IAppState>
+  ) {
     this.turnOnConsoleLogging();
 
     const navigatorMiddleware = store => next => (action:IPayloadAction) => {
@@ -40,9 +47,9 @@ export abstract class TopFrame extends BaseApp<IAppState> {
     };
 
     forRealCardsModule.middlewares.push(navigatorMiddleware);
-    this.configure([connectModule, loginModule, forRealCardsModule, usersModule], ngRedux);
+    this.configure([connectModule, loginModule, forRealCardsModule, uploaderModule, usersModule], ngRedux);
+    this.loginModule = loginModule;
 
-    loginModule.actions.checkAutoLogin();
   }
 
   protected subscriptions:Subscription[] = [];
@@ -53,6 +60,15 @@ export abstract class TopFrame extends BaseApp<IAppState> {
         subscription.unsubscribe();
       })
     }
+  }
+
+  ngOnInit() {
+    console.log('ngOnInit of TopFrame ' + new Date())
+    this.loginModule.actions.watchUser();
+/*    Meteor.setTimeout(()=>{
+     console.log("ngOnInitTimer " + + new Date())
+      this.loginModule.actions.checkAutoLogin();
+     }, 500);*/
   }
 
   ngOnDestroy() {
