@@ -17,3 +17,9 @@ declare module Roles {
   function getUsersInRole(roleName: string): Mongo.Cursor<RolesDAO>;
   var GLOBAL_GROUP: string;
 }
+
+declare module "meteor/meteor" {
+  module Meteor {
+    var roles:Mongo.Collection<any>
+  }
+}
