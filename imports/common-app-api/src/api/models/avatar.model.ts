@@ -40,7 +40,13 @@ export const AvatarMediumStore = new UploadFS.store.GridFS({
     console.log(file)
     Meteor.users.update({_id: file.userId}, {$set: {'profile.avatar-medium': file.url}})
   },
-
+  permissions: new UploadFS.StorePermissions(
+    {
+      insert: loggedIn,
+      update: loggedIn,
+      remove: loggedIn
+    }
+  )
 });
 export const AvatarThumbsStore = new UploadFS.store.GridFS({
   collection: AvatarThumbCollection,
@@ -61,7 +67,13 @@ export const AvatarThumbsStore = new UploadFS.store.GridFS({
     console.log(file)
     Meteor.users.update({_id: file.userId}, {$set: {'profile.avatar-thumb': file.url}})
   },
-
+  permissions: new UploadFS.StorePermissions(
+    {
+      insert: loggedIn,
+      update: loggedIn,
+      remove: loggedIn
+    }
+  )
 });
 export const AvatarOriginalStore = new UploadFS.store.GridFS({
   collection: AvatarOriginalCollection,
@@ -77,25 +89,17 @@ export const AvatarOriginalStore = new UploadFS.store.GridFS({
   copyTo: [
     AvatarMediumStore,
     AvatarThumbsStore
-  ]
+  ],
+  permissions: new UploadFS.StorePermissions(
+    {
+      insert: loggedIn,
+      update: loggedIn,
+      remove: loggedIn
+    }
+  )
 });
 
 if (Meteor.isServer) {
-  AvatarOriginalCollection.allow({
-    insert: loggedIn,
-    update: loggedIn,
-    remove: loggedIn
-  });
-  AvatarMediumCollection.allow({
-    insert: loggedIn,
-    update: loggedIn,
-    remove: loggedIn
-  });
-  AvatarThumbCollection.allow({
-    insert: loggedIn,
-    update: loggedIn,
-    remove: loggedIn
-  });
 
   Meteor.publish('common-app.avatar-images', function (_id, counter) {
     if (!_.isArray(_id))
