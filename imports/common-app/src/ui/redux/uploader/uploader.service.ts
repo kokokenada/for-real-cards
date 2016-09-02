@@ -6,6 +6,7 @@ declare let UploadFS:any;
 declare let window:any; // Make TypeScript compiler stop complaining
 
 import * as log from 'loglevel';
+import {UploaderActions} from "./uploader-actions.class";
 
 export interface UploadFileInfo {
   _id:string;
@@ -201,9 +202,81 @@ export class UploaderService {
     });
   }
 
-  static uploadFile(currentFile, collection):Promise<any>{
+
+  private static makeUploader (file, collection, uploaderActions:UploaderActions):any {
+    // Prepare the file to insert in database, note that we don't provide an URL,
+    // it will be set automatically by the uploader when file transfer is complete.
+    let passedFile = {
+      name: file.name,
+      size: file.size,
+      type: file.type,
+      customField1: 1337,
+      customField2: {
+        a: 1,
+        b: 2
+      }
+    };
+
+    // Create a new Uploader for this file
+    let uploader = new UploadFS.Uploader({
+      // This is where the uploader will save the file
+      store: collection,
+      // Optimize speed transfer by increasing/decreasing chunk size automatically
+      adaptive: true,
+      // Define the upload capacity (if upload speed is 1MB/s, then it will try to maintain upload at 80%, so 800KB/s)
+      // (used only if adaptive = true)
+      capacity: 0.8, // 80%
+      // The size of each chunk sent to the server
+      chunkSize: 8 * 1024, // 8k
+      // The max chunk size (used only if adaptive = true)
+      maxChunkSize: 128 * 1024, // 128k
+      // This tells how many tries to do if an error occurs during upload
+      maxTries: 5,
+      // The File/Blob object containing the data
+      data: file,
+      // The document to save in the collection
+      file: passedFile,
+      // The error callback
+      onError: function (err) {
+        console.error(err);
+      },
+      onAbort: function (file) {
+        console.log(file.name + ' upload has been aborted');
+      },
+      onComplete: function (file) {
+        uploaderActions.uploadSuccess(file._id);
+      },
+      onCreate: function (file) {
+        console.log(file.name + ' has been created with ID ' + file._id);
+      },
+      onProgress: function (file, progress) {
+        uploaderActions.uploadProgress(file.name, progress);
+      },
+      onStart: function (file) {
+        uploaderActions.uploadStarted(file.name);
+      },
+      onStop: function (file) {
+        console.log(file.name + ' stopped');
+      },
+    });
+    return uploader;
+  }
+
+  static uploadFileRequest(currentFile, collection, actions:UploaderActions):void{
+    let uploader = UploaderService.makeUploader(currentFile, collection, actions);
+    actions.uploadStartResponse(uploader);
+    uploader.start();
+  }
+
+  static cancelUpload(uploader) {
+    uploader.abort();
+  }
+
+
+
+  static uploadFileOLD(currentFile, collection):Promise<any>{
     return new Promise( (resolve, reject)=>{
-      log.debug('uploadFile');
+      log.debug('uploadFileRequest');
       let reader = new FileReader();
       let dataURL:any;
 //    reader.onload = (function(aImg) { return function(e) { aImg.src = e.target.result; }; })(img);

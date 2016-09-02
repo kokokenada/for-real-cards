@@ -6,7 +6,7 @@
 import { Component, NgZone } from '@angular/core';
 import { select } from 'ng2-redux';
 
-import { CameraTools, CommonPopups, EditUserProfileBase, LoginActions } from '../../common-app';
+import { CommonPopups, EditUserProfileBase, LoginActions, UploaderActions } from '../../common-app';
 import { AvatarOriginalStore } from '../../common-app-api';
 
 @Component({
@@ -79,13 +79,15 @@ import { AvatarOriginalStore } from '../../common-app-api';
 
 export class EditUserProfileIonic extends EditUserProfileBase {
   @select() loginReducer;
-  constructor(private ngZone:NgZone,private loginActions:LoginActions) {
+  @select() uploaderReducer;
+
+  constructor(private ngZone:NgZone,private loginActions:LoginActions, private uploaderActions:UploaderActions) {
     super();
   }
 
   ngOnInit()
   {
-    this.initialize(this.ngZone, this.loginReducer, this.loginActions);
+    this.initialize(this.ngZone, this.loginReducer, this.loginActions, this.uploaderActions, this.uploaderReducer);
   }
 
   getPicture() {

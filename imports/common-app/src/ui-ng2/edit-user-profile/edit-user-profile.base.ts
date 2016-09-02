@@ -23,12 +23,17 @@ export abstract class EditUserProfileBase {
     this.loginActionsBase = loginActions;
     this.uploaderActionsBase = uploaderActions;
     loginStateObserver.subscribe( (loginState:ILoginState)=>{
-      console.log('loginState in EditUserProfileBase')
-      console.log(loginState)
-      this.userEditted = loginState.user;
+      ngBase.run( ()=>{
+        let user:User = loginState.user;
+        this.userEditted = user;
+        if (user && user.profile)
+          this.avatarURL = loginState.user.profile["avatar-original"];
+      });
     });
     uploadStateObserver.subscribe( (uploadState:IUploaderState)=>{
-      this.uploaderState = uploadState;
+      ngBase.run( ()=>{
+        this.uploaderState = uploadState;
+      });
     });
   }
 
@@ -67,7 +72,7 @@ export abstract class EditUserProfileBase {
     log.debug(files);
     let currentFile = files[0];
 
-    this.uploaderActionsBase.uploadFile(currentFile, AvatarOriginalStore);
+    this.uploaderActionsBase.uploadStartRequest(currentFile, AvatarOriginalStore);
 
   }
 

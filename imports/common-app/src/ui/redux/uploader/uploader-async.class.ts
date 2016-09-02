@@ -18,15 +18,10 @@ export class UploaderAsync {
   constructor(private actions: UploaderActions) {}
 
   startUpload = (action$: Observable<IPayloadAction>): Observable<IPayloadAction> => {
-    return action$.filter(({ type }) => type === UploaderActions.UPLOAD_START)
-      .flatMap(({ payload }) => {
-        return Observable.fromPromise(UploaderService.uploadFile(payload.file, payload.store))
-          .map((result)=> {
-            return Observable.of({type: UploaderActions.UPLOAD_SUCCESS, payload: {_idOfUploadedFile: result._id}});
-          })
-          .catch((error)=> {
-            return Observable.of({type: UploaderActions.UPLOAD_FAIL, payload: {error: error}})
-          });
-      });
+    return action$.filter(({ type }) => type === UploaderActions.UPLOAD_START_REQUEST)
+      .do(({ payload }) => {
+        UploaderService.uploadFileRequest(payload.file, payload.store, this.actions);
+      })
+      .map( ()=> { return {type:'NOOP'}})
   }
 }
