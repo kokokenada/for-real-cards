@@ -51,7 +51,7 @@ import {UploaderActions} from "../../common-app/src/ui/redux/uploader/uploader-a
 
            class="well my-drop-zone">
         Drop image here
-        <img [src]="avatarUrl()"/>
+        <img [src]="avatarUrl()" style="max-width: 20%; height: auto"/>
       </div>
       
       <div *ngIf="uploaderState?.uploadInProgress">

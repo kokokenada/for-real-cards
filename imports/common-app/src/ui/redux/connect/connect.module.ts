@@ -12,9 +12,11 @@ export class ConnectModule extends ReduxModule<IAppState>  {
 
   constructor(private connectEpics:ConnectAsync, public actions:ConnectActions) {
     super();
-    this.epics.push(connectEpics.attempt);
-    this.epics.push(connectEpics.connect);
-    this.epics.push(connectEpics.setNewServer);
+    this.epics.push(
+      connectEpics.attempt,
+      connectEpics.connect,
+      connectEpics.setNewServer
+    );
   }
 
   initialize():void {

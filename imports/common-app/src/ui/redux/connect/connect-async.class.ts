@@ -21,8 +21,6 @@ export class ConnectAsync {
   connect = (action$: Observable<IPayloadAction>) => {
     return action$.filter(({ type }) => type === ConnectActions.CONNECT_START)
       .flatMap(({ payload }) => {
-        console.log("in CONNECT_START epic")
-        console.log(payload);
         if (ConnectService.isConnected()) {
           // We're already connected, so dispatch a success reponse
           return Observable.from([this.connectActions.successFactory(ConnectService.getServerURL())]);

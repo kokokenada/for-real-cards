@@ -5,6 +5,5 @@ export * from "./services/menu-item";
 export * from "./services/menus";
 export * from "./services/page-tools";
 export * from "./services/tools";
-export * from "./models/connect-event.class";
 export * from "./reactive-data";
 export * from "./redux";

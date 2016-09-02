@@ -19,7 +19,7 @@ import {CardSuit, CardRank} from "../../api/models/card.model";
 
 export class GameState {
   private gameId:string;
-  private subject:ReplaySubject;
+  private subject:ReplaySubject<Action>;
   private lastNotified:Date;
   private handsOnServer:Hand[];
   hands:Hand[];
@@ -486,7 +486,7 @@ export class GameState {
 
 
         log.debug('execute action query. gameId:' + this.gameId)
-        let actionCursor:Mongo.Cursor = ActionCollection.find({gameId: this.gameId}, {sort: {dateCreated: 1}});
+        let actionCursor:Mongo.Cursor<any> = ActionCollection.find({gameId: this.gameId}, {sort: {dateCreated: 1}});
         this.actions = actionCursor.fetch();
         log.debug(this.actions)
         log.debug('lastNotified: ' + this.formatDebugTime(this.lastNotified));

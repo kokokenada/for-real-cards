@@ -1,27 +1,40 @@
-/*
+
 import {
   Component,
-  Input,
+  NgZone,
+  OnInit
 } from '@angular/core';
 
-import {IConnectState, ConnectActions} from "../../api";
+import { select } from 'ng2-redux';
+
+import {IConnectState, ConnectActions} from "../../ui";
 
 @Component({
   selector: 'ca-connection-status',
   template: `
 <div 
-  *ngIf="!connectState.connected" 
+  *ngIf="!connectState?.connected" 
   class="alert alert-danger"
   (click)="setServer()"
 >
-  Not connected. Server URL = "{{connectState.serverURL}}".  Retry count={{connectState.retryCount}}
+  Not connected. Server URL = "{{connectState?.serverURL}}".  Retry count={{connectState?.retryCount}}
 </div>
 `
 })
-export class ConnectionStatus {
-  @Input connectState:IConnectState;
+export class ConnectionStatus implements OnInit {
+  @select() connectReducer;
+  connectState:IConnectState;
+  constructor(private ngZone:NgZone, private connectActions:ConnectActions) {}
 
-  constructor(private connectActions:ConnectActions) {}
+  ngOnInit() {
+    this.connectActions.checkConnection();
+    this.connectReducer.subscribe( (state:IConnectState)=>{
+      this.ngZone.run( ()=> {
+        this.connectState = state;
+      });
+    });
+  }
+
 
   // Set server to user specified value.  Not a real feature - just a back door for debugging
   setServer():void {
@@ -32,4 +45,3 @@ export class ConnectionStatus {
     }
   };
 }
-*/

@@ -7,9 +7,9 @@ import { Accounts } from 'meteor/accounts-base';
 export class ConnectService {
 
   static isConnected():boolean {
-    let status:any = Meteor.status(); // shut up WebStorm
-    return status.connected;
+    return Meteor.status().connected;
   }
+
   static getServerURL():string {
     return Meteor.absoluteUrl();
   }

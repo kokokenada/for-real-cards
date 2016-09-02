@@ -166,32 +166,6 @@ export class ForRealCardsTopFrame extends TopFrame {
     this.watchGame();
   }
 
-/*  ngOnInit() {
-    Meteor.setTimeout(()=>{
-      console.log("ngOnInitTimer")
-      if (Meteor.userId()===null || ConnectEvent.isConnected()===false) {
-        // If we're not logged in automatically after 500ms, go to login screen 
-        // TODO: use a subscription instead
-        console.log('navigating to start screen')
-        console.log(Meteor.userId())
-        console.log(Meteor.status().connected)
-        this.navigateToStart()
-      } else {
-        console.log("this.router.routeTree")
-        console.log(Meteor.userId())
-        console.log(Meteor.status().connected)
-        console.log(this.router.routerState);
-        if (!this.router.routerState.root) { //} || !this.router.routerState.children.length) {
-          // Navigate to start if we're nowhere, otherwise we assume user came in via URL directly to game
-          console.log('navigating to entry since requested state not detected')
-          this.navigateToEnter();
-        }
-      }
-    }, 500);
-    this.watchGame();
-  }
-  */
- 
   navigateToEnter() {
     this.ngZone.run( ()=>{
       this.router.navigate(['/enter-game']);

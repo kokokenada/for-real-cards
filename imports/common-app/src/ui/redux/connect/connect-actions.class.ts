@@ -13,11 +13,10 @@ export class ConnectActions {
   static CONNECT_SUCCESS = ConnectActions.prefix + 'SUCCESS';
   static CONNECT_FAIL = ConnectActions.prefix + 'FAIL';
   static CONNECT_SET_SERVER = ConnectActions.prefix + 'SET_SERVER';
- // static CONNECT_AUTOLOGIN = ConnectActions.prefix + 'AUTO_LOGIN';  // Move to Login module
 
   constructor(private ngRedux: NgRedux<IAppState>) {}
 
-  start():void {
+  checkConnection():void {
     this.ngRedux.dispatch({ type: ConnectActions.CONNECT_START});
   }
   attemptFactory(serverURL:string):IPayloadAction {

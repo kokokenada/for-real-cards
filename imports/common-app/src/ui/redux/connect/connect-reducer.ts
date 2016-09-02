@@ -25,8 +25,7 @@ export function connectReducer(
   switch (action.type) {
     case ConnectActions.CONNECT_START:
       return state.merge({
-        connecting: true,
-        serverURL: action.payload.serverURL
+        connecting: true
       });
     case ConnectActions.CONNECT_SUCCESS:
       return state.merge({
