@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import {Component} from '@angular/core';
 import {AccountsModal} from './accounts-modal';
-import {User} from '/imports/common-app-api';
+import {User} from '../../../../common-app-api';
 import * as log from 'loglevel';
 
 @Component({

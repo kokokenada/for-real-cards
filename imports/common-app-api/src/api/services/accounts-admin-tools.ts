@@ -4,10 +4,10 @@
 import  'meteor/alanning:roles'
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
-import { User} from '../../../../common-app-api';
+import { User} from '../../.';
 import { check, Match } from 'meteor/check'
 
-import { PagingTools, FilterDefinition} from "./page-tools"
+import { PagingTools, FilterDefinition} from "../../../../common-app/src/ui/services/page-tools"
 
 
 const SUBSCRIPTION_NAME = 'common-AccountsAdminTools';

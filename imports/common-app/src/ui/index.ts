@@ -1,5 +1,5 @@
 export * from "./services/account-tools";
-export * from "./services/accounts-admin-tools";
+export * from "../../../common-app-api/src/api/services/accounts-admin-tools";
 export * from "./services/credentials";
 export * from "./services/menu-item";
 export * from "./services/menus";

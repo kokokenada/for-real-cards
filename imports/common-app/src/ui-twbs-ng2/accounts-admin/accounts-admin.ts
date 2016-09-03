@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
-import { AccountsAdminTools, Field } from '../../ui/services/accounts-admin-tools';
-import { User } from '../../../../common-app-api';
+import { Component, NgZone } from '@angular/core';
 import { Session } from 'meteor/session';
 import { PagingTools, FilterDefinition, SortDefinitionSingle } from "../../ui"
+import { User, AccountsAdminTools, Field } from '../../../../common-app-api';
+
 import { UpdateAccountModal } from './update-account-modal';
 import {DeleteAccountModal} from "./delete-account-modal";
 import { Tracker } from 'meteor/tracker'
@@ -62,7 +62,7 @@ export class AccountsAdmin {
   computation:Tracker.Computation;
   static throttledSearch(search:string) {  };
 
-  constructor() {
+  constructor(private ngZone:NgZone) {
     this.usersArray = [];
     this.skip = 0;
     this.sort = {key: 'username', direction:1};
@@ -72,7 +72,9 @@ export class AccountsAdmin {
       let subscriptionHandle =AccountsAdminTools.subscribeToPublication(this.currentFilter());
       if (subscriptionHandle.ready()) {
         let cursor:any = AccountsAdminTools.filteredUserQuery(AccountTools.userId(), this.currentFilter()); // Cursor
-        this.usersArray = cursor.fetch();
+        ngZone.run( ()=>{
+          this.usersArray = cursor.fetch();
+        } );
       }
     })
   }
