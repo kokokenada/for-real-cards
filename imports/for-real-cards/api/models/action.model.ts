@@ -13,9 +13,9 @@ import {Card} from './card.model'
 import {GameConfig} from './game-config';
 
 
-export let ActionCollection = new Mongo.Collection("actions", {transform: decode});
+export let GamePlayActionCollection = new Mongo.Collection("actions", {transform: decode});
 
-export enum ActionType {
+export enum GamePlayActionType {
   NEW_GAME,           // 0
   RESET,              // 1
   NEW_HAND,           // 2
@@ -43,12 +43,12 @@ export enum VisibilityType {
   PLAYER
 }
 
-export class Action {
+export class GamePlayAction {
   _id:string;
   gameId:string;
   creatorId:string;
   dateCreated:Date;
-  actionType:ActionType;
+  actionType:GamePlayActionType;
   toPlayerId:string;
   fromPlayerId:string;
   visibilityType:VisibilityType;
@@ -63,7 +63,7 @@ export class Action {
     gameId:string, 
     creatorId:string,
     dateCreated?:Date,
-    actionType:ActionType, 
+    actionType:GamePlayActionType,
     toPlayerId?:string,
     fromPlayerId?:string,
     visibilityType?:VisibilityType,
@@ -137,7 +137,7 @@ let GameConfigSchema = new SimpleSchema({
   }
 });
 
-let ActionSchema = new SimpleSchema({
+let GamePlayActionSchema = new SimpleSchema({
   gameId: {
     type: String
   },
@@ -183,8 +183,8 @@ let ActionSchema = new SimpleSchema({
 });
 
 
-ActionCollection.allow({
-  insert: function (userId, action:Action) {
+GamePlayActionCollection.allow({
+  insert: function (userId, action:GamePlayAction) {
     return false; // Use method
   },
   update: function (userId, game) {
@@ -208,7 +208,7 @@ function encodeCards(cards:Card[]):string {
   return returnValue;
 }
 
-function decode(action:Action):Action {
+function decode(action:GamePlayAction):GamePlayAction {
   action.cards = [];
   let cardsEncoded:string = action.cardsEncoded;
   if (cardsEncoded) {
@@ -231,7 +231,7 @@ function checkUser(gameId:string, userId:string) {
   }
 }
 
-function addAction(action:Action, userId:string):string {
+function addAction(action:GamePlayAction, userId:string):string {
   if (action.creatorId !== userId)
     throw new Meteor.Error('invalid-user', 'current userId does not match user ID of passed object');
   checkUser(action.gameId, action.creatorId);
@@ -239,17 +239,17 @@ function addAction(action:Action, userId:string):string {
   if (action.gameConfig) {
     action.gameConfig._deck_id = action.gameConfig.deck.id;
   }
-  return ActionCollection.insert(action);
+  return GamePlayActionCollection.insert(action);
 }
 
 if (Meteor.isServer) {
   Meteor.methods(
     {
-      'fastcards.NewAction': function(action:Action) {
+      'fastcards.NewAction': function(action:GamePlayAction) {
         addAction(action, this.userId);
       },
-      'fastcards.NewActions': function(actions:Action[]) {
-        let action:Action = actions[0];
+      'fastcards.NewActions': function(actions:GamePlayAction[]) {
+        let action:GamePlayAction = actions[0];
         let groupId = addAction(action, this.userId);
         for (let i=1; i<actions.length; i++) {
           action = actions[i];
@@ -261,6 +261,6 @@ if (Meteor.isServer) {
   );
 }
 
-ActionCollection.attachSchema(ActionSchema);
+GamePlayActionCollection.attachSchema(GamePlayActionSchema);
 
 

@@ -10,7 +10,7 @@ import { getNextSequence } from '/imports/common-app-api';
 
 import { Game, GameCollection } from './game.model.ts';
 import { HandCollection, Hand } from './hand.model.ts';
-import { ActionCollection, Action, ActionType } from "./action.model";
+import { GamePlayActionCollection, GamePlayAction, GamePlayActionType } from "./action.model";
 
 function joinGamegameId(gameId:string, userId:string, password:string):Hand {
   let game:Game = <Game>GameCollection.findOne({_id: gameId});
@@ -29,12 +29,12 @@ function joinGamegameId(gameId:string, userId:string, password:string):Hand {
     let handId:string = HandCollection.insert({gameId: game._id, position: position, userId: userId});
 
     // Add an action too
-    let action:Action = new Action({
+    let action:GamePlayAction = new GamePlayAction({
       gameId: gameId,
       creatorId: userId,
-      actionType: ActionType.NEW_HAND
+      actionType: GamePlayActionType.NEW_HAND
     });
-    ActionCollection.insert(action);
+    GamePlayActionCollection.insert(action);
 
     return HandCollection.findOne({_id: handId});
   }

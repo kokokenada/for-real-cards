@@ -9,7 +9,7 @@ import { ReplaySubject} from 'rxjs'
 import * as log from 'loglevel';
 
 import { GAME_SUBSCRPTION_NAME, GameSubscriptionOptions} from "../../api/models/game.publications.ts";
-import { Action, ActionCollection, ActionType, VisibilityType } from '../../api/models/action.model'
+import { GamePlayAction, GamePlayActionCollection, GamePlayActionType, VisibilityType } from '../../api/models/action.model'
 import {ActionFormatted} from "../action-formatted.class";
 import { GameConfig, DeckLocation} from '../../api/models/game-config';
 import { Hand, HandCollection} from '../../api/models/hand.model';
@@ -19,17 +19,17 @@ import {CardSuit, CardRank} from "../../api/models/card.model";
 
 export class GameState {
   private gameId:string;
-  private subject:ReplaySubject<Action>;
+  private subject:ReplaySubject<GamePlayAction>;
   private lastNotified:Date;
   private handsOnServer:Hand[];
   hands:Hand[];
   tableFaceDown:Card[];
   tablePile:Card[];
-  actions:Action[];
+  actions:GamePlayAction[];
   currentGameConfig: GameConfig;
   private undoneIds:string[] = [];
 
-  constructor(gameId:string, subject:ReplaySubject<Action>) {
+  constructor(gameId:string, subject:ReplaySubject<GamePlayAction>) {
     this.gameId = gameId;
     this.subject = subject;
     this.hands = [];
@@ -39,15 +39,15 @@ export class GameState {
     this.currentGameConfig = GameConfig.getDefaultConfig();
   }
 
-  private processAction(actions:Action[], index:number):void {
-    let action:Action = actions[index];
+  private processAction(actions:GamePlayAction[], index:number):void {
+    let action:GamePlayAction = actions[index];
     //this.debugOutput('processing action (' + index.toString() + ')', action);
     if (this.isUndone(action)) {
       //log.debug('not doing action because it is undone');
       return;
     }
     switch (action.actionType)  {
-      case ActionType.RESET:
+      case GamePlayActionType.RESET:
         this.hands.forEach((hand:Hand)=> {
           hand.cardsFaceDown = [];
           hand.cardsFaceUp = [];
@@ -57,7 +57,7 @@ export class GameState {
         this.tableFaceDown =[];
         this.tablePile = [];
         break;
-      case ActionType.DEAL:
+      case GamePlayActionType.DEAL:
 
         let gameConfig:GameConfig = action.gameConfig;
         if (gameConfig) {
@@ -73,10 +73,10 @@ export class GameState {
           this.tableFaceDown.push(card);
         });
         break;
-      case ActionType.NEW_HAND:
+      case GamePlayActionType.NEW_HAND:
         this.startSubScriptions(); // loads user objects
         break;
-      case ActionType.DECK_TO_HAND:
+      case GamePlayActionType.DECK_TO_HAND:
         if (action.cards) {
           action.cards.forEach((card:Card)=> {
             let index:number = Deck.indexOf(this.tableFaceDown, card)
@@ -117,7 +117,7 @@ export class GameState {
           console.trace();
         }
         break;
-      case ActionType.HAND_TO_TABLE:
+      case GamePlayActionType.HAND_TO_TABLE:
       {
         let hand:Hand = this.getHandFromUserId(action.fromPlayerId);
         if (action.cards && action.cards.length > 0) {
@@ -146,7 +146,7 @@ export class GameState {
         }
         break;
       }
-      case ActionType.HAND_TO_PILE:
+      case GamePlayActionType.HAND_TO_PILE:
       {
         let hand:Hand = this.getHandFromUserId(action.fromPlayerId);
         if (action.cards && action.cards.length > 0) {
@@ -168,14 +168,14 @@ export class GameState {
         }
         break;
       }
-      case ActionType.DECK_TO_PILE:
+      case GamePlayActionType.DECK_TO_PILE:
       {
         let index = 0;
         this.tablePile.push(this.tableFaceDown[index]);
         this.tableFaceDown.splice(index, 1);
         break;
       }
-      case ActionType.HAND_SORT:
+      case GamePlayActionType.HAND_SORT:
       {
         let hand:Hand = Hand.handForUser(this.hands, action.toPlayerId);
         let error:boolean = false;
@@ -210,7 +210,7 @@ export class GameState {
         }
         break;
       }
-      case ActionType.PILE_TO_HAND: {
+      case GamePlayActionType.PILE_TO_HAND: {
         let hand:Hand = this.getHandFromUserId(action.toPlayerId);
         if (action.cards && action.cards.length > 0) {
           action.cards.forEach((card:Card)=> {
@@ -231,7 +231,7 @@ export class GameState {
         }
         break;
       }
-      case ActionType.PILE_TO_DECK: {
+      case GamePlayActionType.PILE_TO_DECK: {
         if (action.cards && action.cards.length > 0) {
           action.cards.forEach((card:Card)=> {
             let index:number = Deck.indexOf(this.tablePile, card);
@@ -251,7 +251,7 @@ export class GameState {
         }
         break;
       }
-      case ActionType.HAND_TO_DECK: {
+      case GamePlayActionType.HAND_TO_DECK: {
         let hand:Hand = this.getHandFromUserId(action.fromPlayerId);
         if (action.cards && action.cards.length > 0) {
           action.cards.forEach((card:Card)=> {
@@ -272,7 +272,7 @@ export class GameState {
         }
         break;
       }
-      case ActionType.TABLE_TO_HAND: {
+      case GamePlayActionType.TABLE_TO_HAND: {
         let hand:Hand = this.getHandFromUserId(action.toPlayerId);
         if (action.cards && action.cards.length > 0) {
           action.cards.forEach((card:Card)=> {
@@ -293,7 +293,7 @@ export class GameState {
         }
         break;
       }
-      case ActionType.TAKE_TRICK:
+      case GamePlayActionType.TAKE_TRICK:
       {
         let hand:Hand = Hand.handForUser(this.hands, action.toPlayerId);
         let error:boolean = false;
@@ -322,13 +322,13 @@ export class GameState {
         }
         break;
       }
-      case ActionType.UNDO: {
-        let foundUndoAction:Action = null;
-        let playBackActions:Action[] = [];
+      case GamePlayActionType.UNDO: {
+        let foundUndoAction:GamePlayAction = null;
+        let playBackActions:GamePlayAction[] = [];
         let actionIdBeingUndone = action.relatedActionId;
         // Walk through actions from the UNDO backwards
         for (let i=index; i>=0; i--) {
-          let actionBeingExamined:Action = actions[i];
+          let actionBeingExamined:GamePlayAction = actions[i];
           //this.debugOutput('examining undo (' + i.toString() + ')', actionBeingExamined);
           if (
             actionBeingExamined._id === actionIdBeingUndone ||           // The 'parent' action
@@ -345,7 +345,7 @@ export class GameState {
               log.error(actionBeingExamined)
               log.error(action)
             }
-          } else if (actionBeingExamined.actionType===ActionType.RESET) {
+          } else if (actionBeingExamined.actionType===GamePlayActionType.RESET) {
             // This is the re-create start point
 
             // Reset
@@ -356,7 +356,7 @@ export class GameState {
             // And re-run actions since
             for (let j=0; j<playBackActions.length; j++) {
               let playBackAction = playBackActions[j];
-              if (playBackAction.actionType!==ActionType.UNDO) {
+              if (playBackAction.actionType!==GamePlayActionType.UNDO) {
                 // Don't try to re-proces UNDO's
                 this.processAction(playBackActions, j);
               }
@@ -380,7 +380,7 @@ export class GameState {
     }
   }
 
-  debugOutput(context:string, action:Action) {
+  debugOutput(context:string, action:GamePlayAction) {
     let af:ActionFormatted = new ActionFormatted(action);
     let cards:string = "";
     if (action.cards) {
@@ -399,20 +399,20 @@ export class GameState {
     );
   }
 
-  private isUndone(action:Action):boolean {
+  private isUndone(action:GamePlayAction):boolean {
     return this.undoneIds.indexOf(action._id)!==-1;
   }
 
-  private addUndone(action:Action) {
+  private addUndone(action:GamePlayAction) {
 //    this.debugOutput('added undone', action);
     this.undoneIds.push(action._id);
   }
 
-  actionToUndo():Action {
+  actionToUndo():GamePlayAction {
     // Walk through actions from latest
     if (this.actions) {
       for (let i = this.actions.length - 1; i >= 0; i--) {
-        let actionBeingExamined:Action = this.actions[i];
+        let actionBeingExamined:GamePlayAction = this.actions[i];
         if (this.isUndoable(actionBeingExamined)) {
 //          this.debugOutput('identified undo action', actionBeingExamined);
           return actionBeingExamined;
@@ -421,12 +421,12 @@ export class GameState {
     }
   }
 
-  private isUndoable(action:Action):boolean {
+  private isUndoable(action:GamePlayAction):boolean {
     switch (action.actionType) {
-      case ActionType.HAND_SORT:
-      case ActionType.NEW_HAND:
-      case ActionType.UNDO:
-      case ActionType.NEW_GAME:
+      case GamePlayActionType.HAND_SORT:
+      case GamePlayActionType.NEW_HAND:
+      case GamePlayActionType.UNDO:
+      case GamePlayActionType.NEW_GAME:
         return false;
       default:
       {
@@ -486,13 +486,13 @@ export class GameState {
 
 
         log.debug('execute action query. gameId:' + this.gameId)
-        let actionCursor:Mongo.Cursor<any> = ActionCollection.find({gameId: this.gameId}, {sort: {dateCreated: 1}});
+        let actionCursor:Mongo.Cursor<any> = GamePlayActionCollection.find({gameId: this.gameId}, {sort: {dateCreated: 1}});
         this.actions = actionCursor.fetch();
         log.debug(this.actions)
         log.debug('lastNotified: ' + this.formatDebugTime(this.lastNotified));
         let latest:Date = this.lastNotified;
         for (let i=0;i<this.actions.length;i++) {
-          let action:Action = this.actions[i];
+          let action:GamePlayAction = this.actions[i];
           action.sequencePosition = i;
           action.sequenceLength = this.actions.length;
           if (action.dateCreated>this.lastNotified) {
@@ -525,7 +525,7 @@ export class GameState {
     return null;
   }
 
-  pushAction(action:Action):void {
+  pushAction(action:GamePlayAction):void {
     Meteor.call('fastcards.NewAction', action, (error)=> {
       if (error) {
         this.subject.error(error);
@@ -533,7 +533,7 @@ export class GameState {
       }
     });
   }
-  pushActions(actions:Action[]):void {
+  pushActions(actions:GamePlayAction[]):void {
     Meteor.call('fastcards.NewActions', actions, (error)=> {
       if (error) {
         this.subject.error(error);
@@ -544,17 +544,17 @@ export class GameState {
 
   deal(gameConfig:GameConfig) {
 
-    this.pushAction(new Action({  // Push RESET separately because it is a different undo block
+    this.pushAction(new GamePlayAction({  // Push RESET separately because it is a different undo block
       gameId: this.gameId,
       creatorId: Meteor.userId(),
-      actionType: ActionType.RESET
+      actionType: GamePlayActionType.RESET
     }));
 
-    let actions:Action[] = [];
-    let initializeAction:Action = new Action({
+    let actions:GamePlayAction[] = [];
+    let initializeAction:GamePlayAction = new GamePlayAction({
       gameId: this.gameId,
       creatorId: Meteor.userId(),
-      actionType: ActionType.DEAL,
+      actionType: GamePlayActionType.DEAL,
       gameConfig: gameConfig
     });
 
@@ -577,10 +577,10 @@ export class GameState {
     let deckPosition = 0;
     this.hands.forEach((hand:Hand)=>{
       if (gameConfig.numberOfCardsToPlayer>0) {
-        let toPlayerAction:Action = new Action({
+        let toPlayerAction:GamePlayAction = new GamePlayAction({
           gameId: this.gameId,
           creatorId: Meteor.userId(),
-          actionType: ActionType.DECK_TO_HAND,
+          actionType: GamePlayActionType.DECK_TO_HAND,
           visibilityType: VisibilityType.PLAYER,
           toPlayerId: hand.userId
         });
@@ -591,10 +591,10 @@ export class GameState {
       }
 
       if (gameConfig.numberOfCardsToPlayerFaceUp>0) {
-        let toPlayerAction:Action = new Action({
+        let toPlayerAction:GamePlayAction = new GamePlayAction({
           gameId: this.gameId,
           creatorId: Meteor.userId(),
-          actionType: ActionType.DECK_TO_HAND,
+          actionType: GamePlayActionType.DECK_TO_HAND,
           visibilityType: VisibilityType.ALL,
           toPlayerId: hand.userId
         });
@@ -605,10 +605,10 @@ export class GameState {
       }
     });
     if (gameConfig.turnCardUpAfterDeal) {
-      actions.push(new Action({
+      actions.push(new GamePlayAction({
         gameId: this.gameId,
         creatorId: Meteor.userId(),
-        actionType: ActionType.DECK_TO_PILE
+        actionType: GamePlayActionType.DECK_TO_PILE
       }));
     }
 
@@ -617,12 +617,12 @@ export class GameState {
   }
   
   showHand(fromPlayerId:string=Meteor.userId()):void{
-    let action:Action = new Action({
+    let action:GamePlayAction = new GamePlayAction({
       gameId: this.gameId,
       creatorId: Meteor.userId(),
       visibilityType: VisibilityType.ALL,
       fromPlayerId: fromPlayerId,
-      actionType: ActionType.HAND_TO_TABLE,
+      actionType: GamePlayActionType.HAND_TO_TABLE,
       cards: this.getHandFromUserId(fromPlayerId).cardsInHand
     });
     this.pushAction(action);
@@ -630,48 +630,48 @@ export class GameState {
   }
 
   cardToTable(suit:CardSuit, rank:CardRank, visibilityType:VisibilityType, fromPlayerId:string=Meteor.userId()):void {
-    let action:Action = new Action({
+    let action:GamePlayAction = new GamePlayAction({
       gameId: this.gameId,
       creatorId: Meteor.userId(),
       visibilityType: visibilityType,
       fromPlayerId: fromPlayerId,
-      actionType: ActionType.HAND_TO_TABLE,
+      actionType: GamePlayActionType.HAND_TO_TABLE,
       cards: [new Card({suit:suit, rank:rank})]
     });
     this.pushAction(action);
   }
   
   deckToHand(visibilityType:VisibilityType, toPlayerId:string=Meteor.userId()):void {
-    let action:Action = new Action({
+    let action:GamePlayAction = new GamePlayAction({
       gameId: this.gameId,
       creatorId: Meteor.userId(),
       visibilityType: visibilityType,
       toPlayerId: toPlayerId,
-      actionType: ActionType.DECK_TO_HAND,
+      actionType: GamePlayActionType.DECK_TO_HAND,
       cards: [this.tableFaceDown[0]]
     });
     this.pushAction(action);
   }
 
   handToPile(suit:CardSuit, rank:CardRank, fromPlayerId:string=Meteor.userId()):void {
-    let action:Action = new Action({
+    let action:GamePlayAction = new GamePlayAction({
       gameId: this.gameId,
       creatorId: Meteor.userId(),
       visibilityType: VisibilityType.PLAYER,
       fromPlayerId: fromPlayerId,
-      actionType: ActionType.HAND_TO_PILE,
+      actionType: GamePlayActionType.HAND_TO_PILE,
       cards: [new Card({suit:suit, rank:rank})]
     });
     this.pushAction(action);
   }
 
   pileToHand(suit:CardSuit, rank:CardRank, toPlayerId:string=Meteor.userId()):void {
-    let action:Action = new Action({
+    let action:GamePlayAction = new GamePlayAction({
       gameId: this.gameId,
       creatorId: Meteor.userId(),
       visibilityType: VisibilityType.PLAYER,
       toPlayerId: toPlayerId,
-      actionType: ActionType.PILE_TO_HAND,
+      actionType: GamePlayActionType.PILE_TO_HAND,
       cards: [new Card({suit:suit, rank:rank})]
     });
     this.pushAction(action);
@@ -679,45 +679,45 @@ export class GameState {
 
 
   sortHand(cards:Card[], toPlayerId:string=Meteor.userId()):void {
-    let action:Action = new Action({
+    let action:GamePlayAction = new GamePlayAction({
       gameId: this.gameId,
       creatorId: Meteor.userId(),
       toPlayerId: toPlayerId,
-      actionType: ActionType.HAND_SORT,
+      actionType: GamePlayActionType.HAND_SORT,
       cards: cards
     });
     this.pushAction(action);
   }
 
   pileToDeck(cards:Card[]) {
-    let action:Action = new Action({
+    let action:GamePlayAction = new GamePlayAction({
       gameId: this.gameId,
       creatorId: Meteor.userId(),
       visibilityType: VisibilityType.PLAYER,
-      actionType: ActionType.PILE_TO_DECK,
+      actionType: GamePlayActionType.PILE_TO_DECK,
       cards: cards
     });
     this.pushAction(action);
   }
 
   handToDeck(suit:CardSuit, rank:CardRank, fromPlayerId:string=Meteor.userId()) {
-    let action:Action = new Action({
+    let action:GamePlayAction = new GamePlayAction({
       gameId: this.gameId,
       creatorId: Meteor.userId(),
       fromPlayerId: fromPlayerId,
-      actionType: ActionType.HAND_TO_DECK,
+      actionType: GamePlayActionType.HAND_TO_DECK,
       cards: [new Card({suit:suit, rank:rank})]
     });
     this.pushAction(action);
   }
 
   tableToHand(suit:CardSuit, rank:CardRank, toPlayerId:string=Meteor.userId()):void {
-    let action:Action = new Action({
+    let action:GamePlayAction = new GamePlayAction({
       gameId: this.gameId,
       creatorId: Meteor.userId(),
       visibilityType: VisibilityType.PLAYER,
       toPlayerId: toPlayerId,
-      actionType: ActionType.TABLE_TO_HAND,
+      actionType: GamePlayActionType.TABLE_TO_HAND,
       cards: [new Card({suit:suit, rank:rank})]
     });
     this.pushAction(action);
@@ -739,11 +739,11 @@ export class GameState {
     this.hands.forEach((hand:Hand)=>{
       trick.push(hand.cardsFaceUp[0]);
     });
-    let action:Action = new Action({
+    let action:GamePlayAction = new GamePlayAction({
       gameId: this.gameId,
       creatorId: Meteor.userId(),
       toPlayerId: toPlayerId,
-      actionType: ActionType.TAKE_TRICK,
+      actionType: GamePlayActionType.TAKE_TRICK,
       cards: trick
     });
     this.pushAction(action);
@@ -752,7 +752,7 @@ export class GameState {
 
   undo(actionId:string) {
     this.pushAction(
-      new Action({actionType: ActionType.UNDO, gameId:this.gameId, creatorId: Meteor.userId(), relatedActionId:actionId})
+      new GamePlayAction({actionType: GamePlayActionType.UNDO, gameId:this.gameId, creatorId: Meteor.userId(), relatedActionId:actionId})
     );
   }
 }

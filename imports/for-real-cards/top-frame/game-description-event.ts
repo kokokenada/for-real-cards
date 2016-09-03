@@ -4,36 +4,36 @@
  */
 import { Observable, Subscription } from 'rxjs';
 
-import {Action, ActionType} from "../api/models/action.model";
+import {GamePlayAction, GamePlayActionType} from "../api/models/action.model";
 import {RunGame} from "../run-game/run-game";
 
 export class GameDescriptionEvent {
   description:string;
-  constructor(action:Action=undefined) {
+  constructor(action:GamePlayAction=undefined) {
     if (action===undefined) {
       this.description = '';
     } else {
-      if (action.actionType === ActionType.DEAL || action.actionType === ActionType.NEW_HAND) {
+      if (action.actionType === GamePlayActionType.DEAL || action.actionType === GamePlayActionType.NEW_HAND) {
         this.description = RunGame.gameState.currentGameConfig.name + " (id " + action.gameId + ")"; // TODO: Change this to pull name from event instead of global state
-      } else if (action.actionType === ActionType.RESET || action.actionType===ActionType.NEW_GAME) {
+      } else if (action.actionType === GamePlayActionType.RESET || action.actionType===GamePlayActionType.NEW_GAME) {
         this.description = "New Game (id " + action.gameId + ")";
-      } else if (action.actionType === ActionType.LEAVE_GAME) {
+      } else if (action.actionType === GamePlayActionType.LEAVE_GAME) {
         this.description = '';
       }
     }
   }
   
-  static subscribe(actionStream:Observable<Action>, onNext:(gameDescriptionEvent:GameDescriptionEvent)=>void):Subscription {
+  static subscribe(actionStream:Observable<GamePlayAction>, onNext:(gameDescriptionEvent:GameDescriptionEvent)=>void):Subscription {
     return actionStream
-    .filter( (action:Action)=> {
+    .filter( (action:GamePlayAction)=> {
       return (
-      action.actionType === ActionType.DEAL ||
-      action.actionType === ActionType.NEW_HAND ||
-      action.actionType === ActionType.RESET ||
-      action.actionType === ActionType.NEW_GAME ||
-      action.actionType === ActionType.LEAVE_GAME)
+      action.actionType === GamePlayActionType.DEAL ||
+      action.actionType === GamePlayActionType.NEW_HAND ||
+      action.actionType === GamePlayActionType.RESET ||
+      action.actionType === GamePlayActionType.NEW_GAME ||
+      action.actionType === GamePlayActionType.LEAVE_GAME)
     })
-    .map( (action:Action)=> {
+    .map( (action:GamePlayAction)=> {
       return new GameDescriptionEvent(action)
     })
     .subscribe(onNext);
@@ -42,7 +42,7 @@ export class GameDescriptionEvent {
 
 /*UserEvent.startObserving( (userEvent:UserEvent)=>{
   if (userEvent.eventType===UserEventType.LOGOUT) {
-    RunGame.pushGameNotification(null, ActionType.LEAVE_GAME);
+    RunGame.pushGameNotification(null, GamePlayActionType.LEAVE_GAME);
   }
 
 });*/

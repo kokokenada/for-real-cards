@@ -11,7 +11,7 @@ import { DragulaService } from 'ng2-dragula/ng2-dragula';
 
 import {CommonPopups} from '../../common-app';
 
-import { Action, ActionType, Card, CardCountAllowed, CardLocation, Deck, DeckLocation, GameConfig, Hand } from '../api/index';
+import { GamePlayAction, GamePlayActionType, Card, CardCountAllowed, CardLocation, Deck, DeckLocation, GameConfig, Hand } from '../api/index';
 import { DragAndDrop, GameState, GameRenderingTools } from '../ui/index';
 
 
@@ -22,7 +22,7 @@ export class RunGame {
   protected gameId:string;
   userPassword:string;
   static gameState:GameState;
-  static subject:ReplaySubject<Action> = new ReplaySubject<Action>();
+  static subject:ReplaySubject<GamePlayAction> = new ReplaySubject<GamePlayAction>();
   private static gameStreamInitializedToId:string;
   protected static dragAndDropInitialized:boolean = false;
 
@@ -33,14 +33,14 @@ export class RunGame {
     //log.debug('RunGame rx.subscribing in RunGame ngOnInit')
     //log.debug(this)
     RunGame.subscribe(
-      (action:Action)=> {
-        //log.debug('Got subscription callback in run-game.ts. Action:');
+      (action:GamePlayAction)=> {
+        //log.debug('Got subscription callback in run-game.ts. GamePlayAction:');
         //log.debug(action);
         //log.debug(this)
         if (
-          action.actionType===ActionType.NEW_HAND ||
-          action.actionType===ActionType.ENTER_GAME_AT_HAND_NOTIFY ||
-          action.actionType===ActionType.ENTER_GAME_AT_TABLE_NOTIFY
+          action.actionType===GamePlayActionType.NEW_HAND ||
+          action.actionType===GamePlayActionType.ENTER_GAME_AT_HAND_NOTIFY ||
+          action.actionType===GamePlayActionType.ENTER_GAME_AT_TABLE_NOTIFY
         ) {
           this.ngZone.run(()=>{
             this.gameId = action.gameId;
@@ -65,20 +65,20 @@ export class RunGame {
   }
 
   static pushNewGameNotification(id:string) {
-    RunGame.pushGameNotification(id, ActionType.NEW_GAME);
+    RunGame.pushGameNotification(id, GamePlayActionType.NEW_GAME);
   }
   
-  static pushGameNotification(gameId, actionType:ActionType):void {
+  static pushGameNotification(gameId, actionType:GamePlayActionType):void {
     RunGame.subject.next(
-      new Action({gameId: gameId, actionType:actionType, creatorId: Meteor.userId()})
+      new GamePlayAction({gameId: gameId, actionType:actionType, creatorId: Meteor.userId()})
     );
   }
 
-  static getActions():Action[] {
+  static getActions():GamePlayAction[] {
     return RunGame.gameState.actions;
   }
   
-  static subscribe(onNext:(action:Action)=>void, onError:(error)=>void=undefined, onCompleted:()=>void=undefined):Subscription {
+  static subscribe(onNext:(action:GamePlayAction)=>void, onError:(error)=>void=undefined, onCompleted:()=>void=undefined):Subscription {
     return RunGame.subject.subscribe(onNext, onError, onCompleted);
   }
 
@@ -144,7 +144,7 @@ export class RunGame {
           log.error(error);
           if (error.error==="gameId-not-found") {
             CommonPopups.alert("That game ID does not exist.");
-            RunGame.subject.next(new Action({gameId: gameId, creatorId: Meteor.userId(), actionType: ActionType.ENTER_GAME_FAIL}));
+            RunGame.subject.next(new GamePlayAction({gameId: gameId, creatorId: Meteor.userId(), actionType: GamePlayActionType.ENTER_GAME_FAIL}));
           } else {
             CommonPopups.alert(error);
           }

@@ -3,12 +3,12 @@ import {AccountTools} from '/imports/common-app';
 
 
 
-import {Action, ActionType, VisibilityType} from "../api/models/action.model";
+import {GamePlayAction, GamePlayActionType, VisibilityType} from "../api/models/action.model";
 
-export class ActionFormatted extends Action {
+export class ActionFormatted extends GamePlayAction {
 
   actionDescription():string {
-    return ActionType[this.actionType];
+    return GamePlayActionType[this.actionType];
   }
   actionTime():string {
     if (!this.dateCreated)

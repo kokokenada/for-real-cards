@@ -5,7 +5,7 @@
 
 import { NgZone } from '@angular/core';
 import {RunGame} from "./run-game";
-import {Action, ActionType} from "../api/models/action.model";
+import {GamePlayAction, GamePlayActionType} from "../api/models/action.model";
 import { Subscription } from 'rxjs';
 
 
@@ -15,9 +15,9 @@ export class RunGameContainer {
   ngZoneBase:NgZone
   constructor(ngZone  :NgZone) {
     this.ngZoneBase = ngZone;
-    this.subscription = RunGame.subscribe((action:Action)=> {
+    this.subscription = RunGame.subscribe((action:GamePlayAction)=> {
       this.ngZoneBase.run(()=> {
-        if (action.actionType===ActionType.NEW_GAME) {
+        if (action.actionType===GamePlayActionType.NEW_GAME) {
           console.log('setting gameId in RunGameController')
           console.log(action)
           this.gameId = action.gameId;

@@ -23,7 +23,7 @@ export class ActionsPayloadObservable implements ActionsObservable {
   constructor(action:IPayloadAction) {
     this.actionsObservable = new ActionsObservable(action);
   }
-  lift(operator: Operator<any, Action>) {
+  lift(operator: Operator<any, GamePlayAction>) {
     this.actionsObservable.lift(operator);
   }
   ofType(...key: any[]){

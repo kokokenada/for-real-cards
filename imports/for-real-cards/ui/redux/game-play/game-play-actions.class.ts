@@ -5,10 +5,10 @@ import { NgRedux } from 'ng2-redux';
 import { IAppState, IPayloadAction } from '../../../../common-app';
 
 
-import { ActionType } from "../../../api";
+import { GamePlayActionType } from "../../../api";
 
 /*
-export enum ActionType {
+export enum GamePlayActionType {
   NEW_GAME,           // 0
   RESET,              // 1
   NEW_HAND,           // 2
@@ -38,8 +38,8 @@ export class GamePlayActions {
   constructor(private ngRedux: NgRedux<IAppState>) {
   }
 
-  fireAction(actionType:ActionType, payload:any) {
-    this.ngRedux.dispatch({type: GamePlayActions.prefix + ActionType[actionType]});
+  fireAction(actionType:GamePlayActionType, payload:any) {
+    this.ngRedux.dispatch({type: GamePlayActions.prefix + GamePlayActionType[actionType]});
   }
 
   navigate(to:string, gamdId:string='') {

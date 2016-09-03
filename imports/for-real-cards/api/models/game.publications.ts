@@ -7,7 +7,7 @@ import { Meteor } from 'meteor/meteor';
 import * as log from 'loglevel';
 
 import { HandCollection, Hand } from './hand.model.ts';
-import { ActionCollection } from "./action.model.ts";
+import { GamePlayActionCollection } from "./action.model.ts";
 
 export interface GameSubscriptionOptions {
   gameId:string
@@ -39,7 +39,7 @@ if (Meteor.isServer) {
         }
       }
     );
-    let actionCursor = ActionCollection.find({gameId: options.gameId});
+    let actionCursor = GamePlayActionCollection.find({gameId: options.gameId});
 //    log.debug("publish gameinfo: " + ", GameId:" + options.gameId +  ", userCount: " + userCursor.count(), ", hands count: " + handsCursor.count(), " action count:" + actionCursor.count())
     return [
       userCursor,

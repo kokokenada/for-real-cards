@@ -5,7 +5,7 @@
 import { Component, Input } from '@angular/core';
 import { Session } from 'meteor/session';
 import {RunGame} from "../run-game/run-game";
-import {ActionType, Action} from "../api/models/action.model";
+import {GamePlayActionType, GamePlayAction} from "../api/models/action.model";
 import {TargetPlatformId, PlatformTools} from '/imports/common-app';
 
 function template():string {
@@ -102,7 +102,7 @@ export class JoinGame{
   joinGame() {
     RunGame.joinGame(this.gameId, this.password).then(
       (result) => {
-        RunGame.pushGameNotification(this.gameId, ActionType.ENTER_GAME_AT_HAND_NOTIFY);
+        RunGame.pushGameNotification(this.gameId, GamePlayActionType.ENTER_GAME_AT_HAND_NOTIFY);
       }, (error)=> {
         console.log('join game promise was rejected')
       }
@@ -110,6 +110,6 @@ export class JoinGame{
   };
   displayGame() {
     Session.set('password', this.password);
-    RunGame.pushGameNotification(this.gameId, ActionType.ENTER_GAME_AT_TABLE_NOTIFY);
+    RunGame.pushGameNotification(this.gameId, GamePlayActionType.ENTER_GAME_AT_TABLE_NOTIFY);
   };
 }

@@ -6,7 +6,7 @@
 import { Component, Input } from '@angular/core';
 
 import { RunGame } from "../run-game/run-game";
-import { Action } from '../api/index'
+import { GamePlayAction } from '../api/index'
 import { PlayingCard } from "../playing-card/playing-card"
 import {ActionFormatted} from "../ui/action-formatted.class";
 import {PlatformTools} from '/imports/common-app';
@@ -96,33 +96,33 @@ function template():string {
   template: template()})
 export class GameActionList {
 
-  getActions():Action[] {
+  getActions():GamePlayAction[] {
     return RunGame.getActions(); //this.actionsFormatted;
   }
 
-  actionTime(action:Action):string {
+  actionTime(action:GamePlayAction):string {
     console.log(action)
     console.log(new ActionFormatted(action).actionTime())
     return new ActionFormatted(action).actionTime();
   }
 
-  actionDescription(action:Action):string {
+  actionDescription(action:GamePlayAction):string {
     return new ActionFormatted(action).actionDescription();
   }
 
-  creator(action:Action):string {
+  creator(action:GamePlayAction):string {
     return new ActionFormatted(action).creator();
   }
 
-  toPlayer(action:Action):string {
+  toPlayer(action:GamePlayAction):string {
     return new ActionFormatted(action).toPlayer();
   }
 
-  fromPlayer(action:Action):string {
+  fromPlayer(action:GamePlayAction):string {
     return new ActionFormatted(action).fromPlayer();
   }
 
-  visibilityTypeDescription(action:Action):string {
+  visibilityTypeDescription(action:GamePlayAction):string {
     return new ActionFormatted(action).visibilityTypeDescription();
   }
 

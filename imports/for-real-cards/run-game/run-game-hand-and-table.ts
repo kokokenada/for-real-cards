@@ -7,7 +7,7 @@ import { Component, Input, NgZone } from '@angular/core';
 import {RunGameTable} from "./run-game-table";
 import {RunGameHand} from "./run-game-hand";
 import {RunGame} from "./run-game";
-import {Action, ActionType} from "../api/models/action.model";
+import {GamePlayAction, GamePlayActionType} from "../api/models/action.model";
 
 
 function template():string {
@@ -36,9 +36,9 @@ export class RunGameHandAndTable {
   constructor(private ngZone:NgZone) {
  }
   ngOnInit() {
-    RunGame.subscribe((action:Action)=> {
+    RunGame.subscribe((action:GamePlayAction)=> {
       this.ngZone.run(()=> {
-        if (action.actionType===ActionType.NEW_GAME) {
+        if (action.actionType===GamePlayActionType.NEW_GAME) {
           this.gameId = action.gameId;
         }
       });

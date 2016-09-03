@@ -13,7 +13,7 @@ import { CommonAppButton, CommonPopups, PlatformTools, Tools } from '../../commo
 import { RunGame } from './run-game.ts';
 import { DealModalService } from "../deal-modal/deal-modal.service"
 import { PlayingCard } from "../playing-card/playing-card";
-import { Action, Card, CardImageStyle, GameConfig, CardLocation, CardCountAllowed, Hand} from "../api/index";
+import { GamePlayAction, Card, CardImageStyle, GameConfig, CardLocation, CardCountAllowed, Hand} from "../api/index";
 import {ActionFormatted} from "../ui/action-formatted.class";
 import { DeckView } from "./deck-view";
 import { PileView } from "./pile-view";
@@ -31,7 +31,7 @@ import template from "./run-game-hand.html"
 )
 export class RunGameHand extends RunGame {
   @Input() showTableProxy:string;
-  undoAction:Action;
+  undoAction:GamePlayAction;
 
   constructor(private dealModelService:DealModalService, private dragulaServiceChild: DragulaService, private ngZoneChild:NgZone,
               private injector: Injector) {
