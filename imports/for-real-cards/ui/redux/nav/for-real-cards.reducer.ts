@@ -2,7 +2,7 @@
 import { makeTypedFactory } from 'typed-immutable-record';
 
 import {IForRealCardsState, IForRealCardsRecord, IForRealCardsAction} from "./for-real-cards.types";
-import {IPayloadAction} from "../../../common-app";
+import {IPayloadAction} from "../../../../common-app";
 import {ForRealCardsActions} from "./for-real-cards-actions.class";
 
 export const ForRealCardsFactory = makeTypedFactory<IForRealCardsState, IForRealCardsRecord>({

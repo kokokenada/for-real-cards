@@ -1,7 +1,7 @@
 import {TypedRecord} from 'typed-immutable-record';
-import {IAppState} from "../../../common-app/";
+import {IAppState} from "../../../../common-app";
 
-import {TopFrame} from "../../top-frame/top-frame.base";
+import {TopFrame} from "../../../top-frame/top-frame.base";
 
 export interface IForRealCardsState extends IAppState {
   topFrame: TopFrame

@@ -262,6 +262,5 @@ if (Meteor.isServer) {
 }
 
 ActionCollection.attachSchema(ActionSchema);
-//ActionUndoCollection.attachSchema(ActionSchema);
 
 

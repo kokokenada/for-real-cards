@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { NgRedux } from 'ng2-redux';
 
 
-import { IAppState, IPayloadAction } from '../../../common-app';
-import {TopFrame} from "../../top-frame/top-frame.base";
+import { IAppState, IPayloadAction } from '../../../../common-app';
+import {TopFrame} from "../../../top-frame/top-frame.base";
 
 @Injectable()
 export class ForRealCardsActions {

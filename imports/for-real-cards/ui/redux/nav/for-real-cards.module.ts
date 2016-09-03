@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 
-import { IAppState, ReduxModule} from '../../../common-app';
+import { IAppState, ReduxModule} from '../../../../common-app';
 import {forRealCardsReducer} from "./for-real-cards.reducer";
 import {ForRealCardsAsync} from "./for-real-cards-async.class";
 import {ForRealCardsActions} from "./for-real-cards-actions.class";
