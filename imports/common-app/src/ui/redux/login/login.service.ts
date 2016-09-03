@@ -29,7 +29,7 @@ export class LoginService {
             log.info('Login successful.');
             resolve(
               LoginActions.loginSuccessFactory(
-                LoginService.userFromMeteorUser(Meteor.user())
+                LoginService.userFromMeteorUser(Meteor.user()), Meteor.userId()
               )
             );
           }

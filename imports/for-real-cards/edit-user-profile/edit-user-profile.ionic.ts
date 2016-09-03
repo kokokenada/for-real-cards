@@ -89,14 +89,4 @@ export class EditUserProfileIonic extends EditUserProfileBase {
   {
     this.initialize(this.ngZone, this.loginReducer, this.loginActions, this.uploaderActions, this.uploaderReducer);
   }
-
-  getPicture() {
-    CameraTools.uploadImageFromCamera(AvatarOriginalStore).then(
-      (result)=>{
-        console.log('upload success')
-      }, (error)=>{
-        CommonPopups.alert(error);
-      }
-    );
-  }
 }

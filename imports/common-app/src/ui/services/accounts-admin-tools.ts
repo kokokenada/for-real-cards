@@ -123,7 +123,7 @@ export class AccountsAdminTools {
     let cursor:Mongo.Cursor<Meteor.User>;
     // if not an admin user don't show any other user
     if (!Roles.userIsInRole(userId, ['admin'])) {
-      cursor = Meteor.users.find(userId, {reactive: false, fields: {username:1}});
+      cursor = Meteor.users.find(userId, {reactive: false, fields: {username:true}});
     } else {
 
       let queryOptions:any = {};

@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { AccountsAdminTools, Field } from '../../ui/services/accounts-admin-tools';
-import { User } from '/imports/common-app-api';
-//import { Cursor } from 'meteor/mongo'
+import { User } from '../../../../common-app-api';
 import { Session } from 'meteor/session';
 import { PagingTools, FilterDefinition, SortDefinitionSingle } from "../../ui"
 import { UpdateAccountModal } from './update-account-modal';

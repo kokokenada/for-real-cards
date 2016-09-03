@@ -29,7 +29,7 @@ export class LoginAsync {
       .flatMap( ({payload}) => {
         if (LoginService.isLoggedIn()) {
           // Yes, we're logged in, so fire off a logged in event
-          return Observable.from([LoginActions.loginSuccessFactory(LoginService.user())]);
+          return Observable.from([LoginActions.loginSuccessFactory(LoginService.user(), LoginService.userId())]);
         }
         return new NeverObservableAction();
       });
@@ -82,7 +82,7 @@ export class LoginAsync {
             let loginState:ILoginState = store.getState().loginReducer;
             if (loginState.neverLoggedIn) {
               // Never logged in, yet the current user is populated, must be automatic login
-              return LoginActions.loginSuccessFactory(change.newDocument);
+              return LoginActions.loginSuccessFactory(change.newDocument, change.newDocument._id);
             } else {
               return LoginActions.changeFactory(change);
             }

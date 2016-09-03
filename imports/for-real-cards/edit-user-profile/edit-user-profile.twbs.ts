@@ -7,14 +7,12 @@ import { Component, NgZone } from '@angular/core';
 import { select } from 'ng2-redux';
 
 //import { FormGroup, FormControl } from '@angular/forms';
-import { FILE_UPLOAD_DIRECTIVES } from 'ng2-file-upload';
 import { EditUserProfileBase } from '../../common-app/index';
 import {LoginActions} from "../../common-app/src/ui/redux/login/login-actions.class";
 import {UploaderActions} from "../../common-app/src/ui/redux/uploader/uploader-actions.class";
 
 @Component({
   selector: 'edit-user-profile',
-  directives: [FILE_UPLOAD_DIRECTIVES],
   template: `
 <style>
   .my-drop-zone { border: dotted 3px lightgray; }
@@ -38,20 +36,30 @@ import {UploaderActions} from "../../common-app/src/ui/redux/uploader/uploader-a
     </div>
 
     <div class="form-group">
-      <label for="avatar">Avatar</label>
-      <input type="file" ng2FileSelect [uploader]="uploader" (onchange)="fileDrop($event)"/>
-      <button *ngIf="showCameraOption()">Camera</button>
-      <strong>OR</strong>
-
-      <div ng2FileDrop
-           [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
-           (fileOver)="fileOverBase($event)"
-           [uploader]="uploader"
-           (onFileDrop)="fileDrop($event)"
-
-           class="well my-drop-zone">
-        Drop image here
-        <img [src]="avatarUrl()" style="max-width: 20%; height: auto"/>
+      <h3 for="avatar">Avatar</h3>
+      <div class="container">
+        <div class="row">
+           <div class="col-xs-6">
+              <img [src]="avatarUrl()" style="max-width: 80%; height: auto"/> 
+           </div>        
+           <div class="col-xs-6">
+              <input type="file" (change)="fileSelect($event)"/>
+              <div *ngIf="showCameraOption()">
+                <strong>OR</strong>
+                 <button (click)="getImageFromCamera()">Camera</button>
+              </div>
+              <div *ngIf="showDragOption()">
+                <strong>OR</strong>
+                <div 
+                     (drop)="fileDrop($event)"
+                     (dragover)="fileOver($event)"
+                     class="well"
+                     style="height: 100px; border-style: dashed">
+                  Drop image here
+                </div>
+              </div>
+           </div>
+        </div>
       </div>
       
       <div *ngIf="uploaderState?.uploadInProgress">
@@ -60,32 +68,6 @@ import {UploaderActions} from "../../common-app/src/ui/redux/uploader/uploader-a
       <div *ngIf="uploaderState?.lastUploadErrorMessage?.length>0" class="glyphicon glyphicon-exclamation-sign">
          {{uploaderState?.lastUploadErrorMessage}}
       </div>
-
-      <table *ngIf="uploader?.queue.length" class="table">
-        <thead>
-        <tr>
-          <th width="50%">Name</th>
-          <th>Size</th>
-          <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let item of uploader.queue">
-            <td><strong>{{item.file.name}}</strong></td>
-            <td nowrap>{{item.file.size}}</td>
-            <td nowrap>
-              <button type="button" class="btn btn-success btn-xs"
-                      (click)="uploadToFSCollection()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
-                <span class="glyphicon glyphicon-upload"></span> Upload
-              </button>
-              <button type="button" class="btn btn-danger btn-xs"
-                      (click)="item.remove()">
-                <span class="glyphicon glyphicon-trash"></span> Remove
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
     </div>
   </div>
 </form>

@@ -4,7 +4,7 @@ import 'meteor/alanning:roles'
 import * as log from 'loglevel';
 
 import {AccountsModal} from './accounts-modal';
-import {User} from '/imports/common-app-api';
+import {User} from '../../../../common-app-api';
 
 @Component({
   selector: 'update-account-modal',
@@ -56,7 +56,7 @@ export class UpdateAccountModal extends AccountsModal {
     super();
   }
 
-  static openUser(user:User):Promise {
+  static openUser(user:User):Promise<any> {
     return AccountsModal._open(UpdateAccountModal, 'update-account-modal', user);
   }
 

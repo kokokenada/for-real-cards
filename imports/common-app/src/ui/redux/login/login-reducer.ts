@@ -27,7 +27,7 @@ export function loginReducer(
         neverLoggedIn:false,
         loggingIn: false,
         loggedIn: true,
-        userId: action.payload.user._id,
+        userId: action.payload.user ? action.payload.user._id : (action.payload.userId ? action.payload.userId : state.userId),
         displayName: User.getDisplayName(action.payload.user),  // OK because it's synchronous
         user: action.payload.user,
         errorMessage: ''

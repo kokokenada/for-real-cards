@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AccountsModal } from './accounts-modal';
-import { User } from '/imports/common-app-api';
+import { User } from '../../../../common-app-api';
 
 @Component({
   selector: 'info-account-modal',
@@ -30,7 +30,7 @@ export class InfoAccountModal extends AccountsModal {
     super();
   }
 
-  static openUser(user:User):Promise {
+  static openUser(user:User):Promise<any> {
     return AccountsModal._open(InfoAccountModal, 'info-account-modal', user);
   }
 

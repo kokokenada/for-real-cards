@@ -26,7 +26,7 @@ export class ConnectActions {
     return {type: ConnectActions.CONNECT_SUCCESS, payload: {serverURL: serverURL}};
   }
   setServerURL(serverURL:string):void {
-    this.ngRedux.dispatch({ type: ConnectActions.CONNECT_SET_SERVER, playload: {serverURL: serverURL}});
+    this.ngRedux.dispatch({ type: ConnectActions.CONNECT_SET_SERVER, payload: {serverURL: serverURL}});
   }
 
 }

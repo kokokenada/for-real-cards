@@ -1,8 +1,7 @@
-import { Observable, Subscription } from 'rxjs'
+import { Observable } from 'rxjs'
 import { NgZone } from '@angular/core';
 import * as log from 'loglevel';
 
-import { FileUploader} from 'ng2-file-upload';
 import { AvatarOriginalStore, User } from '../../../../common-app-api';
 import {PlatformTools} from "../platform-tools/platform-tools";
 import { LoginActions, ILoginState, UploaderActions } from "../../ui";
@@ -10,7 +9,6 @@ import {IUploaderState} from "../../ui/redux/uploader/uploader.types";
 
 export abstract class EditUserProfileBase {
   avatarURL:string;
-  uploader:FileUploader = new FileUploader({});
   hasBaseDropZoneOver:boolean = false;
   userEditted:User;
   uploaderState:IUploaderState;
@@ -52,28 +50,38 @@ export abstract class EditUserProfileBase {
     this.addEmptyEmailIfNeeded(this.userEditted);
   }
 
-  fileOverBase(e:any):void {
+  fileOver(e:any):void {
+      e.stopPropagation();
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'copy';
+    }
+
+  fileDrop(e:any):void {
+    var transfer = this._getTransfer(event);
+    if (!transfer) {
+      return;
+    }
+    this._preventAndStop(event);
+    let file = e.dataTransfer.files[0];
+    this.uploaderActionsBase.uploadStartRequest(file, AvatarOriginalStore)
     this.hasBaseDropZoneOver = e;
   }
 
-  fileDrop(e:any):void {
-    console.log(this.uploader.queue)
-  }
+  private _getTransfer = function (event) {
+    return event.dataTransfer ? event.dataTransfer : event.originalEvent.dataTransfer; // jQuery fix;
+  };
 
-  uploadToFSCollection():void {
-    let files:any[] = [];
-    this.uploader.queue.forEach((queueItem:any)=> {
-      files.push(queueItem._file)
-    });
-    this.addImages(files);
-  }
+   private _preventAndStop = function (event) {
+    event.preventDefault();
+    event.stopPropagation();
+  };
 
-  private addImages(files) {
-    log.debug(files);
-    let currentFile = files[0];
 
-    this.uploaderActionsBase.uploadStartRequest(currentFile, AvatarOriginalStore);
-
+  fileSelect(e:any):void {
+    console.log(e)
+    console.log(e.srcElement.files[0]);
+    let file = e.srcElement.files[0];
+    this.uploaderActionsBase.uploadStartRequest(file, AvatarOriginalStore)
   }
 
   avatarUrl():string {
@@ -82,6 +90,14 @@ export abstract class EditUserProfileBase {
 
   showCameraOption():boolean {
     return PlatformTools.isCordova();
+  }
+
+  showDragOption():boolean {
+    return !PlatformTools.isCordova();
+  }
+
+  getImageFromCamera():void {
+    this.uploaderActionsBase.uploadCameraPicRequest(AvatarOriginalStore);
   }
 
 }

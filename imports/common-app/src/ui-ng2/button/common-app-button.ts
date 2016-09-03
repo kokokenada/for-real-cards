@@ -18,7 +18,7 @@ export class CommonAppButton {
 
   createComponentFactory(resolver: ComponentResolver, metadata: ComponentMetadata, parent:CommonAppButton): Promise<ComponentFactory<any>> {
   const cmpClass = class DynamicComponent {
-    @Output() click = new EventEmitter();
+    //@Output() click = new EventEmitter();
     onClick(o:any) {
       this.parent.onCABClick(o);  // Passing parent in seems simpler than figuring out how to dynamically define event hanlders
     }

@@ -63,8 +63,8 @@ export class LoginActions {
     return {type: LoginActions.SAVE_USER_RESPONSE, payload: {user: user}};
   }
 
-  static loginSuccessFactory(user:User):IPayloadAction {
-    return {type: LoginActions.LOGGED_IN, payload: {user: user}};
+  static loginSuccessFactory(user:User, userId:string):IPayloadAction {
+    return {type: LoginActions.LOGGED_IN, payload: {user: user, userId:userId}};
   }
 
   static logedOutFactory():IPayloadAction {

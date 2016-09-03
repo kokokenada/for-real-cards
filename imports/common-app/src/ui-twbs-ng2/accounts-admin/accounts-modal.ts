@@ -47,7 +47,7 @@ export class AccountsModal {
   displayName():string {
     if (!this.user)
       return "";
-    return User.getDisplayName(this.user._id);
+    return User.getDisplayName(this.user);
   }
 
   timeoutApply():void {

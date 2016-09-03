@@ -14,6 +14,7 @@ export class UploaderActions {
   static UPLOAD_PROGRESS = UploaderActions.prefix + 'UPLOAD_PROGRESS';
   static UPLOAD_SUCCESS = UploaderActions.prefix + 'UPLOAD_SUCCESS';
   static UPLOAD_FAIL = UploaderActions.prefix + 'UPLOAD_FAIL';
+  static UPLOAD_CAMERA_PIC_REQUEST = UploaderActions.prefix + 'UPLOAD_CAMERA_PIC_REQUEST';
 
   constructor(private ngRedux: NgRedux<IAppState>) {}
 
@@ -35,6 +36,14 @@ export class UploaderActions {
 
   uploadSuccess(_idOfUploadedFile:string) {
     this.ngRedux.dispatch({ type: UploaderActions.UPLOAD_SUCCESS, payload: {_idOfUploadedFile:_idOfUploadedFile}});
+  }
+
+  uploadCameraPicRequest(store):void { // TODO: Improve this with some type definitions
+    this.ngRedux.dispatch({ type: UploaderActions.UPLOAD_CAMERA_PIC_REQUEST, payload: {store:store}});
+  }
+
+  uploadError(errorMessage:string):void {
+    this.ngRedux.dispatch({ type: UploaderActions.UPLOAD_FAIL, payload: {lastUploadErrorMessage:errorMessage}});
   }
 
 /*  static changeFactory(documentChange:IDocumentChange<User>):IPayloadAction {

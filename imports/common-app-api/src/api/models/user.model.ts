@@ -83,20 +83,20 @@ export class User {
     verified?:boolean;
   }[];
   profile: {
-    name: string;
-    "avatar-original": string;
-    "avatar-medium": string;
-    "avatar-thumb": string;
-    firstName: string;
-    lastName: string;
-    birthday: Date;
-    gender: string;
-    organization: string;
-    website: string;
-    bio: string;
-    country: {
-      name: string;
-      code: string;
+    name?: string;
+    "avatar-original"?: string;
+    "avatar-medium"?: string;
+    "avatar-thumb"?: string;
+    firstName?: string;
+    lastName?: string;
+    birthday?: Date;
+    gender?: string;
+    organization?: string;
+    website?: string;
+    bio?: string;
+    country?: {
+      name?: string;
+      code?: string;
     }
   };
   // Use this registered_emails field if you are using splendido:meteor-accounts-emails-field / splendido:meteor-accounts-meld

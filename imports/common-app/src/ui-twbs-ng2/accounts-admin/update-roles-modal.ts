@@ -39,7 +39,7 @@ export class UpdateRolesModal extends AccountsModal {
 		super();
 	}
 
-	static openRoles():Promise {
+	static openRoles():Promise<any> {
 		return AccountsModal._open(UpdateRolesModal, 'update-roles-modal', null);
 	}
 

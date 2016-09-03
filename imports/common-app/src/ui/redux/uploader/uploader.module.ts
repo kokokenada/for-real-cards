@@ -12,7 +12,10 @@ export class UploaderModule extends ReduxModule<IAppState>  {
 
   constructor(private uploaderEpics:UploaderAsync, public actions:UploaderActions) {
     super();
-    this.epics.push(uploaderEpics.startUpload);
+    this.epics.push(
+      uploaderEpics.startUpload,
+      uploaderEpics.cameraUpload
+    );
   }
 
   initialize():void {

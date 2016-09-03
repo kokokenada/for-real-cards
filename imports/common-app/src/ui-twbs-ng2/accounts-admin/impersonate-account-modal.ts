@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {AccountsModal} from './accounts-modal';
-import {User} from '/imports/common-app-api';
+import {User} from '../../../../common-app-api';
 import * as log from 'loglevel';
 
 declare let Meteor:any;  // Meteor.connection barfs
@@ -28,7 +28,7 @@ export class ImpersonateAccountModal extends AccountsModal {
     super();
   }
 
-  static openUser(user:User):Promise {
+  static openUser(user:User):Promise<any> {
     return AccountsModal._open(ImpersonateAccountModal, 'impersonate-account-modal', user);
   }
   
