@@ -7,7 +7,4 @@
 /// <reference path="globals/underscore/index.d.ts" />
 /// <reference path="modules/es6-promise/index.d.ts" />
 
-declare module "*.html" {
-  const template: string;
-  export default template;
-}
+/// <reference path="fixes.d.ts" />
