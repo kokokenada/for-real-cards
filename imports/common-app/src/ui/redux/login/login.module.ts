@@ -15,6 +15,7 @@ export class LoginModule extends ReduxModule<IAppState>  {
     this.epics.push(
       loginEpics.checkAutoLogin,
       loginEpics.login,
+      loginEpics.tempUser,
       loginEpics.logout,
       loginEpics.watchUser,
       loginEpics.saveUser

@@ -34,8 +34,7 @@ export class ConnectAsync {
   attempt= (action$: Observable<IPayloadAction>, store: Store<IAppState>) => {
     return action$.filter(({ type }) => type === ConnectActions.CONNECT_ATTEMPT)
       .flatMap(({ payload }) => {
-        let connectState:IConnectState = store.getState().connectReducer;
-        if (connectState.connected) {
+        if (ConnectService.isConnected()) {
           return Observable.from([this.connectActions.successFactory(ConnectService.getServerURL())]);
         } else {
           ConnectService.reconnect();

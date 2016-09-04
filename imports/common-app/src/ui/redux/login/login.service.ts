@@ -10,7 +10,6 @@ import {IPayloadAction} from "../action.interface";
 import {BaseApp} from "../base-app.class";
 import {IDocumentChange} from "../../reactive-data/document-change.interface";
 import {MeteorCursorObservers} from "../../reactive-data/meteor-cursor-observers";
-let random = require("random-js");
 
 // Later, we can make an abstract parent and children that implement specific backend
 // For now, this is Meteor specific
@@ -55,7 +54,9 @@ export class LoginService {
           reject(BaseApp.errorFactory(LoginActions.LOGIN_ERROR, error));
         } else {
           log.info("Register successful.")
-          resolve(Meteor.user());
+          resolve(LoginActions.loginSuccessFactory(
+            LoginService.userFromMeteorUser(Meteor.user()), Meteor.userId()
+          ));
         }
       })
     });
@@ -71,12 +72,12 @@ export class LoginService {
           let credentials:Credentials = new Credentials(
             userId,
             "",
-            random.Random.integer(0,100000000).toString()
+            Math.random().toString()
           );
           LoginService.register(credentials).then(
-            (user) => {
+            (action) => {
               log.info("Registering tmp user successful.")
-              resolve(user);
+              resolve(action);
             }, (error)=> {  // Is this required or can I depend on rejection in AccountTools.register?
               reject(BaseApp.errorFactory(LoginActions.LOGIN_ERROR, error));
             }

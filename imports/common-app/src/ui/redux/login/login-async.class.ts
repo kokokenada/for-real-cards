@@ -44,14 +44,29 @@ export class LoginAsync {
             LoginService.login(payload.credentials)
           )
           .do( (payloadAction:IPayloadAction) => {
-            console.log('payloadAction')
-            console.log(payloadAction)
             this.loginActions.watchUser();
             LoginService.watchCurrentUser();
           } )
           .catch(error => Observable.of(error));
       });
   };
+
+  tempUser = (action$: Observable<IPayloadAction>) => {
+    return action$
+      .filter(({ type }) => type === LoginActions.TEMP_USER_REQUEST)
+      .flatMap(({ payload }) => {
+        return Observable
+          .fromPromise(
+            LoginService.createTempUser()
+          )
+          .do( (payloadAction:IPayloadAction) => {
+            this.loginActions.watchUser();
+            LoginService.watchCurrentUser();
+          } )
+          .catch(error => Observable.of(error));
+      });
+  };
+
 
   logout = (action$: Observable<IPayloadAction>) => {
     return action$.filter(({ type }) => type === LoginActions.LOGOUT_REQUEST)
