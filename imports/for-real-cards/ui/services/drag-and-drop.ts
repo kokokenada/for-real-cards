@@ -36,13 +36,13 @@ export class DragAndDrop {
       this.logError('Element is missing dataset');
     }
     if (target && target.dataset) {
-      this.target = CardLocation[target.dataset.dropTarget];
+      this.target = CardLocation[<string>target.dataset.dropTarget];
     } else {
       this.valid = false;
       this.logError('target is missing or is missing dataset');
     }
     if (source && source.dataset) {
-      this.source = CardLocation[source.dataset.dragSource];
+      this.source = CardLocation[<string>source.dataset.dragSource];
     } else {
       this.valid = false;
       this.logError('source is missing or is missing dataset');
