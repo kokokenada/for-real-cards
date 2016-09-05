@@ -3,8 +3,7 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 import { Meteor } from 'meteor/meteor';
-import { Session } from 'meteor/session';
-import { ReplaySubject, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import * as log from 'loglevel';
 import { NgZone } from '@angular/core';
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
@@ -12,74 +11,36 @@ import { DragulaService } from 'ng2-dragula/ng2-dragula';
 import {CommonPopups} from '../../common-app';
 
 import { GamePlayAction, GamePlayActionType, Card, CardCountAllowed, CardLocation, Deck, DeckLocation, GameConfig, Hand } from '../api/index';
-import { DragAndDrop, GameState, GameRenderingTools } from '../ui/index';
+import { DragAndDrop, GameRenderingTools } from '../ui/index';
 
 
-import {CardImageStyle} from "../api/interfaces/card-image-style.interface";
+import { CardImageStyle} from "../api/interfaces/card-image-style.interface";
+import { IGamePlayRecord} from "../ui/redux/game-play/game-play.types";
+import { GamePlayActions} from "../ui/redux/game-play/game-play-actions.class";
 
-const SESSION_GAME_ID_KEY = 'session-game-id';
 export class RunGame {
-  protected gameId:string;
-  userPassword:string;
-  static gameState:GameState;
-  static subject:ReplaySubject<GamePlayAction> = new ReplaySubject<GamePlayAction>();
-  private static gameStreamInitializedToId:string;
+  gameState:IGamePlayRecord;
   protected static dragAndDropInitialized:boolean = false;
+  protected gamePlayActionsBase:GamePlayActions;
 
-  constructor(private dragulaService: DragulaService, private ngZone:NgZone) {
+  constructor(
+    gamePlayActions:GamePlayActions, 
+    private dragulaService: DragulaService, 
+    private ngZone:NgZone) {
+    this.gamePlayActionsBase = gamePlayActions;
   }
 
-  ngOnInit() {
-    //log.debug('RunGame rx.subscribing in RunGame ngOnInit')
-    //log.debug(this)
-    RunGame.subscribe(
-      (action:GamePlayAction)=> {
-        //log.debug('Got subscription callback in run-game.ts. GamePlayAction:');
-        //log.debug(action);
-        //log.debug(this)
-        if (
-          action.actionType===GamePlayActionType.NEW_HAND ||
-          action.actionType===GamePlayActionType.ENTER_GAME_AT_HAND_NOTIFY ||
-          action.actionType===GamePlayActionType.ENTER_GAME_AT_TABLE_NOTIFY
-        ) {
-          this.ngZone.run(()=>{
-            this.gameId = action.gameId;
-            this.initialize();
-            //log.debug(RunGame.gameState)
-          })
-        } else {
-          if (action.sequencePosition+1===action.sequenceLength ) {
-            this.ngZone.run(()=>{
+  protected initialize(gameState$:Observable<IGamePlayRecord>) {
+    gameState$.subscribe( (gameState:IGamePlayRecord)=>{
+      this.gameState = gameState;
+
+    } );
+    this.dragAndDropInit();  // TODO: deal with changing state
+    //if (action.sequencePosition+1===action.sequenceLength ) { // TODO: How to only render when last
+     // this.ngZone.run(()=> {
 //              console.log('rendered')
-            });
-          }
-        }
-      },
-      (error)=> {
-        log.error(error);
-        CommonPopups.alert(error);
-      }
-    );
-    this.initialize();
-    this.dragAndDropInit();
-  }
-
-  static pushNewGameNotification(id:string) {
-    RunGame.pushGameNotification(id, GamePlayActionType.NEW_GAME);
-  }
-  
-  static pushGameNotification(gameId, actionType:GamePlayActionType):void {
-    RunGame.subject.next(
-      new GamePlayAction({gameId: gameId, actionType:actionType, creatorId: Meteor.userId()})
-    );
-  }
-
-  static getActions():GamePlayAction[] {
-    return RunGame.gameState.actions;
-  }
-  
-  static subscribe(onNext:(action:GamePlayAction)=>void, onError:(error)=>void=undefined, onCompleted:()=>void=undefined):Subscription {
-    return RunGame.subject.subscribe(onNext, onError, onCompleted);
+      //});
+//    }
   }
 
   dragAndDropInit() { // Share a scope for drag and drop
@@ -91,7 +52,7 @@ export class RunGame {
         return true; // elements are always draggable by default
       };
       let accepts = (el, target, source, sibling)=> {
-        let dragAndDrop = new DragAndDrop(el, target, source, sibling, RunGame.gameState.currentGameConfig);
+        let dragAndDrop = new DragAndDrop(el, target, source, sibling, this.gameState);
         return dragAndDrop.isDropAllowed();
       };
       let invalid = (el, hanlde)=> {
@@ -121,7 +82,7 @@ export class RunGame {
       });
       this.dragulaService.drop.subscribe((value)=>{
         let [arg1, el, targetEl, sourceEl, siblingEl] =value;
-        let dragAndDrop = new DragAndDrop(el, targetEl, sourceEl, siblingEl, RunGame.gameState.currentGameConfig);
+        let dragAndDrop = new DragAndDrop(el, targetEl, sourceEl, siblingEl, this.gameState);
         if (!dragAndDrop.isDropAllowed()) {
           dragAndDrop.logError("Drop received an element that should not have been allowed");
           return;
@@ -129,74 +90,15 @@ export class RunGame {
 //        console.log('drop')
 //        console.log(dragAndDrop)
 
-        dragAndDrop.runActions(RunGame.gameState);        
+        dragAndDrop.runActions(this.gamePlayActionsBase);
         
       });
     }
   }
   
-  static joinGame(gameId:string, password:string):Promise<any> {
-    Session.set('password', password);
-    return new Promise( (resolve, reject)=>{
-      Meteor.call('ForRealCardsJoinGame', gameId, password, (error, result:Hand)=> {
-        if (error) {
-          log.error('ForRealCardsJoinGame returned error');
-          log.error(error);
-          if (error.error==="gameId-not-found") {
-            CommonPopups.alert("That game ID does not exist.");
-            RunGame.subject.next(new GamePlayAction({gameId: gameId, creatorId: Meteor.userId(), actionType: GamePlayActionType.ENTER_GAME_FAIL}));
-          } else {
-            CommonPopups.alert(error);
-          }
-          reject(error);
-        } else {
-          log.debug('ForRealCardsJoinGame returned OK');
-          log.debug(result);
-          resolve(result);
-        }
-      })
-    })
-  }
-
-  private initialize() {
-    //console.log("RunGame initialize()")
-    //console.log(this);
-    if   (this.gameId===undefined) {
-      console.log("gameId undefined")
-      console.log(this)
-      return;
-    }
-    if (RunGame.gameStreamInitializedToId !== this.gameId) {
-      this.userPassword = Session.get('password');
-      if (!this.amIIncluded()) {
-        RunGame.joinGame(this.gameId, this.userPassword).then(
-          (result)=>{
-            this.setIncluded(result.gameId);
-          }
-        );
-
-      }
-
-      console.log('subscribing to game ' + this.gameId);
-
-      RunGame.gameState = new GameState(this.gameId, RunGame.subject);
-      RunGame.gameState.startSubScriptions();
-      RunGame.gameStreamInitializedToId = this.gameId;
-    }
-  }
-
   getHands():Hand[] {
-    if (RunGame.gameState)
-      return RunGame.gameState.hands;
-  }
-
-  private amIIncluded():boolean {
-    let sessionGameId = Session.get(SESSION_GAME_ID_KEY);
-    return (sessionGameId === this.gameId);
-  }
-
-  private setIncluded(gameId:string) {
-    Session.set(SESSION_GAME_ID_KEY, gameId)
+    if (this.gameState)
+      return this.gameState.hands.toArray();
   }
 
   getDecks() {
@@ -210,59 +112,59 @@ export class RunGame {
   }
 
   getHand(userId:string = Meteor.userId()):Hand {
-    if (RunGame.gameState) {
-      let hand:Hand = RunGame.gameState.getHandFromUserId(userId);
+    if (this.gameState) {
+      let hand:Hand = GamePlayActions.getHandFromUserId(this.gameState.hands, userId);
       return hand;
     }
   }
 
   getCardsInHandFaceUp(userId:string = Meteor.userId()):Card[] {
-    if (RunGame.gameState) {
-      let hand:Hand = RunGame.gameState.getHandFromUserId(userId);
+    if (this.gameState) {
+      let hand:Hand = GamePlayActions.getHandFromUserId(this.gameState.hands, userId);
       if (hand)
         return hand.cardsFaceUp;
     }
   }
 
   getCardsInDeck():Card[] {
-    if (RunGame.gameState)
-      return RunGame.gameState.tableFaceDown;
+    if (this.gameState)
+      return this.gameState.tableFaceDown.toArray();
   }
 
   getCardsInPile():Card[] {
-    if (RunGame.gameState)
-      return RunGame.gameState.tablePile;
+    if (this.gameState)
+      return this.gameState.tablePile.toArray();
   }
 
   getCardsFaceUp(userId:string = Meteor.userId()):Card[] {
-    if (RunGame.gameState) {
-      let hand:Hand = RunGame.gameState.getHandFromUserId(userId);
+    if (this.gameState) {
+      let hand:Hand = GamePlayActions.getHandFromUserId(this.gameState.hands, userId);
       if (hand)
         return hand.cardsFaceUp;
     }
   }
 
   topCardInPile():Card {
-    if (RunGame.gameState && RunGame.gameState.tablePile) {
-      let length = RunGame.gameState.tablePile.length;
+    if (this.gameState && this.gameState.tablePile) {
+      let length = this.gameState.tablePile.size;
       if (length)
-        return RunGame.gameState.tablePile[length - 1];
+        return this.gameState.tablePile.get(length - 1);
     }
   }
 
   shouldShowTableDrop():boolean {
     return (
-      RunGame.gameState &&
-      RunGame.gameState.currentGameConfig &&
-      RunGame.gameState.currentGameConfig.isTarget(CardLocation.TABLE)
+      this.gameState &&
+      this.gameState.currentGameConfig &&
+      this.gameState.currentGameConfig.isTarget(CardLocation.TABLE)
     )
   }
 
   private tricksInProgress():boolean {
-    let gameConfig:GameConfig = RunGame.gameState.currentGameConfig;
+    let gameConfig:GameConfig = this.gameState.currentGameConfig;
     if (gameConfig) {
       if (gameConfig.hasTricks) {
-        let hands:Hand[] =  RunGame.gameState.hands;
+        let hands:Hand[] =  this.gameState.hands.toArray();
         for (let i=0; i<hands.length; i++) {
           let hand:Hand = hands[i];
           if (hand.cardsFaceUp.length>0 || hand.tricks.length>0) {
@@ -276,13 +178,13 @@ export class RunGame {
 
   shouldShowPile():boolean {
     return (
-      RunGame.gameState &&
-      RunGame.gameState.currentGameConfig &&
+      this.gameState &&
+      this.gameState.currentGameConfig &&
       (
         this.tricksInProgress()===false &&
         (
-          RunGame.gameState.currentGameConfig.isTarget(CardLocation.PILE) ||
-          RunGame.gameState.currentGameConfig.isSource(CardLocation.PILE)
+          this.gameState.currentGameConfig.isTarget(CardLocation.PILE) ||
+          this.gameState.currentGameConfig.isSource(CardLocation.PILE)
         )
       )
     );
@@ -290,24 +192,24 @@ export class RunGame {
 
 
   shouldShowDeck():boolean {
-    if (RunGame.gameState && RunGame.gameState.currentGameConfig)
-      return this.tricksInProgress()===false && RunGame.gameState.currentGameConfig.deckLocationAfterDeal == DeckLocation.CENTER;
+    if (this.gameState && this.gameState.currentGameConfig)
+      return this.tricksInProgress()===false && this.gameState.currentGameConfig.deckLocationAfterDeal == DeckLocation.CENTER;
   }
 
   cardBackURL(portrait:boolean = true):string {
-    return GameRenderingTools.getCardBackURL(this.gameId, portrait);
+    return GameRenderingTools.getCardBackURL(this.gameState.gameId, portrait);
   }
 
   canShowHand():boolean {
     return (
-      RunGame.gameState &&
-      RunGame.gameState.currentGameConfig && 
-      RunGame.gameState.currentGameConfig.findCommand(CardLocation.HAND, CardLocation.TABLE).cardCountAllowed===CardCountAllowed.ALL
+      this.gameState &&
+      this.gameState.currentGameConfig && 
+      this.gameState.currentGameConfig.findCommand(CardLocation.HAND, CardLocation.TABLE).cardCountAllowed===CardCountAllowed.ALL
     );
   }
 
   showHand():void {
-    RunGame.gameState.showHand();
+    this.gamePlayActionsBase.showHand(this.gameState);
   }
   
   landscapeCardStyle():CardImageStyle {
@@ -324,6 +226,5 @@ export class RunGame {
       width: '100%'
     }
   }
-
 }
 

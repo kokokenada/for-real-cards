@@ -27,7 +27,7 @@ export function usersReducer(
         case (EDocumentChangeType.CHANGED):
           return {users: state.users.set(changeDoc.newDocument._id, changeDoc.newDocument) };
         case (EDocumentChangeType.REMOVED):
-          return {users: state.users.delete(changeDoc.newDocument._id) };
+          return {users: state.users.delete(changeDoc.oldDocument._id) };
         default:
           return state;
       }

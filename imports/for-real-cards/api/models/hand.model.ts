@@ -15,7 +15,7 @@ const enum SortSequence {
   RANK
 }
 
-export class Hand {
+class HandBase {
   _id: string;
   gameId: string;
   userId: string;
@@ -26,8 +26,15 @@ export class Hand {
   cardsInHand:Card[]; // not persisted
   tricks:Card[][] = [];  // Not persisted
   handSortSequence:SortSequence = SortSequence.RANK; // Not persisted
-  
-  constructor(hand:Hand) {
+}
+
+export interface HandInterface extends HandBase {
+}
+
+export class Hand extends HandBase {
+
+  constructor(hand:HandBase) {
+    super();
     _.extend(this, hand);
   }
   

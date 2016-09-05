@@ -3,19 +3,19 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 
-import { Component, Injector, Input, NgZone, ViewEncapsulation } from '@angular/core';
+import { Component, Injector, Input, OnInit, NgZone, ViewEncapsulation } from '@angular/core';
 import { Dragula, DragulaService} from 'ng2-dragula/ng2-dragula';
+import { select } from 'ng2-redux';
 
-import { Tools } from '/imports/common-app';
+import { PlatformTools, Tools } from '../../common-app';
 
-import { GameRenderingTools } from "../ui/index";
+import { GamePlayActions, GameRenderingTools } from "../ui";
 import { Card, Coordinates, Deck, Hand} from "../api/index";
 import { RunGame } from './run-game.ts';
 import { Player } from "../player/player";
 import { PlayingCard } from "../playing-card/playing-card";
 import { DeckView } from "./deck-view";
 import { PileView } from "./pile-view";
-import {PlatformTools} from '/imports/common-app';
 
 import template from "./run-game-table.html"
 
@@ -31,13 +31,18 @@ const TABLE_ZONE_OUTER_RADIUS = 30;
   }
 )
 
-export class RunGameTable extends RunGame {
+export class RunGameTable extends RunGame implements OnInit {
   @Input() width:string;
   @Input() height:string;
   @Input() forPlayer:string;
+  @select() gamePlayReducer;
   
-  constructor(private dragulaServiceChild: DragulaService, private ngZoneChild:NgZone, private injector: Injector) {
-    super(dragulaServiceChild, ngZoneChild);
+  constructor(
+    private gamePlayActions:GamePlayActions,
+    private dragulaServiceChild: DragulaService,
+    private ngZoneChild:NgZone,
+    private injector: Injector) {
+    super(gamePlayActions, dragulaServiceChild, ngZoneChild);
     if (PlatformTools.isIonic())  {
       let navParams = PlatformTools.getNavParams(injector);
       if (navParams) {
@@ -45,6 +50,10 @@ export class RunGameTable extends RunGame {
         this.height = navParams.data.height;
       }
     }
+  }
+
+  ngOnInit() { // TODO: Can this go on base class if gamePLayReducer can be abstract
+    this.initialize(this.gamePlayReducer);
   }
 
   private forPlayerBool():boolean {

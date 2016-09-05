@@ -4,32 +4,22 @@
  */
 
 import { NgZone } from '@angular/core';
-import {RunGame} from "./run-game";
-import {GamePlayAction, GamePlayActionType} from "../api/models/action.model";
-import { Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
+import {IGamePlayRecord} from "../ui/redux/game-play/game-play.types";
 
 
 export class RunGameContainer {
   protected gameId:string;
-  private subscription:Subscription;
   ngZoneBase:NgZone
   constructor(ngZone  :NgZone) {
     this.ngZoneBase = ngZone;
-    this.subscription = RunGame.subscribe((action:GamePlayAction)=> {
-      this.ngZoneBase.run(()=> {
-        if (action.actionType===GamePlayActionType.NEW_GAME) {
-          console.log('setting gameId in RunGameController')
-          console.log(action)
-          this.gameId = action.gameId;
-        }
-      });
-    });
   }
 
-  ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+  initialize(gameState$:Observable<IGamePlayRecord>) {
+    gameState$.subscribe( (gameState:IGamePlayRecord)=>{
+      this.ngZoneBase.run(()=> {
+        this.gameId = gameState.gameId;
+      })
+    });
   }
-  
 }

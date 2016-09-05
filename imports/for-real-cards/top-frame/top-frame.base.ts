@@ -2,13 +2,10 @@
  * Copyright Ken Ono, Fabrica Technolology 2016
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
-import { Meteor } from 'meteor/meteor';
-import { Subscription } from 'rxjs'
-import { IAppState, IPayloadAction, BaseApp, ConnectModule, LoginActions, LoginModule, UploaderModule, UsersModule} from "../../common-app";
-import {RunGame} from "../run-game/run-game";
-import {GamePlayAction as OLDAction, GamePlayActionType} from "../api/models/action.model";
 import {NgRedux} from "ng2-redux";
-import {ForRealCardsModule, ForRealCardsActions} from "../ui";
+
+import { IAppState, IPayloadAction, BaseApp, ConnectModule, LoginActions, LoginModule, UploaderModule, UsersModule} from "../../common-app";
+import {ForRealCardsModule, ForRealCardsActions, GamePlayModule, IForRealCardsActionPayload} from "../ui";
 
 export abstract class TopFrame extends BaseApp<IAppState> {
   private loginModule:LoginModule;
@@ -16,12 +13,14 @@ export abstract class TopFrame extends BaseApp<IAppState> {
     connectModule:ConnectModule,
     loginModule:LoginModule,
     forRealCardsModule:ForRealCardsModule,
+    gamePlayModule:GamePlayModule,
     usersModule:UsersModule,
     uploaderModule:UploaderModule,
     ngRedux: NgRedux<IAppState>
   ) {
     this.turnOnConsoleLogging();
 
+    // Middleware put here so it can have access to 'this.'.  This is a temporary work around until navigation with redux is done
     const navigatorMiddleware = store => next => (action:IPayloadAction) => {
       switch (action.type)  {
         case LoginActions.LOGGED_IN:
@@ -42,6 +41,19 @@ export abstract class TopFrame extends BaseApp<IAppState> {
         case ForRealCardsActions.NAV_TO_TABLE:
           this.navigateToGameTable(action.payload.gameId);
           break;
+        case ForRealCardsActions.ENTER_GAME_FAIL:
+          this.navigateToEnter();
+          break;
+        case ForRealCardsActions.JOIN_GAME_SUCCESS: {
+          let forRealCardsPayload: IForRealCardsActionPayload = action.payload;
+          this.navigateToGamePlayer(forRealCardsPayload.gameId);
+          break;
+        }
+        case ForRealCardsActions.VIEW_GAME_SUCCESS: {
+          let forRealCardsPayload: IForRealCardsActionPayload = action.payload;
+          this.navigateToGameTable(forRealCardsPayload.gameId);
+          break;
+        }
       }
       return next(action);
     };
@@ -52,54 +64,11 @@ export abstract class TopFrame extends BaseApp<IAppState> {
 
   }
 
-  protected subscriptions:Subscription[] = [];
-  
-  protected cleanSubScriptions():void {
-    if (this.subscriptions) {
-      this.subscriptions.forEach((subscription:Subscription)=>{
-        subscription.unsubscribe();
-      })
-    }
-  }
-
   ngOnInit() {
     console.log('ngOnInit of TopFrame ' + new Date())
-    this.loginModule.actions.watchUser();
-/*    Meteor.setTimeout(()=>{
-     console.log("ngOnInitTimer " + + new Date())
-      this.loginModule.actions.checkAutoLogin();
-     }, 500);*/
+   // this.loginModule.actions.watchUser();  // TODO: DELETE THIS i DONT' THINK ITS NEEDED
   }
 
-  ngOnDestroy() {
-    this.cleanSubScriptions();
-  }
-
-
-  watchGame() {
-    this.subscriptions.push(RunGame.subscribe((action:OLDAction)=> {
-      switch (action.actionType) {
-        case GamePlayActionType.NEW_GAME: {
-          console.log("Ionic nav NEW_GAME")
-          this.navigateToGamePlayer('');
-          break;
-        }
-        case GamePlayActionType.ENTER_GAME_FAIL: {
-          this.navigateToEnter();
-          break;
-        }
-        case GamePlayActionType.ENTER_GAME_AT_HAND_NOTIFY:{
-          console.log("Ionic nav ENTER_GAME_AT_HAND_NOTIFY")
-          this.navigateToGamePlayer(action.gameId);
-          break;
-        }
-        case GamePlayActionType.ENTER_GAME_AT_TABLE_NOTIFY: {
-          this.navigateToGameTable(action.gameId);
-          break;
-        }
-      }
-    }));
-  }
 
   abstract navigateToStart():void;
   abstract navigateToEnter():void;

@@ -3,7 +3,8 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 
-import { Component, Input, Injector, NgZone, Optional, ViewEncapsulation } from '@angular/core';
+import { Component, Input, Injector, NgZone, OnInit, ViewEncapsulation } from '@angular/core';
+import { select } from 'ng2-redux';
 import { Meteor } from 'meteor/meteor';
 import { Dragula, DragulaService } from 'ng2-dragula/ng2-dragula';
 
@@ -13,8 +14,8 @@ import { CommonAppButton, CommonPopups, PlatformTools, Tools } from '../../commo
 import { RunGame } from './run-game.ts';
 import { DealModalService } from "../deal-modal/deal-modal.service"
 import { PlayingCard } from "../playing-card/playing-card";
-import { GamePlayAction, Card, CardImageStyle, GameConfig, CardLocation, CardCountAllowed, Hand} from "../api/index";
-import {ActionFormatted} from "../ui/action-formatted.class";
+import { Card, CardImageStyle, GameConfig, CardLocation, CardCountAllowed, Hand} from "../api";
+import { ActionFormatted, GamePlayActions} from "../ui";
 import { DeckView } from "./deck-view";
 import { PileView } from "./pile-view";
 
@@ -29,19 +30,27 @@ import template from "./run-game-hand.html"
     template: template
   }
 )
-export class RunGameHand extends RunGame {
+export class RunGameHand extends RunGame implements OnInit {
   @Input() showTableProxy:string;
-  undoAction:GamePlayAction;
+  @select() gamePlayReducer;
 
-  constructor(private dealModelService:DealModalService, private dragulaServiceChild: DragulaService, private ngZoneChild:NgZone,
-              private injector: Injector) {
-    super(dragulaServiceChild, ngZoneChild);
+  constructor(
+    private dealModelService:DealModalService,
+    private gamePlayActions:GamePlayActions,
+    private dragulaServiceChild: DragulaService,
+    private ngZoneChild:NgZone,
+    private injector: Injector) {
+    super(gamePlayActions, dragulaServiceChild, ngZoneChild);
     if (PlatformTools.isIonic())  {
       let navParams = PlatformTools.getNavParams(injector);
       if (navParams) {
         this.showTableProxy = navParams.data.showTableProxy;
       }
     }
+  }
+
+  ngOnInit() {
+    this.initialize(this.gamePlayReducer)
   }
 
   private showTableProxyBool():boolean {
@@ -53,7 +62,7 @@ export class RunGameHand extends RunGame {
   }
 
   shouldShowTakeTrick():boolean {
-      return RunGame.gameState && RunGame.gameState.currentGameConfig && RunGame.gameState.currentGameConfig.hasTricks && RunGame.gameState.trickReady();
+      return this.gameState && this.gameState.currentGameConfig && this.gameState.currentGameConfig.hasTricks && GamePlayActions.trickReady(this.gameState);
   }
   
   private numberOfBoxes():number {
@@ -81,14 +90,14 @@ export class RunGameHand extends RunGame {
   }
   
   takeTrick():void {
-    RunGame.gameState.takeTrick();
+    this.gamePlayActionsBase.takeTrick(this.gameState);
   }
   
   shouldShowSort():boolean {
     return (
-      RunGame.gameState &&
-      RunGame.gameState.currentGameConfig &&
-      RunGame.gameState.currentGameConfig.findCommand(CardLocation.HAND, CardLocation.HAND).cardCountAllowed!==CardCountAllowed.NONE
+      this.gameState &&
+      this.gameState.currentGameConfig &&
+      this.gameState.currentGameConfig.findCommand(CardLocation.HAND, CardLocation.HAND).cardCountAllowed!==CardCountAllowed.NONE
     );
   }
   
@@ -101,17 +110,17 @@ export class RunGameHand extends RunGame {
       let card = hand.cardsInHand[i];
       cardOrder.push(card);
     }
-    RunGame.gameState.sortHand(cardOrder);
+    this.gamePlayActionsBase.sortHand(this.gameState, cardOrder);
   }
 
   deal() {
     let defaultGameConfig:GameConfig;
-    if (RunGame.gameState)
-      defaultGameConfig = RunGame.gameState.currentGameConfig;
+    if (this.gameState)
+      defaultGameConfig = this.gameState.currentGameConfig;
     this.dealModelService.open(defaultGameConfig).then(
       (gameConfig:GameConfig)=>{
         if (gameConfig) {
-          RunGame.gameState.deal(gameConfig);
+          this.gamePlayActionsBase.deal(this.gameState, gameConfig);
         }
       }, (error)=> {
         CommonPopups.alert(error);
@@ -120,19 +129,19 @@ export class RunGameHand extends RunGame {
   }
 
   shouldShowUndo():boolean {
-    return RunGame.gameState && (RunGame.gameState.actionToUndo() ? true : false);
+    return (GamePlayActions.actionToUndo(this.gameState) ? true : false);
   }
   
   undo():void {
     
-    let action:ActionFormatted  = new ActionFormatted( RunGame.gameState.actionToUndo() );
+    let action:ActionFormatted  = new ActionFormatted( GamePlayActions.actionToUndo(this.gameState) );
 
     let prompt:string = "Undo " + action.actionDescription() + " done by "
       + (action.creatorId === Meteor.userId() ? "yourself" : action.creator());
     CommonPopups.confirm(prompt).then(
       (result)=> {
         if (result) {
-          RunGame.gameState.undo(action._id);
+          this.gamePlayActions.undo(this.gameState, action._id);
         }
       }, (error)=> {
         CommonPopups.alert(error);

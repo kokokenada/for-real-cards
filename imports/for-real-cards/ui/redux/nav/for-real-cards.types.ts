@@ -1,14 +1,19 @@
+/**
+ * Copyright Ken Ono, Fabrica Technolology 2016
+ * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
+ */
+
 import {TypedRecord} from 'typed-immutable-record';
 import {IAppState} from "../../../../common-app";
 
-import {TopFrame} from "../../../top-frame/top-frame.base";
 
 export interface IForRealCardsState extends IAppState {
-  topFrame: TopFrame
+  gameDescription:string;
 }
 
 export interface IForRealCardsRecord extends TypedRecord<IForRealCardsRecord>, IForRealCardsState {}
 
-export interface IForRealCardsAction {
-  topFrame: TopFrame
+export interface IForRealCardsActionPayload {
+  password?:string
+  gameId?:string
 }

@@ -3,14 +3,11 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 
-import { Component, NgZone } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { select } from 'ng2-redux';
 
-import {GameDescriptionEvent} from "./game-description-event";
-import {RunGame} from "../run-game/run-game";
-import {PlatformTools} from '../../common-app';
-import {ILoginState} from "../../common-app/src/ui/redux/login/login.types";
+import { ILoginState, PlatformTools} from '../../common-app';
+import {IForRealCardsRecord} from "../ui";
 
 function template():string {
   if (PlatformTools.isIonic())
@@ -22,26 +19,24 @@ function template():string {
   selector: 'top-frame-header',
   template: template()
 })
-export class TopFrameHeader {
+export class TopFrameHeader implements OnInit {
   @select() loginReducer;
+  @select() forRealCardsReducer;
   gameDescription:string;
   displayName:string;
-  private subscriptionGameDesc:Subscription;
-  constructor(private ngZone:NgZone) {
-    this.subscriptionGameDesc = GameDescriptionEvent.subscribe(RunGame.subject, (gameDescription:GameDescriptionEvent)=>{
-      this.ngZone.run(()=>{
-        this.gameDescription = gameDescription.description;
-      });
-    });
-  }
-  ngInit() {
-    this.loginReducer.subscribe( (loginState:ILoginState)=>{
-      this.displayName = loginState.displayName;
+
+  constructor(private ngZone:NgZone) {}
+
+  ngOnInit() {
+    this.forRealCardsReducer.subscribe( (state:IForRealCardsRecord)=>{
+      this.ngZone.run( ()=>{
+        this.gameDescription = state.gameDescription;
+      } );
     } );
-  }
-  ngOnDestroy() {
-    if (this.subscriptionGameDesc) {
-      this.subscriptionGameDesc.unsubscribe();
-    }
+    this.loginReducer.subscribe( (state:ILoginState)=>{
+      this.ngZone.run( ()=>{
+        this.displayName = state.displayName;
+      } );
+    } );
   }
 }

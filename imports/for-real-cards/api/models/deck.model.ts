@@ -3,15 +3,10 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 
-import {Card, CardRank, CardSuit} from './card.model.ts';
 import 'seedrandom';
+import { List } from "immutable";
 
-/*
-export interface DeckDefinition {
-    name: string;
-    ranks: [card.CardRank]
-}
-*/
+import {Card, CardRank, CardSuit} from './card.model.ts';
 
 let decks: Deck[] = [];
 
@@ -138,7 +133,9 @@ export class Deck{
     }
     return decks;
   }
-  static indexOf(cards:Card[], cardToFind:Card):number {
+  static indexOf(cards:List<Card>, cardToFind:Card):number
+  static indexOf(cards:Card[], cardToFind:Card):number
+  static indexOf(cards:any, cardToFind:Card):number {
     for (let i = 0; i<cards.length; i++) {
       let deckCard:Card = cards[i];
       if (deckCard.rank===cardToFind.rank && deckCard.suit===cardToFind.suit)

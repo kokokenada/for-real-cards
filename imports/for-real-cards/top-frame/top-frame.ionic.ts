@@ -25,8 +25,11 @@ import { PlatformToolsIonic, MenuItem, Menus, MenuFilterPipe,
 
 import {
   ForRealCardsActions,
+  ForRealCardsModule,
   ForRealCardsAsync,
-  ForRealCardsModule
+  GamePlayActions,
+  GamePlayAsync,
+  GamePlayModule,
 } from '../ui';
 
 import { Start } from '../start/start';
@@ -72,8 +75,11 @@ import {TopFrameHeader} from "./top-frame-header";
     LoginAsync,
     LoginModule,
     ForRealCardsActions,
-    ForRealCardsAsync,
     ForRealCardsModule,
+    ForRealCardsAsync,
+    GamePlayActions,
+    GamePlayAsync,
+    GamePlayModule,
     UploaderModule,
     UploaderActions,
     UploaderAsync,
@@ -92,12 +98,13 @@ class ForRealCardsTopFrame extends TopFrame {
     connectModule:ConnectModule,
     loginModule:LoginModule,
     forRealCardsModule:ForRealCardsModule,
+    gamePlatModule:GamePlayModule,
     usersModule:UsersModule,
     uploaderModule:UploaderModule,
     ngRedux:NgRedux<IAppState>
 ) { //, private navParams:NavParams) {
     super()
-    this.topFrameConfigure(connectModule, loginModule, forRealCardsModule, usersModule, uploaderModule, ngRedux);
+    this.topFrameConfigure(connectModule, loginModule, forRealCardsModule, gamePlatModule, usersModule, uploaderModule, ngRedux);
 
     Menus.addMenu({id: 'topbar'});
 
@@ -141,7 +148,6 @@ class ForRealCardsTopFrame extends TopFrame {
   }
 
   ngAfterViewInit() { // Defer until after the view initializad and all components available
-    this.watchGame();
     this.menu.enable(true, 'topFrameMenu');
     PlatformToolsIonic.initializeWithRouter(this.nav);
   }

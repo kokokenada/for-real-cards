@@ -2,15 +2,17 @@
  * Copyright Ken Ono, Fabrica Technolology 2016
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
-import { Component, Input } from '@angular/core';
-import { Session } from 'meteor/session';
+import {Component, Input} from '@angular/core';
+import {Session} from 'meteor/session';
 import {RunGame} from "../run-game/run-game";
 import {GamePlayActionType, GamePlayAction} from "../api/models/action.model";
-import {TargetPlatformId, PlatformTools} from '/imports/common-app';
+import {TargetPlatformId, PlatformTools} from '../../common-app';
+import {ForRealCardsActions} from "../ui/redux/nav/for-real-cards-actions.class";
 
-function template():string {
+function template(): string {
   switch (PlatformTools.getTargetPlatforrm()) {
-    case TargetPlatformId.IONIC: return `
+    case TargetPlatformId.IONIC:
+      return `
 <ion-list>
   <form>
     <ion-list-header>
@@ -93,23 +95,19 @@ function template():string {
   {
     selector: 'join-game',
     template: template()
-})
-export class JoinGame{
-  password:string;
-  gameId:string;
-  constructor() {
+  })
+export class JoinGame {
+  password: string;
+  gameId: string;
+
+  constructor(private forRealCardsActions: ForRealCardsActions) {
   }
+
   joinGame() {
-    RunGame.joinGame(this.gameId, this.password).then(
-      (result) => {
-        RunGame.pushGameNotification(this.gameId, GamePlayActionType.ENTER_GAME_AT_HAND_NOTIFY);
-      }, (error)=> {
-        console.log('join game promise was rejected')
-      }
-    );
+    this.forRealCardsActions.joinGameRequest(this.gameId, this.password);
   };
+
   displayGame() {
-    Session.set('password', this.password);
-    RunGame.pushGameNotification(this.gameId, GamePlayActionType.ENTER_GAME_AT_TABLE_NOTIFY);
+    this.forRealCardsActions.viewGameRequest(this.gameId, this.password);
   };
 }

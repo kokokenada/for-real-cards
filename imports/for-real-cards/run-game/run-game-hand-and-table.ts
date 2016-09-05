@@ -4,10 +4,11 @@
  */
 
 import { Component, Input, NgZone } from '@angular/core';
+import { select } from 'ng2-redux';
+
 import {RunGameTable} from "./run-game-table";
 import {RunGameHand} from "./run-game-hand";
-import {RunGame} from "./run-game";
-import {GamePlayAction, GamePlayActionType} from "../api/models/action.model";
+import {IGamePlayRecord} from "../ui/redux/game-play/game-play.types";
 
 
 function template():string {
@@ -32,17 +33,18 @@ return `
   }
 )
 export class RunGameHandAndTable {
-  @Input() gameId:string;
+  gameId:string;
+  @select() gamePlayReducer;
+
   constructor(private ngZone:NgZone) {
- }
+  }
   ngOnInit() {
-    RunGame.subscribe((action:GamePlayAction)=> {
-      this.ngZone.run(()=> {
-        if (action.actionType===GamePlayActionType.NEW_GAME) {
-          this.gameId = action.gameId;
-        }
-      });
-    });
+    this.gamePlayReducer.subscribe( (gameState:IGamePlayRecord)=>{
+      this.ngZone.run(
+        ()=> {
+          this.gameId = gameState.gameId;
+        });
+    } );
   }
 }
 

@@ -4,11 +4,14 @@
  */
 
 import { Component, Input, NgZone } from '@angular/core';
+import { select } from 'ng2-redux';
+
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
 
 import { RunGame } from './run-game.ts';
 import { PlayingCard } from "../playing-card/playing-card";
 import { CardImageStyle } from "../api/index";
+import {GamePlayActions} from "../ui/redux/game-play/game-play-actions.class";
 
 @Component(
   {
@@ -39,9 +42,19 @@ import { CardImageStyle } from "../api/index";
 )
 export class PileView extends RunGame {
   @Input() imgStyle:CardImageStyle;
-  constructor(private dragulaServiceChild: DragulaService, private ngZoneChild:NgZone ) {
-    super(dragulaServiceChild, ngZoneChild);
+  @select() gamePlayReducer;
+
+  constructor(
+    private gamePlayActions:GamePlayActions,
+    private dragulaServiceChild: DragulaService,
+    private ngZoneChild:NgZone ) {
+    super(gamePlayActions, dragulaServiceChild, ngZoneChild);
   }
+
+  ngOnInit() {
+    this.initialize(this.gamePlayReducer);
+  }
+
   numberOfCards():number {
     return this.getCardsInPile() ? this.getCardsInPile().length : 0;
   }

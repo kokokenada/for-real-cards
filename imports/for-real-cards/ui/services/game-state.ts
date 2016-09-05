@@ -17,7 +17,7 @@ import { Card} from '../../api/models/card.model';
 import { Deck, DeckId} from '../../api/models/deck.model';
 import {CardSuit, CardRank} from "../../api/models/card.model";
 
-export class GameState {
+export class GameStateOLD {
   private gameId:string;
   private subject:ReplaySubject<GamePlayAction>;
   private lastNotified:Date;

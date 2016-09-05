@@ -20,7 +20,7 @@ import {IAppState} from "../state.interface";
 export class LoginAsync {
   constructor(private loginActions: LoginActions) {}
 
-  checkAutoLogin = (action$: Observable<IPayloadAction>):Observable<Action> => {
+  checkAutoLogin = (action$: Observable<IPayloadAction>):Observable<Action> => { /// TODO: DELETE THIS I DON"T THINK ITS NEEDED
     let loginActions:LoginActions = this.loginActions;
     return action$
       .filter(({type}) => {

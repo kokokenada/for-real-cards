@@ -5,7 +5,8 @@
 import {Card, CardSuit, CardRank} from "../../api/models/card.model";
 import {GameConfig, CardLocation, CardCountAllowed} from "../../api/models/game-config";
 import {VisibilityType} from "../../api/models/action.model";
-import {GameState} from './game-state';
+import {GamePlayActions} from '../redux';
+import {IGamePlayState} from "../redux/game-play/game-play.types";
   
 export class DragAndDrop {
   suit:CardSuit;
@@ -13,13 +14,16 @@ export class DragAndDrop {
   target:CardLocation;
   source:CardLocation;
   valid:boolean;
+  gameState: IGamePlayState;
   gameConfig:GameConfig;
   el:any;
   targetElement:any;
   sourceElement:any;
   sibling:any;
 
-  constructor(el, target, source, sibling, gameConfig:GameConfig) {
+  constructor(el, target, source, sibling, gameState: IGamePlayState) {
+    this.gameConfig = gameState.currentGameConfig;
+    this.gameState = gameState;
     this.valid = true;
     if (el.dataset) {
       if (!(el.dataset.cardSuit) || !(el.dataset.cardRank)) {
@@ -47,7 +51,6 @@ export class DragAndDrop {
       this.valid = false;
       this.logError('source is missing or is missing dataset');
     }
-    this.gameConfig = gameConfig;
     this.el = el;
     this.targetElement = target;
     this.sourceElement = source;
@@ -70,7 +73,7 @@ export class DragAndDrop {
   }
   
   
-  runActions(gameStreams:GameState) {
+  runActions(gamePlayActions:GamePlayActions) {
     switch (this.source) {
       case CardLocation.HAND: {
         switch (this.target) {
@@ -86,22 +89,22 @@ export class DragAndDrop {
                 cardOrder.push(card);
               }
             }
-            gameStreams.sortHand(cardOrder);
+            gamePlayActions.sortHand(this.gameState, cardOrder);
             this.el.remove(); // Let actions observable update
             break;
           }
           case CardLocation.DECK: {
-            gameStreams.handToDeck(this.suit, this.rank);
+            gamePlayActions.handToDeck(this.gameState, this.suit, this.rank);
             this.el.remove(); // Let actions observable update
             break;
           }
           case CardLocation.PILE: {
-            gameStreams.handToPile(this.suit, this.rank);
+            gamePlayActions.handToPile(this.gameState, this.suit, this.rank);
             this.el.remove(); // Let actions observable update
             break;
           }
           case CardLocation.TABLE: {
-            gameStreams.cardToTable(this.suit, this.rank, VisibilityType.ALL);
+            gamePlayActions.cardToTable(this.gameState, this.suit, this.rank, VisibilityType.ALL);
             this.el.remove(); // Let actions observable update
             break;
           }
@@ -113,7 +116,7 @@ export class DragAndDrop {
       case CardLocation.DECK: {
         switch (this.target) {
           case CardLocation.HAND: {
-            gameStreams.deckToHand(VisibilityType.PLAYER);
+            gamePlayActions.deckToHand(this.gameState, VisibilityType.PLAYER);
             this.el.remove(); // Let actions observable update
             break;
           }
@@ -140,12 +143,12 @@ export class DragAndDrop {
       case CardLocation.PILE: {
         switch (this.target) {
           case CardLocation.HAND: {
-            gameStreams.pileToHand(this.suit, this.rank);
+            gamePlayActions.pileToHand(this.gameState, this.suit, this.rank);
             this.el.remove(); // Let actions observable update
             break;
           }
           case CardLocation.DECK: {
-            gameStreams.pileToDeck([this.getCard()]);
+            gamePlayActions.pileToDeck(this.gameState, [this.getCard()]);
             this.el.remove(); // Let actions observable update
             break;
           }
@@ -167,7 +170,7 @@ export class DragAndDrop {
       case CardLocation.TABLE: {
         switch (this.target) {
           case CardLocation.HAND: {
-            gameStreams.tableToHand(this.suit, this.rank);
+            gamePlayActions.tableToHand(this.gameState, this.suit, this.rank);
             this.el.remove(); // Let actions observable update
             break;
           }

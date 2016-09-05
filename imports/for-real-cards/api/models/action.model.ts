@@ -16,7 +16,7 @@ import {GameConfig} from './game-config';
 export let GamePlayActionCollection = new Mongo.Collection("actions", {transform: decode});
 
 export enum GamePlayActionType {
-  NEW_GAME,           // 0
+  SET_GAME_ID,        // 0
   RESET,              // 1
   NEW_HAND,           // 2
   DEAL,               // 3
@@ -30,11 +30,7 @@ export enum GamePlayActionType {
   HAND_TO_DECK,       // 11
   TABLE_TO_HAND,      // 12
   TAKE_TRICK,         // 13
-  UNDO,               // 14
-  ENTER_GAME_FAIL,    // 15
-  ENTER_GAME_AT_HAND_NOTIFY,  // 16
-  ENTER_GAME_AT_TABLE_NOTIFY, // 17
-  LEAVE_GAME          // 18
+  UNDO
 }
 
 export enum VisibilityType {
@@ -43,7 +39,8 @@ export enum VisibilityType {
   PLAYER
 }
 
-export class GamePlayAction {
+class GamePlayActionData {
+  constructor() {}
   _id:string;
   gameId:string;
   creatorId:string;
@@ -57,7 +54,14 @@ export class GamePlayAction {
   gameConfig: GameConfig;
   relatedActionId: string;
   sequencePosition:number;
-  sequenceLength:number;
+//  sequenceLength:number;
+}
+
+export interface GamePlayActionInterface extends GamePlayActionData {
+
+}
+
+export class GamePlayAction extends GamePlayActionData {
   constructor(initialValues:{
     _id?:string,
     gameId:string, 
@@ -72,6 +76,7 @@ export class GamePlayAction {
     relatedActionId?:string
     }) 
   {
+    super();
     this._id = initialValues._id
     this.gameId = initialValues.gameId;
     this.creatorId = initialValues.creatorId;

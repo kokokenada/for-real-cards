@@ -4,11 +4,9 @@
  */
 
 import * as log from 'loglevel';
-import {Meteor} from 'meteor/meteor';
-import {Session} from 'meteor/session';
 import {Component} from '@angular/core';
-import {RunGame} from "../run-game/run-game";
-import {PlatformTools, TargetPlatformId} from '/imports/common-app';
+import {PlatformTools, TargetPlatformId} from '../../common-app';
+import {ForRealCardsActions} from "../ui/redux/nav/for-real-cards-actions.class";
 
 function template():string {
   switch (PlatformTools.getTargetPlatforrm()) {
@@ -64,16 +62,11 @@ function template():string {
 )
 export class NewGame {
   password:string;
+  constructor(private forRealCardsActions:ForRealCardsActions) {
 
+  }
   newGame() {
-    Meteor.call('ForRealCardsNewGame', this.password, (error, result)=> {
-      if (error) {
-        log.error(error);
-      } else {
-        Session.set('password', this.password);
-        RunGame.pushNewGameNotification(result);
-      }
-    });
+    this.forRealCardsActions.newGame(this.password);
   }
 }
 

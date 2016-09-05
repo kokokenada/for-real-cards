@@ -1,3 +1,7 @@
+/**
+ * Copyright Ken Ono, Fabrica Technolology 2016
+ * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
+ */
 import {Injectable} from "@angular/core";
 
 import { IAppState, ReduxModule} from '../../../../common-app';
@@ -10,11 +14,13 @@ export class GamePlayModule extends ReduxModule<IAppState>  {
   reducer=gamePlayReducer;
 
   constructor(
-    private forRealCardsEpics:GamePlayAsync,
+    private gamePlayEpics:GamePlayAsync,
     public actions:GamePlayActions
   ) {
     super();
-//    this.epics.push(forRealCardsEpics.loginNavigation);
+    this.middlewares.push(
+      gamePlayEpics.gamePlayMiddleware
+    );
   }
 
   initialize():void {}

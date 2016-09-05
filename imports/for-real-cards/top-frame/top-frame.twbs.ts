@@ -18,12 +18,10 @@ import {
   LoginAsync,
   LoginModule,
   IAppState,
-  IPayloadAction,
   Menus,
   MenuItem,
   ModalDialog,
   ModalService,
-  NeverObservableAction,
   UsersModule,
   UsersActions,
   UsersAsync,
@@ -35,9 +33,11 @@ import {
 
 import {
   ForRealCardsActions,
-  ForRealCardsAsync,
   ForRealCardsModule,
-  IForRealCardsState
+  ForRealCardsAsync,
+  GamePlayActions,
+  GamePlayAsync,
+  GamePlayModule
 } from '../ui';
 
 import { DealModal } from "../deal-modal/deal-modal.twbs";
@@ -83,8 +83,11 @@ const appRouterProviders = [
       LoginAsync,
       LoginModule,
       ForRealCardsActions,
-      ForRealCardsAsync,
       ForRealCardsModule,
+      ForRealCardsAsync,
+      GamePlayActions,
+      GamePlayAsync,
+      GamePlayModule,
       UploaderModule,
       UploaderActions,
       UploaderAsync,
@@ -110,12 +113,13 @@ export class ForRealCardsTopFrame extends TopFrame {
     connectModule:ConnectModule,
     loginModule:LoginModule,
     forRealCardsModule:ForRealCardsModule,
+    gamePlatModule:GamePlayModule,
     usersModule:UsersModule,
     uploaderModule:UploaderModule
   )
   {
     super();
-    this.topFrameConfigure(connectModule, loginModule, forRealCardsModule, usersModule, uploaderModule, ngRedux);
+    this.topFrameConfigure(connectModule, loginModule, forRealCardsModule, gamePlatModule, usersModule, uploaderModule, ngRedux);
     Menus.addMenu({id: 'topbar'});
 
     Menus.addSubMenuItem('topbar', {
@@ -162,8 +166,6 @@ export class ForRealCardsTopFrame extends TopFrame {
         loginModule.actions.logout();
       }
     });
-
-    this.watchGame();
   }
 
   navigateToEnter() {

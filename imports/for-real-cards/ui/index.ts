@@ -3,3 +3,5 @@ export * from "./services/game-rendering-tools";
 export * from "./services/game-state";
 
 export * from "./redux";
+
+export * from "./action-formatted.class";

@@ -4,8 +4,9 @@
  */
 
 
-import { Component, NgZone, Type } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { TAB_DIRECTIVES } from 'ng2-bootstrap/ng2-bootstrap'
+import { select } from 'ng2-redux';
 
 import { RunGameHandAndTable } from "./run-game-hand-and-table";
 import { RunGameHand } from "./run-game-hand";
@@ -33,9 +34,15 @@ import { RunGameContainer } from "./run-game-container";
   }
 )
 
-export class RunGameTabs extends RunGameContainer{
+export class RunGameTabs extends RunGameContainer implements OnInit {
+  @select() gamePlayReducer;
   constructor(private ngZone:NgZone) {
     super(ngZone);
   }
+
+  ngOnInit() {
+    this.initialize(this.gamePlayReducer);
+  }
+
 }
 

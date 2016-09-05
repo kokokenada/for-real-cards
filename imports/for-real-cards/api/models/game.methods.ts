@@ -6,13 +6,13 @@
 import { Meteor } from 'meteor/meteor';
 import * as log from 'loglevel';
 
-import { getNextSequence } from '/imports/common-app-api';
+import { getNextSequence } from '../../../common-app-api';
 
 import { Game, GameCollection } from './game.model.ts';
-import { HandCollection, Hand } from './hand.model.ts';
+import { HandCollection, HandInterface, Hand } from './hand.model.ts';
 import { GamePlayActionCollection, GamePlayAction, GamePlayActionType } from "./action.model";
 
-function joinGamegameId(gameId:string, userId:string, password:string):Hand {
+function joinGame(gameId:string, userId:string, password:string):HandInterface {
   let game:Game = <Game>GameCollection.findOne({_id: gameId});
   if (!game) {
     throw new Meteor.Error('gameId-not-found', 'The game Id "' + gameId + '" was not found.');
@@ -36,11 +36,34 @@ function joinGamegameId(gameId:string, userId:string, password:string):Hand {
     });
     GamePlayActionCollection.insert(action);
 
-    return HandCollection.findOne({_id: handId});
+    return <HandInterface>HandCollection.findOne({_id: handId});
   }
   return existingHand;
 
 }
+
+function viewGame(gameId:string, userId:string, password:string):boolean {
+  let game:Game = <Game>GameCollection.findOne({_id: gameId});
+  if (!game) {
+    throw new Meteor.Error('gameId-not-found', 'The game Id "' + gameId + '" was not found.');
+  }
+  let existingHand:Hand = <Hand>HandCollection.findOne({gameId: gameId, userId: userId});
+  if (!existingHand) {  // User is part of the game, so no viewing is OK
+    return true;
+  }
+
+  if (game.password) {
+    if (game.password === password) {
+      return true; // Correct password
+    }
+    return false; // Password exists, password is incorrect
+  } else {
+    return true;  // Game has no password
+  }
+
+}
+
+
 
 if (Meteor.isServer) {
 
@@ -51,15 +74,23 @@ if (Meteor.isServer) {
     ForRealCardsNewGame: function (password:string):string {
       let id:string = getNextSequence('game').toString();
       GameCollection.insert({_id: id, creatorId: this.userId});
-      joinGamegameId(id, this.userId, password);
+      joinGame(id, this.userId, password);
       return id;
     },
     /**
      * Adds a new player to a game, returns a Hand
      */
-    ForRealCardsJoinGame: function (gameId:string, password:string):Hand {
-      return joinGamegameId(gameId, this.userId, password);
+    ForRealCardsJoinGame: function (gameId:string, password:string):HandInterface {
+      return joinGame(gameId, this.userId, password);
+    },
+
+    /**
+     * View Game OK?
+     */
+    ForRealCardsViewGameCheck: function (gameId:string, password:string):boolean {
+      return viewGame(gameId, this.userId, password);
     }
+
   });
 }
 export let something=""
