@@ -9,7 +9,7 @@ import {Hand, HandInterface} from "../../../api/models/hand.model";
 import {Card} from "../../../api/models/card.model";
 import {GamePlayAction, GamePlayActionInterface} from "../../../api/models/action.model";
 import {GameConfig} from "../../../api/models/game-config";
-import { List } from "immutable";
+import { List, OrderedMap } from "immutable";
 
 
 export interface IGamePlayState extends IAppState {
@@ -19,9 +19,10 @@ export interface IGamePlayState extends IAppState {
   hands:List<Hand>;
   tableFaceDown:List<Card>;
   tablePile:List<Card>;
-  actions:List<GamePlayAction>;
+  actions:OrderedMap<string, GamePlayAction>;
   currentGameConfig: GameConfig;
   undoneIds:List<string>;
+  idCounter: number;
 }
 
 export interface IGamePlayRecord extends TypedRecord<IGamePlayRecord>, IGamePlayState {}

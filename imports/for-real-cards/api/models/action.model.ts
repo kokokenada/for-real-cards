@@ -11,6 +11,7 @@ import * as log from 'loglevel';
 import { HandCollection } from '../models/hand.model';
 import {Card} from './card.model'
 import {GameConfig} from './game-config';
+import {IGamePlayRecord} from "../../ui/";
 
 
 export let GamePlayActionCollection = new Mongo.Collection("actions", {transform: decode});
@@ -54,6 +55,7 @@ class GamePlayActionData {
   gameConfig: GameConfig;
   relatedActionId: string;
   sequencePosition:number;
+  previousState:IGamePlayRecord;
 //  sequenceLength:number;
 }
 

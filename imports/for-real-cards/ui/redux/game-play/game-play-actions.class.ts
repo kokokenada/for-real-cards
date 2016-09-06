@@ -350,13 +350,17 @@ export class GamePlayActions {
   static actionToUndo(gameState: IGamePlayState): GamePlayAction {
     // Walk through actions from latest
     if (gameState.actions) {
-      for (let i = gameState.actions.size - 1; i >= 0; i--) {
-        let actionBeingExamined: GamePlayAction = gameState.actions.get(i);
-        if (GamePlayActions.isUndoable(gameState, actionBeingExamined)) {
-//          this.debugOutput('identified undo action', actionBeingExamined);
-          return actionBeingExamined;
-        }
+      let action:GamePlayAction = (
+                gameState.actions.findLastEntry( (actionBeingExamined:GamePlayAction)=>{
+                    return GamePlayActions.isUndoable(gameState, actionBeingExamined);
+              }) || [undefined,undefined])[1];
+      if (!action)
+        return action;
+      let relatedActionId=action.relatedActionId;
+      if (relatedActionId) {  // Make sure parent action is the one being undone
+        return gameState.actions.get(relatedActionId);
       }
+      return action;
     }
   }
 

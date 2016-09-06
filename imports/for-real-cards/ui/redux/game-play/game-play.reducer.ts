@@ -3,8 +3,8 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 
-import {makeTypedFactory} from 'typed-immutable-record';
-import {List} from "immutable";
+import { makeTypedFactory} from 'typed-immutable-record';
+import { List, OrderedMap} from "immutable";
 
 import * as log from 'loglevel';
 
@@ -27,34 +27,31 @@ export const GamePlayFactory = makeTypedFactory<IGamePlayState, IGamePlayRecord>
   tableFaceDown: List<Card>(),
   tablePile: List<Card>(),
   lastNotified: null,
-  actions: List<GamePlayAction>(),
+  actions: OrderedMap<string, GamePlayAction>(),
   currentGameConfig: GameConfig.getDefaultConfig(),
-  undoneIds: List<string>()
+  undoneIds: List<string>(),
+  idCounter:0
 });
 
 export const INITIAL_STATE = GamePlayFactory();
 
-export function gamePlayReducer(inState: IGamePlayRecord = INITIAL_STATE,
+export function gamePlayReducer(oldState: IGamePlayRecord = INITIAL_STATE,
                                 action: IPayloadAction) {
 
   if (!GamePlayActions.isGamePlayAction(action.type))
-    return inState;
+    return oldState;
 
   let payload: IGamePlayActionPayload = action.payload;
   let gamePlayAction: GamePlayAction = payload.gamePlayAction;
-  let returnState: IGamePlayRecord = inState.withMutations( (transient:IGamePlayRecord)=>{
+  let returnState: IGamePlayRecord = oldState.withMutations( (transient:IGamePlayRecord)=>{
     switch (action.type) {
       case GamePlayActions.GAME_PLAY_ACTION_RECIEVED: {
-        gamePlayAction.sequencePosition = transient.actions.size;
-        transient.set('actions', transient.actions.push(gamePlayAction));
-        return processGamePlayAction(transient, gamePlayAction, payload);
+        return processGamePlayAction(transient, gamePlayAction, payload, oldState);
       }
       case GamePlayActions.GAME_PLAY_ACTIONSSS_RECIEVED: {
         let gamePlayActions: GamePlayActionInterface[] = payload.gamePlayActions;
         gamePlayActions.forEach((gamePlayAction:GamePlayAction)=>{
-          gamePlayAction.sequencePosition = transient.actions.size;
-          transient.set('actions', transient.actions.push(gamePlayAction));
-          transient = processGamePlayAction(transient, gamePlayAction, payload);
+          transient = processGamePlayAction(transient, gamePlayAction, payload, oldState);
         });
       }
       default:
@@ -65,12 +62,25 @@ export function gamePlayReducer(inState: IGamePlayRecord = INITIAL_STATE,
   return returnState;
 }
 
-function processGamePlayAction(transient: IGamePlayRecord, gamePlayAction: GamePlayAction, payload: IGamePlayActionPayload):IGamePlayRecord {
+function processGamePlayAction(transient: IGamePlayRecord, gamePlayAction: GamePlayAction, payload: IGamePlayActionPayload, previousState:IGamePlayRecord):IGamePlayRecord {
+  let readState: IGamePlayRecord = transient; // Just so one object is read (readState) and the other (transient) is wrriten
+  if (!gamePlayAction._id) {
+    let counter:number = readState.idCounter + 1;
+    transient.set('idCounter', counter);
+    gamePlayAction._id = counter.toString();
+  }
+  let id = gamePlayAction._id;
+  if (readState.actions.get(id, undefined)) {
+    // We've seen this action before, do not process
+    return transient;
+  }
+  gamePlayAction.sequencePosition = transient.actions.size;
+  gamePlayAction.previousState = previousState;
+  transient.set('actions', transient.actions.set(id, gamePlayAction));
   if (GamePlayActions.isUndone(transient, gamePlayAction)) {
     //log.debug('not doing gamePlayAction because it is undone');
     return transient;
   }
-  let readState: IGamePlayRecord = transient; // Just so one object is read (readState) and the other (transient) is wrriten
 
   console.log('PROCESSING GAME PLAY ACTION: ' + GamePlayActionType[gamePlayAction.actionType]);
   console.log(gamePlayAction);
@@ -281,55 +291,15 @@ function processGamePlayAction(transient: IGamePlayRecord, gamePlayAction: GameP
       break;
     }
     case GamePlayActionType.UNDO: {
-      let foundUndoAction: GamePlayAction = null;
-      let playBackActions: GamePlayAction[] = [];
       let actionIdBeingUndone = gamePlayAction.relatedActionId;
-      let index: number = payload.undoIndex;
-
-      // Walk through actions from the UNDO backwards
-      for (let i = index; i >= 0; i--) {
-        let actionBeingExamined: GamePlayAction = readState.actions.get(i);
-        //this.debugOutput('examining undo (' + i.toString() + ')', actionBeingExamined);
-        if (
-          actionBeingExamined._id === actionIdBeingUndone ||           // The 'parent' gamePlayAction
-          actionBeingExamined.relatedActionId === actionIdBeingUndone)   // A 'child' gamePlayAction
-        {
-          // This is an gamePlayAction being undone
-          addUndone(readState, actionBeingExamined);
-        } else if (actionBeingExamined._id === gamePlayAction._id) {
-          if (i === index && !foundUndoAction && actionBeingExamined.relatedActionId === actionIdBeingUndone) { // a sanity check
-            // This the undo gamePlayAction we're working on
-            foundUndoAction = actionBeingExamined;
-          } else {
-            log.error('unexpected state');
-            log.error(actionBeingExamined);
-            log.error(gamePlayAction);
-          }
-        } else if (actionBeingExamined.actionType === GamePlayActionType.RESET) {
-          // This is the re-create start point
-
-          // Reset
-          playBackActions.push(actionBeingExamined);
-
-
-          playBackActions.reverse();
-          // And re-run actions since
-          for (let j = 0; j < playBackActions.length; j++) {
-            let playBackAction = playBackActions[j];
-            if (playBackAction.actionType !== GamePlayActionType.UNDO) {
-              // Don't try to re-proces UNDO's
-              this.processAction(playBackActions, j); // TODO: this won't work, fix it
-            }
-          }
-          break; // We're done
-        } else if (foundUndoAction) {
-          // This is an gamePlayAction to recreate from last RESET
-          playBackActions.push(actionBeingExamined);
-        } else {
-          // this is an gamePlayAction that has happened since the gamePlayAction being undone. Hmmm
-          playBackActions.push(actionBeingExamined);
+      addUndone(readState, actionIdBeingUndone);
+      let foundUndoAction = readState.actions.get(actionIdBeingUndone);
+      foundUndoAction.previousState.forEach( (value:any, key:string)=>{
+        // To preserve the UNDO history and allow for a redo, we'll only rollback part of the state
+        if (key!=='actions' && key !=='undoneIds' && key!=='idCounter') {
+          transient.set(key, value);
         }
-      }
+      });
       break;
     }
 
@@ -341,8 +311,8 @@ function processGamePlayAction(transient: IGamePlayRecord, gamePlayAction: GameP
   return transient;
 }
 
-function addUndone(state: IGamePlayRecord, action: GamePlayAction) {
-  state.set('undoneIds', state.undoneIds.push(action._id));
+function addUndone(state: IGamePlayRecord, actionId: string) {
+  state.set('undoneIds', state.undoneIds.push(actionId));
 }
 
 function getHandIndexFromUserId(hands: List<Hand>, userId: string): number {
@@ -364,6 +334,10 @@ function getHandForWriting(transientState: IGamePlayRecord, playerId: string): H
     console.trace();
   } else {
     let newHand: Hand = new Hand(transientState.hands.get(handIndex));
+    newHand.cardsFaceDown = newHand.cardsFaceDown.slice(); // This is inefficient.  Would be better as immutable.js objects
+    newHand.cardsFaceUp = newHand.cardsFaceUp.slice();
+    newHand.cardsInHand = newHand.cardsInHand.slice();
+    newHand.tricks = JSON.parse(JSON.stringify(newHand.tricks));
     transientState.set('hands', transientState.hands.set(handIndex, newHand));
     return newHand;
   }

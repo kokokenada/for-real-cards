@@ -6,9 +6,9 @@
 import { Component, Input, NgZone } from '@angular/core';
 import { select } from 'ng2-redux';
 
-import { PlatformTools } from '../../common-app';
+import { AccountTools, PlatformTools } from '../../common-app';
 
-import { GamePlayAction } from '../api/index'
+import { GamePlayAction, Hand } from '../api/index'
 import { ActionFormatted, ForRealCardsActions, IGamePlayState } from "../ui";
 
 import { TopFrameHeader } from "../top-frame/top-frame-header";
@@ -70,6 +70,47 @@ return `
         <td colspan="5">
           <playing-card *ngFor="let card of action.cards" [card]="card" [imgStyle]="{height: 'auto', width: '100%'}" style="display:inline-block; width:40px"></playing-card>
         </td>
+      </tr>
+      <tr *ngIf="action.previousState">
+        <td>Previous State Hands:</td>
+        <td colspan="5">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Player</th>              
+                <th>In Hand</th>
+                <th>Face Up</th>
+                <th>Face Down</th>
+              </tr>            
+            </thead>
+            <tbody>
+              <tr *ngFor="let hand of action.previousState.hands">
+                <td>{{handPlayer(hand)}}</td>                              
+                <td>
+                  <playing-card *ngFor="let card of hand.cardsInHand" [card]="card" [imgStyle]="{height: 'auto', width: '100%'}" style="display:inline-block; width:40px"></playing-card>
+                </td>
+                <td>
+                  <playing-card *ngFor="let card of hand.cardsFaceUp" [card]="card" [imgStyle]="{height: 'auto', width: '100%'}" style="display:inline-block; width:40px"></playing-card>
+                </td>
+                <td>
+                  <playing-card *ngFor="let card of hand.cardsFaceDown" [card]="card" [imgStyle]="{height: 'auto', width: '100%'}" style="display:inline-block; width:40px"></playing-card>
+                </td>
+              </tr>            
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr *ngIf="action.previousState">
+        <td>Previous State Table Face Down:</td>
+        <td colspan="5">
+          <playing-card *ngFor="let card of action.previousState.tableFaceDown" [card]="card" [imgStyle]="{height: 'auto', width: '100%'}" style="display:inline-block; width:40px"></playing-card>
+        </td>             
+      </tr>              
+      <tr *ngIf="action.previousState">
+        <td>Previous State Table Pile:</td>
+        <td colspan="5">
+          <playing-card *ngFor="let card of action.previousState.tablePile" [card]="card" [imgStyle]="{height: 'auto', width: '100%'}" style="display:inline-block; width:40px"></playing-card>
+        </td>             
       </tr>
     </template>
   </tbody>
@@ -144,8 +185,6 @@ export class GameActionList {
   }
 
   actionTime(action:GamePlayAction):string {
-    console.log(action)
-    console.log(new ActionFormatted(action).actionTime())
     return new ActionFormatted(action).actionTime();
   }
 
@@ -163,6 +202,10 @@ export class GameActionList {
 
   fromPlayer(action:GamePlayAction):string {
     return new ActionFormatted(action).fromPlayer();
+  }
+
+  handPlayer(hand:Hand):string {
+    return AccountTools.getDisplayName(hand.userId);
   }
 
   visibilityTypeDescription(action:GamePlayAction):string {

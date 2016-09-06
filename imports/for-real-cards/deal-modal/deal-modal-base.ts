@@ -19,8 +19,6 @@ export class DealModalBase extends ModalBase {
     return "Tap to select a game pre-set"
   }
   getPresets():GameConfig[] {
-    console.log('in getPresets')
-    console.log(defaultGames)
     return defaultGames;
   }
   selectPreset(presetIndex:number):void {
