@@ -92,8 +92,6 @@ export class LoginAsync {
         LoginService.watchCurrentUser();
         return LoginService
           .createUserObserver(LoginService.userId()).map( (change:IDocumentChange<User>)=>{
-            console.log('store.getState() when in watchUser' );
-            console.log(store.getState());
             let loginState:ILoginState = store.getState().loginReducer;
             if (loginState.neverLoggedIn) {
               // Never logged in, yet the current user is populated, must be automatic login

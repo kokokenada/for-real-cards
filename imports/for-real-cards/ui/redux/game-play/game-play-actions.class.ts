@@ -21,10 +21,12 @@ import {IGamePlayState} from "./game-play.types";
 import {Hand, HandInterface} from "../../../api/models/hand.model";
 import {BaseApp} from "../../../../common-app/src/ui/redux/base-app.class";
 
+const _prefix = 'FRC_GAMEPLAY_';
+const _prefix_length = _prefix.length;
 
 @Injectable()
 export class GamePlayActions {
-  private static prefix = 'FRC_GAMEPLAY_';
+  private static prefix = _prefix;
   static GAME_PLAY_INITIALIZE = GamePlayActions.prefix + 'GAME_PLAY_INITIALIZE';
   static GAME_PLAY_ACTION_RECIEVED = GamePlayActions.prefix + 'GAME_PLAY_ACTION_RECIEVED';
   static GAME_PLAY_ACTION_PUSH = GamePlayActions.prefix + 'GAME_PLAY_ACTION_PUSH';
@@ -32,6 +34,10 @@ export class GamePlayActions {
   static GAME_PLAY_ERROR = GamePlayActions.prefix + 'GAME_PLAY_ERROR';
 
   constructor(private ngRedux: NgRedux<IAppState>) {
+  }
+
+  static isGamePlayAction(actionType:string) : boolean {
+    return actionType.substr(0, _prefix_length) === _prefix;
   }
 
   /**

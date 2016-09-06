@@ -28,14 +28,6 @@ function joinGame(gameId:string, userId:string, password:string):HandInterface {
     log.debug('adding hand. userID: ' + userId + ", gameId:" + gameId + ", pos:" + position);
     let handId:string = HandCollection.insert({gameId: game._id, position: position, userId: userId});
 
-    // Add an action too
-    let action:GamePlayAction = new GamePlayAction({
-      gameId: gameId,
-      creatorId: userId,
-      actionType: GamePlayActionType.NEW_HAND
-    });
-    GamePlayActionCollection.insert(action);
-
     return <HandInterface>HandCollection.findOne({_id: handId});
   }
   return existingHand;

@@ -59,7 +59,7 @@ export abstract class TopFrame extends BaseApp<IAppState> {
     };
 
     forRealCardsModule.middlewares.push(navigatorMiddleware);
-    this.configure([connectModule, loginModule, forRealCardsModule, uploaderModule, usersModule], ngRedux);
+    this.configure([connectModule, loginModule, forRealCardsModule, gamePlayModule, uploaderModule, usersModule], ngRedux);
     this.loginModule = loginModule;
 
   }

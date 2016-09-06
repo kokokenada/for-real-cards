@@ -18,7 +18,7 @@ export class RunGameContainer {
   initialize(gameState$:Observable<IGamePlayRecord>) {
     gameState$.subscribe( (gameState:IGamePlayRecord)=>{
       this.ngZoneBase.run(()=> {
-        this.gameId = gameState.gameId;
+        this.gameId = gameState ? gameState.gameId : null;
       })
     });
   }

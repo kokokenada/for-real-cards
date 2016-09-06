@@ -61,6 +61,14 @@ export class GamePlayAsync {
   };
 }
 
+function isHandReady(hands:HandInterface[], action:GamePlayAction):boolean {
+  if (action.toPlayerId && hands.findIndex( hand => hand.userId===action.toPlayerId ) === -1)
+    return false;
+  if (action.fromPlayerId && hands.findIndex( hand => hand.userId===action.fromPlayerId ) === -1 )
+    return false;
+  return true;
+}
+
 function watchGamePlayActionsAndHand(gamePlayActions: GamePlayActions, gameId:string) {
   Tracker.autorun(()=> {
     let options: GameSubscriptionOptions = {gameId: gameId};
@@ -80,30 +88,33 @@ function watchGamePlayActionsAndHand(gamePlayActions: GamePlayActions, gameId:st
     let isReady = subscriptionHandle.ready();
     if (isReady) {
 
-      log.debug('execute action query. gameId:' + gameId);
-      let actionCursor: Mongo.Cursor<any> = GamePlayActionCollection.find({gameId: gameId}, {sort: {dateCreated: 1}});
-
-      let gameActions$:Observable<IDocumentChange<GamePlayAction>> = MeteorCursorObservers.createCursorObserver<GamePlayAction>(actionCursor);
-      gameActions$.subscribe(
-        (gamePlayActionChange:IDocumentChange<GamePlayAction>) => {
-          switch (gamePlayActionChange.changeType) {
-            case EDocumentChangeType.NEW: {
-              gamePlayActions.receiveActon(gamePlayActionChange.newDocument);
-              break;
-            }
-            default:
-              gamePlayActions.error('only expecting new game state records')
-          }
-        }
-      );
-
+      let knownHands:HandInterface[] = [];
+      let buffer:GamePlayAction[] = [];
       let handsCursor: Mongo.Cursor<any> = HandCollection.find({gameId: gameId}, {sort: {dateCreated: 1}});
       let hands$:Observable<IDocumentChange<HandInterface>> = MeteorCursorObservers.createCursorObserver<HandInterface>(handsCursor);
       hands$.subscribe(
         (handChange:IDocumentChange<HandInterface>) => {
           switch (handChange.changeType) {
             case EDocumentChangeType.NEW: {
+              console.log('Document Change handChange')
+              console.log(handChange)
               gamePlayActions.newHand(gameId, handChange.newDocument);
+              knownHands.push(handChange.newDocument);
+              let wholeBufferReady = true;
+              for (let i = 0; i<buffer.length; i++) { // Flush the whole buffer only, to avoid order of processing glitches
+                let bufferedAction = buffer[i];
+                if (!isHandReady(knownHands, bufferedAction)) {
+                  wholeBufferReady = false;
+                  break;
+                }
+              }
+              if (wholeBufferReady) {
+                for (let i = 0; i<buffer.length; i++) {
+                  let bufferedAction = buffer[i];
+                  gamePlayActions.receiveActon(bufferedAction);
+                }
+                buffer = [];
+              }
               break;
             }
             default: // TODO: handle user leaving
@@ -112,6 +123,31 @@ function watchGamePlayActionsAndHand(gamePlayActions: GamePlayActions, gameId:st
           }
         }
       );
+      log.debug('execute action query. gameId:' + gameId);
+      let actionCursor: Mongo.Cursor<any> = GamePlayActionCollection.find({gameId: gameId}, {sort: {dateCreated: 1}});
+
+      let gameActions$:Observable<IDocumentChange<GamePlayAction>> = MeteorCursorObservers.createCursorObserver<GamePlayAction>(actionCursor);
+      gameActions$.subscribe(
+        (gamePlayActionChange:IDocumentChange<GamePlayAction>) => {
+          switch (gamePlayActionChange.changeType) {
+            case EDocumentChangeType.NEW: {
+              let action:GamePlayAction = gamePlayActionChange.newDocument;
+
+              // If the hand is not read yet, defer.  There is probably a more streamy way (Observable.bufferWhen???)
+              if ( isHandReady(knownHands, action) ){
+                gamePlayActions.receiveActon(action);
+              } else {
+                buffer.push(action);
+              }
+              break;
+            }
+            default:
+              gamePlayActions.error('only expecting new game state records')
+          }
+        }
+        );
+
+
 
     }
   })

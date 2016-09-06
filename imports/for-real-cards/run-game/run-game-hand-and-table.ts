@@ -42,7 +42,7 @@ export class RunGameHandAndTable {
     this.gamePlayReducer.subscribe( (gameState:IGamePlayRecord)=>{
       this.ngZone.run(
         ()=> {
-          this.gameId = gameState.gameId;
+          this.gameId = gameState ? gameState.gameId : null;
         });
     } );
   }

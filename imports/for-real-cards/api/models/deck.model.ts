@@ -136,12 +136,9 @@ export class Deck{
   static indexOf(cards:List<Card>, cardToFind:Card):number
   static indexOf(cards:Card[], cardToFind:Card):number
   static indexOf(cards:any, cardToFind:Card):number {
-    for (let i = 0; i<cards.length; i++) {
-      let deckCard:Card = cards[i];
-      if (deckCard.rank===cardToFind.rank && deckCard.suit===cardToFind.suit)
-        return i;
-    }
-    return -1;
+    return cards.findIndex( (deckCard:Card)=> {
+      return deckCard.rank===cardToFind.rank && deckCard.suit===cardToFind.suit;
+    });
   }
   static shuffle(seed:string, cards:Card[]): void {
     Math.seedrandom(seed); // Important for UNDO/rebuild, or cards get shuffled in different order

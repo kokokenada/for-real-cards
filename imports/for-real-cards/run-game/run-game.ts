@@ -8,10 +8,10 @@ import * as log from 'loglevel';
 import { NgZone } from '@angular/core';
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
 
-import {CommonPopups} from '../../common-app';
 
-import { GamePlayAction, GamePlayActionType, Card, CardCountAllowed, CardLocation, Deck, DeckLocation, GameConfig, Hand } from '../api/index';
-import { DragAndDrop, GameRenderingTools } from '../ui/index';
+import { GamePlayAction, GamePlayActionType, Card, CardCountAllowed, CardLocation, Deck, DeckLocation, GameConfig, Hand } from '../api';
+import { DragAndDrop, GameRenderingTools } from '../ui';
+import { INITIAL_STATE } from '../ui/redux/game-play/game-play.reducer'
 
 
 import { CardImageStyle} from "../api/interfaces/card-image-style.interface";
@@ -32,10 +32,13 @@ export class RunGame {
 
   protected initialize(gameState$:Observable<IGamePlayRecord>) {
     gameState$.subscribe( (gameState:IGamePlayRecord)=>{
-      this.gameState = gameState;
+      if (gameState)
+        this.gameState = gameState;
+      else
+        this.gameState = INITIAL_STATE;
 
     } );
-    this.dragAndDropInit();  // TODO: deal with changing state
+    this.dragAndDropInit();
     //if (action.sequencePosition+1===action.sequenceLength ) { // TODO: How to only render when last
      // this.ngZone.run(()=> {
 //              console.log('rendered')
