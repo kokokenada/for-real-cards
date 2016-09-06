@@ -205,6 +205,10 @@ export class AccountsAdminTools {
   static subscribeToPublication(options:FilterDefinition) {
     return Meteor.subscribe(SUBSCRIPTION_NAME, options);
   }
+
+  static isAdmin(user:Meteor.User) : boolean {
+    return user && Roles.userIsInRole(user, ['admin']);
+  }
   
 }
 
@@ -214,7 +218,7 @@ if (Meteor.isServer) {
     deleteUser: function(userId) {
       check(userId, String);
       var user = Meteor.user();
-      if (!user || !Roles.userIsInRole(user, ['admin']))
+      if (!AccountsAdminTools.isAdmin(user))
         throw new Meteor.Error(401, "You need to be an admin to delete a user.");
 
       if (user._id == userId)

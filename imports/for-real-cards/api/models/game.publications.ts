@@ -8,6 +8,7 @@ import * as log from 'loglevel';
 
 import { HandCollection, Hand } from './hand.model.ts';
 import { GamePlayActionCollection } from "./action.model.ts";
+import {AccountsAdminTools} from "../../../common-app-api/src/api/services/accounts-admin-tools";
 
 export interface GameSubscriptionOptions {
   gameId:string
@@ -27,7 +28,9 @@ if (Meteor.isServer) {
       gameUserIds.push(game.userId);
     });
     if (gameUserIds.indexOf(this.userId)===-1) {
-      return this.ready(); // Game only visible to its players
+      let user:Meteor.User = Meteor.users.find({_id: this.userId});
+      if (!AccountsAdminTools.isAdmin(user))
+        return this.ready(); // Game only visible to its players or admins
     }
     let userCursor =  Meteor.users.find(
       {_id: {$in: gameUserIds}},

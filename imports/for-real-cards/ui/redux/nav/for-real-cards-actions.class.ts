@@ -25,6 +25,8 @@ export class ForRealCardsActions {
   static JOIN_GAME_SUCCESS = ForRealCardsActions.prefix + 'JOIN_GAME_SUCCESS';
   static VIEW_GAME_REQUEST = ForRealCardsActions.prefix + 'VIEW_GAME_REQUEST';
   static VIEW_GAME_SUCCESS = ForRealCardsActions.prefix + 'VIEW_GAME_SUCCESS';
+  static LOAD_GAME_REQUEST = ForRealCardsActions.prefix + 'LOAD_GAME_REQUEST';
+  static LOAD_GAME_SUCCESS = ForRealCardsActions.prefix + 'LOAD_GAME_SUCCESS';
 
   constructor(private ngRedux: NgRedux<IAppState>) {
   }
@@ -39,6 +41,14 @@ export class ForRealCardsActions {
 
   joinGameSuccess(gameId:string) {
     this.ngRedux.dispatch({type:ForRealCardsActions.JOIN_GAME_SUCCESS, payload: {gameId:gameId}});
+  }
+
+  loadGameRequest(gameId:string, password:string) {
+    this.ngRedux.dispatch({type:ForRealCardsActions.LOAD_GAME_REQUEST, payload: {gameId:gameId , password:password}});
+  }
+
+  loadGameSuccess(gameId:string) {
+    this.ngRedux.dispatch({type:ForRealCardsActions.LOAD_GAME_SUCCESS, payload: {gameId:gameId}});
   }
 
   viewGameRequest(gameId:string, password:string) {

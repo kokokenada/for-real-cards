@@ -20,21 +20,6 @@ import {IAppState} from "../state.interface";
 export class LoginAsync {
   constructor(private loginActions: LoginActions) {}
 
-  checkAutoLogin = (action$: Observable<IPayloadAction>):Observable<Action> => { /// TODO: DELETE THIS I DON"T THINK ITS NEEDED
-    let loginActions:LoginActions = this.loginActions;
-    return action$
-      .filter(({type}) => {
-        return type === LoginActions.CHECK_AUTO_LOGIN
-      })
-      .flatMap( ({payload}) => {
-        if (LoginService.isLoggedIn()) {
-          // Yes, we're logged in, so fire off a logged in event
-          return Observable.from([LoginActions.loginSuccessFactory(LoginService.user(), LoginService.userId())]);
-        }
-        return new NeverObservableAction();
-      });
-  };
-
   login = (action$: Observable<IPayloadAction>) => {
     return action$
       .filter(({ type }) => type === LoginActions.LOGIN_REQUEST)
@@ -86,7 +71,13 @@ export class LoginAsync {
       });
   };
 
-  watchUser = (action$: Observable<IPayloadAction>, store: Store<IAppState>) => {
+  /**
+   * Start watching the currently logged in user
+   * @param action$
+   * @param store
+   * @returns {Observable<IPayloadAction>}
+   */
+  watchUser = (action$: Observable<IPayloadAction>, store: Store<IAppState>) : Observable<IPayloadAction> => {
     return action$.filter(({ type }) => type === LoginActions.WATCH_USER)
       .flatMap(({ payload }) => {
         LoginService.watchCurrentUser();
@@ -95,7 +86,7 @@ export class LoginAsync {
             let loginState:ILoginState = store.getState().loginReducer;
             if (loginState.neverLoggedIn) {
               // Never logged in, yet the current user is populated, must be automatic login
-              return LoginActions.loginSuccessFactory(change.newDocument, change.newDocument._id);
+              return LoginActions.loginSuccessFactory(change.newDocument, change.newDocument._id, true);
             } else {
               return LoginActions.changeFactory(change);
             }

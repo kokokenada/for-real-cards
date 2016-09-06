@@ -87,17 +87,17 @@ function watchGamePlayActionsAndHand(gamePlayActions: GamePlayActions, gameId:st
 
     let isReady = subscriptionHandle.ready();
     if (isReady) {
-
+      log.debug('in watchGamePlayActionsAndHand and isReady');
       let knownHands:HandInterface[] = [];
       let buffer:GamePlayAction[] = [];
       let handsCursor: Mongo.Cursor<any> = HandCollection.find({gameId: gameId}, {sort: {dateCreated: 1}});
       let hands$:Observable<IDocumentChange<HandInterface>> = MeteorCursorObservers.createCursorObserver<HandInterface>(handsCursor);
       hands$.subscribe(
         (handChange:IDocumentChange<HandInterface>) => {
+          console.log('Document Change handChange')
+          console.log(handChange)
           switch (handChange.changeType) {
             case EDocumentChangeType.NEW: {
-              console.log('Document Change handChange')
-              console.log(handChange)
               gamePlayActions.newHand(gameId, handChange.newDocument);
               knownHands.push(handChange.newDocument);
               let wholeBufferReady = true;
@@ -109,10 +109,7 @@ function watchGamePlayActionsAndHand(gamePlayActions: GamePlayActions, gameId:st
                 }
               }
               if (wholeBufferReady) {
-                for (let i = 0; i<buffer.length; i++) {
-                  let bufferedAction = buffer[i];
-                  gamePlayActions.receiveActon(bufferedAction);
-                }
+                gamePlayActions.receiveActions(buffer);
                 buffer = [];
               }
               break;
@@ -129,13 +126,17 @@ function watchGamePlayActionsAndHand(gamePlayActions: GamePlayActions, gameId:st
       let gameActions$:Observable<IDocumentChange<GamePlayAction>> = MeteorCursorObservers.createCursorObserver<GamePlayAction>(actionCursor);
       gameActions$.subscribe(
         (gamePlayActionChange:IDocumentChange<GamePlayAction>) => {
+          console.log('GameChange');
+          console.log(gamePlayActionChange);
           switch (gamePlayActionChange.changeType) {
             case EDocumentChangeType.NEW: {
+              log.debug('')
               let action:GamePlayAction = gamePlayActionChange.newDocument;
 
               // If the hand is not read yet, defer.  There is probably a more streamy way (Observable.bufferWhen???)
               if ( isHandReady(knownHands, action) ){
-                gamePlayActions.receiveActon(action);
+                gamePlayActions.receiveAction(action);
+                console.log('done receiveAction');
               } else {
                 buffer.push(action);
               }

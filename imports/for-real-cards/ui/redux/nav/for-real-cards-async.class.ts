@@ -49,15 +49,19 @@ export class ForRealCardsAsync {
           }
         });
         break;
-      case ForRealCardsActions.VIEW_GAME_REQUEST:
+      case ForRealCardsActions.VIEW_GAME_REQUEST: // Fallthrough
+      case ForRealCardsActions.LOAD_GAME_REQUEST:
         Meteor.call('ForRealCardsViewGameCheck', payload.gameId, payload.password, (error, result:boolean)=> {
           if (error) {
-            log.error('ForRealCardsJoinGame returned error');
+            log.error('ForRealCardsViewGameCheck returned error');
             log.error(error);
             this.forRealCardActions.error(error);
           } else {
             this.gamePlayAction.initialize(payload.gameId);
-            this.forRealCardActions.viewGameSuccess(payload.gameId);
+            if (action.type===ForRealCardsActions.VIEW_GAME_REQUEST)
+              this.forRealCardActions.viewGameSuccess(payload.gameId);
+            else
+              this.forRealCardActions.loadGameSuccess(payload.gameId);
           }
         });
         break;

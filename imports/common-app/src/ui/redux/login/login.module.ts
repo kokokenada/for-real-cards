@@ -13,7 +13,6 @@ export class LoginModule extends ReduxModule<IAppState>  {
   constructor(private loginEpics:LoginAsync, public actions:LoginActions) {
     super();
     this.epics.push(
-      loginEpics.checkAutoLogin,
       loginEpics.login,
       loginEpics.tempUser,
       loginEpics.logout,

@@ -29,6 +29,7 @@ export class GamePlayActions {
   private static prefix = _prefix;
   static GAME_PLAY_INITIALIZE = GamePlayActions.prefix + 'GAME_PLAY_INITIALIZE';
   static GAME_PLAY_ACTION_RECIEVED = GamePlayActions.prefix + 'GAME_PLAY_ACTION_RECIEVED';
+  static GAME_PLAY_ACTIONSSS_RECIEVED = GamePlayActions.prefix + 'GAME_PLAY_ACTIONSSS_RECIEVED';
   static GAME_PLAY_ACTION_PUSH = GamePlayActions.prefix + 'GAME_PLAY_ACTION_PUSH';
   static GAME_PLAY_ACTIONSSS_PUSH = GamePlayActions.prefix + 'GAME_PLAY_ACTIONSSS_PUSH'; // Triple S to be more distinctive than singluar form
   static GAME_PLAY_ERROR = GamePlayActions.prefix + 'GAME_PLAY_ERROR';
@@ -68,8 +69,16 @@ export class GamePlayActions {
    * Processes an action locally
    * @param action
    */
-  receiveActon(action: GamePlayAction) {
+  receiveAction(action: GamePlayAction) {
     this.ngRedux.dispatch({type: GamePlayActions.GAME_PLAY_ACTION_RECIEVED, payload: {gamePlayAction: action}});
+  }
+
+  /**
+   * Processes an actions locally
+   * @param actions
+   */
+  receiveActions(actions: GamePlayAction[]) {
+    this.ngRedux.dispatch({type: GamePlayActions.GAME_PLAY_ACTIONSSS_RECIEVED, payload: {gamePlayActions: actions}});
   }
 
 

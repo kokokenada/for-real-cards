@@ -3,49 +3,77 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 
-import { Component, Input } from '@angular/core';
+import { Component, Input, NgZone } from '@angular/core';
+import { select } from 'ng2-redux';
 
-import { RunGame } from "../run-game/run-game";
+import { PlatformTools } from '../../common-app';
+
 import { GamePlayAction } from '../api/index'
+import { ActionFormatted, ForRealCardsActions, IGamePlayState } from "../ui";
+
+import { TopFrameHeader } from "../top-frame/top-frame-header";
 import { PlayingCard } from "../playing-card/playing-card"
-import {ActionFormatted} from "../ui/action-formatted.class";
-import {PlatformTools} from '../../common-app';
-import {TopFrameHeader} from "../top-frame/top-frame-header";
 
 function genericTableContent():string {
 return `
-<thead>
-  <tr>
-    <th>id</th>
-    <th>Time</th>      
-    <th>Action</th>
-    <th>Created By</th>
-    <th>To Player</th>
-    <th>From Player</th>
-    <th>Realted Id</th>
-    <th>Visiblity Type</th>
-  </tr>    
-</thead>
-<tbody>
-  <template ngFor let-action [ngForOf]="getActions()">
+<form class="form-inline" #displayGameForm="ngForm">
+  <div class="form-group">
+    <label class="control-label" for="gameId">Game Id:</label>
+    <input 
+      [(ngModel)]="gameId" 
+      type="text" 
+      class="form-control" 
+      id="gameId"
+      ngControl="formGameId" 
+      #formGameId="ngForm" 
+      required
+    />
+  </div>
+  <div class="form-group">
+    <label class="control-label" for="password">Password (if required):</label>
+    <input [(ngModel)]="password" type="text" class="form-control" id="password"/>
+  </div>
+  <button class="xs-col-4"
+    [disabled]="!displayGameForm.form.valid" 
+    (click)="displayGame()" 
+    class="btn btn-default">
+      View
+  </button>
+</form>
+<table class="table table-striped">
+  <thead>
     <tr>
-      <td>{{action._id}}</td>
-      <td>{{actionTime(action)}}</td>
-      <td>{{actionDescription(action)}} ({{action.actionType}})</td>
-      <td>{{creator(action)}}</td>
-      <td>{{toPlayer(action)}}</td>
-      <td>{{fromPlayer(action)}}</td>
-      <td>{{action.relatedActionId}}</td>
-      <td>{{visibilityTypeDescription(action)}}</td>
-    </tr>
-    <tr [hidden]="action.cards?.length===0">
-      <td>Cards:</td>
-      <td colspan="5">
-        <playing-card *ngFor="let card of action.cards" [card]="card" [imgStyle]="{height: 'auto', width: '100%'}" style="display:inline-block; width:40px"></playing-card>
-      </td>
-    </tr>
-  </template>
-</tbody>
+      <th>id</th>
+      <th>Time</th>      
+      <th>Action</th>
+      <th>Created By</th>
+      <th>To Player</th>
+      <th>From Player</th>
+      <th>Realted Id</th>
+      <th>Visiblity Type</th>
+    </tr>    
+  </thead>
+  <tbody>
+    <template ngFor let-action [ngForOf]="getActions()">
+      <tr>
+        <td>{{action._id}}</td>
+        <td>{{actionTime(action)}}</td>
+        <td>{{actionDescription(action)}} ({{action.actionType}})</td>
+        <td>{{creator(action)}}</td>
+        <td>{{toPlayer(action)}}</td>
+        <td>{{fromPlayer(action)}}</td>
+        <td>{{action.relatedActionId}}</td>
+        <td>{{visibilityTypeDescription(action)}}</td>
+      </tr>
+      <tr [hidden]="action.cards?.length===0">
+        <td>Cards:</td>
+        <td colspan="5">
+          <playing-card *ngFor="let card of action.cards" [card]="card" [imgStyle]="{height: 'auto', width: '100%'}" style="display:inline-block; width:40px"></playing-card>
+        </td>
+      </tr>
+    </template>
+  </tbody>
+</table>
 `
 }
 
@@ -78,26 +106,41 @@ function template():string {
 `
   } else {
     return `
-<form role="form" class="form-horizontal">
   <div class="panel-heading">
     <h3 class="panel-title">Game Action List (debugger)</h3>
   </div>
-  <table class="table table-striped">`
-  + genericTableContent() + `
-  </table>
-</form>
 `
+    + genericTableContent()
   }
 }
 
 @Component({
   selector: 'game-action-list',
   directives: [PlayingCard, TopFrameHeader],
-  template: template()})
+  template: template()}
+)
 export class GameActionList {
+  @select() gamePlayReducer;
+  gamePlayState:IGamePlayState;
+  password: string;
+  gameId: string;
+
+  constructor(private forRealCardsActions:ForRealCardsActions, private ngZone:NgZone) {}
+
+  ngOnInit() {
+    this.gamePlayReducer.subscribe( (gamePlayState:IGamePlayState)=>{
+      this.ngZone.run( ()=>{
+        this.gamePlayState = gamePlayState;
+      });
+    });
+  }
+
+  displayGame() {
+    this.forRealCardsActions.loadGameRequest(this.gameId, this.password);
+  }
 
   getActions():GamePlayAction[] {
-    return RunGame.getActions(); //this.actionsFormatted;
+    return this.gamePlayState.actions.toArray();
   }
 
   actionTime(action:GamePlayAction):string {

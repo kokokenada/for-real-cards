@@ -32,11 +32,12 @@ export class RunGame {
 
   protected initialize(gameState$:Observable<IGamePlayRecord>) {
     gameState$.subscribe( (gameState:IGamePlayRecord)=>{
-      if (gameState)
-        this.gameState = gameState;
-      else
-        this.gameState = INITIAL_STATE;
-
+      this.ngZone.run(()=>{
+        if (gameState)
+          this.gameState = gameState;
+        else
+          this.gameState = INITIAL_STATE;
+      });
     } );
     this.dragAndDropInit();
     //if (action.sequencePosition+1===action.sequenceLength ) { // TODO: How to only render when last

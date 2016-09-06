@@ -18,6 +18,7 @@ export interface ILoginAction {
   credentials?: Credentials,
   user?: User,
   userId?: string,
-  documentChange?:IDocumentChange<User>
+  documentChange?:IDocumentChange<User>,
+  autoLogin?: boolean
 }
 

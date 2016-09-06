@@ -7,6 +7,7 @@ import { makeTypedFactory } from 'typed-immutable-record';
 
 import {IForRealCardsState, IForRealCardsRecord, IForRealCardsActionPayload} from "./for-real-cards.types";
 import {IPayloadAction} from "../../../../common-app";
+import {ForRealCardsActions} from "./for-real-cards-actions.class";
 
 export const ForRealCardsFactory = makeTypedFactory<IForRealCardsState, IForRealCardsRecord>({
   gameDescription: "New Game"
@@ -20,19 +21,11 @@ export function forRealCardsReducer(
 
   let payload:IForRealCardsActionPayload = action.payload;
   switch (action.type) {
-/*
-
-
- if (action.actionType === GamePlayActionType.DEAL || action.actionType === GamePlayActionType.NEW_HAND) {
- this.description = RunGame.gameState.currentGameConfig.name + " (id " + action.gameId + ")"; // TODO: Change this to pull name from event instead of global state
- } else if (action.actionType === GamePlayActionType.RESET || action.actionType===GamePlayActionType.NEW_GAME) {
- this.description = "New Game (id " + action.gameId + ")";
- } else if (action.actionType === GamePlayActionType.LEAVE_GAME) {
- this.description = '';
- }
-
-
-;*/
+    case (ForRealCardsActions.JOIN_GAME_SUCCESS):
+    case (ForRealCardsActions.VIEW_GAME_SUCCESS):
+    {
+      return state.set('gameDescription', '(id '+ action.payload.gameId + ')');
+    }
     default:
       return state;
   }

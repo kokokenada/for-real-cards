@@ -24,7 +24,8 @@ export abstract class TopFrame extends BaseApp<IAppState> {
     const navigatorMiddleware = store => next => (action:IPayloadAction) => {
       switch (action.type)  {
         case LoginActions.LOGGED_IN:
-          this.navigateToEnter();
+          if (!action.payload.autoLogin)
+            this.navigateToEnter();
           break;
         case LoginActions.LOGGED_OUT:
           this.navigateToStart();
@@ -61,7 +62,7 @@ export abstract class TopFrame extends BaseApp<IAppState> {
     forRealCardsModule.middlewares.push(navigatorMiddleware);
     this.configure([connectModule, loginModule, forRealCardsModule, gamePlayModule, uploaderModule, usersModule], ngRedux);
     this.loginModule = loginModule;
-
+    loginModule.actions.watchUser(); // for auto login
   }
 
   ngOnInit() {

@@ -3,9 +3,6 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 import {Component, Input} from '@angular/core';
-import {Session} from 'meteor/session';
-import {RunGame} from "../run-game/run-game";
-import {GamePlayActionType, GamePlayAction} from "../api/models/action.model";
 import {TargetPlatformId, PlatformTools} from '../../common-app';
 import {ForRealCardsActions} from "../ui/redux/nav/for-real-cards-actions.class";
 

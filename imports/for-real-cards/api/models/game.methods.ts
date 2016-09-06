@@ -6,11 +6,10 @@
 import { Meteor } from 'meteor/meteor';
 import * as log from 'loglevel';
 
-import { getNextSequence } from '../../../common-app-api';
+import { AccountsAdminTools, getNextSequence } from '../../../common-app-api';
 
 import { Game, GameCollection } from './game.model.ts';
 import { HandCollection, HandInterface, Hand } from './hand.model.ts';
-import { GamePlayActionCollection, GamePlayAction, GamePlayActionType } from "./action.model";
 
 function joinGame(gameId:string, userId:string, password:string):HandInterface {
   let game:Game = <Game>GameCollection.findOne({_id: gameId});
@@ -41,6 +40,9 @@ function viewGame(gameId:string, userId:string, password:string):boolean {
   }
   let existingHand:Hand = <Hand>HandCollection.findOne({gameId: gameId, userId: userId});
   if (!existingHand) {  // User is part of the game, so no viewing is OK
+    return true;
+  }
+  if (AccountsAdminTools.isAdmin(Meteor.user())) { // Admin's can peak
     return true;
   }
 

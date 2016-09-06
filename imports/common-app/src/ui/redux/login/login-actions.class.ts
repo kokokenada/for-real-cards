@@ -11,7 +11,6 @@ import {IDocumentChange} from "../../reactive-data/document-change.interface";
 @Injectable()
 export class LoginActions {
   private static prefix = 'CA_LOGIN_';
-  static CHECK_AUTO_LOGIN = LoginActions.prefix + 'CHECK_AUTO_LOGIN';
   static LOGIN_REQUEST = LoginActions.prefix + 'LOGIN_REQUEST';
   static REGISTRATION_REQUEST = LoginActions.prefix + 'REG_REQUEST';
   static TEMP_USER_REQUEST = LoginActions.prefix + 'TEMP_USER_REQUEST';
@@ -26,10 +25,6 @@ export class LoginActions {
   static WATCHED_USER_CHANGED = LoginActions.prefix + 'WATCHED_USER_CHANGED';
 
   constructor(private ngRedux: NgRedux<IAppState>) {}
-
-  checkAutoLogin() : void {
-    this.ngRedux.dispatch({ type: LoginActions.CHECK_AUTO_LOGIN});
-  }
 
   login(credentials:Credentials):void {
     this.ngRedux.dispatch({ type: LoginActions.LOGIN_REQUEST, payload: {credentials: credentials}});
@@ -63,8 +58,8 @@ export class LoginActions {
     return {type: LoginActions.SAVE_USER_RESPONSE, payload: {user: user}};
   }
 
-  static loginSuccessFactory(user:User, userId:string):IPayloadAction {
-    return {type: LoginActions.LOGGED_IN, payload: {user: user, userId:userId}};
+  static loginSuccessFactory(user:User, userId:string, autoLogin:boolean=false):IPayloadAction {
+    return {type: LoginActions.LOGGED_IN, payload: {user: user, userId:userId, autoLogin:autoLogin}};
   }
 
   static logedOutFactory():IPayloadAction {
