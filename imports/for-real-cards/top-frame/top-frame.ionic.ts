@@ -3,7 +3,8 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 import { Component, NgZone, ViewChild } from '@angular/core';
-import { ionicBootstrap, MenuController, NavController } from 'ionic-angular';
+//import { ionicBootstrap, MenuController, NavController } from 'ionic-angular';
+declare let ionicBootstrap, MenuController, NavController; // Shut up compiler until we have another go at Ionic
 import { DragulaService} from 'ng2-dragula/ng2-dragula';
 import { NgRedux } from 'ng2-redux';
 
