@@ -21,9 +21,9 @@ class HandBase {
   userId: string;
   position: number;
   dateCreated: Date;
-  cardsFaceDown:Card[]; // not persisted
-  cardsFaceUp:Card[]; // not persisted
-  cardsInHand:Card[]; // not persisted
+  cardsFaceDown:Card[] = []; // not persisted
+  cardsFaceUp:Card[] = []; // not persisted
+  cardsInHand:Card[] = []; // not persisted
   tricks:Card[][] = [];  // Not persisted
   handSortSequence:SortSequence = SortSequence.RANK; // Not persisted
 }

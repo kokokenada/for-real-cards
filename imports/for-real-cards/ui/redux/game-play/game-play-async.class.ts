@@ -9,6 +9,7 @@ import * as log from 'loglevel';
 import { Observable} from 'rxjs/Observable';
 
 import {
+  BatchAndWatch,
   IDocumentChange,
   IPayloadAction,
   EDocumentChangeType,
@@ -26,7 +27,6 @@ import {
 
 import {GamePlayActions} from "./game-play-actions.class";
 import { IGamePlayState, IGamePlayActionPayload } from "./game-play.types";
-
 
 @Injectable()
 export class GamePlayAsync {
@@ -69,6 +69,18 @@ function isHandReady(hands:HandInterface[], action:GamePlayAction):boolean {
   return true;
 }
 
+function isBufferReady(knownHands:HandInterface[], buffer:GamePlayAction[]):boolean {
+  let wholeBufferReady = true;
+  for (let i = 0; i<buffer.length; i++) { // Flush the whole buffer only, to avoid order of processing glitches
+    let bufferedAction = buffer[i];
+    if (!isHandReady(knownHands, bufferedAction)) {
+      wholeBufferReady = false;
+      break;
+    }
+  }
+  return wholeBufferReady;
+}
+
 function watchGamePlayActionsAndHand(gamePlayActions: GamePlayActions, gameId:string) {
   Tracker.autorun(()=> {
     let options: GameSubscriptionOptions = {gameId: gameId};
@@ -94,21 +106,11 @@ function watchGamePlayActionsAndHand(gamePlayActions: GamePlayActions, gameId:st
       let hands$:Observable<IDocumentChange<HandInterface>> = MeteorCursorObservers.createCursorObserver<HandInterface>(handsCursor);
       hands$.subscribe(
         (handChange:IDocumentChange<HandInterface>) => {
-          console.log('Document Change handChange')
-          console.log(handChange)
           switch (handChange.changeType) {
             case EDocumentChangeType.NEW: {
               gamePlayActions.newHand(gameId, handChange.newDocument);
               knownHands.push(handChange.newDocument);
-              let wholeBufferReady = true;
-              for (let i = 0; i<buffer.length; i++) { // Flush the whole buffer only, to avoid order of processing glitches
-                let bufferedAction = buffer[i];
-                if (!isHandReady(knownHands, bufferedAction)) {
-                  wholeBufferReady = false;
-                  break;
-                }
-              }
-              if (wholeBufferReady) {
+              if (isBufferReady(knownHands, buffer)) {
                 gamePlayActions.receiveActions(buffer);
                 buffer = [];
               }
@@ -124,13 +126,28 @@ function watchGamePlayActionsAndHand(gamePlayActions: GamePlayActions, gameId:st
       let actionCursor: Mongo.Cursor<any> = GamePlayActionCollection.find({gameId: gameId}, {sort: {dateCreated: 1}});
 
       let gameActions$:Observable<IDocumentChange<GamePlayAction>> = MeteorCursorObservers.createCursorObserver<GamePlayAction>(actionCursor);
-      gameActions$.subscribe(
-        (gamePlayActionChange:IDocumentChange<GamePlayAction>) => {
-          console.log('GameChange');
-          console.log(gamePlayActionChange);
+      let batchAndWatch:BatchAndWatch<IDocumentChange<GamePlayAction>> = MeteorCursorObservers.batchAndWatch(gameActions$);
+      batchAndWatch.batchObservable.subscribe( (gamePlayActionChanges:IDocumentChange<GamePlayAction>[]) => {
+        gamePlayActionChanges.forEach( (gamePlayActionChange:IDocumentChange<GamePlayAction>)=>{
           switch (gamePlayActionChange.changeType) {
             case EDocumentChangeType.NEW: {
-              log.debug('')
+              buffer.push(gamePlayActionChange.newDocument);
+              break;
+            }
+            default:
+              gamePlayActions.error('only expecting new game state records')
+          }
+
+        });
+        if (isBufferReady(knownHands, buffer)) {
+          gamePlayActions.receiveActions(buffer);
+          buffer = [];
+        }
+      });
+      batchAndWatch.watchedObservable.subscribe(
+        (gamePlayActionChange:IDocumentChange<GamePlayAction>) => {
+          switch (gamePlayActionChange.changeType) {
+            case EDocumentChangeType.NEW: {
               let action:GamePlayAction = gamePlayActionChange.newDocument;
 
               // If the hand is not read yet, defer.  There is probably a more streamy way (Observable.bufferWhen???)
@@ -147,9 +164,6 @@ function watchGamePlayActionsAndHand(gamePlayActions: GamePlayActions, gameId:st
           }
         }
         );
-
-
-
     }
   })
 }

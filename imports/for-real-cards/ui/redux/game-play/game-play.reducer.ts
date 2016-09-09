@@ -317,17 +317,11 @@ function addUndone(state: IGamePlayRecord, actionId: string) {
 
 function getHandIndexFromUserId(hands: List<Hand>, userId: string): number {
   return hands.findIndex((hand: Hand)=> {
-    console.log('getHandIndexFromUserId')
-    console.log(hand)
-    console.log(userId)
     return hand.userId === userId
   });
 }
 
 function getHandForWriting(transientState: IGamePlayRecord, playerId: string): Hand {
-  console.log('getHandForWriting')
-  console.log(transientState.hands.toArray())
-  console.log(playerId)
   let handIndex: number = getHandIndexFromUserId(transientState.hands, playerId);
   if (handIndex === -1) {
     log.error('cannot find playerId %s is hands', playerId);
