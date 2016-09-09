@@ -121,8 +121,6 @@ function processGamePlayAction(transient: IGamePlayRecord, gamePlayAction: GameP
     case GamePlayActionType.NEW_HAND: {
       let newHand = new Hand(payload.newHand);
       let newHands: List<Hand> = readState.hands.push(newHand);
-      console.log(newHand)
-      console.log(newHands.toArray());
       transient.set('hands', newHands);
       break;
     }
