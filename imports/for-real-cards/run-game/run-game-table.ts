@@ -72,10 +72,7 @@ export class RunGameTable extends RunGame implements OnInit {
       // Rotate so user is at bottom
       let currentUserIndex = Hand.indexOfUser(hands);
       if (currentUserIndex===-1) {
-        console.warn("Couldn't find current user in hands");
-        console.warn(hands);
-        console.warn(Meteor.userId());
-//        throw "Couldn't find current user in hands"
+        // Couldn't find current user in hands.  Not an error because a user may have joined a game while it is in progress
         currentUserIndex=0;
       }
       let currentPlayerDegrees:number = 360/numberOfPlayers*currentUserIndex;
