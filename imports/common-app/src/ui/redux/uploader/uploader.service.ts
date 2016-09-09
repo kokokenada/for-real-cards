@@ -1,4 +1,5 @@
 import 'meteor/jalik:ufs';
+import 'meteor/okland:camera-ui'; declare let MeteorCameraUI;
 import {Camera, File} from 'ionic-native';
 
 declare let UploadFS: any;
@@ -14,62 +15,6 @@ export interface UploadFileInfo {
 }
 
 export class UploaderService {
-
-  /**
-   * Converts DataURL to Blob object
-   *
-   * https://github.com/ebidel/filer.js/blob/master/src/filer.js#L137
-   *
-   * @param  {String} dataURL
-   * @return {Blob}
-   */
-  private static dataURLToBlob(dataURL): any {
-    const BASE64_MARKER = ';base64,';
-
-    if (dataURL.indexOf(BASE64_MARKER) === -1) {
-      const parts = dataURL.split(',');
-      const contentType = parts[0].split(':')[1];
-      const raw = decodeURIComponent(parts[1]);
-
-      return new Blob([raw], {type: contentType});
-    }
-
-    const parts = dataURL.split(BASE64_MARKER);
-    const contentType = parts[0].split(':')[1];
-    const raw = window.atob(parts[1]);
-    const rawLength = raw.length;
-    const uInt8Array = new Uint8Array(rawLength);
-
-    for (let i = 0; i < rawLength; ++i) {
-      uInt8Array[i] = raw.charCodeAt(i);
-    }
-
-    return new Blob([uInt8Array], {type: contentType});
-  }
-
-  /**
-   * Converts Blob object to ArrayBuffer
-   *
-   * @param  {Blob}       blob          Source file
-   * @param  {Function}   callback      Success callback with converted object as a first argument
-   * @param  {Function}   errorCallback Error callback with error as a first argument
-   */
-  static blobToArrayBuffer(blob, callback, errorCallback) {
-    let reader = new FileReader();
-
-    reader.onload = (e: any) => {
-      callback(e.target.result);
-    };
-
-    reader.onerror = (e) => {
-      if (errorCallback) {
-        errorCallback(e);
-      }
-    };
-
-    reader.readAsArrayBuffer(blob);
-
-  }
 
   private static addToCommonUploaderOptions(options, actions: UploaderActions) {
     return Object.assign({},
@@ -108,112 +53,6 @@ export class UploaderService {
         }
       }, options
     );
-  }
-
-  /**
-   * Uploads a new file
-   *
-   * @param  {String}   dataUrl [description]
-   * @param  {String}   name    [description]
-   * @param  {Collection} collection
-   * @param  {Function} resolve [description]
-   * @param  {Function} reject  [description]
-   */
-  private static uploadDataUrl(dataUrl, name, collection, actions: UploaderActions): Promise<any> {
-    return new Promise((resolve, reject)=> {
-      // convert to Blob
-      let blob = UploaderService.dataURLToBlob(dataUrl);
-      blob.name = name;
-
-      // pick from an object only: name, type and size
-      const file = _.pick(blob, 'name', 'type', 'size');
-
-      // convert to ArrayBuffer
-      UploaderService.blobToArrayBuffer(
-        blob,
-        (data) => {
-          let uploader = new UploadFS.Uploader(UploaderService.addToCommonUploaderOptions(
-            {
-              data,
-              file,
-              store: collection,
-            }, actions
-          ));
-          resolve(uploader);
-        },
-        (error)=> {
-          reject(error);
-        });
-    });
-  }
-
-  private static uploadFileURI(file, collection, actions: UploaderActions): Promise<any> {
-    return new Promise((resolve, reject)=> {
-      console.log("in uploadFileURI reading " + file)
-      window.resolveLocalFileSystemURL(file, (entry)=> {
-
-        // Doesn't work
-        const fileobj = {name: file};
-        resolve(new UploadFS.Uploader(
-          UploaderService.addToCommonUploaderOptions({
-            store: collection,
-            file: fileobj,
-            data: file,
-          }, actions)
-        ));
-        if (false) { // Also doesn't work.  I think it worked with an older verion of UFS
-          entry.file((f)=> {
-            console.log('entry.file( (f)')
-            console.log(f)
-
-            var reader: any = new FileReader();
-            reader = reader.__zone_symbol__originalInstance; // Why on earth do I need to do this???
-
-            reader.onload = (ev: any)=> {
-              console.log('reader.onload')
-              console.log(ev)
-              const uploader = new UploadFS.Uploader(
-                UploaderService.addToCommonUploaderOptions({
-                  store: collection,
-                  file: file,
-                  data: ev.target.result,
-                }, actions)
-              );
-              resolve(uploader);
-
-            };
-            reader.onerror = (e)=> {
-              log.error('FilerReader error');
-              log.error(e);
-              reject(e);
-            }
-            reader.onabort = (e)=> {
-              log.info('FilerReader abort');
-              reject(e);
-            }
-            reader.onloadstart = (o)=> {
-              log.debug('FilerReader onloadstart');
-            }
-            reader.onloadend = (o)=> {
-              log.debug('FilerReader onloadend');
-            }
-
-            reader.readAsArrayBuffer(f);
-
-          });
-        }
-      });
-
-      /*
-       var reader = new FileReader();
-       reader.onload = function (ev) {
-       console.log('file reader onload in uploadFileURI')
-       console.log(ev)
-       };
-       reader.readAsDataURL(file);
-       */
-
-    });
   }
 
   private static makeUploader(file, collection, uploaderActions: UploaderActions): any {
@@ -267,49 +106,28 @@ export class UploaderService {
     if (!Meteor.isCordova) {
       actions.uploadError('This is a cordova only function');
     } else {
-      Camera.getPicture(options).then(
-        (cameraResult)=> {
-          console.log('camera success')
-          console.log(cameraResult)
-          if (options.destinationType === Camera.DestinationType.FILE_URI) {
-            File.checkFile(cameraResult, '').then(
-              (result)=> {
-                console.log('checkFile')
-                console.log(result)
+      MeteorCameraUI.getPicture({ width: options.targetWidth, height: options.targetHeight }, (error, dataURL) => {
 
-                //let uploader = UploaderService.makeUploader(result, collection, actions);  // Web approach - doesn't work
-                //actions.uploadStartResponse(uploader);
-                //uploader.start();
+        if (error) {
+          actions.uploadError(error);
+        }
 
-                UploaderService.uploadFileURI(cameraResult, collection, actions).then(
-                  (uploader)=> {
-                    actions.uploadStartResponse(uploader);
-                    uploader.start();
-                  }, (error)=> {
-                    log.error(error);
-                    actions.uploadError(error.toString);
-                  }
-                )
-              }, (error)=> {
-                console.error(error);
-                actions.uploadError(error.toString())
-              }
-            );
-          } else if (options.destinationType === Camera.DestinationType.DATA_URL) {  //DATA_URL
-            UploaderService.uploadDataUrl(cameraResult, "camera", collection, actions).then(
-              (uploader)=> {
-                actions.uploadStartResponse(uploader);
-                uploader.start();
-              }, (error)=> {
-                log.error(error);
-                actions.uploadError(error.toString);
-              }
-            )
-          }
-        }, (error)=> {
-          log.error(error);
-          actions.uploadError(error.toString());
-        });
+        const blob = MeteorCameraUI.dataURIToBlob(dataURL);
+        blob.name = 'default';
+        const file = _.pick(blob, 'name', 'type', 'size');
+
+        //console.log('blob', blob, blob instanceof Blob);
+
+        const uploader = new UploadFS.Uploader(UploaderService.addToCommonUploaderOptions({
+          data: blob,
+          file: file,
+          store: collection
+        }, actions));
+
+        uploader.start();
+        actions.uploadStartResponse(uploader);
+
+      });
     }
   }
 

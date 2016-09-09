@@ -18,11 +18,16 @@ export class Avatar {
   @Input() private userId:string;
   @Input() private size:string = 'medium';
   @Input() private shape:string = 'round';
+
+  constructor(private ngZone:NgZone){}
+
   private imageURL:string;
 
   ngOnInit() {
     this.usersReducer.subscribe( (usersState:IUsersState)=>{
-      this.imageURL = User.getAvatarURL( usersState.users.get(this.userId) );
+      this.ngZone.run(()=>{
+        this.imageURL = User.getAvatarURL( usersState.users.get(this.userId) );
+      });
     } );
 
   }

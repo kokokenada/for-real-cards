@@ -45,8 +45,4 @@ export class UploaderActions {
   uploadError(errorMessage:string):void {
     this.ngRedux.dispatch({ type: UploaderActions.UPLOAD_FAIL, payload: {lastUploadErrorMessage:errorMessage}});
   }
-
-/*  static changeFactory(documentChange:IDocumentChange<User>):IPayloadAction {
-    return {type: UsersActions.CHANGE, payload: {documentChange:documentChange}};
-  }*/
 }
