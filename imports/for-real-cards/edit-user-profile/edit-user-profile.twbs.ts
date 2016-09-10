@@ -65,7 +65,7 @@ import {UploaderActions} from "../../common-app/src/ui/redux/uploader/uploader-a
       <div *ngIf="uploaderState?.uploadInProgress">
         Uploading... Progress: {{uploaderState?.progressPercent}}
       </div>
-      <div *ngIf="uploaderState?.lastUploadErrorMessage?.length>0" class="glyphicon glyphicon-exclamation-sign">
+      <div *ngIf="uploaderState?.lastUploadErrorMessage?.length>0" class="fa fa-exclamation-triangle">
          {{uploaderState?.lastUploadErrorMessage}}
       </div>
     </div>

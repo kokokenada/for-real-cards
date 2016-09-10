@@ -16,7 +16,7 @@ import { MenuFilterPipe}  from '../ui-ng2';
   template: `
 
     <span dropdown (on-toggle)="toggled($event)">
-      <span dropdownToggle class="glyphicon glyphicon-menu-hamburger" style="font-size: x-large" aria-hidden="true"></span>
+      <span dropdownToggle class="fa fa-bars" style="font-size: x-large" aria-hidden="true"></span>
       <ul class="dropdown-menu dropdown-menu-right" >
         <li
             *ngFor="let item of getMenuItems() | menuFilter"

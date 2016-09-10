@@ -22,7 +22,7 @@ import {AccountTools} from "../../ui/index";
         <input type="text" class="form-control search-input-filter" [(ngModel)]="searchFilter"/>
         <span class="input-group-btn">
           <button class="btn btn-default" type="button">
-            <span class="glyphicon glyphicon-search"></span>
+            <span class="fa fa-search"></span>
           </button>
           <button class="btn btn-default" type="button" data-toggle="modal" (click)="updateRoles()">Manage Roles</button>
         </span>
@@ -39,10 +39,10 @@ import {AccountTools} from "../../ui/index";
     <tbody>
       <tr *ngFor="let user of users()">
         <td>
-          <span (click)="deleteUser(user)" class="glyphicon glyphicon-trash"></span>
-          <span (click)="updateUser(user)" class="glyphicon glyphicon-pencil"></span>
-          <span (click)="infoUser(user)" class="glyphicon glyphicon-info-sign"></span>
-          <span (click)="impersonateUser(user)" class="glyphicon glyphicon-eye-open"></span>
+          <span (click)="deleteUser(user)" class="fa fa-trash"></span>
+          <span (click)="updateUser(user)" class="fa fa-pencil"></span>
+          <span (click)="infoUser(user)" class="fa fa-info"></span>
+          <span (click)="impersonateUser(user)" class="fa fa-eye"></span>
         </td> 
         <td *ngFor="let field of fields()">{{field.displayText(user)}}</td>
       </tr>

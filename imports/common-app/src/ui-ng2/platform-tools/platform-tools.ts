@@ -27,7 +27,7 @@ export class PlatformTools {
       case TargetPlatformId.TWBS_CORDOVA:
       case TargetPlatformId.TWBS_WEB:
       {
-        require('../../ui-twbs-ng2/scss/bootstrap.scss');
+//        require('../../ui-twbs-ng2/scss/bootstrap.scss');
 
         break;
       }

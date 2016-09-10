@@ -17,13 +17,13 @@ import { Meteor } from 'meteor/meteor';
  			<li class="list-group-item" *ngFor="let role of allRoles()">
 				<em *ngIf="role==='admin'">Admin Role (admin)</em>
 				<span *ngIf="role!=='admin'">{{role}}</span>
-				<button *ngIf="role!=='admin'" class="btn btn-danger btn-xs" (click)='removeRole(role)' type="button">Delete</button>
+				<button *ngIf="role!=='admin'" class="btn btn-danger btn-xs" (click)='removeRole(role)' type="button"><span class="fa fa-minus-circle"></span> Delete</button>
 			</li>
 		</ul>
 		<div class="input-group">
 			<input type="text" class="form-control" value="" [(ngModel)]="newRole">
 			<span class="input-group-btn">
-				<button (click)="addRole()" class="btn btn-success" type="button"><span class="glyphicon glyphicon-plus"></span> Create Role</button>
+				<button (click)="addRole()" class="btn btn-success" type="button"><span class="fa fa-plus-circle"></span>  Create Role</button>
 			</span>
 		</div>
  	</div>

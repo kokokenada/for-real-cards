@@ -60,11 +60,11 @@ import { AvatarOriginalStore } from '../../common-app-api';
             <td nowrap>
               <button type="button" class="btn btn-success btn-xs"
                       (click)="uploadToFSCollection()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
-                <span class="glyphicon glyphicon-upload"></span> Upload
+                <span class="fa fa-upload"></span> Upload
               </button>
               <button type="button" class="btn btn-danger btn-xs"
                       (click)="item.remove()">
-                <span class="glyphicon glyphicon-trash"></span> Remove
+                <span class="fa fa-trash"></span> Remove
               </button>
             </td>
           </tr>

@@ -3,7 +3,7 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 
-import { Component, provide, NgZone } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { bootstrap } from '@angular/platform-browser-dynamic';
 import { NgRedux } from 'ng2-redux';
 import { provideRouter, ROUTER_DIRECTIVES, RouterConfig, Router } from '@angular/router'

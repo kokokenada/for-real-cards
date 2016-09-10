@@ -22,7 +22,7 @@ import {User} from '../../../../common-app-api';
           <ul *ngIf="getRoles().length" class="list-group">
             <li *ngFor="let role of getRoles()" class="list-group-item">
               <button (click)="removeRole(role)" class="btn btn-danger btn-xs" type="button">
-                <span class="glyphicon glyphicon-minus"></span> 
+                <span class="fa fa-minus-circle"></span> 
                 Remove
               </button>
               <span class="pull-right">{{role}}</span>
@@ -33,7 +33,7 @@ import {User} from '../../../../common-app-api';
           <ul *ngIf="getUnsetRoles().length" class="list-group">
             <li *ngFor="let newRole of getUnsetRoles()" class="list-group-item">
             <button type="button" (click)="addRole(newRole)" class="btn btn-success">
-              <span class="glyphicon glyphicon-plus"></span> 
+              <span class="fa fa-plus-circle"></span> 
               Add Role
             </button>
             <span class="pull-right">{{newRole}}</span>
