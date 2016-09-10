@@ -20,8 +20,9 @@ export function forRealCardsReducer(
   switch (action.type) {
     case (ForRealCardsActions.JOIN_GAME_SUCCESS):
     case (ForRealCardsActions.VIEW_GAME_SUCCESS):
+    case (ForRealCardsActions.LOAD_GAME_SUCCESS):
     {
-      return Object.assign({}, {gameDescription: 'id '+ action.payload.gameId + ')', gameId:action.payload.gameId});
+      return Object.assign({}, {gameDescription: '(id '+ action.payload.gameId + ')', gameId:action.payload.gameId});
     }
     default:
       return state;
