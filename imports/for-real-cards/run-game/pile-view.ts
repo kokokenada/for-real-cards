@@ -3,15 +3,11 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 
-import { Component, Input, NgZone } from '@angular/core';
-import { select } from 'ng2-redux';
-
-import { DragulaService } from 'ng2-dragula/ng2-dragula';
+import { Component, Input, Injector } from '@angular/core';
 
 import { RunGame } from './run-game.ts';
 import { PlayingCard } from "../playing-card/playing-card";
 import { CardImageStyle } from "../api/index";
-import {GamePlayActions} from "../ui/redux/game-play/game-play-actions.class";
 
 @Component(
   {
@@ -42,18 +38,10 @@ import {GamePlayActions} from "../ui/redux/game-play/game-play-actions.class";
 )
 export class PileView extends RunGame {
   @Input() imgStyle:CardImageStyle;
-  @select() gamePlayReducer;
-
-  constructor(
-    private gamePlayActions:GamePlayActions,
-    private dragulaServiceChild: DragulaService,
-    private ngZoneChild:NgZone ) {
-    super(gamePlayActions, dragulaServiceChild, ngZoneChild);
+  constructor(private injectorInjection: Injector) {
+    super(injectorInjection);
   }
-
-  ngOnInit() {
-    this.initialize(this.gamePlayReducer);
-  }
+  childInit() {}
 
   numberOfCards():number {
     return this.getCardsInPile() ? this.getCardsInPile().length : 0;

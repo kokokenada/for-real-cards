@@ -3,13 +3,12 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 
-import { Component, Injector, Input, OnInit, NgZone, ViewEncapsulation } from '@angular/core';
-import { Dragula, DragulaService} from 'ng2-dragula/ng2-dragula';
-import { select } from 'ng2-redux';
+import { Component, Injector, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { Dragula } from 'ng2-dragula/ng2-dragula';
 
 import { PlatformTools, Tools } from '../../common-app';
 
-import { GamePlayActions, GameRenderingTools } from "../ui";
+import { GameRenderingTools } from "../ui";
 import { Card, Coordinates, Deck, Hand} from "../api/index";
 import { RunGame } from './run-game.ts';
 import { Player } from "../player/player";
@@ -35,25 +34,18 @@ export class RunGameTable extends RunGame implements OnInit {
   @Input() width:string;
   @Input() height:string;
   @Input() forPlayer:string;
-  @select() gamePlayReducer;
-  
-  constructor(
-    private gamePlayActions:GamePlayActions,
-    private dragulaServiceChild: DragulaService,
-    private ngZoneChild:NgZone,
-    private injector: Injector) {
-    super(gamePlayActions, dragulaServiceChild, ngZoneChild);
+  constructor(private injectorInjection: Injector) {
+    super(injectorInjection);
+  }
+
+  childInit() {
     if (PlatformTools.isIonic())  {
-      let navParams = PlatformTools.getNavParams(injector);
+      let navParams = PlatformTools.getNavParams(this.injector);
       if (navParams) {
         this.width = navParams.data.width;
         this.height = navParams.data.height;
       }
     }
-  }
-
-  ngOnInit() { // TODO: Can this go on base class if gamePLayReducer can be abstract
-    this.initialize(this.gamePlayReducer);
   }
 
   private forPlayerBool():boolean {

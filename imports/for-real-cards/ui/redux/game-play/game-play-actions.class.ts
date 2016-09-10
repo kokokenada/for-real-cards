@@ -103,6 +103,7 @@ export class GamePlayActions {
         type: GamePlayActions.GAME_PLAY_ACTION_RECIEVED,
         payload: {
           gamePlayAction: {
+            _id: 'newhand:' + hand._id, // Ensure gamePlayAction has unique ID to prevent double processing
             gameId: gameId,
             creatorId: AccountTools.userId(),
             actionType: GamePlayActionType.NEW_HAND

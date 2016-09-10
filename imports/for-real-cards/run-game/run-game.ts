@@ -3,51 +3,79 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 import { Meteor } from 'meteor/meteor';
-import { Observable } from 'rxjs';
 import * as log from 'loglevel';
-import { NgZone } from '@angular/core';
+import { Injector, NgZone } from '@angular/core';
+import { select } from 'ng2-redux';
+
+
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
 
 
-import { GamePlayAction, GamePlayActionType, Card, CardCountAllowed, CardLocation, Deck, DeckLocation, GameConfig, Hand } from '../api';
-import { DragAndDrop, GameRenderingTools } from '../ui';
-import { INITIAL_STATE } from '../ui/redux/game-play/game-play.reducer'
-
+import { Card, CardCountAllowed, CardLocation, Deck, DeckLocation, GameConfig, Hand } from '../api';
+import { DragAndDrop, ForRealCardsActions, GameRenderingTools, INITIAL_STATE_GAME_PLAY, INITIAL_STATE_FOR_REAL_CARDS } from '../ui';
 
 import { CardImageStyle} from "../api/interfaces/card-image-style.interface";
-import { IGamePlayRecord} from "../ui/redux/game-play/game-play.types";
-import { GamePlayActions} from "../ui/redux/game-play/game-play-actions.class";
+import { GamePlayActions, IForRealCardsState, IGamePlayRecord} from "../ui";
+import {DealModalService} from "../deal-modal/deal-modal.service";
 
-export class RunGame {
+
+export abstract class RunGame {
+  @select() gamePlayReducer$;
+  @select() forRealCardsReducer$;
+  gamePlayActions :GamePlayActions;
+  dragulaService: DragulaService;
+  ngZone:NgZone;
+  forRealCardsActions:ForRealCardsActions;
+  injector: Injector;
+  dealModelService:DealModalService;
+
+  abstract childInit();
   gameState:IGamePlayRecord;
+  forRealCardsState:IForRealCardsState;
   protected static dragAndDropInitialized:boolean = false;
-  protected gamePlayActionsBase:GamePlayActions;
 
-  constructor(
-    gamePlayActions:GamePlayActions, 
-    private dragulaService: DragulaService, 
-    private ngZone:NgZone) {
-    this.gamePlayActionsBase = gamePlayActions;
+  constructor(injector: Injector) {
+    this.injector = injector;
+    this.gamePlayActions = injector.get(GamePlayActions);
+    this.dragulaService = injector.get(DragulaService);
+    this.ngZone = injector.get(NgZone);
+    this.forRealCardsActions = injector.get(ForRealCardsActions);
+    this.dealModelService = injector.get(DealModalService);
   }
 
-  protected initialize(gameState$:Observable<IGamePlayRecord>) {
-    gameState$.subscribe( (gameState:IGamePlayRecord)=>{
+  ngOnInit() {
+    this.gamePlayReducer$.subscribe( (gameState:IGamePlayRecord)=>{
       this.ngZone.run(()=>{
         if (gameState)
           this.gameState = gameState;
         else
-          this.gameState = INITIAL_STATE;
+          this.gameState = INITIAL_STATE_GAME_PLAY;
       });
     } );
+    this.forRealCardsReducer$.subscribe( (forRealCardsState:IForRealCardsState)=>{
+      this.ngZone.run(()=>{
+        if (forRealCardsState)
+          this.forRealCardsState = forRealCardsState;
+          if (forRealCardsState.gameId===null) {
+            // We must have deep linked here or refreshed, so let's load the game
+            let pathname:string[] = window.location.pathname.split('/');
+            if (pathname.length>=3) {
+              let subUrl:string = pathname[1];
+              let gameId:string = pathname[2];
+              this.forRealCardsActions.loadGameRequest(gameId, '');
+            }
+
+
+          }
+        else
+          this.forRealCardsState = INITIAL_STATE_FOR_REAL_CARDS;
+      });
+      this.childInit();
+    } );
     this.dragAndDropInit();
-    //if (action.sequencePosition+1===action.sequenceLength ) { // TODO: How to only render when last
-     // this.ngZone.run(()=> {
-//              console.log('rendered')
-      //});
-//    }
   }
 
-  dragAndDropInit() { // Share a scope for drag and drop
+  private dragAndDropInit() { // Share a scope for drag and drop
 
     if (!RunGame.dragAndDropInitialized) {
       RunGame.dragAndDropInitialized = true;
@@ -94,7 +122,7 @@ export class RunGame {
 //        console.log('drop')
 //        console.log(dragAndDrop)
 
-        dragAndDrop.runActions(this.gamePlayActionsBase);
+        dragAndDrop.runActions(this.gamePlayActions);
         
       });
     }
@@ -213,7 +241,7 @@ export class RunGame {
   }
 
   showHand():void {
-    this.gamePlayActionsBase.showHand(this.gameState);
+    this.gamePlayActions.showHand(this.gameState);
   }
   
   landscapeCardStyle():CardImageStyle {

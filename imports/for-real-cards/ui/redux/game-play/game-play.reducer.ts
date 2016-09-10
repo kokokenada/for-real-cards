@@ -23,7 +23,6 @@ import {Deck} from "../../../api/models/deck.model";
 export const GamePlayFactory = makeTypedFactory<IGamePlayState, IGamePlayRecord>({
   gameId: '',
   hands: List<Hand>(),
-  handsOnServer: List<Hand>(),
   tableFaceDown: List<Card>(),
   tablePile: List<Card>(),
   lastNotified: null,
@@ -33,9 +32,9 @@ export const GamePlayFactory = makeTypedFactory<IGamePlayState, IGamePlayRecord>
   idCounter:0
 });
 
-export const INITIAL_STATE = GamePlayFactory();
+export const INITIAL_STATE_GAME_PLAY = GamePlayFactory();
 
-export function gamePlayReducer(oldState: IGamePlayRecord = INITIAL_STATE,
+export function gamePlayReducer(oldState: IGamePlayRecord = INITIAL_STATE_GAME_PLAY,
                                 action: IPayloadAction) {
 
   if (!GamePlayActions.isGamePlayAction(action.type))
@@ -121,6 +120,8 @@ function processGamePlayAction(transient: IGamePlayRecord, gamePlayAction: GameP
     case GamePlayActionType.NEW_HAND: {
       let newHand = new Hand(payload.newHand);
       let newHands: List<Hand> = readState.hands.push(newHand);
+//      console.log(newHand)
+//      console.log(newHands.toArray());
       transient.set('hands', newHands);
       break;
     }

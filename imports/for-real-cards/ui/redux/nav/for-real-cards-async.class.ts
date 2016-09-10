@@ -7,7 +7,7 @@ import { Injectable } from '@angular/core';
 import * as log from 'loglevel';
 
 import { IPayloadAction } from '../../../../common-app';
-import { IForRealCardsRecord, IForRealCardsActionPayload} from "./for-real-cards.types";
+import { IForRealCardsState, IForRealCardsActionPayload} from "./for-real-cards.types";
 import { ForRealCardsActions } from "./for-real-cards-actions.class";
 import { GamePlayActions } from "../game-play/game-play-actions.class";
 import { HandInterface } from "../../../api/";
@@ -17,7 +17,7 @@ export class ForRealCardsAsync {
   constructor(private forRealCardActions: ForRealCardsActions, private gamePlayAction:GamePlayActions) {
   }
 
-  gameNavigationMiddleware = (state: IForRealCardsRecord) => next => (action: IPayloadAction) => {
+  gameNavigationMiddleware = (state: IForRealCardsState) => next => (action: IPayloadAction) => {
     let payload: IForRealCardsActionPayload = action.payload;
     switch (action.type) {
       case ForRealCardsActions.START_NEW_GAME_REQUEST:

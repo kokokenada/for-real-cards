@@ -3,20 +3,17 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 
-import { makeTypedFactory } from 'typed-immutable-record';
-
-import {IForRealCardsState, IForRealCardsRecord, IForRealCardsActionPayload} from "./for-real-cards.types";
+import {IForRealCardsState, IForRealCardsActionPayload} from "./for-real-cards.types";
 import {IPayloadAction} from "../../../../common-app";
 import {ForRealCardsActions} from "./for-real-cards-actions.class";
 
-export const ForRealCardsFactory = makeTypedFactory<IForRealCardsState, IForRealCardsRecord>({
-  gameDescription: "New Game"
-});
-
-export const INITIAL_STATE = ForRealCardsFactory();
+export const INITIAL_STATE_FOR_REAL_CARDS = {
+  gameDescription: "New Game",
+  gameId: null
+};
 
 export function forRealCardsReducer(
-  state: IForRealCardsRecord = INITIAL_STATE,
+  state: IForRealCardsState = INITIAL_STATE_FOR_REAL_CARDS,
   action: IPayloadAction) {
 
   let payload:IForRealCardsActionPayload = action.payload;
@@ -24,7 +21,7 @@ export function forRealCardsReducer(
     case (ForRealCardsActions.JOIN_GAME_SUCCESS):
     case (ForRealCardsActions.VIEW_GAME_SUCCESS):
     {
-      return state.set('gameDescription', '(id '+ action.payload.gameId + ')');
+      return Object.assign({}, {gameDescription: 'id '+ action.payload.gameId + ')', gameId:action.payload.gameId});
     }
     default:
       return state;

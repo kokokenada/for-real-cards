@@ -3,15 +3,11 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 
-import { Component, Input, NgZone } from '@angular/core';
-import { select } from 'ng2-redux';
-
-import { DragulaService } from 'ng2-dragula/ng2-dragula';
+import { Component, Input, Injector } from '@angular/core';
 
 import {RunGame} from './run-game.ts';
 import {Card, Deck} from "../api/index";
 import {CardImageStyle} from "../api/interfaces/card-image-style.interface";
-import {GamePlayActions} from "../ui/redux/game-play/game-play-actions.class";
 
 @Component(
   {
@@ -52,18 +48,12 @@ import {GamePlayActions} from "../ui/redux/game-play/game-play-actions.class";
 )
 export class DeckView extends RunGame {
   @Input() imgStyle:CardImageStyle;
-  @select() gamePlayReducer;
 
-  constructor(
-    private gamePlayActions:GamePlayActions,
-    private dragulaServiceChild: DragulaService,
-    private ngZoneChild:NgZone ) {
-    super(gamePlayActions, dragulaServiceChild, ngZoneChild);
+  constructor(private injectorInjection: Injector) {
+    super(injectorInjection);
   }
 
-  ngOnInit() {
-    this.initialize(this.gamePlayReducer);
-  }
+  childInit(){};
 
   URL():string {
     return this.cardBackURL();
@@ -83,6 +73,6 @@ export class DeckView extends RunGame {
       });
       Deck.shuffle(seed, this.getCardsInPile());
     }
-    this.gamePlayActionsBase.pileToDeck(this.gameState, this.getCardsInPile());
+    this.gamePlayActions.pileToDeck(this.gameState, this.getCardsInPile());
   }
 }

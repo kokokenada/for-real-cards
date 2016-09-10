@@ -7,7 +7,7 @@ import { Component, NgZone, OnInit } from '@angular/core';
 import { select } from 'ng2-redux';
 
 import { ILoginState, PlatformTools} from '../../common-app';
-import {IForRealCardsRecord} from "../ui";
+import {IForRealCardsState} from "../ui";
 
 function template():string {
   if (PlatformTools.isIonic())
@@ -28,7 +28,7 @@ export class TopFrameHeader implements OnInit {
   constructor(private ngZone:NgZone) {}
 
   ngOnInit() {
-    this.forRealCardsReducer.subscribe( (state:IForRealCardsRecord)=>{
+    this.forRealCardsReducer.subscribe( (state:IForRealCardsState)=>{
       this.ngZone.run( ()=>{
         this.gameDescription = state.gameDescription;
       } );

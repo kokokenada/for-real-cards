@@ -15,7 +15,6 @@ import { List, OrderedMap } from "immutable";
 export interface IGamePlayState extends IAppState {
   gameId:string;
   lastNotified:Date;
-  handsOnServer:List<Hand>;
   hands:List<Hand>;
   tableFaceDown:List<Card>;
   tablePile:List<Card>;

@@ -10,7 +10,7 @@ import { provideRouter, ROUTER_DIRECTIVES, RouterConfig, Router } from '@angular
 import { DragulaService} from 'ng2-dragula/ng2-dragula';
 
 import {
-  AccountsAdmin,  // <-depricated
+  AccountsAdmin,
   ConnectActions,
   ConnectAsync,
   ConnectModule,
@@ -51,6 +51,7 @@ import { Start } from "../start/start";
 import "../scss/for-real-cards.scss";
 import {TopFrame} from "./top-frame.base";
 import {TopFrameHeader} from "./top-frame-header";
+import {DealModalService} from "../deal-modal/deal-modal.service";
 
 
 const routes:RouterConfig = [
@@ -76,6 +77,7 @@ const appRouterProviders = [
     viewProviders: [DragulaService],
     providers: [
       ModalService,
+      DealModalService,
       ConnectActions,
       ConnectAsync,
       ConnectModule,

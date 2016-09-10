@@ -3,10 +3,9 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 
-import { Component, Input, Injector, NgZone, OnInit, ViewEncapsulation } from '@angular/core';
-import { select } from 'ng2-redux';
+import { Component, Input, Injector, OnInit, ViewEncapsulation } from '@angular/core';
 import { Meteor } from 'meteor/meteor';
-import { Dragula, DragulaService } from 'ng2-dragula/ng2-dragula';
+import { Dragula } from 'ng2-dragula/ng2-dragula';
 
 
 import { CommonAppButton, CommonPopups, PlatformTools, Tools } from '../../common-app';
@@ -32,25 +31,17 @@ import template from "./run-game-hand.html"
 )
 export class RunGameHand extends RunGame implements OnInit {
   @Input() showTableProxy:string;
-  @select() gamePlayReducer;
+  constructor(private injectorInjection: Injector) {
+    super(injectorInjection);
+  }
 
-  constructor(
-    private dealModelService:DealModalService,
-    private gamePlayActions:GamePlayActions,
-    private dragulaServiceChild: DragulaService,
-    private ngZoneChild:NgZone,
-    private injector: Injector) {
-    super(gamePlayActions, dragulaServiceChild, ngZoneChild);
+  childInit() {
     if (PlatformTools.isIonic())  {
-      let navParams = PlatformTools.getNavParams(injector);
+      let navParams = PlatformTools.getNavParams(this.injector);
       if (navParams) {
         this.showTableProxy = navParams.data.showTableProxy;
       }
     }
-  }
-
-  ngOnInit() {
-    this.initialize(this.gamePlayReducer)
   }
 
   private showTableProxyBool():boolean {
@@ -90,7 +81,7 @@ export class RunGameHand extends RunGame implements OnInit {
   }
   
   takeTrick():void {
-    this.gamePlayActionsBase.takeTrick(this.gameState);
+    this.gamePlayActions.takeTrick(this.gameState);
   }
   
   shouldShowSort():boolean {
@@ -110,7 +101,7 @@ export class RunGameHand extends RunGame implements OnInit {
       let card = hand.cardsInHand[i];
       cardOrder.push(card);
     }
-    this.gamePlayActionsBase.sortHand(this.gameState, cardOrder);
+    this.gamePlayActions.sortHand(this.gameState, cardOrder);
   }
 
   deal() {
@@ -120,7 +111,7 @@ export class RunGameHand extends RunGame implements OnInit {
     this.dealModelService.open(defaultGameConfig).then(
       (gameConfig:GameConfig)=>{
         if (gameConfig) {
-          this.gamePlayActionsBase.deal(this.gameState, gameConfig);
+          this.gamePlayActions.deal(this.gameState, gameConfig);
         }
       }, (error)=> {
         CommonPopups.alert(error);
