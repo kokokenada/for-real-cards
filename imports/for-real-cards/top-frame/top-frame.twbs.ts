@@ -48,7 +48,6 @@ import { RunGameTableContainer } from "../run-game/run-game-table-container";
 import { RunGameTabs } from "../run-game/run-game-tabs.twbs";
 import { Start } from "../start/start";
 
-import "../scss/for-real-cards.scss";
 import {TopFrame} from "./top-frame.base";
 import {TopFrameHeader} from "./top-frame-header";
 import {DealModalService} from "../deal-modal/deal-modal.service";
