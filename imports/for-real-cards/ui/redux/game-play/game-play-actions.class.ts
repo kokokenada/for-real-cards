@@ -8,7 +8,7 @@ import {NgRedux} from 'ng2-redux';
 import {List} from "immutable";
 
 
-import {IAppState, IPayloadAction} from '../../../../common-app';
+import {AccountTools, IAppState} from '../../../../common-app';
 
 
 import {GamePlayActionType} from "../../../api";
@@ -16,7 +16,6 @@ import {GamePlayAction, VisibilityType} from "../../../api/models/action.model";
 import {GameConfig} from "../../../api/models/game-config";
 import {Deck} from "../../../api/models/deck.model";
 import {Card, CardSuit, CardRank} from "../../../api/models/card.model";
-import {AccountTools} from "../../../../common-app/src/ui/services/account-tools";
 import {IGamePlayState} from "./game-play.types";
 import {Hand, HandInterface} from "../../../api/models/hand.model";
 import {BaseApp} from "../../../../common-app/src/ui/redux/base-app.class";
@@ -37,7 +36,7 @@ export class GamePlayActions {
   constructor(private ngRedux: NgRedux<IAppState>) {
   }
 
-  static isGamePlayAction(actionType:string) : boolean {
+  static isGamePlayAction(actionType: string): boolean {
     return actionType.substr(0, _prefix_length) === _prefix;
   }
 
@@ -45,8 +44,14 @@ export class GamePlayActions {
    * Sets game Id and kicks off watching for data changes
    * @param gameId
    */
-  initialize(gameId:string) : void {
-    this.ngRedux.dispatch({type: GamePlayActions.GAME_PLAY_INITIALIZE, payload: {gameId: gameId}});
+  initialize(gameId: string): void {
+    let newGameAction: GamePlayAction = new GamePlayAction({
+      gameId: gameId,
+      creatorId: AccountTools.userId(),
+      actionType: GamePlayActionType.NEW_GAME
+    });
+    this.ngRedux.dispatch({type: GamePlayActions.GAME_PLAY_INITIALIZE, payload: {gameId}});
+    this.receiveAction(newGameAction);
   }
 
   /**
@@ -81,23 +86,7 @@ export class GamePlayActions {
     this.ngRedux.dispatch({type: GamePlayActions.GAME_PLAY_ACTIONSSS_RECIEVED, payload: {gamePlayActions: actions}});
   }
 
-
-  setGameId(gameId:string) : void {
-    this.ngRedux.dispatch(
-      {
-        type: GamePlayActions.GAME_PLAY_ACTION_RECIEVED,
-        payload: {
-          gamePlayAction: {
-            gameId: gameId,
-            creatorId: AccountTools.userId(),
-            actionType: GamePlayActionType.SET_GAME_ID
-          }
-        }
-      }
-    );
-  }
-
-  newHand(gameId:string, hand:HandInterface) {
+  newHand(gameId: string, hand: HandInterface) {
     this.ngRedux.dispatch(
       {
         type: GamePlayActions.GAME_PLAY_ACTION_RECIEVED,
@@ -338,7 +327,7 @@ export class GamePlayActions {
       case GamePlayActionType.HAND_SORT:
       case GamePlayActionType.NEW_HAND:
       case GamePlayActionType.UNDO:
-      case GamePlayActionType.SET_GAME_ID:
+      case GamePlayActionType.NEW_GAME:
         return false;
       default: {
         if (action.relatedActionId) // If has a related actionId then can't undo because it is like a child action
@@ -351,13 +340,13 @@ export class GamePlayActions {
   static actionToUndo(gameState: IGamePlayState): GamePlayAction {
     // Walk through actions from latest
     if (gameState.actions) {
-      let action:GamePlayAction = (
-                gameState.actions.findLastEntry( (actionBeingExamined:GamePlayAction)=>{
-                    return GamePlayActions.isUndoable(gameState, actionBeingExamined);
-              }) || [undefined,undefined])[1];
+      let action: GamePlayAction = (
+      gameState.actions.findLastEntry((actionBeingExamined: GamePlayAction)=> {
+        return GamePlayActions.isUndoable(gameState, actionBeingExamined);
+      }) || [undefined, undefined])[1];
       if (!action)
         return action;
-      let relatedActionId=action.relatedActionId;
+      let relatedActionId = action.relatedActionId;
       if (relatedActionId) {  // Make sure parent action is the one being undone
         return gameState.actions.get(relatedActionId);
       }
@@ -378,7 +367,7 @@ export class GamePlayActions {
 
   error(error) {
     this.ngRedux.dispatch(
-      BaseApp.errorFactory(GamePlayActions.GAME_PLAY_ERROR, {error:error.error})
+      BaseApp.errorFactory(GamePlayActions.GAME_PLAY_ERROR, {error: error.error})
     );
   }
 }

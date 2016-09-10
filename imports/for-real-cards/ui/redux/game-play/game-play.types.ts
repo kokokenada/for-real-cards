@@ -30,6 +30,5 @@ export interface IGamePlayActionPayload {
   gamePlayAction?: GamePlayActionInterface;
   gamePlayActions?: GamePlayActionInterface[];
   newHand?:HandInterface;
-  undoIndex?:number;
   gameId?:string;
 }

@@ -7,18 +7,11 @@ import { Injectable } from '@angular/core';
 import { NgRedux } from 'ng2-redux';
 
 
-import { IAppState, IPayloadAction } from '../../../../common-app';
-import {TopFrame} from "../../../top-frame/top-frame.base";
-import {BaseApp} from "../../../../common-app/src/ui/redux/base-app.class";
+import { BaseApp, IAppState } from '../../../../common-app';
 
 @Injectable()
 export class ForRealCardsActions {
   private static prefix = 'FRC_';
-  static NAV_TO_ENTER = ForRealCardsActions.prefix + 'NAV_TO_ENTER';
-  static NAV_TO_PROFILE = ForRealCardsActions.prefix + 'NAV_TO_PROFILE';
-  static NAV_TO_START = ForRealCardsActions.prefix + 'NAV_TO_START';
-  static NAV_TO_TABLE = ForRealCardsActions.prefix + 'NAV_TO_TABLE';
-  static NAV_TO_HAND = ForRealCardsActions.prefix + 'NAV_TO_HAND';
   static START_NEW_GAME_REQUEST = ForRealCardsActions.prefix + 'START_NEW_GAME_REQUEST';
   static JOIN_GAME_REQUEST = ForRealCardsActions.prefix + 'JOIN_GAME_REQUEST';
   static ENTER_GAME_FAIL = ForRealCardsActions.prefix + 'ENTER_GAME_FAIL';

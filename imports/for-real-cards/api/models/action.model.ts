@@ -17,7 +17,7 @@ import {IGamePlayRecord} from "../../ui/";
 export let GamePlayActionCollection = new Mongo.Collection("actions", {transform: decode});
 
 export enum GamePlayActionType {
-  SET_GAME_ID,        // 0
+  NEW_GAME,        // 0
   RESET,              // 1
   NEW_HAND,           // 2
   DEAL,               // 3

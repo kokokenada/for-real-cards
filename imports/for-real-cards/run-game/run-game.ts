@@ -56,7 +56,7 @@ export abstract class RunGame {
       this.ngZone.run(()=>{
         if (forRealCardsState)
           this.forRealCardsState = forRealCardsState;
-          if (forRealCardsState.gameId===null) {
+          if (forRealCardsState.gameId===null && !forRealCardsState.loading) { // Check to make sure loading request not already issued
             // We must have deep linked here or refreshed, so let's load the game
             let pathname:string[] = window.location.pathname.split('/');
             if (pathname.length>=3) {
@@ -64,8 +64,6 @@ export abstract class RunGame {
               let gameId:string = pathname[2];
               this.forRealCardsActions.loadGameRequest(gameId, '');
             }
-
-
           }
         else
           this.forRealCardsState = INITIAL_STATE_FOR_REAL_CARDS;

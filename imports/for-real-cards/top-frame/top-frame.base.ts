@@ -18,7 +18,8 @@ export abstract class TopFrame extends BaseApp<IAppState> {
     uploaderModule:UploaderModule,
     ngRedux: NgRedux<IAppState>
   ) {
-    this.turnOnConsoleLogging();
+    if (Meteor.isDevelopment)
+      this.turnOnConsoleLogging();
 
     // Middleware put here so it can have access to 'this.'.  This is a temporary work around until navigation with redux is done
     const navigatorMiddleware = store => next => (action:IPayloadAction) => {
@@ -29,18 +30,6 @@ export abstract class TopFrame extends BaseApp<IAppState> {
           break;
         case LoginActions.LOGGED_OUT:
           this.navigateToStart();
-          break;
-        case ForRealCardsActions.NAV_TO_ENTER:
-          this.navigateToEnter();
-          break;
-        case ForRealCardsActions.NAV_TO_START:
-          this.navigateToStart();
-          break;
-        case ForRealCardsActions.NAV_TO_HAND:
-          this.navigateToGamePlayer(action.payload.gameId);
-          break;
-        case ForRealCardsActions.NAV_TO_TABLE:
-          this.navigateToGameTable(action.payload.gameId);
           break;
         case ForRealCardsActions.ENTER_GAME_FAIL:
           this.navigateToEnter();

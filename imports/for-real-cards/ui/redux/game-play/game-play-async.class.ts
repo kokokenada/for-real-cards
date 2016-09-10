@@ -52,9 +52,7 @@ export class GamePlayAsync {
         });
         break;
       case GamePlayActions.GAME_PLAY_INITIALIZE:
-        let gameId:string = payload.gameId;
-        this.gamePlayActions.setGameId(gameId);
-        watchGamePlayActionsAndHand(this.gamePlayActions, gameId);
+        watchGamePlayActionsAndHand(this.gamePlayActions, payload.gameId);
         break;
     }
     return next(action);
@@ -117,8 +115,8 @@ function watchGamePlayActionsAndHand(gamePlayActions: GamePlayActions, gameId:st
               break;
             }
             default: // TODO: handle user leaving
-              console.log('handChange - not sure if it matters');
-              console.log(handChange);
+//              console.log('handChange - not sure if it matters');
+//              console.log(handChange);
           }
         }
       );
@@ -153,7 +151,6 @@ function watchGamePlayActionsAndHand(gamePlayActions: GamePlayActions, gameId:st
               // If the hand is not read yet, defer.  There is probably a more streamy way (Observable.bufferWhen???)
               if ( isHandReady(knownHands, action) ){
                 gamePlayActions.receiveAction(action);
-                console.log('done receiveAction');
               } else {
                 buffer.push(action);
               }

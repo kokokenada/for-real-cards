@@ -41,28 +41,29 @@ export function gamePlayReducer(oldState: IGamePlayRecord = INITIAL_STATE_GAME_P
     return oldState;
 
   let payload: IGamePlayActionPayload = action.payload;
+  if (!payload)
+    return oldState;
   let gamePlayAction: GamePlayAction = payload.gamePlayAction;
   let returnState: IGamePlayRecord = oldState.withMutations( (transient:IGamePlayRecord)=>{
     switch (action.type) {
       case GamePlayActions.GAME_PLAY_ACTION_RECIEVED: {
-        return processGamePlayAction(transient, gamePlayAction, payload, oldState);
+        transient = processGamePlayAction(transient, gamePlayAction, payload);
+        break;
       }
       case GamePlayActions.GAME_PLAY_ACTIONSSS_RECIEVED: {
         let gamePlayActions: GamePlayActionInterface[] = payload.gamePlayActions;
         gamePlayActions.forEach((gamePlayAction:GamePlayAction)=>{
-          transient = processGamePlayAction(transient, gamePlayAction, payload, oldState);
+          transient = processGamePlayAction(transient, gamePlayAction, payload);
         });
+        break;
       }
-      default:
-        return transient;
     }
-
   });
   return returnState;
 }
 
-function processGamePlayAction(transient: IGamePlayRecord, gamePlayAction: GamePlayAction, payload: IGamePlayActionPayload, previousState:IGamePlayRecord):IGamePlayRecord {
-  let readState: IGamePlayRecord = transient; // Just so one object is read (readState) and the other (transient) is wrriten
+function processGamePlayAction(transient: IGamePlayRecord, gamePlayAction: GamePlayAction, payload: IGamePlayActionPayload):IGamePlayRecord {
+  let readState: IGamePlayRecord = transient; // Just so one variable is read (readState) and the other (transient) is wrriten
   if (!gamePlayAction._id) {
     let counter:number = readState.idCounter + 1;
     transient.set('idCounter', counter);
@@ -74,18 +75,22 @@ function processGamePlayAction(transient: IGamePlayRecord, gamePlayAction: GameP
     return transient;
   }
   gamePlayAction.sequencePosition = transient.actions.size;
-  gamePlayAction.previousState = previousState;
+  gamePlayAction.previousState = GamePlayFactory(transient);
   transient.set('actions', transient.actions.set(id, gamePlayAction));
   if (GamePlayActions.isUndone(transient, gamePlayAction)) {
     //log.debug('not doing gamePlayAction because it is undone');
     return transient;
   }
 
-  console.log('PROCESSING GAME PLAY ACTION: ' + GamePlayActionType[gamePlayAction.actionType]);
-  console.log(gamePlayAction);
+  //console.log('PROCESSING GAME PLAY ACTION: ' + GamePlayActionType[gamePlayAction.actionType]);
+  //console.log(gamePlayAction);
   switch (gamePlayAction.actionType) {
-    case GamePlayActionType.SET_GAME_ID:
+    case GamePlayActionType.NEW_GAME:
       transient.set('gameId', gamePlayAction.gameId);
+      transient.set('hands', List<Hand>());
+      transient.set('tableFaceDown', List<Card>());
+      transient.set('tablePile', List<Card>());
+      transient.set('actions', OrderedMap<string, GamePlayAction>());
       break;
     case GamePlayActionType.RESET: {
       let oldHands = readState.hands;

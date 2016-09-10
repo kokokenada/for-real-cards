@@ -9,6 +9,7 @@ import {IAppState} from "../../../../common-app";
 export interface IForRealCardsState extends IAppState {
   gameDescription:string;
   gameId:string;
+  loading:boolean;
 }
 
 export interface IForRealCardsActionPayload {
