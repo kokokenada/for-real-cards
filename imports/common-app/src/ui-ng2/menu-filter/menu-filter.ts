@@ -2,7 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { select } from 'ng2-redux';
 
 import {MenuItem} from "../../ui/services/menu-item";
-import {ILoginState} from "../../ui/redux/login/login.types";
+import {ILoginState, LOGIN_INITIAL_STATE} from "../../ui";
 import {User} from "../../../../common-app-api";
 
 @Pipe({
@@ -15,6 +15,7 @@ export class MenuFilterPipe implements PipeTransform {
   constructor() {
     console.log('MenuFilterPipe init');
     this.loginReducer.subscribe( (loginState:ILoginState)=>{
+      loginState = loginState || LOGIN_INITIAL_STATE;
       this.user = loginState.user;
     })
   }

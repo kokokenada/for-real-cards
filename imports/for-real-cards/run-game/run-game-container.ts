@@ -10,7 +10,7 @@ import {IGamePlayRecord} from "../ui/redux/game-play/game-play.types";
 
 export class RunGameContainer {
   protected gameId:string;
-  ngZoneBase:NgZone
+  ngZoneBase:NgZone;
   constructor(ngZone  :NgZone) {
     this.ngZoneBase = ngZone;
   }

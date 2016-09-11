@@ -7,18 +7,9 @@ import {Injectable} from '@angular/core';
 import {NgRedux} from 'ng2-redux';
 import {List} from "immutable";
 
-
-import {AccountTools, IAppState} from '../../../../common-app';
-
-
-import {GamePlayActionType} from "../../../api";
-import {GamePlayAction, VisibilityType} from "../../../api/models/action.model";
-import {GameConfig} from "../../../api/models/game-config";
-import {Deck} from "../../../api/models/deck.model";
-import {Card, CardSuit, CardRank} from "../../../api/models/card.model";
-import {IGamePlayState} from "./game-play.types";
-import {Hand, HandInterface} from "../../../api/models/hand.model";
-import {BaseApp} from "../../../../common-app/src/ui/redux/base-app.class";
+import { AccountTools, BaseApp, IAppState } from '../../../../common-app';
+import { Card, CardSuit, CardRank, Deck, GameConfig, GamePlayActionType, GamePlayAction, Hand, HandInterface, VisibilityType } from "../../../api";
+import { IGamePlayState } from "./game-play.types";
 
 const _prefix = 'FRC_GAMEPLAY_';
 const _prefix_length = _prefix.length;
@@ -30,7 +21,7 @@ export class GamePlayActions {
   static GAME_PLAY_ACTION_RECIEVED = GamePlayActions.prefix + 'GAME_PLAY_ACTION_RECIEVED';
   static GAME_PLAY_ACTIONSSS_RECIEVED = GamePlayActions.prefix + 'GAME_PLAY_ACTIONSSS_RECIEVED';
   static GAME_PLAY_ACTION_PUSH = GamePlayActions.prefix + 'GAME_PLAY_ACTION_PUSH';
-  static GAME_PLAY_ACTIONSSS_PUSH = GamePlayActions.prefix + 'GAME_PLAY_ACTIONSSS_PUSH'; // Triple S to be more distinctive than singluar form
+  static GAME_PLAY_ACTIONSSS_PUSH = GamePlayActions.prefix + 'GAME_PLAY_ACTIONSSS_PUSH'; // Triple S to be more distinctive from singluar form
   static GAME_PLAY_ERROR = GamePlayActions.prefix + 'GAME_PLAY_ERROR';
 
   constructor(private ngRedux: NgRedux<IAppState>) {

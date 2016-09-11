@@ -84,7 +84,7 @@ export class LoginAsync {
         return LoginService
           .createUserObserver(LoginService.userId()).map( (change:IDocumentChange<User>)=>{
             let loginState:ILoginState = store.getState().loginReducer;
-            if (loginState.neverLoggedIn) {
+            if (loginState && loginState.neverLoggedIn) {
               // Never logged in, yet the current user is populated, must be automatic login
               return LoginActions.loginSuccessFactory(change.newDocument, change.newDocument._id, true);
             } else {

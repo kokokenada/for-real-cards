@@ -1,0 +1,4 @@
+Scalingo Deployment
+===================
+
+git push scalingo master

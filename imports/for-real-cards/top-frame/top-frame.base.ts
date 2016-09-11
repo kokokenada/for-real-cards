@@ -18,7 +18,7 @@ export abstract class TopFrame extends BaseApp<IAppState> {
     uploaderModule:UploaderModule,
     ngRedux: NgRedux<IAppState>
   ) {
-    if (Meteor.isDevelopment)
+//    if (Meteor.isDevelopment)
       this.turnOnConsoleLogging();
 
     // Middleware put here so it can have access to 'this.'.  This is a temporary work around until navigation with redux is done

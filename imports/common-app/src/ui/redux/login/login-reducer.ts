@@ -4,7 +4,7 @@ import { LoginActions } from './login-actions.class';
 import {ILoginState, ILoginAction} from './login.types'
 import {User} from "../../../../../common-app-api";
 
-const INITIAL_STATE:ILoginState = {
+export const LOGIN_INITIAL_STATE:ILoginState = {
   neverLoggedIn: true,
   loggedIn: false,
   loggingIn: false,
@@ -15,7 +15,7 @@ const INITIAL_STATE:ILoginState = {
 };
 
 export function loginReducer(
-  state: ILoginState = INITIAL_STATE,
+  state: ILoginState = LOGIN_INITIAL_STATE,
   action: IPayloadAction): ILoginState {
 
   let payload:ILoginAction = action.payload;
