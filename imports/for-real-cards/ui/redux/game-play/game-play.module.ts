@@ -11,7 +11,7 @@ import {GamePlayActions} from "./game-play-actions.class";
 
 @Injectable()
 export class GamePlayModule extends ReduxModule<IAppState>  {
-  reducer=gamePlayReducer;
+  reducer={name: 'gamePlayReducer', reducer:gamePlayReducer};
 
   constructor(
     private gamePlayEpics:GamePlayAsync,

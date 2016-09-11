@@ -11,7 +11,7 @@ import {ForRealCardsAsync} from "./for-real-cards-async.class";
 
 @Injectable()
 export class ForRealCardsModule extends ReduxModule<IAppState>  {
-  reducer=forRealCardsReducer;
+  reducer={name:'forRealCardsReducer', reducer:forRealCardsReducer};
 
   constructor(
     public actions:ForRealCardsActions,

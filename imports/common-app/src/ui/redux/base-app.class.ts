@@ -37,8 +37,7 @@ export class BaseApp<T> {
     modules.forEach((module: ReduxModule<T>)=> {
 
       let reducer: ReducersMapObject = {};
-      let stopTypeScriptComplaint: any = module.reducer; // tsc compiler Doesn't like .name (even though it's declared as a function and works just fine...)
-      reducer[stopTypeScriptComplaint.name] = module.reducer;
+      reducer[module.reducer.name] = module.reducer.reducer;
       this.reducers = Object.assign(this.reducers, reducer);
       module.epics.forEach((epic)=> {
         this.middlewares.push(createEpicMiddleware(epic))
@@ -51,7 +50,6 @@ export class BaseApp<T> {
       });
     });
     const rootReducer = combineReducers<IAppState>(this.reducers);
-
     ngRedux.configureStore(rootReducer, {}, this.middlewares, this.enhancers);
     modules.forEach((module: ReduxModule<T>)=> {
       module.initialize();

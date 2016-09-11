@@ -8,7 +8,7 @@ import {UsersActions} from "./users-actions.class";
 
 @Injectable()
 export class UsersModule extends ReduxModule<IAppState>  {
-  reducer=usersReducer;
+  reducer={name: 'usersReducer', reducer: usersReducer};
 
   constructor(private usersEpics:UsersAsync, public actions:UsersActions) {
     super();
