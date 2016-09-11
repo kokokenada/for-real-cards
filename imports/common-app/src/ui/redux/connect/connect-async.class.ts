@@ -29,7 +29,7 @@ export class ConnectAsync {
           return Observable.from([this.connectActions.attemptFactory(ConnectService.getServerURL())]);
         }
       });
-  }
+  };
 
   attempt= (action$: Observable<IPayloadAction>, store: Store<IAppState>) => {
     return action$.filter(({ type }) => type === ConnectActions.CONNECT_ATTEMPT)
@@ -41,7 +41,7 @@ export class ConnectAsync {
           return Observable.from([this.connectActions.attemptFactory(ConnectService.getServerURL())]).delay(5000);
         }
       });
-  }
+  };
 
   setNewServer= (action$: Observable<IPayloadAction>) => {
     return action$.filter(({ type }) => type === ConnectActions.CONNECT_SET_SERVER)
@@ -51,5 +51,5 @@ export class ConnectAsync {
         return Observable.from([this.connectActions.attemptFactory(ConnectService.getServerURL())]);
       }
     );
-  }
+  };
 }

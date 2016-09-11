@@ -1,10 +1,9 @@
 
 import { makeTypedFactory } from 'typed-immutable-record';
 
-
 import { IPayloadAction } from '../action.interface';
 import { ConnectActions } from './connect-actions.class';
-import {IConnectState, IConnectRecord, IConnectAction} from './connect.types'
+import {IConnectState, IConnectRecord, IConnectActionPayload} from './connect.types'
 
 
 export const ConnectFactory = makeTypedFactory<IConnectState, IConnectRecord>({
@@ -21,7 +20,7 @@ export function connectReducer(
   state: IConnectRecord = INITIAL_STATE,
   action: IPayloadAction): IConnectRecord {
 
-  let payload:IConnectAction = action.payload;
+  let payload:IConnectActionPayload = action.payload;
   switch (action.type) {
     case ConnectActions.CONNECT_START:
       return state.merge({

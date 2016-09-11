@@ -1,8 +1,8 @@
+import { User } from "../../../../../common-app-api";
 
 import { IPayloadAction } from '../action.interface';
 import { LoginActions } from './login-actions.class';
-import {ILoginState, ILoginAction} from './login.types'
-import {User} from "../../../../../common-app-api";
+import { ILoginState, ILoginActionPayload } from './login.types'
 
 export const LOGIN_INITIAL_STATE:ILoginState = {
   neverLoggedIn: true,
@@ -18,7 +18,7 @@ export function loginReducer(
   state: ILoginState = LOGIN_INITIAL_STATE,
   action: IPayloadAction): ILoginState {
 
-  let payload:ILoginAction = action.payload;
+  let payload:ILoginActionPayload = action.payload;
   switch (action.type) {
     case LoginActions.LOGIN_REQUEST:
       return Object.assign({}, state, {loggingIn: true});
@@ -53,7 +53,7 @@ export function loginReducer(
         }
       );
     case LoginActions.SAVE_USER_RESPONSE:   // Fall through
-    case LoginActions.READ_CUR_USER_RESPONSE:
+    case LoginActions.WATCH_USER_FIRST_READ:
       return Object.assign({}, state, {user: payload.user});
     case LoginActions.WATCHED_USER_CHANGED:
       return Object.assign({}, state, {user: payload.documentChange.newDocument});

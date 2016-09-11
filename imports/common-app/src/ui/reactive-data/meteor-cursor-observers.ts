@@ -43,7 +43,7 @@ export class MeteorCursorObservers {
   /**
    * Create an observable that fires once with a batch of records and another observable that fires thereafter
    *
-   * TODO: 1: Is it to implement this as an operator? 2: Is there a combination of existing operators that does this better?
+   * TODO: 1: Is it better to implement this as an operator? 2: Is there a combination of existing operators that does this better?
    *
    * @param observable
    * @param inactivityTreshold

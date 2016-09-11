@@ -20,7 +20,7 @@ export class UploaderAsync {
         UploaderService.uploadFileRequest(payload.file, payload.store, this.actions);
       })
       .map( ()=> { return {type:'NOOP'}}); // Don't return self. If you do, race condition occrus
-  }
+  };
 
   cameraUpload = (action$: Observable<IPayloadAction>): Observable<IPayloadAction> => {
     return action$.filter(({ type }) => type === UploaderActions.UPLOAD_CAMERA_PIC_REQUEST)
@@ -28,5 +28,5 @@ export class UploaderAsync {
         UploaderService.uploadImageFromCamera(payload.store, this.actions);
       })
       .map( ()=> { return {type:'NOOP'}}); // Don't return self. If you do, race condition occrus
-  }
+  };
 }

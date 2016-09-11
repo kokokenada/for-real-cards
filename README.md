@@ -32,6 +32,7 @@ All files under import/for-real-cards are released in GPL 3.0.  All other files 
 * Password recovery
 * Fix modal dialogs
 * Login with Facebook (etc)
+* Automatic deletion of tmp users
 * Welcome page with links to apps
 * Upgrades (Angular rc6 or final)
 * Get pagination working (ng2-paginate)

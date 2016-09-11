@@ -58,7 +58,12 @@ export class GamePlayAsync {
     return next(action);
   };
 }
-
+/**
+ * Check to see if action is ready, where ready means the hands it references are present
+ * @param hands
+ * @param action
+ * @returns {boolean}
+ */
 function isHandReady(hands:HandInterface[], action:GamePlayAction):boolean {
   if (action.toPlayerId && hands.findIndex( hand => hand.userId===action.toPlayerId ) === -1)
     return false;

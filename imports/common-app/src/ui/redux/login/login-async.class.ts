@@ -1,20 +1,20 @@
 import { Injectable } from '@angular/core';
 import { IPayloadAction  } from '../action.interface';
 import { Observable } from 'rxjs/Observable';
-import { Action, Store } from "redux";
+import { Store } from "redux";
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/delay';
 
+import { User } from "../../../../../common-app-api";
+
 import { IDocumentChange } from "../../reactive-data/document-change.interface"
+import { IAppState } from "../state.interface";
 import { LoginActions } from "./login-actions.class";
-import {LoginService} from "./login.service";
-import {NeverObservableAction} from "../neverObservableAction.class";
-import {ILoginAction, ILoginState} from "./login.types"
-import {User} from "../../../../../common-app-api/src/api/models/user.model";
-import {IAppState} from "../state.interface";
+import { LoginService} from "./login.service";
+import { ILoginState} from "./login.types"
 
 @Injectable()
 export class LoginAsync {

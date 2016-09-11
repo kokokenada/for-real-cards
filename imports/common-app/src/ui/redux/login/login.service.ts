@@ -128,7 +128,7 @@ export class LoginService {
     return new Promise((resolve, reject)=>{
       Meteor.subscribe('user-edit', {reactive: true}, {
         onReady: ()=> {
-          resolve(LoginActions.readCurUserResponseFactory(LoginService.user())); // Copy Current User
+          resolve(LoginActions.watchedUserFirstReadFactory(LoginService.user())); // Copy Current User
         },
         onStop: (error)=> {
           if (error) {

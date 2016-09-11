@@ -1,7 +1,7 @@
 
 import { User } from '../../../../../common-app-api';
-import {Credentials} from "../../services/credentials";
-import {IDocumentChange} from "../../reactive-data/document-change.interface";
+import { Credentials } from "../../services/credentials";
+import { IDocumentChange } from "../../reactive-data/document-change.interface";
 
 
 export interface ILoginState {
@@ -14,7 +14,7 @@ export interface ILoginState {
   errorMessage:string;
 }
 
-export interface ILoginAction {
+export interface ILoginActionPayload {
   credentials?: Credentials,
   user?: User,
   userId?: string,

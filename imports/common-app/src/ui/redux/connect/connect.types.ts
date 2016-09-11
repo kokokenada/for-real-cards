@@ -10,7 +10,7 @@ export interface IConnectState {
 
 export interface IConnectRecord extends TypedRecord<IConnectRecord>, IConnectState {}
 
-export interface IConnectAction {
+export interface IConnectActionPayload {
   serverURL: string;
 }
 

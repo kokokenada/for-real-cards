@@ -2,3 +2,8 @@ Scalingo Deployment
 ===================
 
 git push scalingo master
+
+scalingo -a for-real-cards mongo-console
+
+scalingo -a for-real-cards run bash
+
