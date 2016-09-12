@@ -36,6 +36,23 @@ export class LoginAsync {
       });
   };
 
+  register = (action$: Observable<IPayloadAction>) => {
+    return action$
+      .filter(({ type }) => type === LoginActions.REGISTRATION_REQUEST)
+      .flatMap(({ payload }) => {
+        return Observable
+          .fromPromise(
+            LoginService.register(payload.credentials)
+          )
+          .do( (payloadAction:IPayloadAction) => {
+            this.loginActions.watchUser();
+            LoginService.watchCurrentUser();
+          } )
+          .catch(error => Observable.of(error));
+      });
+  };
+
+
   tempUser = (action$: Observable<IPayloadAction>) => {
     return action$
       .filter(({ type }) => type === LoginActions.TEMP_USER_REQUEST)
