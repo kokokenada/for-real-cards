@@ -12,7 +12,7 @@ import { IForRealCardsState, INITIAL_STATE_FOR_REAL_CARDS } from "../ui";
 function template():string {
   if (PlatformTools.isIonic())
     return '{{displayName}} {{gameDescription}}';
-  return '<label><strong>For Real Cards</strong> {{displayName}} {{gameDescription}}</label>';
+  return '<label><strong>For Real Cards!!</strong> {{displayName}} {{gameDescription}}</label>';
 }
 
 @Component({
