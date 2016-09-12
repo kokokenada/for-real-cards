@@ -82,8 +82,8 @@ function processGamePlayAction(transient: IGamePlayRecord, gamePlayAction: GameP
     return transient;
   }
 
-  console.log('PROCESSING GAME PLAY ACTION: ' + GamePlayActionType[gamePlayAction.actionType]);
-  console.log(gamePlayAction);
+//  console.log('PROCESSING GAME PLAY ACTION: ' + GamePlayActionType[gamePlayAction.actionType]);
+//  console.log(gamePlayAction);
   switch (gamePlayAction.actionType) {
     case GamePlayActionType.NEW_GAME:
       transient.set('gameId', gamePlayAction.gameId);
