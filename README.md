@@ -28,6 +28,7 @@ All files under import/for-real-cards are released in GPL 3.0.  All other files 
 ## To Do
 ### Framework
 * Fix styling of edit profile
+* Error handling (logins, users, etc)
 * Change Password
 * Password recovery
 * Fix modal dialogs
