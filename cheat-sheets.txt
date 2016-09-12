@@ -7,3 +7,10 @@ scalingo -a for-real-cards mongo-console
 
 scalingo -a for-real-cards run bash
 
+
+Mobile Build
+============
+
+bump version # in mobile-config.js
+./mobile-build
+http://ionicframework.com/docs/guide/publishing.html
