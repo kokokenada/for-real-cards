@@ -23,6 +23,8 @@ export abstract class EditUserProfileBase {
     loginStateObserver.subscribe( (loginState:ILoginState)=>{
       ngBase.run( ()=>{
         let user:User = loginState.user;
+        if (user)
+          this.addEmptyEmailIfNeeded(user);
         this.userEditted = user;
         if (user && user.profile)
           this.avatarURL = loginState.user.profile["avatar-original"];
