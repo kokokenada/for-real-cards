@@ -11,6 +11,6 @@ export class UsersService {
 
   static createUsersObserver():Observable<IDocumentChange<User>>
   {
-    return MeteorCursorObservers.createCursorObserver<User>(Meteor.users.find()); // Depends on subscription being called elsewhere
+    return MeteorCursorObservers.fromMeteorCursor<User>(Meteor.users.find()); // Depends on subscription being called elsewhere
   }
 }

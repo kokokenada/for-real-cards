@@ -118,7 +118,7 @@ export class LoginService {
           log.error(error)
           reject(BaseApp.errorFactory(LoginActions.LOGIN_ERROR, error));
         } else {
-          resolve(LoginActions.logedOutFactory());
+          resolve(LoginActions.loggedOutFactory());
         }
       });
     })
@@ -142,7 +142,7 @@ export class LoginService {
 
   static createUserObserver(userId:string):Observable<IDocumentChange<User>>
   {
-    return MeteorCursorObservers.createCursorObserver<User>(Meteor.users.find({_id: userId}));
+    return MeteorCursorObservers.fromMeteorCursor<User>(Meteor.users.find({_id: userId}));
   }
 
   private static _user(userId:string = undefined) {

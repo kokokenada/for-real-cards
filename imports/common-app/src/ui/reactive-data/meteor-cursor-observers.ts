@@ -7,8 +7,9 @@ export interface BatchAndWatch<T> {
   batchObservable: Observable<T[]>;
   watchedObservable: Observable<T>;
 }
+
 export class MeteorCursorObservers {
-  static createCursorObserver<T>(cursor: Mongo.Cursor<any>): Observable<IDocumentChange<T>> {
+  static fromMeteorCursor<T>(cursor: Mongo.Cursor<any>): Observable<IDocumentChange<T>> {
     return Observable.create((observer: Subscriber<IDocumentChange<T>>) => {
       let handle: Meteor.LiveQueryHandle = cursor.observe({
         added: (doc: T) => {
@@ -108,7 +109,7 @@ export class MeteorCursorObservers {
     return {batchObservable: batchObservable, watchedObservable: watchedObservable};
   };
 
-  static createCursorObserverWithAt<T>(cursor: Mongo.Cursor<any>): Observable<IDocumentChange<T>> {
+  static fromMeteorCursorWithAt<T>(cursor: Mongo.Cursor<any>): Observable<IDocumentChange<T>> {
     return Observable.create((observer: Subscriber<IDocumentChange<T>>) => {
       let handle: Meteor.LiveQueryHandle = cursor.observe({
         addedAt: (doc: T, index: number) => {
@@ -152,3 +153,12 @@ export class MeteorCursorObservers {
 
   }
 }
+
+/*
+declare module rxjs {
+  namespace Observable {
+    export let fromMeteorCursor: typeof MeteorCursorObservers.fromMeteorCursor;
+  }
+}
+Observable.fromMeteorCursor = MeteorCursorObservers.fromMeteorCursor;
+*/

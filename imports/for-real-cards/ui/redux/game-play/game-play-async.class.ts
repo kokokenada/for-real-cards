@@ -106,7 +106,7 @@ function watchGamePlayActionsAndHand(gamePlayActions: GamePlayActions, gameId:st
       let knownHands:HandInterface[] = [];
       let buffer:GamePlayAction[] = [];
       let handsCursor: Mongo.Cursor<any> = HandCollection.find({gameId: gameId}, {sort: {dateCreated: 1}});
-      let hands$:Observable<IDocumentChange<HandInterface>> = MeteorCursorObservers.createCursorObserver<HandInterface>(handsCursor);
+      let hands$:Observable<IDocumentChange<HandInterface>> = MeteorCursorObservers.fromMeteorCursor<HandInterface>(handsCursor);
       hands$.subscribe(
         (handChange:IDocumentChange<HandInterface>) => {
           switch (handChange.changeType) {
@@ -128,7 +128,7 @@ function watchGamePlayActionsAndHand(gamePlayActions: GamePlayActions, gameId:st
       log.debug('execute action query. gameId:' + gameId);
       let actionCursor: Mongo.Cursor<any> = GamePlayActionCollection.find({gameId: gameId}, {sort: {dateCreated: 1}});
 
-      let gameActions$:Observable<IDocumentChange<GamePlayAction>> = MeteorCursorObservers.createCursorObserver<GamePlayAction>(actionCursor);
+      let gameActions$:Observable<IDocumentChange<GamePlayAction>> = MeteorCursorObservers.fromMeteorCursor<GamePlayAction>(actionCursor);
       let batchAndWatch:BatchAndWatch<IDocumentChange<GamePlayAction>> = MeteorCursorObservers.batchAndWatch(gameActions$);
       batchAndWatch.batchObservable.subscribe( (gamePlayActionChanges:IDocumentChange<GamePlayAction>[]) => {
         gamePlayActionChanges.forEach( (gamePlayActionChange:IDocumentChange<GamePlayAction>)=>{

@@ -64,7 +64,7 @@ export class LoginActions {
     return {type: LoginActions.LOGGED_IN, payload: {user: user, userId:userId, autoLogin:autoLogin}};
   }
 
-  static logedOutFactory():IPayloadAction {
+  static loggedOutFactory():IPayloadAction {
     return {type: LoginActions.LOGGED_OUT};
   }
 
