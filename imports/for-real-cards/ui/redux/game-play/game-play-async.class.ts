@@ -18,7 +18,7 @@ import {
 
 import {
   GameSubscriptionOptions,
-  GAME_SUBSCRPTION_NAME,
+  GAME_SUBSCRIPTION_NAME,
   GamePlayActionCollection,
   GamePlayAction,
   HandCollection,
@@ -84,21 +84,25 @@ function isBufferReady(knownHands:HandInterface[], buffer:GamePlayAction[]):bool
   return wholeBufferReady;
 }
 
+function runSubscription(gamePlayActions: GamePlayActions, gameId:string) {
+  let options: GameSubscriptionOptions = {gameId: gameId};
+  return Meteor.subscribe(GAME_SUBSCRIPTION_NAME, options, {
+    onStop: (error) => {
+      if (error) {
+        log.error("Error returned from Meteor.subscribe");
+        log.error(error);
+        gamePlayActions.error(error);
+      }
+    },
+    onReady: ()=> {
+
+    }
+  });
+}
+
 function watchGamePlayActionsAndHand(gamePlayActions: GamePlayActions, gameId:string) {
   Tracker.autorun(()=> {
-    let options: GameSubscriptionOptions = {gameId: gameId};
-    let subscriptionHandle = Meteor.subscribe(GAME_SUBSCRPTION_NAME, options, {
-      onStop: (error) => {
-        if (error) {
-          log.error("Error returned from Meteor.subscribe");
-          log.error(error);
-          gamePlayActions.error(error);
-        }
-      },
-      onReady: ()=> {
-
-      }
-    });
+    let subscriptionHandle = runSubscription(gamePlayActions, gameId);
 
     let isReady = subscriptionHandle.ready();
     if (isReady) {
@@ -117,6 +121,7 @@ function watchGamePlayActionsAndHand(gamePlayActions: GamePlayActions, gameId:st
                 gamePlayActions.receiveActions(buffer);
                 buffer = [];
               }
+              subscriptionHandle = runSubscription(gamePlayActions, gameId); // Rerun subscription so users gets refreshed (reactive join issue)
               break;
             }
             default: // TODO: handle user leaving
