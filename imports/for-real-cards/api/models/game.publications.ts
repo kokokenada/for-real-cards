@@ -14,10 +14,10 @@ export interface GameSubscriptionOptions {
   gameId:string
 }
 
-export const GAME_SUBSCRPTION_NAME = "fastcards.game-data";
+export const GAME_SUBSCRIPTION_NAME = "frc.game-data";
 
 if (Meteor.isServer) {
-  Meteor.publish(GAME_SUBSCRPTION_NAME, function (options:GameSubscriptionOptions) {
+  Meteor.publish(GAME_SUBSCRIPTION_NAME, function (options:GameSubscriptionOptions) {
     if (!this.userId) {
       log.warn('Subscription denied due to no userId');
       return this.ready(); // Must be logged in
