@@ -1,8 +1,8 @@
-import { Component, ViewContainerRef } from "@angular/core"
+import { Component, OnInit, ViewContainerRef } from "@angular/core"
+import { select } from 'ng2-redux';
 
-import { ModalOutlet} from "./modal-outlet.component";
-import { ModalEvent, ModalEventType} from "../../ui-ng2/modal/modal-event.class";
-import { ModalService } from "../../ui-ng2/modal/modal.service"
+import { ModalOutlet} from "./modal-outlet.component"; {ModalOutlet};
+import {IModalState} from "../../ui/redux/modal/modal.types";
 
 @Component({
   selector: 'modal-dialog',
@@ -16,20 +16,18 @@ import { ModalService } from "../../ui-ng2/modal/modal.service"
     </div>
   </div>
 </div>
-`,
-  directives: [ModalOutlet],
+`
 })
-export class ModalDialog {
-  creationModalEvent:ModalEvent;
+export class ModalDialog implements  OnInit {
+  @select() modalReducer;
   style:Object = {display: 'none'};
 
-  constructor(viewContainerRef:ViewContainerRef, private modalService:ModalService) {
-    ModalService.subscribe((modalEvent:ModalEvent)=> {
-      if (modalEvent.eventType === ModalEventType.OPEN) {
+  ngOnInit() {
+    this.modalReducer.subscribe( (modalState:IModalState)=>{
+      if (modalState.displaying) {
         console.log("open event in ModalDialog")
         this.style = {display: 'inline-block'};
-        this.creationModalEvent = modalEvent
-      } else if (modalEvent.eventType === ModalEventType.CLOSE) {
+      } else {
         this.style = {display: "none"}
       }
     });

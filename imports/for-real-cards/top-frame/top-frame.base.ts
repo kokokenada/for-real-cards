@@ -4,10 +4,11 @@
  */
 import {NgRedux} from "ng2-redux";
 
-import { IAppState, IPayloadAction, BaseApp, ConnectModule, LoginActions, LoginModule, UploaderModule, UsersModule} from "../../common-app";
+import { IAppState, IPayloadAction, ReduxModuleUtil, ConnectModule, LoginActions, LoginModule, UploaderModule, UsersModule} from "../../common-app";
 import {ForRealCardsModule, ForRealCardsActions, GamePlayModule, IForRealCardsActionPayload} from "../ui";
+import {ReduxModuleCombiner} from "../../common-app/src/ui/redux/redux-module-combiner";
 
-export abstract class TopFrame extends BaseApp<IAppState> {
+export abstract class TopFrame {
   private loginModule:LoginModule;
   topFrameConfigure(
     connectModule:ConnectModule,
@@ -16,10 +17,11 @@ export abstract class TopFrame extends BaseApp<IAppState> {
     gamePlayModule:GamePlayModule,
     usersModule:UsersModule,
     uploaderModule:UploaderModule,
-    ngRedux: NgRedux<IAppState>
+    ngRedux: NgRedux<IAppState>,
+    reduxModuleCombiner:ReduxModuleCombiner
   ) {
     if (Meteor.isDevelopment)
-      this.turnOnConsoleLogging();
+      reduxModuleCombiner.turnOnConsoleLogging();
 
     // Middleware put here so it can have access to 'this.'.  This is a temporary work around until navigation with redux is done
     const navigatorMiddleware = store => next => (action:IPayloadAction) => {
@@ -49,7 +51,7 @@ export abstract class TopFrame extends BaseApp<IAppState> {
     };
 
     forRealCardsModule.middlewares.push(navigatorMiddleware);
-    this.configure([connectModule, loginModule, forRealCardsModule, gamePlayModule, uploaderModule, usersModule], ngRedux);
+    reduxModuleCombiner.configure([connectModule, loginModule, forRealCardsModule, gamePlayModule, uploaderModule, usersModule], ngRedux);
     this.loginModule = loginModule;
     loginModule.actions.watchUser(); // for auto login
   }

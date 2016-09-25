@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 import {CommonPopupModal} from "../../ui-ng2/common-popups/common-popup.class";
+import {ModalActions} from "../../ui/redux/modal/modal-actions.class";
 
 @Component(
   {
@@ -21,7 +22,7 @@ import {CommonPopupModal} from "../../ui-ng2/common-popups/common-popup.class";
 export class AlertModal extends CommonPopupModal {
   @Input() componentParameters;
 
-  constructor() {
-    super();
+  constructor(private modalActions:ModalActions) {
+    super(modalActions);
   }
 }

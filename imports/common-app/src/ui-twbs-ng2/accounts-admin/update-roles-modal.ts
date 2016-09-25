@@ -1,9 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AccountsModal } from './accounts-modal';
 import 'meteor/underscore'
 import 'meteor/alanning:roles'
-import * as log from 'loglevel';
-import { Meteor } from 'meteor/meteor';
+import {AccountsAdminActions} from "../../ui/redux/accounts-admin/accounts-admin-actions.class";
 
 @Component({
 	selector: 'update-roles-modal',
@@ -33,38 +32,17 @@ import { Meteor } from 'meteor/meteor';
 	</div>
 		
 `})
-export class UpdateRolesModal extends AccountsModal {
+export class UpdateRolesModal extends AccountsModal implements OnInit {
 	newRole:string;
-	constructor() {
+	constructor(private accountsAdminActions:AccountsAdminActions) {
 		super();
 	}
 
-	static openRoles():Promise<any> {
-		return AccountsModal._open(UpdateRolesModal, 'update-roles-modal', null);
-	}
-
 	addRole():void {
-		Meteor.call('addRole', this.newRole, (error)=> {
-			if (error) {
-				this._error = error.message;
-				log.error(error)
-			} else {
-				super.complete();
-			}
-      super.timeoutApply();
-		});
+		this.accountsAdminActions.systemRoleChangeRequest(this.newRole, true);
 	}
 
 	removeRole(role:string):void {
-		Meteor.call('removeRole', role, (error)=> {
-			if (error) {
-				this._error = error.message;
-				log.error(error)
-			} else {
-				super.complete();
-			}
-      super.timeoutApply();
-		});
-
+		this.accountsAdminActions.systemRoleChangeRequest(this.newRole, false);
 	}
 }

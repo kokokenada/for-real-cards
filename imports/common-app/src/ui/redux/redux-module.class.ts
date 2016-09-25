@@ -1,10 +1,10 @@
 
-import {Reducer} from "redux";
+import { Reducer } from "redux";
 import { Epic } from 'redux-observable';
 
-export abstract class ReduxModule<T> {
-  reducer:{name: string, reducer:Reducer<T>};
-  epics:Epic[]=[];        // Stream based middleware
+export abstract class ReduxModule<STATE, ACTION> {
+  reducer:{name: string, reducer:Reducer<STATE>};
+  epics:Epic<ACTION>[]=[];        // Stream based middleware
   middlewares:any[]=[];   // Normal redux middleware
   enhancers:any[]=[];
   actions:Object;

@@ -1,3 +1,5 @@
+import { Injectable } from '@angular/core';
+
 ///<reference path='../../../../../node_modules/immutable/dist/immutable.d.ts'/>
 import Immutable = require('immutable');
 
@@ -7,9 +9,10 @@ import {NgRedux} from "ng2-redux";
 import {IAppState} from "./state.interface";
 import {ReduxModule} from "./redux-module.class";
 import {createEpicMiddleware} from 'redux-observable';
-import {IPayloadAction, IActionError} from "./action.interface";
+import {IPayloadAction} from "./action.interface";
 
-export class BaseApp<T> {
+@Injectable()
+export class ReduxModuleCombiner {
   private reducers: ReducersMapObject = {};
   private middlewares: any[] = []; // TODO: How to I properly type this?
   private enhancers: any[] = [];
@@ -31,10 +34,10 @@ export class BaseApp<T> {
     this.middlewares.push(this.logger);
   }
 
-  configure(modules: ReduxModule<T>[],
+  configure(modules: ReduxModule<IAppState, IPayloadAction>[],
             ngRedux: NgRedux<IAppState>) {
     this.ngRedux = ngRedux;
-    modules.forEach((module: ReduxModule<T>)=> {
+    modules.forEach((module: ReduxModule<IAppState, IPayloadAction>)=> {
 
       let reducer: ReducersMapObject = {};
       reducer[module.reducer.name] = module.reducer.reducer;
@@ -51,20 +54,8 @@ export class BaseApp<T> {
     });
     const rootReducer = combineReducers<IAppState>(this.reducers);
     ngRedux.configureStore(rootReducer, {}, this.middlewares, this.enhancers);
-    modules.forEach((module: ReduxModule<T>)=> {
+    modules.forEach((module: ReduxModule<IAppState, IPayloadAction>)=> {
       module.initialize();
     })
-  }
-
-  static errorFactory(actionType:string, error:IActionError):IPayloadAction {
-    return {type: actionType, error: error };
-  }
-
-  static arrayToMap<T>(arr:any[], key:string="_id"):Immutable.Map<string, T> {
-    let obj:Object = {};
-    arr.forEach( (item:any)=>{
-      obj[key] = item;
-    });
-    return Immutable.fromJS(obj);
   }
 }

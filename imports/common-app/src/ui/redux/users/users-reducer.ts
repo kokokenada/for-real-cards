@@ -3,7 +3,7 @@ import Immutable = require('immutable');
 import { IPayloadAction } from '../action.interface';
 import { UsersActions } from './users-actions.class';
 import {IUsersActionPayload, IUsersState  } from './users.types'
-import {BaseApp} from "../base-app.class";
+import {BaseApp} from "../redux-module-combiner";
 import {User} from "../../../../../common-app-api/";
 import {IDocumentChange, EDocumentChangeType} from "../../reactive-data/document-change.interface";
 

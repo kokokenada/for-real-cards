@@ -4,13 +4,13 @@
  */
 import {Injectable} from "@angular/core";
 
-import { IAppState, ReduxModule} from '../../../../common-app';
+import { IAppState, IPayloadAction, ReduxModule} from '../../../../common-app';
 import {forRealCardsReducer} from "./for-real-cards.reducer";
 import {ForRealCardsActions} from "./for-real-cards-actions.class";
 import {ForRealCardsAsync} from "./for-real-cards-async.class";
 
 @Injectable()
-export class ForRealCardsModule extends ReduxModule<IAppState>  {
+export class ForRealCardsModule extends ReduxModule<IAppState, IPayloadAction>  {
   reducer={name:'forRealCardsReducer', reducer:forRealCardsReducer};
 
   constructor(

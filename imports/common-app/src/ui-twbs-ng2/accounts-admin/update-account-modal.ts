@@ -1,10 +1,8 @@
-import {Component} from '@angular/core';
-import {Meteor} from 'meteor/meteor';
+import { Component, OnInit } from '@angular/core';
 import 'meteor/alanning:roles'
-import * as log from 'loglevel';
 
 import {AccountsModal} from './accounts-modal';
-import {User} from '../../../../common-app-api';
+import {AccountsAdminActions} from "../../ui/redux/accounts-admin/accounts-admin-actions.class";
 
 @Component({
   selector: 'update-account-modal',
@@ -49,15 +47,11 @@ import {User} from '../../../../common-app-api';
 `
 })
 
-export class UpdateAccountModal extends AccountsModal {
+export class UpdateAccountModal extends AccountsModal implements OnInit {
   private unsetRoles:string[];
 
-  constructor() {
+  constructor(private accountsAdminActions:AccountsAdminActions) {
     super();
-  }
-
-  static openUser(user:User):Promise<any> {
-    return AccountsModal._open(UpdateAccountModal, 'update-account-modal', user);
   }
 
   getUnsetRoles():string[] {
@@ -75,30 +69,15 @@ export class UpdateAccountModal extends AccountsModal {
   getRoles():string[] {
     return this.user.roles;
   }
+// TODO: fix update (with subscription??)
+  // old code:           this.user.roles.push(role);
+///  this.unsetRoles = _.without(this.unsetRoles, role);
 
   addRole(role:string):void {
-    Meteor.call('addUserRole', this.user._id, role, (error)=> {
-      if (error) {
-        log.error(error);
-        this._error = error.message;
-      } else {
-        this.user.roles.push(role);
-        this.unsetRoles = _.without(this.unsetRoles, role);
-      }
-      this.timeoutApply();
-    });
+    this.accountsAdminActions.userRoleChangeRequest(this.user._id, role, true);
   }
 
   removeRole(role:string):void {
-    Meteor.call('removeUserRole', this.user._id, role, (error)=> {
-      if (error) {
-        log.error(error);
-        this._error = error.message;
-      } else {
-        this.user.roles = _.without(this.user.roles, role);
-        this.unsetRoles.push(role);
-      }
-      this.timeoutApply();
-    });
+    this.accountsAdminActions.userRoleChangeRequest(this.user._id, role, false);
   }
 }

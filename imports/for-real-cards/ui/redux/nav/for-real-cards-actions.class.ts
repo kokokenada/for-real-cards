@@ -7,7 +7,7 @@ import { Injectable } from '@angular/core';
 import { NgRedux } from 'ng2-redux';
 
 
-import { BaseApp, IAppState } from '../../../../common-app';
+import { ReduxModuleUtil, IAppState } from '../../../../common-app';
 
 @Injectable()
 export class ForRealCardsActions {
@@ -53,6 +53,6 @@ export class ForRealCardsActions {
   }
 
   error(error) {
-    this.ngRedux.dispatch( BaseApp.errorFactory(ForRealCardsActions.ENTER_GAME_FAIL, error) );
+    this.ngRedux.dispatch( ReduxModuleUtil.errorFactory(ForRealCardsActions.ENTER_GAME_FAIL, error) );
   }
 }

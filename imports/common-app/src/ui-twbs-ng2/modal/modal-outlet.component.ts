@@ -1,8 +1,7 @@
 import {
   Component,
   ComponentFactory,
-  ComponentMetadata,
-  ComponentResolver,
+  Compiler,
   Directive,
   Input,
   ReflectiveInjector,
@@ -12,26 +11,22 @@ import {
 
 } from '@angular/core'
 
-import { ModalEvent } from "../../ui-ng2/modal/modal-event.class";
-import {ModalService} from "../../ui-ng2/modal/modal.service";
-
 // Based on http://blog.lacolaco.net/post/dynamic-component-creation-in-angular-2/     http://plnkr.co/edit/HCz7Kc?p=info
 
 
-function createComponentFactory(resolver: ComponentResolver, metadata: ComponentMetadata, creationModalEvent:ModalEvent): Promise<ComponentFactory<any>> {
+function createComponentFactory(compiler: Compiler, metadata: Component): Promise<ComponentFactory<any>> {
   const cmpClass = class DynamicComponent {
     componentParameters:Object = creationModalEvent.componentParameters;
   };
-  const decoratedCmp:Type = <Type>Component(metadata)(cmpClass);
-  return resolver.resolveComponent(decoratedCmp);
+  const decoratedCmp:Type<any> = <Type<any>>Component(metadata)(cmpClass);
+  return compiler.compileModuleAndAllComponentsAsync(decoratedCmp);
 }
 
 @Directive({
   selector: 'modal-outlet',
 })
 export class ModalOutlet {
-  @Input() creationModalEvent:ModalEvent;
-  constructor(private vcRef: ViewContainerRef, private resolver: ComponentResolver) {
+  constructor(private vcRef: ViewContainerRef, private compiler: Compiler) {
   }
 
   ngOnChanges() {
@@ -43,14 +38,14 @@ export class ModalOutlet {
     }
 
     let html = "<" + this.creationModalEvent.componentSelector + " [componentParameters]='componentParameters'></" + this.creationModalEvent.componentSelector + ">";
-    const metadata = new ComponentMetadata({
+    const metadata = new Component({
       selector: 'dynamic-html',
-      directives: [this.creationModalEvent.componentType],
+//      directives: [this.creationModalEvent.componentType],
       template: html,
       inputs: ['componentParameters']
 
     });
-    createComponentFactory(this.resolver, metadata, this.creationModalEvent)
+    createComponentFactory(this.compiler, metadata, this.creationModalEvent)
       .then(factory => {
         const injector = ReflectiveInjector.fromResolvedProviders([], this.vcRef.parentInjector);
         this.vcRef.createComponent(factory, 0, injector, []);

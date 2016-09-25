@@ -1,8 +1,10 @@
-import { Component, ComponentMetadata, ComponentFactory, ComponentResolver, Directive, EventEmitter, Input, Output, Type, ViewContainerRef } from '@angular/core';
+import { Component, ComponentFactory, Compiler, Directive, EventEmitter, Input, Output, Type, ViewContainerRef } from '@angular/core';
 import { PlatformTools } from "../platform-tools/platform-tools";
 
 
-
+/**
+ * A button the works for Ionic and Bootstrap, probably a fools errand
+ */
 
 @Directive({
   selector: 'common-app-button'
@@ -13,10 +15,10 @@ export class CommonAppButton {
   @Input() outline:boolean;
   @Input() color:string;
   @Output() click = new EventEmitter();
-  constructor(private vcRef: ViewContainerRef, private resolver: ComponentResolver) {
+  constructor(private vcRef: ViewContainerRef, private compiler: Compiler) {
   }
 
-  createComponentFactory(resolver: ComponentResolver, metadata: ComponentMetadata, parent:CommonAppButton): Promise<ComponentFactory<any>> {
+  createComponentFactory(compiler: Compiler, metadata: Component, parent:CommonAppButton): Promise<ComponentFactory<any>> {
   const cmpClass = class DynamicComponent {
     //@Output() click = new EventEmitter();
     onClick(o:any) {
@@ -24,8 +26,8 @@ export class CommonAppButton {
     }
     parent:CommonAppButton = parent;
   };
-  const decoratedCmp:Type = <Type>Component(metadata)(cmpClass);
-  return resolver.resolveComponent(decoratedCmp);
+  const decoratedCmp:Type<any> = <Type<any>>Component(metadata)(cmpClass);
+  return compiler.compileModuleAsync(decoratedCmp);
 }
 
   ngOnChanges() {
@@ -67,11 +69,11 @@ export class CommonAppButton {
     }
     html += this.label;
     html += "</button>";
-    const metadata = new ComponentMetadata({
+    const metadata = new Component({
       selector: 'dynamic-html',
       template: html
     });
-    this.createComponentFactory(this.resolver, metadata, this)
+    this.createComponentFactory(this.compiler, metadata, this)
       .then(factory => {
         this.vcRef.createComponent(factory, 0);
       });

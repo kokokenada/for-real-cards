@@ -10,7 +10,7 @@ import {CommonPopupsTWBS} from '../common-popups/common-popups.twbs'
 import {InfoAccountModal} from './info-account-modal'
 import {ImpersonateAccountModal} from './impersonate-account-modal';
 import {UpdateRolesModal} from "./update-roles-modal";
-import {AccountTools} from "../../ui/index";
+import {AccountTools, ModalActions} from "../../ui/index";
 
 @Component({
   selector: 'accounts-admin',
@@ -62,7 +62,7 @@ export class AccountsAdmin {
   computation:Tracker.Computation;
   static throttledSearch(search:string) {  };
 
-  constructor(private ngZone:NgZone) {
+  constructor(private ngZone:NgZone, private modalActions:ModalActions) {
     this.usersArray = [];
     this.skip = 0;
     this.sort = {key: 'username', direction:1};
@@ -84,41 +84,24 @@ export class AccountsAdmin {
   }
 
   updateUser(user:User) {
-    UpdateAccountModal.openUser(user)
+    this.modalActions.open(UpdateAccountModal, {user});
   }
 
   deleteUser(user:User) {
-    DeleteAccountModal.openUser(user).then(
-      (payload:boolean)=> {
-        if (payload) {
-          this.computation.invalidate();
-        }
-      },
-      (error)=>{
-        CommonPopupsTWBS.alert(error)
-      }
-    );
+    this.modalActions.open(DeleteAccountModal, {user});
   }
 
   infoUser(user:User) {
-    InfoAccountModal.openUser(user);
+    this.modalActions.open(InfoAccountModal, {user});
   }
 
   impersonateUser(user:User) {
-    ImpersonateAccountModal.openUser(user);
+    this.modalActions.open(ImpersonateAccountModal, {user});
   }
 
   updateRoles() {
-    UpdateRolesModal.openRoles().then(
-      (payload:boolean)=> {
-        if (payload) {
-          this.computation.invalidate();
-        }
-      },
-      (error)=>{
-        CommonPopupsTWBS.alert(error)
-      }
-    );
+    this.modalActions.open(UpdateRolesModal);
+//          this.computation.invalidate();
   }
 
   fields():Field[] {

@@ -1,6 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AccountsModal } from './accounts-modal';
-import { User } from '../../../../common-app-api';
 
 @Component({
   selector: 'info-account-modal',
@@ -25,13 +24,9 @@ import { User } from '../../../../common-app-api';
 		
 `
 })
-export class InfoAccountModal extends AccountsModal {
+export class InfoAccountModal extends AccountsModal implements OnInit {
   constructor() {
     super();
-  }
-
-  static openUser(user:User):Promise<any> {
-    return AccountsModal._open(InfoAccountModal, 'info-account-modal', user);
   }
 
   getXMLDump():string {

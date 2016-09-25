@@ -1,26 +1,48 @@
+import { Injectable } from '@angular/core';
 //import { require } from 'meteor/modules'
 declare var require:any;
 import {PlatformTools} from "../platform-tools/platform-tools";
+import {ModalActions} from "../../ui/redux/modal/modal-actions.class";
+import {CommonPopupParametersInterface} from "./common-popup-params.interface";
+import {CommonPopupModal} from "./common-popup.class";
+import {ModalService} from "../modal/modal.service";
+
+@Injectable()
 export class CommonPopups {
+  constructor(private modalActions:ModalActions, private modalService:ModalService) {
+    CommonPopups.init();
+  }
   private static instance;
   private static init() {
     if (!CommonPopups.instance) {
       // This should happen at build time.  How to???
       if (PlatformTools.isIonic()) {
-        CommonPopups.instance = require('../../ui-ionic/common-popups/common-popups.ionic').CommonPopupsIonic;
+        CommonPopups.instance = require('../../ui-ionic/common-popups/common-popups.ionic');
       } else if (PlatformTools.isTWBS()) {
-        CommonPopups.instance = require('../../ui-twbs-ng2/common-popups/common-popups.twbs').CommonPopupsTWBS;
+        CommonPopups.instance = require('../../ui-twbs-ng2/common-popups/common-popups.twbs');
       } else {
         throw "unsupported Platform in CommonPopups";
       }
     }
   }
-  static alert(messageOrError, titleText:string="", okText:string="OK"):void {
-    CommonPopups.init();
-    CommonPopups.instance.alert(messageOrError, titleText, okText)
+  alert(messageOrError, titleText:string="", okText:string="OK"):void {
+    let message = CommonPopupModal.messageOrErrorToText(messageOrError);
+
+    let params:CommonPopupParametersInterface = {
+      titleText: titleText,
+      messageText: message,
+      okText: okText
+    };
+
+    this.modalActions.open(CommonPopups.instance.AlertModal, params);
   }
-  static confirm(messageText:string, titleText:string="", okText:string="OK", cancelText:string="Cancel"):Promise<boolean> {
-    CommonPopups.init();
-    return CommonPopups.instance.confirm(messageText, titleText, okText, cancelText);
+  confirm(messageText:string, titleText:string="", okText:string="OK", cancelText:string="Cancel"):Promise<boolean> {
+    let params:CommonPopupParametersInterface = {
+      titleText: titleText,
+      messageText: messageText,
+      cancelText: cancelText,
+      okText: okText
+    };
+    return this.modalService.asPromise(CommonPopups.instance.Confirm, params);
   }
 }

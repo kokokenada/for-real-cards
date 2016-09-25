@@ -3,14 +3,18 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 
-import { Component, NgZone } from '@angular/core';
+import { Component, provide, NgZone } from '@angular/core';
 import { bootstrap } from '@angular/platform-browser-dynamic';
 import { NgRedux } from 'ng2-redux';
-import { provideRouter, ROUTER_DIRECTIVES, RouterConfig, Router } from '@angular/router'
+import { Routes, Router } from '@angular/router'
 import { DragulaService} from 'ng2-dragula/ng2-dragula';
+import { NgModule }      from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule }   from '@angular/forms';
 
 import {
   AccountsAdmin,
+  CommonAppNgTWBS,
   ConnectActions,
   ConnectAsync,
   ConnectModule,
@@ -28,7 +32,8 @@ import {
   UploaderModule,
   UploaderActions,
   UploaderAsync,
-  PopoverMenu
+  PopoverMenu,
+  ReduxModuleCombiner
 } from '../../common-app';
 
 import {
@@ -51,9 +56,17 @@ import { Start } from "../start/start";
 import {TopFrame} from "./top-frame.base";
 import {TopFrameHeader} from "./top-frame-header";
 import {DealModalService} from "../deal-modal/deal-modal.service";
+import {CoreModule} from "./core.module";
+
+@NgModule({
+  imports:      [ BrowserModule, CoreModule, CommonAppNgTWBS ],
+  declarations: [ ForRealCardsTopFrame ],
+  bootstrap:    [ ForRealCardsTopFrame ]
+})
+export class AppModule { }
 
 
-const routes:RouterConfig = [
+const appRoutes:Routes = [
   {path: '', component: Start},
   {path: 'start', component: Start},
   {path: 'enter-game', component: EnterGame},
@@ -65,9 +78,9 @@ const routes:RouterConfig = [
   {path: 'game-action-list',  component: GameActionList}
 ];
 
-const appRouterProviders = [
-  provideRouter(routes)
+const appRouterProviders:any[] = [
 ];
+export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);
 
 @Component(
   {
@@ -111,16 +124,17 @@ export class ForRealCardsTopFrame extends TopFrame {
     private router: Router,
     private ngZone:NgZone,
     ngRedux:NgRedux<IAppState>,
+    reduxModuleCombiner:ReduxModuleCombiner,
     connectModule:ConnectModule,
     loginModule:LoginModule,
     forRealCardsModule:ForRealCardsModule,
     gamePlatModule:GamePlayModule,
     usersModule:UsersModule,
-    uploaderModule:UploaderModule
+    uploaderModule:UploaderModule,
   )
   {
     super();
-    this.topFrameConfigure(connectModule, loginModule, forRealCardsModule, gamePlatModule, usersModule, uploaderModule, ngRedux);
+    this.topFrameConfigure(connectModule, loginModule, forRealCardsModule, gamePlatModule, usersModule, uploaderModule, ngRedux, reduxModuleCombiner);
     Menus.addMenu({id: 'topbar'});
 
     Menus.addSubMenuItem('topbar', {

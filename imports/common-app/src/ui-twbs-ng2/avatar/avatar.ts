@@ -3,8 +3,8 @@
  */
 import { Component, Input, NgZone } from '@angular/core';
 import { select } from 'ng2-redux';
-import { User } from "../../../common-app-api";
-import { IUsersState } from "../ui/";
+import { User } from "../../../../common-app-api";
+import { IUsersState } from "../../ui/redux/users/users.types";
 
 @Component({
   selector: 'avatar',

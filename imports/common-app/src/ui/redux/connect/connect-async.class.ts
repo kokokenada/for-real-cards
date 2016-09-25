@@ -1,17 +1,13 @@
 import { Injectable } from '@angular/core';
 import { IPayloadAction  } from '../action.interface';
 import { Observable } from 'rxjs/Observable';
-import { Store } from "redux";
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/catch';
-//import 'rxjs/add/observable/delay';
 
 import { ConnectService } from "./connect.service";
 import { ConnectActions } from "./connect-actions.class";
-import {IAppState} from "../state.interface";
-import {IConnectState} from "./connect.types";
 
 
 @Injectable()
@@ -31,7 +27,7 @@ export class ConnectAsync {
       });
   };
 
-  attempt= (action$: Observable<IPayloadAction>, store: Store<IAppState>) => {
+  attempt= (action$: Observable<IPayloadAction>) => {
     return action$.filter(({ type }) => type === ConnectActions.CONNECT_ATTEMPT)
       .flatMap(({ payload }) => {
         if (ConnectService.isConnected()) {

@@ -5,8 +5,8 @@
 import { Component, Input, NgZone } from '@angular/core';
 import { DROPDOWN_DIRECTIVES } from 'ng2-bootstrap/ng2-bootstrap';
 
-import { Menus, MenuItem } from "../ui/index";
-import { MenuFilterPipe}  from '../ui-ng2';
+import { Menus, MenuItem } from "../../ui/index";
+import { MenuFilterPipe}  from '../.';
 
 
 @Component({

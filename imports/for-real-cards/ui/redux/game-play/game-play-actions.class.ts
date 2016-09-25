@@ -7,7 +7,7 @@ import {Injectable} from '@angular/core';
 import {NgRedux} from 'ng2-redux';
 import {List} from "immutable";
 
-import { AccountTools, BaseApp, IAppState } from '../../../../common-app';
+import { AccountTools, ReduxModuleUtil, IAppState } from '../../../../common-app';
 import { Card, CardSuit, CardRank, Deck, GameConfig, GamePlayActionType, GamePlayAction, Hand, HandInterface, VisibilityType } from "../../../api";
 import { IGamePlayState } from "./game-play.types";
 
@@ -358,7 +358,7 @@ export class GamePlayActions {
 
   error(error) {
     this.ngRedux.dispatch(
-      BaseApp.errorFactory(GamePlayActions.GAME_PLAY_ERROR, {error: error.error})
+      ReduxModuleUtil.errorFactory(GamePlayActions.GAME_PLAY_ERROR, {error: error.error})
     );
   }
 }
