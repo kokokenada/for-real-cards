@@ -11,6 +11,7 @@ import { DragulaService} from 'ng2-dragula/ng2-dragula';
 import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule }   from '@angular/forms';
+import { Dragula } from 'ng2-dragula/ng2-dragula';
 
 import {
   AccountsAdmin,
@@ -57,10 +58,30 @@ import {TopFrame} from "./top-frame.base";
 import {TopFrameHeader} from "./top-frame-header";
 import {DealModalService} from "../deal-modal/deal-modal.service";
 import {CoreModule} from "./core.module";
+import {PlayingCard} from "../playing-card/playing-card";
+import {JoinGame} from "../enter-game/join-game";
+import {NewGame} from "../enter-game/new-game";
+import {Player} from "../player/player";
+import {DeckView} from "../run-game/deck-view";
+import {PileView} from "../run-game/pile-view";
+import {RunGameTable} from "../run-game/run-game-table";
+import {RunGameHand} from "../run-game/run-game-hand";
+import {RunGameHandAndTable} from "../run-game/run-game-hand-and-table";
 
 @NgModule({
-  imports:      [ BrowserModule, CoreModule, CommonAppNgTWBS ],
-  declarations: [ ForRealCardsTopFrame ],
+  imports:      [ BrowserModule, CoreModule, CommonAppNgTWBS, Dragula ],
+  declarations: [
+    DeckView,
+    ForRealCardsTopFrame,
+    JoinGame,
+    NewGame,
+    PileView,
+    Player,
+    PlayingCard,
+    RunGameHand,
+    RunGameHandAndTable,
+    RunGameTable,
+    TopFrameHeader ],
   bootstrap:    [ ForRealCardsTopFrame ]
 })
 export class AppModule { }
@@ -85,7 +106,6 @@ export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);
 @Component(
   {
     selector: 'for-real-cards-top-frame',
-    directives: [PopoverMenu, ROUTER_DIRECTIVES, ModalDialog, TopFrameHeader],
     viewProviders: [DragulaService],
     providers: [
       ModalService,

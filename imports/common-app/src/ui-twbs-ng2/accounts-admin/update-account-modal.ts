@@ -3,6 +3,7 @@ import 'meteor/alanning:roles'
 
 import {AccountsModal} from './accounts-modal';
 import {AccountsAdminActions} from "../../ui/redux/accounts-admin/accounts-admin-actions.class";
+import {ModalActions} from "../../ui/redux/modal/modal-actions.class";
 
 @Component({
   selector: 'update-account-modal',
@@ -50,8 +51,8 @@ import {AccountsAdminActions} from "../../ui/redux/accounts-admin/accounts-admin
 export class UpdateAccountModal extends AccountsModal implements OnInit {
   private unsetRoles:string[];
 
-  constructor(private accountsAdminActions:AccountsAdminActions) {
-    super();
+  constructor(private accountsAdminActions:AccountsAdminActions, private modalActions:ModalActions) {
+    super(modalActions);
   }
 
   getUnsetRoles():string[] {

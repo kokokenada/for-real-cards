@@ -1,17 +1,16 @@
 import { select } from 'ng2-redux';
 import 'meteor/alanning:roles'
-import {Type} from '@angular/core';
 
 import { User} from '../../../../common-app-api';
-import {ModalService} from '../../ui-ng2/modal/modal.service';
-import {IModalState} from "../../ui/redux/modal/modal.types";
+import {IModalState, ModalActions, ModalBase} from "../../ui";
 
-export class AccountsModal {
+export class AccountsModal extends ModalBase {
   @select() modalReducer;
   user:User;
   protected _error:string;
 
-  constructor() {
+  constructor(modalActions:ModalActions) {
+    super(modalActions)
   }
 
   ngOnInit() {
@@ -24,11 +23,11 @@ export class AccountsModal {
 
 
   cancel() {
-    ModalService.close(false);
+    this.close(false);
   }
 
   complete() {
-    ModalService.close(true);
+    this.close(true);
   }
 
   get error():string {

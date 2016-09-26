@@ -5,6 +5,7 @@ import {ModalActions} from "../../ui/redux/modal/modal-actions.class";
 
 @Injectable()
 export class ModalService {
+  _component:any;
   @select() modalReducer;
   constructor(private modalActions:ModalActions) {
   }
@@ -22,4 +23,7 @@ export class ModalService {
       )
     });
   }
+
+  set component  (component)  { this._component = component }
+  get component  ()           { return this._component }
 }

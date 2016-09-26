@@ -6,7 +6,6 @@ import { User, AccountsAdminTools, Field } from '../../../../common-app-api';
 import { UpdateAccountModal } from './update-account-modal';
 import {DeleteAccountModal} from "./delete-account-modal";
 import { Tracker } from 'meteor/tracker'
-import {CommonPopupsTWBS} from '../common-popups/common-popups.twbs'
 import {InfoAccountModal} from './info-account-modal'
 import {ImpersonateAccountModal} from './impersonate-account-modal';
 import {UpdateRolesModal} from "./update-roles-modal";

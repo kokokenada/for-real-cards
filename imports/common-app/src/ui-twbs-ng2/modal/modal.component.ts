@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewContainerRef } from "@angular/core"
+import { Component, ComponentFactoryResolver, ComponentRef, ElementRef, OnInit, ReflectiveInjector, ViewContainerRef, ViewChild } from "@angular/core"
 import { select } from 'ng2-redux';
 
-import { ModalOutlet} from "./modal-outlet.component"; {ModalOutlet};
 import {IModalState} from "../../ui/redux/modal/modal.types";
+import {ModalService} from "../../ui-ng2/modal/modal.service";
 
 @Component({
   selector: 'modal-dialog',
@@ -11,8 +11,8 @@ import {IModalState} from "../../ui/redux/modal/modal.types";
   <div class="modal" [ngStyle]="style" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
-        <modal-outlet  [creationModalEvent]="creationModalEvent"></modal-outlet>
-        </div>
+          <template #placeHolder></template>
+      </div>
     </div>
   </div>
 </div>
@@ -20,11 +20,17 @@ import {IModalState} from "../../ui/redux/modal/modal.types";
 })
 export class ModalDialog implements  OnInit {
   @select() modalReducer;
+  @ViewChild('placeHolder', {read: ViewContainerRef}) private _placeHolder: ElementRef;
   style:Object = {display: 'none'};
+  constructor(
+    private _cmpFctryRslvr: ComponentFactoryResolver,
+    private modalService: ModalService
+  ) {}
 
   ngOnInit() {
     this.modalReducer.subscribe( (modalState:IModalState)=>{
       if (modalState.displaying) {
+        this.setComponent(this.modalService.component);
         console.log("open event in ModalDialog")
         this.style = {display: 'inline-block'};
       } else {
@@ -32,8 +38,40 @@ export class ModalDialog implements  OnInit {
       }
     });
   }
+
+  setComponent(component) {
+    let cmp = this.createComponent(this._placeHolder, component);
+
+    // set inputs..
+    cmp.instance.name = 'peter';
+
+    // set outputs..
+    cmp.instance.clicked.subscribe(event => console.log(`clicked: ${event}`));
+
+    // all inputs/outputs set? add it to the DOM ..
+    this._placeHolder.insert(cmp.hostView);
+  }
+
+  public createComponent (vCref: ViewContainerRef, type: any): ComponentRef<any> {
+
+    let factory = this._cmpFctryRslvr.resolveComponentFactory(type);
+
+    // vCref is needed cause of that injector..
+    let injector = ReflectiveInjector.fromResolvedProviders([], vCref.parentInjector);
+
+    // create component without adding it directly to the DOM
+    let comp = factory.create(injector);
+
+    return comp;
+  }
+
 }
+
+
 /*    TODO figure out how to automatically add modal-dialog to document, this version requires it to be user defined
+
+
+
 
  let el = document.getElementById("common-app.modal");
  if (!el) {
