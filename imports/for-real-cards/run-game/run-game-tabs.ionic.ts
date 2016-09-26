@@ -9,12 +9,10 @@ import { RunGameHandAndTable } from "./run-game-hand-and-table";
 import { RunGameHand } from "./run-game-hand";
 import { RunGameTable } from "./run-game-table";
 import { RunGameContainer } from "./run-game-container";
-import {TopFrameHeader} from "../top-frame/top-frame-header";
 
 @Component(
   {
     selector: 'run-game-tabs',
-    directives: [RunGameHandAndTable, RunGameHand, RunGameTable, TopFrameHeader],
     template: `
 <ion-header>
   <ion-navbar *navbar>
@@ -36,9 +34,9 @@ import {TopFrameHeader} from "../top-frame/top-frame-header";
 )
 
 export class RunGameTabs extends RunGameContainer{
-  ionTab1:Type = RunGameHandAndTable;
-  ionTab2:Type = RunGameHand;
-  ionTab3:Type = RunGameTable;
+  ionTab1:Type<any> = RunGameHandAndTable;
+  ionTab2:Type<any> = RunGameHand;
+  ionTab3:Type<any> = RunGameTable;
   handParams = {
     showTableProxy: true
   };

@@ -5,25 +5,19 @@
 
 import { Component, Input, Injector, OnInit, ViewEncapsulation } from '@angular/core';
 import { Meteor } from 'meteor/meteor';
-import { Dragula } from 'ng2-dragula/ng2-dragula';
 
-
-import { CommonAppButton, CommonPopups, PlatformTools, Tools } from '../../common-app';
+import { PlatformTools, Tools } from '../../common-app';
 
 import { RunGame } from './run-game.ts';
 import { DealModalService } from "../deal-modal/deal-modal.service"
-import { PlayingCard } from "../playing-card/playing-card";
 import { Card, CardImageStyle, GameConfig, CardLocation, CardCountAllowed, Hand} from "../api";
 import { ActionFormatted, GamePlayActions} from "../ui";
-import { DeckView } from "./deck-view";
-import { PileView } from "./pile-view";
 
 import template from "./run-game-hand.html"
 
 @Component(
   {
     selector: 'run-game-hand',
-    directives: [DeckView, Dragula, PileView, PlayingCard, CommonAppButton],
     providers: [DealModalService],
     encapsulation: ViewEncapsulation.None, // Require for Dragula .gu-transit
     template: template
@@ -114,7 +108,7 @@ export class RunGameHand extends RunGame implements OnInit {
           this.gamePlayActions.deal(this.gameState, gameConfig);
         }
       }, (error)=> {
-        CommonPopups.alert(error);
+        this.commonPopups.alert(error);
       }
     );
   }
@@ -129,13 +123,13 @@ export class RunGameHand extends RunGame implements OnInit {
 
     let prompt:string = "Undo " + action.actionDescription() + " done by "
       + (action.creatorId === Meteor.userId() ? "yourself" : action.creator());
-    CommonPopups.confirm(prompt).then(
+    this.commonPopups.confirm(prompt).then(
       (result)=> {
         if (result) {
           this.gamePlayActions.undo(this.gameState, action._id);
         }
       }, (error)=> {
-        CommonPopups.alert(error);
+        this.commonPopups.alert(error);
       }
     );
   }

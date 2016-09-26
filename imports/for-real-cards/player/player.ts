@@ -6,7 +6,6 @@ import { Component, Input } from '@angular/core';
 import { Subscription } from 'rxjs'
 import { select } from 'ng2-redux';
 
-import { Avatar } from '../../common-app';
 import { User } from '../../common-app-api';
 import { Card, Hand } from  '../api/index';
 import { GameRenderingTools } from  '../ui';
@@ -15,7 +14,6 @@ import {IUsersState} from "../../common-app/src/ui/redux/users/users.types";
 @Component(
   {
     selector: 'player',
-    directives: [Avatar],
     template: `
 
 

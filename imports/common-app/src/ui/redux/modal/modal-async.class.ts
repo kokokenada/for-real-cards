@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { IPayloadAction  } from '../action.interface';
 
-import { ModalService } from "./modal.service";
 import { ModalActions } from "./modal-actions.class";
 import {IModalActionPayload, IModalState} from "./modal.types";
+import {ModalService} from "../../../ui-ng2/modal/modal.service";
 
 @Injectable()
 export class ModalAsync {
@@ -14,7 +14,7 @@ export class ModalAsync {
     let payload: IModalActionPayload = action.payload;
     switch (action.type) {
       case ModalActions.MODAL_OPEN: {
-        this.modalService.open(payload.component);
+   //     this.modalService.open(payload.component);
       }
     }
   }

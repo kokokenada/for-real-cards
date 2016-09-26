@@ -1,18 +1,9 @@
-/**
- * Created by kenono on 2016-04-16.
- */
-
 import { Component, Input, NgZone } from '@angular/core';
-import { DROPDOWN_DIRECTIVES } from 'ng2-bootstrap/ng2-bootstrap';
-
 import { Menus, MenuItem } from "../../ui/index";
-import { MenuFilterPipe}  from '../.';
 
 
 @Component({
   selector: 'popover-menu',
-  directives: [DROPDOWN_DIRECTIVES],
-  pipes: [MenuFilterPipe],
   template: `
 
     <span dropdown (on-toggle)="toggled($event)">

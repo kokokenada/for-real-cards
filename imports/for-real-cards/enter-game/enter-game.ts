@@ -48,7 +48,6 @@ function template():string {
 
 @Component({
   selector: 'enter-game',
-  directives: [NewGame, JoinGame, TopFrameHeader],
   template: template()
 })
 export class EnterGame {

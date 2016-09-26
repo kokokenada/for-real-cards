@@ -1,8 +1,9 @@
 import { select } from 'ng2-redux';
 import 'meteor/alanning:roles'
 
-import { User} from '../../../../common-app-api';
-import {IModalState, ModalActions, ModalBase} from "../../ui";
+import { User } from '../../../../common-app-api';
+import { IModalState, ModalActions } from "../../ui";
+import { ModalBase } from "../../ui-ng2";
 
 export class AccountsModal extends ModalBase {
   @select() modalReducer;
@@ -20,7 +21,6 @@ export class AccountsModal extends ModalBase {
       }
     );
   }
-
 
   cancel() {
     this.close(false);

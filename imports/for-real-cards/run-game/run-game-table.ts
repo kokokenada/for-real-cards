@@ -4,17 +4,12 @@
  */
 
 import { Component, Injector, Input, OnInit, ViewEncapsulation } from '@angular/core';
-import { Dragula } from 'ng2-dragula/ng2-dragula';
 
 import { PlatformTools, Tools } from '../../common-app';
 
 import { GameRenderingTools } from "../ui";
 import { Card, Coordinates, Deck, Hand} from "../api/index";
 import { RunGame } from './run-game.ts';
-import { Player } from "../player/player";
-import { PlayingCard } from "../playing-card/playing-card";
-import { DeckView } from "./deck-view";
-import { PileView } from "./pile-view";
 
 import template from "./run-game-table.html"
 
@@ -24,7 +19,6 @@ const TABLE_ZONE_OUTER_RADIUS = 30;
 @Component(
   {
     selector: 'run-game-table',
-    directives: [DeckView, Dragula, Player, PlayingCard, PileView],
     encapsulation: ViewEncapsulation.None, // Require for Dragula .gu-transit
     template: template
   }

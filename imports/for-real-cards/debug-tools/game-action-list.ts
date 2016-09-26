@@ -157,7 +157,6 @@ function template():string {
 
 @Component({
   selector: 'game-action-list',
-  directives: [PlayingCard, TopFrameHeader],
   template: template()}
 )
 export class GameActionList {

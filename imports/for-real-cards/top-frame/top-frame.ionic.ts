@@ -66,8 +66,6 @@ import {TopFrameHeader} from "./top-frame-header";
 <ion-nav  #myNav [root]="rootPage" swipe-back-enabled="true"></ion-nav>
 `,
   viewProviders: [DragulaService],
-  pipes: [MenuFilterPipe],
-  directives: [TopFrameHeader],
   providers: [
     ConnectActions,
     ConnectAsync,
@@ -104,7 +102,7 @@ class ForRealCardsTopFrame extends TopFrame {
     uploaderModule:UploaderModule,
     ngRedux:NgRedux<IAppState>
 ) { //, private navParams:NavParams) {
-    super()
+    super();
     this.topFrameConfigure(connectModule, loginModule, forRealCardsModule, gamePlatModule, usersModule, uploaderModule, ngRedux);
 
     Menus.addMenu({id: 'topbar'});

@@ -19,8 +19,7 @@ import {ILoginState, IConnectState, ConnectionStatus} from "../../common-app/";
 
 @Component({
   template: PlatformTools.isIonic() ? templateIonic : templateTWBS,
-  selector: 'start',
-  directives: [ConnectionStatus]
+  selector: 'start'
 })
 export class Start {
   @select() loginReducer;

@@ -3,15 +3,15 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 
-import { Component, provide, NgZone } from '@angular/core';
-import { bootstrap } from '@angular/platform-browser-dynamic';
+import { Component, ModuleWithProviders, NgZone } from '@angular/core';
+import { Routes, RouterModule, Router } from '@angular/router';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { NgRedux } from 'ng2-redux';
-import { Routes, Router } from '@angular/router'
 import { DragulaService} from 'ng2-dragula/ng2-dragula';
 import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule }   from '@angular/forms';
-import { Dragula } from 'ng2-dragula/ng2-dragula';
+import { DragulaModule } from 'ng2-dragula/ng2-dragula';
 
 import {
   AccountsAdmin,
@@ -68,8 +68,24 @@ import {RunGameTable} from "../run-game/run-game-table";
 import {RunGameHand} from "../run-game/run-game-hand";
 import {RunGameHandAndTable} from "../run-game/run-game-hand-and-table";
 
+const appRoutes:Routes = [
+  {path: '', component: Start},
+  {path: 'start', component: Start},
+  {path: 'enter-game', component: EnterGame},
+  {path: 'game-hand/:id', component: RunGameTabs},
+  {path: 'game-table/:id', component: RunGameTableContainer},
+  {path: 'edit-profile', component: EditUserProfileTWBS},
+  {path: 'frc-deal-modal', component: DealModal},
+  {path: 'accounts-admin',  component: AccountsAdmin},
+  {path: 'game-action-list',  component: GameActionList}
+];
+
+const appRouterProviders:any[] = [
+];
+export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);
+
 @NgModule({
-  imports:      [ BrowserModule, CoreModule, CommonAppNgTWBS, Dragula ],
+  imports:      [ BrowserModule, CoreModule, CommonAppNgTWBS, DragulaModule, routing ],
   declarations: [
     DeckView,
     ForRealCardsTopFrame,
@@ -86,22 +102,6 @@ import {RunGameHandAndTable} from "../run-game/run-game-hand-and-table";
 })
 export class AppModule { }
 
-
-const appRoutes:Routes = [
-  {path: '', component: Start},
-  {path: 'start', component: Start},
-  {path: 'enter-game', component: EnterGame},
-  {path: 'game-hand/:id', component: RunGameTabs},
-  {path: 'game-table/:id', component: RunGameTableContainer},
-  {path: 'edit-profile', component: EditUserProfileTWBS},
-  {path: 'frc-deal-modal', component: DealModal},
-  {path: 'accounts-admin',  component: AccountsAdmin},
-  {path: 'game-action-list',  component: GameActionList}
-];
-
-const appRouterProviders:any[] = [
-];
-export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);
 
 @Component(
   {
@@ -150,7 +150,7 @@ export class ForRealCardsTopFrame extends TopFrame {
     forRealCardsModule:ForRealCardsModule,
     gamePlatModule:GamePlayModule,
     usersModule:UsersModule,
-    uploaderModule:UploaderModule,
+    uploaderModule:UploaderModule
   )
   {
     super();
@@ -235,7 +235,9 @@ export class ForRealCardsTopFrame extends TopFrame {
 }
   
 export function run() {
-  bootstrap(ForRealCardsTopFrame,
+  const platform = platformBrowserDynamic();
+
+  platform.bootstrapModule(AppModule,
     [
       NgRedux,
       appRouterProviders

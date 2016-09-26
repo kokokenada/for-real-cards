@@ -10,6 +10,7 @@ import { select } from 'ng2-redux';
 
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
 
+import {CommonPopups} from "../../common-app/";
 
 import { Card, CardCountAllowed, CardLocation, Deck, DeckLocation, GameConfig, Hand } from '../api';
 import { DragAndDrop, ForRealCardsActions, GameRenderingTools, INITIAL_STATE_GAME_PLAY, INITIAL_STATE_FOR_REAL_CARDS } from '../ui';
@@ -28,6 +29,7 @@ export abstract class RunGame {
   forRealCardsActions:ForRealCardsActions;
   injector: Injector;
   dealModelService:DealModalService;
+  commonPopups:CommonPopups;
 
   abstract childInit();
   gameState:IGamePlayRecord;
@@ -41,6 +43,7 @@ export abstract class RunGame {
     this.ngZone = injector.get(NgZone);
     this.forRealCardsActions = injector.get(ForRealCardsActions);
     this.dealModelService = injector.get(DealModalService);
+    this.commonPopups = injector.get(CommonPopups);
   }
 
   ngOnInit() {

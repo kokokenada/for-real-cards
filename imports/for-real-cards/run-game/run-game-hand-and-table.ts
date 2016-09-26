@@ -3,11 +3,9 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 
-import { Component, Input, NgZone } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { select } from 'ng2-redux';
 
-import {RunGameTable} from "./run-game-table";
-import {RunGameHand} from "./run-game-hand";
 import {IGamePlayRecord} from "../ui/redux/game-play/game-play.types";
 
 
@@ -28,7 +26,6 @@ return `
 @Component(
   {
     selector: 'run-game-hand-and-table',
-    directives: [RunGameTable, RunGameHand],
     template: template()
   }
 )
