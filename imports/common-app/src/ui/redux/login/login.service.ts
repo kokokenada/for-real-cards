@@ -4,7 +4,7 @@ import * as log from 'loglevel';
 import { Observable } from 'rxjs';
 
 import {Credentials} from "../../services/credentials";
-import {User} from '../../../../../common-app-api';
+import { User } from "../../../../../common-app-api/src/api/models/user.model";
 import {LoginActions} from "./login-actions.class";
 import {IPayloadAction} from "../action.interface";
 import {ReduxModuleUtil} from "../redux-module-util";

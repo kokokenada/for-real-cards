@@ -5,7 +5,7 @@ import { NgRedux } from 'ng2-redux';
 import { IAppState } from '../state.interface';
 import { IPayloadAction} from "../action.interface";
 import {IDocumentChange} from "../../reactive-data/document-change.interface";
-import {User} from "../../../../../common-app-api";
+import { User } from "../../../../../common-app-api/src/api/models/user.model";
 
 @Injectable()
 export class UsersActions {

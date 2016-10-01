@@ -19,7 +19,7 @@
     <div class="panel-body">
       <div class="form-group">
         <label for="username">Username:</label>
-        <input [(ngModel)]="credentials.username" type="text" class="form-control" ngControl="username" #username="ngForm" required id="username">
+        <input [(ngModel)]="credentials.username" type="text" class="form-control" ngControl="username" #username="ngModel" required id="username">
         <div [hidden]="username.valid || username.pristine" class="alert alert-danger">
           Username is required
         </div>
@@ -30,7 +30,7 @@
       </div>
       <div class="form-group">
         <label for="password">Password</label>
-        <input [(ngModel)]="credentials.password" type="password" ngControl="password" #password="ngForm" required class="form-control" id="password">
+        <input [(ngModel)]="credentials.password" type="password" ngControl="password" #password="ngModel" required class="form-control" id="password">
         <div [hidden]="password.valid || password.pristine" class="alert alert-danger">
           Password is required
         </div>

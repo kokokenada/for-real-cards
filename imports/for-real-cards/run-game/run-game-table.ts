@@ -5,13 +5,13 @@
 
 import { Component, Injector, Input, OnInit, ViewEncapsulation } from '@angular/core';
 
-import { PlatformTools, Tools } from '../../common-app';
-
 import { GameRenderingTools } from "../ui";
 import { Card, Coordinates, Deck, Hand} from "../api/index";
 import { RunGame } from './run-game.ts';
 
 import template from "./run-game-table.html"
+import {PlatformTools} from "../../common-app/src/ui-ng2/platform-tools/platform-tools";
+import {Tools} from "../../common-app/src/ui/services/tools";
 
 const TABLE_ZONE_CENTER_RADIUS = 20;
 const TABLE_ZONE_OUTER_RADIUS = 30;

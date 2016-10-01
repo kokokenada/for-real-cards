@@ -6,11 +6,11 @@
 import { Injectable } from '@angular/core';
 import * as log from 'loglevel';
 
-import { IPayloadAction } from '../../../../common-app';
 import { IForRealCardsState, IForRealCardsActionPayload} from "./for-real-cards.types";
 import { ForRealCardsActions } from "./for-real-cards-actions.class";
 import { GamePlayActions } from "../game-play/game-play-actions.class";
 import { HandInterface } from "../../../api/";
+import {IPayloadAction} from "../../../../common-app/src/ui/redux/action.interface";
 
 @Injectable()
 export class ForRealCardsAsync {

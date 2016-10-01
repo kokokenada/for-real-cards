@@ -4,7 +4,7 @@ import { IPayloadAction } from '../action.interface';
 import { UsersActions } from './users-actions.class';
 import {IUsersActionPayload, IUsersState  } from './users.types'
 import { ReduxModuleUtil } from "../redux-module-util";
-import {User} from "../../../../../common-app-api/";
+import { User } from "../../../../../common-app-api/src/api/models/user.model";
 import {IDocumentChange, EDocumentChangeType} from "../../reactive-data/document-change.interface";
 
 const INITIAL_STATE:IUsersState = {

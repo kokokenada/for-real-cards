@@ -6,13 +6,10 @@
 import { Component, Input, NgZone } from '@angular/core';
 import { select } from 'ng2-redux';
 
-import { AccountTools, PlatformTools } from '../../common-app';
-
 import { GamePlayAction, Hand } from '../api/index'
 import { ActionFormatted, ForRealCardsActions, IGamePlayState } from "../ui";
-
-import { TopFrameHeader } from "../top-frame/top-frame-header";
-import { PlayingCard } from "../playing-card/playing-card"
+import {PlatformTools} from "../../common-app/src/ui-ng2/platform-tools/platform-tools";
+import {AccountTools} from "../../common-app/src/ui/services/account-tools";
 
 function genericTableContent():string {
 return `

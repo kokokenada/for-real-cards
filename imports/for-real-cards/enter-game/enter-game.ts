@@ -3,11 +3,8 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 import { Component, Optional } from '@angular/core';
+import {PlatformTools, TargetPlatformId} from "../../common-app/src/ui-ng2/platform-tools/platform-tools";
 
-import {NewGame} from './new-game';
-import {JoinGame} from './join-game';
-import {PlatformTools, TargetPlatformId} from '../../common-app';
-import {TopFrameHeader} from "../top-frame/top-frame-header";
 
 function template():string {
   switch (PlatformTools.getTargetPlatforrm()) {

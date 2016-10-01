@@ -6,15 +6,17 @@ import { Component, NgZone } from '@angular/core';
 import { select } from 'ng2-redux';
 import * as log from 'loglevel';
 
-import {LoginActions, Credentials, PlatformTools } from '../../common-app';
-
 //import * as templateTWBS from './start.twbs.html';  //This also works and doesn't cause webstorm to complain
 //import * as templateIonic from './start.ionic.html';
 //  template: PlatformTools.isIonic() ? templateIonic.default.toString() : templateTWBS.default.toString(),
 import templateTWBS from './start.twbs.html';
 import templateIonic from './start.ionic.html';
 import {loginReducer} from "../../common-app/src/ui/redux/login/login-reducer";
-import {ILoginState, IConnectState, ConnectionStatus} from "../../common-app/";
+import {PlatformTools} from "../../common-app/src/ui-ng2/platform-tools/platform-tools";
+import {ILoginState} from "../../common-app/src/ui/redux/login/login.types";
+import {LoginActions} from "../../common-app/src/ui/redux/login/login-actions.class";
+import {Credentials} from "../../common-app/src/ui/services/credentials";
+import {IConnectState} from "../../common-app/src/ui/redux/connect/connect.types";
 
 
 @Component({

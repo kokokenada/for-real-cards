@@ -5,22 +5,19 @@
 
 import { Component, Input } from '@angular/core';
 
-import { ModalService } from '../../common-app';
-
 import {DealModalBase} from "./deal-modal-base";
 
 import template from "./deal-modal.twbs.html";
+import {ModalActions} from "../../common-app/src/ui/redux/modal/modal-actions.class";
 
 @Component(
   {
     selector: 'frc-deal-modal',
-    providers: [ModalService],
     template: template
   }
 )
 export class DealModal extends DealModalBase {
-  @Input() componentParameters:any;
-  constructor() {
-    super();
+  constructor(private myModalActions:ModalActions) {
+    super(myModalActions);
   }
 }

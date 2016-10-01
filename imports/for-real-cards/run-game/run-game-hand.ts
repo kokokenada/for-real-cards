@@ -6,14 +6,14 @@
 import { Component, Input, Injector, OnInit, ViewEncapsulation } from '@angular/core';
 import { Meteor } from 'meteor/meteor';
 
-import { PlatformTools, Tools } from '../../common-app';
-
 import { RunGame } from './run-game.ts';
 import { DealModalService } from "../deal-modal/deal-modal.service"
 import { Card, CardImageStyle, GameConfig, CardLocation, CardCountAllowed, Hand} from "../api";
 import { ActionFormatted, GamePlayActions} from "../ui";
 
 import template from "./run-game-hand.html"
+import {PlatformTools} from "../../common-app/src/ui-ng2/platform-tools/platform-tools";
+import {Tools} from "../../common-app/src/ui/services/tools";
 
 @Component(
   {

@@ -7,9 +7,11 @@ declare var require:any;
 
 import { Injectable } from '@angular/core';
 
-import { ModalActions, ModalService, PlatformTools } from '../../common-app';
 
 import { GameConfig } from "../api/index";
+import {ModalActions} from "../../common-app/src/ui/redux/modal/modal-actions.class";
+import {ModalService} from "../../common-app/src/ui/redux/modal/modal.service";
+import {PlatformTools} from "../../common-app/src/ui-ng2/platform-tools/platform-tools";
 
 @Injectable()
 export class DealModalService {

@@ -3,7 +3,7 @@ import { select } from 'ng2-redux';
 
 import {MenuItem} from "../../ui/services/menu-item";
 import {ILoginState, LOGIN_INITIAL_STATE} from "../../ui";
-import {User} from "../../../../common-app-api";
+import { User } from "../../../../common-app-api/src/api/models/user.model";
 
 @Pipe({
   name: 'menuFilter',

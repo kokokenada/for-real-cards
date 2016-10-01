@@ -10,32 +10,7 @@ import { NgRedux } from 'ng2-redux';
 import { DragulaService} from 'ng2-dragula/ng2-dragula';
 import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule }   from '@angular/forms';
 import { DragulaModule } from 'ng2-dragula/ng2-dragula';
-
-import {
-  AccountsAdmin,
-  CommonAppNgTWBS,
-  ConnectActions,
-  ConnectAsync,
-  ConnectModule,
-  LoginActions,
-  LoginAsync,
-  LoginModule,
-  IAppState,
-  Menus,
-  MenuItem,
-  ModalDialog,
-  ModalService,
-  UsersModule,
-  UsersActions,
-  UsersAsync,
-  UploaderModule,
-  UploaderActions,
-  UploaderAsync,
-  PopoverMenu,
-  ReduxModuleCombiner
-} from '../../common-app';
 
 import {
   ForRealCardsActions,
@@ -67,6 +42,17 @@ import {PileView} from "../run-game/pile-view";
 import {RunGameTable} from "../run-game/run-game-table";
 import {RunGameHand} from "../run-game/run-game-hand";
 import {RunGameHandAndTable} from "../run-game/run-game-hand-and-table";
+import {AccountsAdmin} from "../../common-app/src/ui-twbs-ng2/accounts-admin/accounts-admin";
+import {CommonAppNgTWBS} from "../../common-app/src/ui-twbs-ng2/common-app-ng-twbs.module";
+import {IAppState} from "../../common-app/src/ui/redux/state.interface";
+import {ReduxModuleCombiner} from "../../common-app/src/ui/redux/redux-module-combiner";
+import {ConnectModule} from "../../common-app/src/ui/redux/connect/connect.module";
+import {LoginModule} from "../../common-app/src/ui/redux/login/login.module";
+import {UsersModule} from "../../common-app/src/ui/redux/users/users.module";
+import {UploaderModule} from "../../common-app/src/ui/redux/uploader/uploader.module";
+import {Menus} from "../../common-app/src/ui/services/menus";
+import {MenuItem} from "../../common-app/src/ui/services/menu-item";
+import {COMMON_APP_SINGLETONS} from "../../common-app/src/ui-ng2/common-app-ng.module";
 
 const appRoutes:Routes = [
   {path: '', component: Start},
@@ -80,54 +66,21 @@ const appRoutes:Routes = [
   {path: 'game-action-list',  component: GameActionList}
 ];
 
-const appRouterProviders:any[] = [
-];
+//const appRouterProviders:any[] = [];
 export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);
-
-@NgModule({
-  imports:      [ BrowserModule, CoreModule, CommonAppNgTWBS, DragulaModule, routing ],
-  declarations: [
-    DeckView,
-    ForRealCardsTopFrame,
-    JoinGame,
-    NewGame,
-    PileView,
-    Player,
-    PlayingCard,
-    RunGameHand,
-    RunGameHandAndTable,
-    RunGameTable,
-    TopFrameHeader ],
-  bootstrap:    [ ForRealCardsTopFrame ]
-})
-export class AppModule { }
-
 
 @Component(
   {
     selector: 'for-real-cards-top-frame',
     viewProviders: [DragulaService],
     providers: [
-      ModalService,
       DealModalService,
-      ConnectActions,
-      ConnectAsync,
-      ConnectModule,
-      LoginActions,
-      LoginAsync,
-      LoginModule,
       ForRealCardsActions,
       ForRealCardsModule,
       ForRealCardsAsync,
       GamePlayActions,
       GamePlayAsync,
       GamePlayModule,
-      UploaderModule,
-      UploaderActions,
-      UploaderAsync,
-      UsersModule,
-      UsersAsync,
-      UsersActions
     ],
     template: `
 <div class="row">
@@ -233,20 +186,33 @@ export class ForRealCardsTopFrame extends TopFrame {
     });
   }
 }
-  
+
+@NgModule({
+  imports:      [ BrowserModule, CoreModule, CommonAppNgTWBS, DragulaModule, routing ],
+  declarations: [
+    DeckView,
+    EnterGame,
+    ForRealCardsTopFrame,
+    JoinGame,
+    NewGame,
+    PileView,
+    Player,
+    PlayingCard,
+    RunGameHand,
+    RunGameHandAndTable,
+    RunGameTable,
+    RunGameTabs,
+    Start],
+  bootstrap:    [ ForRealCardsTopFrame ],
+  providers:    [ ...COMMON_APP_SINGLETONS ]
+})
+export class AppModule { }
+
+
 export function run() {
   const platform = platformBrowserDynamic();
 
-  platform.bootstrapModule(AppModule,
-    [
-      NgRedux,
-      appRouterProviders
-//      provide(APP_BASE_HREF, { useValue: '/' }),
-//      ROUTER_DIRECTIVES,
-//      provide(LocationStrategy,
-//        {useClass: HashLocationStrategy})
-    ]
-  );
+  platform.bootstrapModule(AppModule);
 }
 
 export function prepare():void {

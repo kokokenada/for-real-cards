@@ -2,9 +2,9 @@
  * Copyright Ken Ono, Fabrica Technolology 2016
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
-import {Component, Input} from '@angular/core';
-import {TargetPlatformId, PlatformTools} from '../../common-app';
+import {Component } from '@angular/core';
 import {ForRealCardsActions} from "../ui/redux/nav/for-real-cards-actions.class";
+import {PlatformTools, TargetPlatformId} from "../../common-app/src/ui-ng2/platform-tools/platform-tools";
 
 function template(): string {
   switch (PlatformTools.getTargetPlatforrm()) {
@@ -59,7 +59,7 @@ function template(): string {
           class="form-control" 
           id="gameId"
           ngControl="formGameId" 
-          #formGameId="ngForm" 
+          #formGameId="ngModel" 
           required
         />
       </div>

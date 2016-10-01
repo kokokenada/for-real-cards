@@ -1,12 +1,13 @@
 import {Deck, GameConfig, defaultGames, DeckLocation, UserCommand} from "../api/index";
-import {ModalBase} from "/imports/common-app";
+import {ModalBase} from '../../common-app/src/ui-ng2/modal/modal-base';
+import {ModalActions} from "../../common-app/src/ui/redux/modal/modal-actions.class";
 
 export class DealModalBase extends ModalBase {
   gameConfig: GameConfig;
   selectedPreset:string;
 
-  constructor() {
-    super();
+  constructor(private modalActions:ModalActions) {
+    super(modalActions);
   }
 
   onModalInit(componentParameters:any) {

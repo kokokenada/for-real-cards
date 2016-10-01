@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { NgRedux } from 'ng2-redux';
 
-import { User } from "../../../../../common-app-api";
+import { User } from "../../../../../common-app-api/src/api/models/user.model";
 import { IDocumentChange } from "../../reactive-data/document-change.interface";
 import { IAppState } from '../state.interface';
 import { IPayloadAction } from "../action.interface";

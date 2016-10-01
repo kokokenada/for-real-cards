@@ -9,14 +9,6 @@ import * as log from 'loglevel';
 import { Observable} from 'rxjs/Observable';
 
 import {
-  BatchAndWatch,
-  IDocumentChange,
-  IPayloadAction,
-  EDocumentChangeType,
-  MeteorCursorObservers
-} from "../../../../common-app";
-
-import {
   GameSubscriptionOptions,
   GAME_SUBSCRIPTION_NAME,
   GamePlayActionCollection,
@@ -27,6 +19,15 @@ import {
 
 import {GamePlayActions} from "./game-play-actions.class";
 import { IGamePlayState, IGamePlayActionPayload } from "./game-play.types";
+import {IPayloadAction} from "../../../../common-app/src/ui/redux/action.interface";
+import {
+  IDocumentChange,
+  EDocumentChangeType
+} from "../../../../common-app/src/ui/reactive-data/document-change.interface";
+import {
+  MeteorCursorObservers,
+  BatchAndWatch
+} from "../../../../common-app/src/ui/reactive-data/meteor-cursor-observers";
 
 @Injectable()
 export class GamePlayAsync {

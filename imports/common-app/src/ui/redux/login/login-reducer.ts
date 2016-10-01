@@ -1,4 +1,4 @@
-import { User } from "../../../../../common-app-api";
+import { User } from "../../../../../common-app-api/src/api/models/user.model";
 
 import { IPayloadAction } from '../action.interface';
 import { LoginActions } from './login-actions.class';

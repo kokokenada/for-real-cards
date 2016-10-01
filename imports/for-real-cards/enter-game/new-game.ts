@@ -5,8 +5,8 @@
 
 import * as log from 'loglevel';
 import {Component} from '@angular/core';
-import {PlatformTools, TargetPlatformId} from '../../common-app';
 import {ForRealCardsActions} from "../ui/redux/nav/for-real-cards-actions.class";
+import {PlatformTools, TargetPlatformId} from "../../common-app/src/ui-ng2/platform-tools/platform-tools";
 
 function template():string {
   switch (PlatformTools.getTargetPlatforrm()) {

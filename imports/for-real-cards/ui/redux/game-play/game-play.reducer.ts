@@ -9,7 +9,6 @@ import { List, OrderedMap} from "immutable";
 import * as log from 'loglevel';
 
 import {IGamePlayActionPayload, IGamePlayRecord, IGamePlayState} from "./game-play.types";
-import {IPayloadAction} from "../../../../common-app";
 import {GamePlayActions} from "./game-play-actions.class";
 import {
   GamePlayAction, GamePlayActionType, VisibilityType,
@@ -19,6 +18,7 @@ import {GameConfig} from "../../../api/models/game-config";
 import {Card} from "../../../api/models/card.model";
 import {Hand} from "../../../api/models/hand.model";
 import {Deck} from "../../../api/models/deck.model";
+import {IPayloadAction} from "../../../../common-app/src/ui/redux/action.interface";
 
 export const GamePlayFactory = makeTypedFactory<IGamePlayState, IGamePlayRecord>({
   gameId: '',

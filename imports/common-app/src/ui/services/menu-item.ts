@@ -1,5 +1,5 @@
 
-import {User} from "../../../../common-app-api";
+import { User } from "../../../../common-app-api/src/api/models/user.model";
 
 export interface MenuItemDefintion {
   id:string;

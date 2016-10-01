@@ -5,7 +5,7 @@ import {PlatformTools} from "../platform-tools/platform-tools";
 import {ModalActions} from "../../ui/redux/modal/modal-actions.class";
 import {CommonPopupParametersInterface} from "./common-popup-params.interface";
 import {CommonPopupModal} from "./common-popup.class";
-import {ModalService} from "../modal/modal.service";
+import {ModalService} from "../../ui/redux/modal/modal.service";
 
 @Injectable()
 export class CommonPopups {

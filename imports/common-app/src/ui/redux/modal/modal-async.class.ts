@@ -3,7 +3,7 @@ import { IPayloadAction  } from '../action.interface';
 
 import { ModalActions } from "./modal-actions.class";
 import {IModalActionPayload, IModalState} from "./modal.types";
-import {ModalService} from "../../../ui-ng2/modal/modal.service";
+import {ModalService} from "./modal.service";
 
 @Injectable()
 export class ModalAsync {

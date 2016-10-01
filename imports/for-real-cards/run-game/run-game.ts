@@ -10,14 +10,13 @@ import { select } from 'ng2-redux';
 
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
 
-import {CommonPopups} from "../../common-app/";
-
 import { Card, CardCountAllowed, CardLocation, Deck, DeckLocation, GameConfig, Hand } from '../api';
 import { DragAndDrop, ForRealCardsActions, GameRenderingTools, INITIAL_STATE_GAME_PLAY, INITIAL_STATE_FOR_REAL_CARDS } from '../ui';
 
 import { CardImageStyle} from "../api/interfaces/card-image-style.interface";
 import { GamePlayActions, IForRealCardsState, IGamePlayRecord} from "../ui";
 import {DealModalService} from "../deal-modal/deal-modal.service";
+import {CommonPopups} from "../../common-app/src/ui-ng2/common-popups/common-popups";
 
 
 export abstract class RunGame {

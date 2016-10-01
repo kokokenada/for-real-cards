@@ -7,9 +7,11 @@ import {Injectable} from '@angular/core';
 import {NgRedux} from 'ng2-redux';
 import {List} from "immutable";
 
-import { AccountTools, ReduxModuleUtil, IAppState } from '../../../../common-app';
 import { Card, CardSuit, CardRank, Deck, GameConfig, GamePlayActionType, GamePlayAction, Hand, HandInterface, VisibilityType } from "../../../api";
 import { IGamePlayState } from "./game-play.types";
+import {IAppState} from "../../../../common-app/src/ui/redux/state.interface";
+import {AccountTools} from "../../../../common-app/src/ui/services/account-tools";
+import {ReduxModuleUtil} from "../../../../common-app/src/ui/redux/redux-module-util";
 
 const _prefix = 'FRC_GAMEPLAY_';
 const _prefix_length = _prefix.length;

@@ -5,9 +5,9 @@
 
 import { Component, NgZone } from '@angular/core';
 import { select } from 'ng2-redux';
-
-import { CommonPopups, EditUserProfileBase, LoginActions, UploaderActions } from '../../common-app';
-import { AvatarOriginalStore } from '../../common-app-api';
+import {EditUserProfileBase} from "../../common-app/src/ui-ng2/edit-user-profile/edit-user-profile.base";
+import {LoginActions} from "../../common-app/src/ui/redux/login/login-actions.class";
+import {UploaderActions} from "../../common-app/src/ui/redux/uploader/uploader-actions.class";
 
 @Component({
   selector: 'edit-user-profile',

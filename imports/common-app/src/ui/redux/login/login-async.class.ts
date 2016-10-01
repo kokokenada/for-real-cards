@@ -8,7 +8,7 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/delay';
 
-import { User } from "../../../../../common-app-api";
+import { User } from "../../../../../common-app-api/src/api/models/user.model";
 
 import { IDocumentChange } from "../../reactive-data/document-change.interface"
 import { IAppState } from "../state.interface";

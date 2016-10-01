@@ -1,7 +1,8 @@
 import { Component, NgZone } from '@angular/core';
 import { Session } from 'meteor/session';
-import { PagingTools, FilterDefinition, SortDefinitionSingle } from "../../ui"
-import { User, AccountsAdminTools, Field } from '../../../../common-app-api';
+import { FilterDefinition, SortDefinitionSingle } from '../../../../common-app-api/src/api/services/page-tools';
+import { User } from '../../../../common-app-api/src/api/models/user.model';
+import { AccountsAdminTools, Field } from '../../../../common-app-api/src/api/services/accounts-admin-tools';
 
 import { UpdateAccountModal } from './update-account-modal';
 import {DeleteAccountModal} from "./delete-account-modal";

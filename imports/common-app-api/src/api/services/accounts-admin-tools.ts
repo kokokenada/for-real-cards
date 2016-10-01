@@ -7,7 +7,7 @@ import { Mongo } from 'meteor/mongo';
 import { User} from '../../.';
 import { check, Match } from 'meteor/check'
 
-import { PagingTools, FilterDefinition} from "../../../../common-app/src/ui/services/page-tools"
+import { PagingTools, FilterDefinition} from "./page-tools"
 
 
 const SUBSCRIPTION_NAME = 'common-AccountsAdminTools';

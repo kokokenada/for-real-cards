@@ -3,7 +3,7 @@ import { NgRedux } from 'ng2-redux';
 
 
 import { IAppState } from '../state.interface';
-import {ModalService} from "../../../ui-ng2/modal/modal.service";
+//import {ModalService} from "./modal.service";
 
 
 @Injectable()
@@ -13,10 +13,10 @@ export class ModalActions {
 //  static MODAL_HIDE = ModalActions.prefix + 'MODAL_HIDE';
   static MODAL_RESOLVE = ModalActions.prefix + 'MODAL_RESOLVE';
 
-  constructor(private ngRedux: NgRedux<IAppState>, private modalService:ModalService) {}
+  constructor(private ngRedux: NgRedux<IAppState>) {} //, private modalService:ModalService
 
   open(component:Component, params:any={}):void {
-    this.modalService.component  = component; // A fly in the ointment.  Revisit this apporach
+  //  this.modalService.component  = component; // A fly in the ointment.  Revisit this apporach
     // Can I stick the component on the action?
     this.ngRedux.dispatch({ type: ModalActions.MODAL_OPEN, payload: {params}});
 

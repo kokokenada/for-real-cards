@@ -8,22 +8,6 @@ declare let ionicBootstrap, MenuController, NavController; // Shut up compiler u
 import { DragulaService} from 'ng2-dragula/ng2-dragula';
 import { NgRedux } from 'ng2-redux';
 
-import { PlatformToolsIonic, MenuItem, Menus, MenuFilterPipe,
-  IAppState,
-  LoginActions,
-  LoginAsync,
-  LoginModule,
-  ConnectActions,
-  ConnectAsync,
-  ConnectModule,
-  UploaderModule,
-  UploaderActions,
-  UploaderAsync,
-  UsersModule,
-  UsersAsync,
-  UsersActions
-} from '../../common-app';
-
 import {
   ForRealCardsActions,
   ForRealCardsModule,
@@ -41,6 +25,14 @@ import { EnterGame } from "../enter-game/enter-game";
 import { RunGameTabs } from "../run-game/run-game-tabs.ionic";
 import { RunGameTableContainer } from "../run-game/run-game-table-container";
 import {TopFrameHeader} from "./top-frame-header";
+import {ConnectModule} from "../../common-app/src/ui/redux/connect/connect.module";
+import {LoginModule} from "../../common-app/src/ui/redux/login/login.module";
+import {UsersModule} from "../../common-app/src/ui/redux/users/users.module";
+import {UploaderModule} from "../../common-app/src/ui/redux/uploader/uploader.module";
+import {IAppState} from "../../common-app/src/ui/redux/state.interface";
+import {Menus} from "../../common-app/src/ui/services/menus";
+import {MenuItem} from "../../common-app/src/ui/services/menu-item";
+import {PlatformToolsIonic} from "../../common-app/src/ui-ionic/platform-tools/platform-tools-ionic";
 
 
 @Component({
@@ -67,24 +59,12 @@ import {TopFrameHeader} from "./top-frame-header";
 `,
   viewProviders: [DragulaService],
   providers: [
-    ConnectActions,
-    ConnectAsync,
-    ConnectModule,
-    LoginActions,
-    LoginAsync,
-    LoginModule,
     ForRealCardsActions,
     ForRealCardsModule,
     ForRealCardsAsync,
     GamePlayActions,
     GamePlayAsync,
-    GamePlayModule,
-    UploaderModule,
-    UploaderActions,
-    UploaderAsync,
-    UsersModule,
-    UsersAsync,
-    UsersActions
+    GamePlayModule
   ]
 })
 class ForRealCardsTopFrame extends TopFrame {

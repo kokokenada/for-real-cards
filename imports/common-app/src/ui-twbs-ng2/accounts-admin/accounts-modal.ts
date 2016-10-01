@@ -1,7 +1,7 @@
 import { select } from 'ng2-redux';
 import 'meteor/alanning:roles'
 
-import { User } from '../../../../common-app-api';
+import { User } from '../../../../common-app-api/src/api/models/user.model';
 import { IModalState, ModalActions } from "../../ui";
 import { ModalBase } from "../../ui-ng2";
 

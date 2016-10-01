@@ -2,7 +2,7 @@ import { Component, ComponentFactoryResolver, ComponentRef, ElementRef, OnInit, 
 import { select } from 'ng2-redux';
 
 import {IModalState} from "../../ui/redux/modal/modal.types";
-import {ModalService} from "../../ui-ng2/modal/modal.service";
+import {ModalService} from "../../ui/redux/modal/modal.service";
 
 @Component({
   selector: 'modal-dialog',

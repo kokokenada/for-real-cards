@@ -4,9 +4,15 @@
  */
 import {NgRedux} from "ng2-redux";
 
-import { IAppState, IPayloadAction, ReduxModuleUtil, ConnectModule, LoginActions, LoginModule, UploaderModule, UsersModule} from "../../common-app";
 import {ForRealCardsModule, ForRealCardsActions, GamePlayModule, IForRealCardsActionPayload} from "../ui";
 import {ReduxModuleCombiner} from "../../common-app/src/ui/redux/redux-module-combiner";
+import {LoginModule} from "../../common-app/src/ui/redux/login/login.module";
+import {ConnectModule} from "../../common-app/src/ui/redux/connect/connect.module";
+import {UsersModule} from "../../common-app/src/ui/redux/users/users.module";
+import {IAppState} from "../../common-app/src/ui/redux/state.interface";
+import {UploaderModule} from "../../common-app/src/ui/redux/uploader/uploader.module";
+import {LoginActions} from "../../common-app/src/ui/redux/login/login-actions.class";
+import {IPayloadAction} from "../../common-app/src/ui/redux/action.interface";
 
 export abstract class TopFrame {
   private loginModule:LoginModule;

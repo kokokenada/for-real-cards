@@ -1,7 +1,6 @@
-import { select } from 'ng2-redux';
-
 import { Injectable, Component } from '@angular/core';
-import {ModalActions} from "../../ui/redux/modal/modal-actions.class";
+import { select } from 'ng2-redux';
+import {ModalActions} from "./modal-actions.class";
 
 @Injectable()
 export class ModalService {

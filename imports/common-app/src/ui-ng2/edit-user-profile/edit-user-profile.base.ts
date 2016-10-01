@@ -2,7 +2,8 @@ import { Observable } from 'rxjs'
 import { NgZone } from '@angular/core';
 import * as log from 'loglevel';
 
-import { AvatarOriginalStore, User } from '../../../../common-app-api';
+import { User } from '../../../../common-app-api/src/api/models/user.model';
+import { AvatarOriginalStore } from '../../../../common-app-api/src/api/models/avatar.model';
 import {PlatformTools} from "../platform-tools/platform-tools";
 import { LoginActions, ILoginState, UploaderActions } from "../../ui";
 import {IUploaderState} from "../../ui/redux/uploader/uploader.types";

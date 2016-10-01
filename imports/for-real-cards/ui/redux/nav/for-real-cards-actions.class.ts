@@ -5,9 +5,10 @@
 
 import { Injectable } from '@angular/core';
 import { NgRedux } from 'ng2-redux';
+import {IAppState} from "../../../../common-app/src/ui/redux/state.interface";
+import {ReduxModuleUtil} from "../../../../common-app/src/ui/redux/redux-module-util";
 
 
-import { ReduxModuleUtil, IAppState } from '../../../../common-app';
 
 @Injectable()
 export class ForRealCardsActions {
