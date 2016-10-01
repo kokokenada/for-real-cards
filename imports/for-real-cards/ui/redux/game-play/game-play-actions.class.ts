@@ -6,6 +6,7 @@
 import {Injectable} from '@angular/core';
 import {NgRedux} from 'ng2-redux';
 import {List} from "immutable";
+import * as log from 'loglevel';
 
 import { Card, CardSuit, CardRank, Deck, GameConfig, GamePlayActionType, GamePlayAction, Hand, HandInterface, VisibilityType } from "../../../api";
 import { IGamePlayState } from "./game-play.types";

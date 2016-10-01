@@ -3,31 +3,37 @@ import { NgRedux } from 'ng2-redux';
 
 
 import { IAppState } from '../state.interface';
-//import {ModalService} from "./modal.service";
 
 
 @Injectable()
 export class ModalActions {
   private static prefix = 'CA_MODAL_';
-  static MODAL_OPEN = ModalActions.prefix + 'MODAL_OPEN';
+  static MODAL_OPEN_REQUEST = ModalActions.prefix + 'MODAL_OPEN_REQUEST';
+  static MODAL_OPEN_SUCCESS = ModalActions.prefix + 'MODAL_OPEN_SUCCESS';
 //  static MODAL_HIDE = ModalActions.prefix + 'MODAL_HIDE';
-  static MODAL_RESOLVE = ModalActions.prefix + 'MODAL_RESOLVE';
+  static MODAL_RESOLVE_REQUEST = ModalActions.prefix + 'MODAL_RESOLVE_REQUEST';
+  static MODAL_RESOLVE_SUCCESS = ModalActions.prefix + 'MODAL_RESOLVE_SUCCESS';
 
-  constructor(private ngRedux: NgRedux<IAppState>) {} //, private modalService:ModalService
+  constructor(private ngRedux: NgRedux<IAppState>) {}
 
-  open(component:Component, params:any={}):void {
-  //  this.modalService.component  = component; // A fly in the ointment.  Revisit this apporach
-    // Can I stick the component on the action?
-    this.ngRedux.dispatch({ type: ModalActions.MODAL_OPEN, payload: {params}});
+  openRequest(component:Component, params:any={}):void {
+    this.ngRedux.dispatch({ type: ModalActions.MODAL_OPEN_REQUEST, payload: {component, params}});
+  }
 
+  openSuccess():void {
+    this.ngRedux.dispatch({ type: ModalActions.MODAL_OPEN_SUCCESS});
   }
 
 //  hide():void {
 //    this.ngRedux.dispatch({ type: ModalActions.MODAL_HIDE});
 //  }
 
-  resolve(result:any):void {
-    this.ngRedux.dispatch({ type: ModalActions.MODAL_RESOLVE, payload: {result}});
+  resolveRequest(result:any):void {
+    this.ngRedux.dispatch({ type: ModalActions.MODAL_RESOLVE_REQUEST, payload: {result}});
+  }
+
+  resolveSuccess():void {
+    this.ngRedux.dispatch({ type: ModalActions.MODAL_RESOLVE_SUCCESS});
   }
 
 }

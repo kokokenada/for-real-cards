@@ -9,7 +9,7 @@ import { UploaderActions} from "./uploader-actions.class";
 
 @Injectable()
 export class UploaderModule extends ReduxModule<IAppState, IPayloadAction>  {
-  reducer={name:'modalReducer', reducer: uploaderReducer};
+  reducer={name:'uploaderReducer', reducer: uploaderReducer};
 
   constructor(private uploaderEpics:UploaderAsync, public actions:UploaderActions) {
     super();

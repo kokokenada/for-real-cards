@@ -6,7 +6,7 @@ const INITIAL_STATE:IAccountsAdminState = {
   requestInprogress: false
 };
 
-export function modalReducer(
+export function accountsAdminReducer(
   state: IAccountsAdminState = INITIAL_STATE,
   action: IPayloadAction): IAccountsAdminState
 {

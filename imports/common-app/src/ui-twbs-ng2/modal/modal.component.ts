@@ -1,8 +1,9 @@
 import { Component, ComponentFactoryResolver, ComponentRef, ElementRef, OnInit, ReflectiveInjector, ViewContainerRef, ViewChild } from "@angular/core"
+import {Subscription} from 'rxjs';
 import { select } from 'ng2-redux';
 
 import {IModalState} from "../../ui/redux/modal/modal.types";
-import {ModalService} from "../../ui/redux/modal/modal.service";
+import {ModalActions} from "../../ui/redux/modal/modal-actions.class";
 
 @Component({
   selector: 'modal-dialog',
@@ -22,21 +23,32 @@ export class ModalDialog implements  OnInit {
   @select() modalReducer;
   @ViewChild('placeHolder', {read: ViewContainerRef}) private _placeHolder: ElementRef;
   style:Object = {display: 'none'};
+  subscription:Subscription;
   constructor(
     private _cmpFctryRslvr: ComponentFactoryResolver,
-    private modalService: ModalService
+    private modalActions: ModalActions
   ) {}
 
   ngOnInit() {
-    this.modalReducer.subscribe( (modalState:IModalState)=>{
-      if (modalState.displaying) {
-        this.setComponent(this.modalService.component);
-        console.log("open event in ModalDialog")
+    this.subscription = this.modalReducer.subscribe( (modalState:IModalState)=>{
+      console.log("modalState in ModalDialog")
+      console.log(modalState)
+
+      if (modalState.opening) {
+        this.setComponent(modalState.component);
+        console.log("openRequest event in ModalDialog")
         this.style = {display: 'inline-block'};
-      } else {
+        this.modalActions.openSuccess();
+      } else if (modalState.closing) {
         this.style = {display: "none"}
+        this.modalActions.resolveSuccess();
       }
     });
+  }
+  ngOnDestroy() {
+    console.log('destroying ModalDialog');
+    if (this.subscription)
+      this.subscription.unsubscribe();
   }
 
   setComponent(component) {
@@ -64,7 +76,6 @@ export class ModalDialog implements  OnInit {
 
     return comp;
   }
-
 }
 
 

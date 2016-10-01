@@ -34,7 +34,7 @@ export class CommonPopups {
       okText: okText
     };
 
-    this.modalActions.open(CommonPopups.instance.AlertModal, params);
+    this.modalActions.openRequest(CommonPopups.instance.AlertModal, params);
   }
   confirm(messageText:string, titleText:string="", okText:string="OK", cancelText:string="Cancel"):Promise<boolean> {
     let params:CommonPopupParametersInterface = {

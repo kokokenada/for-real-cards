@@ -2,7 +2,10 @@
 export interface IModalState { // TODO: Add type paremeters like IModalState<PARAMS, RESULT>
   params:any,
   result:any,
-  displaying:boolean
+  opening:boolean,
+  closing:boolean,
+  displaying:boolean,
+  component:any;
 }
 
 export interface IModalActionPayload {

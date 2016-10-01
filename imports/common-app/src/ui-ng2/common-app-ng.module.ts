@@ -1,7 +1,7 @@
 import { NgModule }      from '@angular/core';
 import { CommonModule }      from '@angular/common';
 import { FormsModule }      from '@angular/forms';
-import { NgReduxModule } from 'ng2-redux';
+import { NgReduxModule, NgRedux } from 'ng2-redux';
 
 import { ConnectionStatus } from "./connect/connection-status.component";
 import { CommonAppButton } from "./button/common-app-button";
@@ -21,13 +21,16 @@ import {LoginActions} from "../ui/redux/login/login-actions.class";
 import {ConnectModule} from "../ui/redux/connect/connect.module";
 import {ConnectAsync} from "../ui/redux/connect/connect-async.class";
 import {ConnectActions} from "../ui/redux/connect/connect-actions.class";
+import {ModalModule} from "../ui/redux/modal/modal.module";
 import {CommonPopups} from "./common-popups/common-popups";
+import {AccountsAdminModule} from "../ui/redux/accounts-admin/accounts-admin.module";
+import {ModalAsync} from "../ui/redux/modal/modal-async.class";
 
 const COMMON_APP_EXPORTED_DECLARATIONS = [
   // Common-app
   ConnectionStatus,
   CommonAppButton,
-  MenuFilterPipe,
+  MenuFilterPipe
 ];
 export const COMMON_APP_NG_EXPORTS = [
   ...COMMON_APP_EXPORTED_DECLARATIONS,
@@ -38,6 +41,7 @@ export const COMMON_APP_NG_EXPORTS = [
 ];
 
 export const COMMON_APP_SINGLETONS = [
+  AccountsAdminModule,
   CommonPopups,
   ConnectActions,
   ConnectAsync,
@@ -46,6 +50,8 @@ export const COMMON_APP_SINGLETONS = [
   LoginAsync,
   LoginModule,
   ModalActions,
+  ModalAsync,
+  ModalModule,
   ModalService,
   ReduxModuleCombiner,
   UploaderModule,
@@ -57,7 +63,7 @@ export const COMMON_APP_SINGLETONS = [
 ];
 
 @NgModule({
-  imports: [CommonModule, FormsModule, NgReduxModule],
+  imports: [CommonModule, FormsModule],
   declarations: [COMMON_APP_EXPORTED_DECLARATIONS],
   exports: COMMON_APP_NG_EXPORTS
 })

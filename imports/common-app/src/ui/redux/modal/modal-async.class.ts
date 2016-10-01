@@ -13,8 +13,8 @@ export class ModalAsync {
   modalMiddleware = (state: IModalState) => next => (action: IPayloadAction) => {
     let payload: IModalActionPayload = action.payload;
     switch (action.type) {
-      case ModalActions.MODAL_OPEN: {
-   //     this.modalService.open(payload.component);
+      case ModalActions.MODAL_OPEN_REQUEST: {
+//        this.modalService.openRequest(payload.component);
       }
     }
   }

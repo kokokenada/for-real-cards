@@ -84,23 +84,23 @@ export class AccountsAdmin {
   }
 
   updateUser(user:User) {
-    this.modalActions.open(UpdateAccountModal, {user});
+    this.modalActions.openRequest(UpdateAccountModal, {user});
   }
 
   deleteUser(user:User) {
-    this.modalActions.open(DeleteAccountModal, {user});
+    this.modalActions.openRequest(DeleteAccountModal, {user});
   }
 
   infoUser(user:User) {
-    this.modalActions.open(InfoAccountModal, {user});
+    this.modalActions.openRequest(InfoAccountModal, {user});
   }
 
   impersonateUser(user:User) {
-    this.modalActions.open(ImpersonateAccountModal, {user});
+    this.modalActions.openRequest(ImpersonateAccountModal, {user});
   }
 
   updateRoles() {
-    this.modalActions.open(UpdateRolesModal);
+    this.modalActions.openRequest(UpdateRolesModal);
 //          this.computation.invalidate();
   }
 

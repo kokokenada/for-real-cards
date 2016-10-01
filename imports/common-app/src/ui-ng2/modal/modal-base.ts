@@ -7,6 +7,6 @@ export abstract class ModalBase {
   }
 
   close(payload:any=undefined) {
-    this.modalActionsBase.resolve(payload);
+    this.modalActionsBase.resolveRequest(payload);
   }
 }

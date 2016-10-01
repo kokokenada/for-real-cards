@@ -37,6 +37,7 @@ export const INITIAL_STATE_GAME_PLAY = GamePlayFactory();
 export function gamePlayReducer(oldState: IGamePlayRecord = INITIAL_STATE_GAME_PLAY,
                                 action: IPayloadAction) {
 
+  console.log('gamePlayReducer')
   if (!GamePlayActions.isGamePlayAction(action.type))
     return oldState;
 

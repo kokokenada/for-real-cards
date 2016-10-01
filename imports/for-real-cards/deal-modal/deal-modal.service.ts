@@ -16,6 +16,7 @@ import {PlatformTools} from "../../common-app/src/ui-ng2/platform-tools/platform
 @Injectable()
 export class DealModalService {
   constructor(private modalActions:ModalActions, private modalService:ModalService) {}
+  debugger;
   open(gameConfig:GameConfig):Promise<GameConfig> {
     let dealModal;
     if (PlatformTools.isIonic()) {

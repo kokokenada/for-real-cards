@@ -17,7 +17,9 @@ export const LOGIN_INITIAL_STATE:ILoginState = {
 export function loginReducer(
   state: ILoginState = LOGIN_INITIAL_STATE,
   action: IPayloadAction): ILoginState {
-
+  console.log('in loginReducer')
+  console.log(state)
+  console.log(action)
   let payload:ILoginActionPayload = action.payload;
   switch (action.type) {
     case LoginActions.LOGIN_REQUEST:

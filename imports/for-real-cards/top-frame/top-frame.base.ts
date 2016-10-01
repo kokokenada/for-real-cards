@@ -13,12 +13,13 @@ import {IAppState} from "../../common-app/src/ui/redux/state.interface";
 import {UploaderModule} from "../../common-app/src/ui/redux/uploader/uploader.module";
 import {LoginActions} from "../../common-app/src/ui/redux/login/login-actions.class";
 import {IPayloadAction} from "../../common-app/src/ui/redux/action.interface";
+import {ModalModule} from "../../common-app/src/ui/redux/modal/modal.module";
 
 export abstract class TopFrame {
-  private loginModule:LoginModule;
   topFrameConfigure(
     connectModule:ConnectModule,
     loginModule:LoginModule,
+    modalModule:ModalModule,
     forRealCardsModule:ForRealCardsModule,
     gamePlayModule:GamePlayModule,
     usersModule:UsersModule,
@@ -57,16 +58,9 @@ export abstract class TopFrame {
     };
 
     forRealCardsModule.middlewares.push(navigatorMiddleware);
-    reduxModuleCombiner.configure([connectModule, loginModule, forRealCardsModule, gamePlayModule, uploaderModule, usersModule], ngRedux);
-    this.loginModule = loginModule;
+    reduxModuleCombiner.configure([connectModule, loginModule, modalModule, forRealCardsModule, gamePlayModule, uploaderModule, usersModule], ngRedux);
     loginModule.actions.watchUser(); // for auto login
   }
-
-  ngOnInit() {
-    console.log('ngOnInit of TopFrame ' + new Date())
-   // this.loginModule.actions.watchUser();  // TODO: DELETE THIS i DONT' THINK ITS NEEDED
-  }
-
 
   abstract navigateToStart():void;
   abstract navigateToEnter():void;

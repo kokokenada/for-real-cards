@@ -3,9 +3,6 @@ import { Injectable, Injector, ComponentFactory, ComponentFactoryResolver, Compo
 
 import { Meteor } from 'meteor/meteor';
 
-import * as log from 'loglevel';
-import {AccountsAdminActions} from "./accounts-admin-actions.class";
-
 @Injectable()
 export class AccountsAdminService {
   deleteAccount(userId:string):Promise<boolean> {
