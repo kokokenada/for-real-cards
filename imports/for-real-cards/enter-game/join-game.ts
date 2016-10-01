@@ -55,6 +55,7 @@ function template(): string {
         <label class="control-label" for="gameId">Game Id:</label>
         <input 
           [(ngModel)]="gameId" 
+          name="gameId"
           type="text" 
           class="form-control" 
           id="gameId"
@@ -65,7 +66,7 @@ function template(): string {
       </div>
       <div class="form-group">
         <label class="control-label" for="password">Password (if required):</label>
-        <input [(ngModel)]="password" type="text" class="form-control" id="password">
+        <input [(ngModel)]="password" name="password" type="text" class="form-control" id="password">
       </div>
       <button 
         [disabled]="!joinGameForm.form.valid" 

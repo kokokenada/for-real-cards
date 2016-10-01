@@ -17,18 +17,19 @@ return `
   <div class="form-group">
     <label class="control-label" for="gameId">Game Id:</label>
     <input 
-      [(ngModel)]="gameId" 
+      [(ngModel)]="gameId"
+      name="gameId"
       type="text" 
       class="form-control" 
       id="gameId"
       ngControl="formGameId" 
-      #formGameId="ngForm" 
+      #formGameId="ngModel" 
       required
     />
   </div>
   <div class="form-group">
     <label class="control-label" for="password">Password (if required):</label>
-    <input [(ngModel)]="password" type="text" class="form-control" id="password"/>
+    <input [(ngModel)]="password" name="password" type="text" class="form-control" id="password"/>
   </div>
   <button class="xs-col-4"
     [disabled]="!displayGameForm.form.valid" 

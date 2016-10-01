@@ -3,6 +3,7 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 
+export * from "../../common-app-api/src";
 
 export * from "./interfaces/card-image-style.interface";
 

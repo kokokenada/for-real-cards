@@ -40,7 +40,7 @@ function template():string {
     <div class="panel-body">
       <div class="form-group">
         <label for="password">Password (optional):</label>
-        <input class="form-control" [(ngModel)]="password" type="text" id="password">
+        <input class="form-control" [(ngModel)]="password" name="password" type="text" id="password">
       </div>
       <button type="button" class="btn btn-success btn-block" (click)="newGame()">
         Start Game

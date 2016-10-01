@@ -21,6 +21,7 @@ import {LoginActions} from "../ui/redux/login/login-actions.class";
 import {ConnectModule} from "../ui/redux/connect/connect.module";
 import {ConnectAsync} from "../ui/redux/connect/connect-async.class";
 import {ConnectActions} from "../ui/redux/connect/connect-actions.class";
+import {CommonPopups} from "./common-popups/common-popups";
 
 const COMMON_APP_EXPORTED_DECLARATIONS = [
   // Common-app
@@ -36,13 +37,17 @@ export const COMMON_APP_NG_EXPORTS = [
   NgReduxModule
 ];
 
-export const COMMON_APP_SINGLETONS = [ ModalActions, ModalService, ReduxModuleCombiner,
+export const COMMON_APP_SINGLETONS = [
+  CommonPopups,
   ConnectActions,
   ConnectAsync,
   ConnectModule,
   LoginActions,
   LoginAsync,
   LoginModule,
+  ModalActions,
+  ModalService,
+  ReduxModuleCombiner,
   UploaderModule,
   UploaderActions,
   UploaderAsync,

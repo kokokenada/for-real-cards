@@ -11,7 +11,7 @@ import { DragulaService} from 'ng2-dragula/ng2-dragula';
 import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { DragulaModule } from 'ng2-dragula/ng2-dragula';
-
+import { TabsModule } from 'ng2-bootstrap/ng2-bootstrap';
 import {
   ForRealCardsActions,
   ForRealCardsModule,
@@ -30,7 +30,6 @@ import { RunGameTabs } from "../run-game/run-game-tabs.twbs";
 import { Start } from "../start/start";
 
 import {TopFrame} from "./top-frame.base";
-import {TopFrameHeader} from "./top-frame-header";
 import {DealModalService} from "../deal-modal/deal-modal.service";
 import {CoreModule} from "./core.module";
 import {PlayingCard} from "../playing-card/playing-card";
@@ -188,16 +187,21 @@ export class ForRealCardsTopFrame extends TopFrame {
 }
 
 @NgModule({
-  imports:      [ BrowserModule, CoreModule, CommonAppNgTWBS, DragulaModule, routing ],
+  imports:      [ BrowserModule, CoreModule, CommonAppNgTWBS, DragulaModule, routing, TabsModule ],
   declarations: [
+    AccountsAdmin,
+    DealModal,
     DeckView,
+    EditUserProfileTWBS,
     EnterGame,
     ForRealCardsTopFrame,
+    GameActionList,
     JoinGame,
     NewGame,
     PileView,
     Player,
     PlayingCard,
+    RunGameTableContainer,
     RunGameHand,
     RunGameHandAndTable,
     RunGameTable,

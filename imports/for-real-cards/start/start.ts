@@ -11,7 +11,6 @@ import * as log from 'loglevel';
 //  template: PlatformTools.isIonic() ? templateIonic.default.toString() : templateTWBS.default.toString(),
 import templateTWBS from './start.twbs.html';
 import templateIonic from './start.ionic.html';
-import {loginReducer} from "../../common-app/src/ui/redux/login/login-reducer";
 import {PlatformTools} from "../../common-app/src/ui-ng2/platform-tools/platform-tools";
 import {ILoginState} from "../../common-app/src/ui/redux/login/login.types";
 import {LoginActions} from "../../common-app/src/ui/redux/login/login-actions.class";

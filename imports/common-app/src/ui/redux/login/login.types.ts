@@ -20,5 +20,6 @@ export interface ILoginActionPayload {
   userId?: string,
   documentChange?:IDocumentChange<User>,
   autoLogin?: boolean
+  error?: any
 }
 
