@@ -73,9 +73,9 @@ export class DealModalBase extends ModalBase<DealModalParamAndResult, DealModalP
   }
   deal() {
     this.gameConfig.pruneUserCommands();
-    this.close(this.gameConfig);
+    this.close({gameConfig: this.gameConfig});
   }
   cancel() {
-    this.close(undefined);
+    this.close(null);
   }
 }
