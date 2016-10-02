@@ -8,6 +8,27 @@ import {IModalState} from "./modal.types";
 export class ModalService {
   inProgress:boolean = false;
   @select() modalReducer;
+  subscription:Subscription;
+
+  private checkSubscription(resolve, reject) {
+    if (!this.subscription) {
+      this.subscription = this.modalReducer.subscribe(
+        (state:IModalState<any, any>)=>{
+          console.log('IN MODAL PROMISE SUBSCRIPTION CALLBACK')
+          console.log(state)
+          if (state.lastEvent === ModalActions.MODAL_RESOLVE_SUCCESS) {
+            console.log('RESOLVING')
+            resolve(state.result);
+            this.inProgress = false;
+          }
+        },
+        (error)=>{
+          reject(error);
+          this.inProgress = false;
+        }
+      );
+    }
+  }
 
   asPromise<PARAMS, RESULT>(compoent:Component, params:PARAMS):Promise<RESULT> {
     return new Promise<RESULT>( (resolve, reject)=>{
@@ -15,20 +36,7 @@ export class ModalService {
         reject("Modal promise currently in progress");
       } else {
         this.inProgress = true;
-        const subscription:Subscription = this.modalReducer.subscribe(
-          (state:IModalState<PARAMS, RESULT>)=>{
-            if (state.lastEvent === ModalActions.MODAL_RESOLVE_SUCCESS) {
-              resolve(state.result);
-              subscription.unsubscribe();
-              this.inProgress = false;
-            }
-          },
-          (error)=>{
-            reject(error);
-            subscription.unsubscribe();
-            this.inProgress = false;
-          }
-        );
+        this.checkSubscription(resolve, reject);
         ModalActions.openRequest(compoent, params);
       }
     });
