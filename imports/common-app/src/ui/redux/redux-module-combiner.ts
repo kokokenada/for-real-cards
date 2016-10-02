@@ -41,7 +41,6 @@ export class ReduxModuleCombiner {
     modules.forEach((module: ReduxModule<IAppState, IPayloadAction>)=> {
 
       let reducer: ReducersMapObject = {};
-      console.log(module.reducer.name)
       if (this.reducers[module.reducer.name]) {
         throw "Two included reducers have the identical name of " + module.reducer.name;
       }
