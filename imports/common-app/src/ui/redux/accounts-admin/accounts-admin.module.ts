@@ -9,7 +9,7 @@ import { AccountsAdminActions} from "./accounts-admin-actions.class";
 
 @Injectable()
 export class AccountsAdminModule extends ReduxModule<IAppState, IPayloadAction>  {
-  reducer={name:'modalReducer', reducer: accountsAdminReducer};
+  reducer={name:'accountsAdminReducer', reducer: accountsAdminReducer};
 
   constructor(private accountsAdminAsync:AccountsAdminAsync, public actions:AccountsAdminActions) {
     super();

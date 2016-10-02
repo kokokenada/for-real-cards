@@ -25,5 +25,6 @@ export class DeleteAccountModal extends AccountsModal implements OnInit {
 
   deleteAccount() {
     this.accountsAdminActions.deleteRequest(this.user._id);
+    this.close();
   }
 }

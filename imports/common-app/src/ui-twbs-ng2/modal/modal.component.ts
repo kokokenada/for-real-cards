@@ -21,9 +21,10 @@ import {ModalActions} from "../../ui/redux/modal/modal-actions.class";
 })
 export class ModalDialog implements  OnInit {
   @select() modalReducer;
-  @ViewChild('placeHolder', {read: ViewContainerRef}) private _placeHolder: ElementRef;
+  @ViewChild('placeHolder', {read: ViewContainerRef}) private _placeHolder: ViewContainerRef;
   style:Object = {display: 'none'};
   subscription:Subscription;
+  needsRemoval = false;
   constructor(
     private ngZone: NgZone,
     private _cmpFctryRslvr: ComponentFactoryResolver,
@@ -32,13 +33,9 @@ export class ModalDialog implements  OnInit {
 
   ngOnInit() {
     this.subscription = this.modalReducer.subscribe( (modalState:IModalState)=>{
-      console.log("modalState in ModalDialog")
-      console.log(modalState)
-
       this.ngZone.run( ()=>{
         if (modalState.lastEvent===ModalActions.MODAL_OPEN_REQUEST) {
           this.setComponent(modalState.component);
-          console.log("openRequest event in ModalDialog")
           this.style = {display: 'inline-block'};
           this.modalActions.openSuccess();
         } else if (modalState.lastEvent===ModalActions.MODAL_RESOLVE_REQUEST) {
@@ -55,10 +52,12 @@ export class ModalDialog implements  OnInit {
   }
 
   setComponent(component) {
+    if (this.needsRemoval)
+      this._placeHolder.remove();
     let cmp = this.createComponent(this._placeHolder, component);
-
     // all inputs/outputs set? add it to the DOM ..
     this._placeHolder.insert(cmp.hostView);
+    this.needsRemoval = true;
   }
 
   public createComponent (vCref: ViewContainerRef, type: any): ComponentRef<any> {

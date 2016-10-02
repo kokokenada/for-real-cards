@@ -61,7 +61,7 @@ export class AccountsAdminAsync {
         }
         break;
       }
-
     }
+    return next(action);
   }
 }

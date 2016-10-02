@@ -18,7 +18,7 @@ import {ModalActions} from "../../ui/redux/modal/modal-actions.class";
               <input class="form-control admin-user-info" readonly="true" [(ngModel)]="user.profile.name">
             </div>
           </div>
-          <ul *ngIf="getRoles().length" class="list-group">
+          <ul *ngIf="getRoles()" class="list-group">
             <li *ngFor="let role of getRoles()" class="list-group-item">
               <button (click)="removeRole(role)" class="btn btn-danger btn-xs" type="button">
                 <span class="fa fa-minus-circle"></span> 

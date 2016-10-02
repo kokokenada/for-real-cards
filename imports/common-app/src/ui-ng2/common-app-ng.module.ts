@@ -25,6 +25,9 @@ import {ModalModule} from "../ui/redux/modal/modal.module";
 import {CommonPopups} from "./common-popups/common-popups";
 import {AccountsAdminModule} from "../ui/redux/accounts-admin/accounts-admin.module";
 import {ModalAsync} from "../ui/redux/modal/modal-async.class";
+import {AccountsAdminAsync} from "../ui/redux/accounts-admin/accounts-admin-async.class";
+import {AccountsAdminActions} from "../ui/redux/accounts-admin/accounts-admin-actions.class";
+import {AccountsAdminService} from "../ui/redux/accounts-admin/accounts-admin.service";
 
 const COMMON_APP_EXPORTED_DECLARATIONS = [
   // Common-app
@@ -42,6 +45,9 @@ export const COMMON_APP_NG_EXPORTS = [
 
 export const COMMON_APP_SINGLETONS = [
   AccountsAdminModule,
+  AccountsAdminAsync,
+  AccountsAdminActions,
+  AccountsAdminService,
   CommonPopups,
   ConnectActions,
   ConnectAsync,

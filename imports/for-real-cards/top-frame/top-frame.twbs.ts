@@ -174,7 +174,6 @@ export class ForRealCardsTopFrame extends TopFrame implements OnInit {
 @NgModule({
   imports: [BrowserModule, CoreModule, CommonAppNgTWBS, DragulaModule, routing, TabsModule],
   declarations: [
-    AccountsAdmin,
     DealModal,
     DeckView,
     EditUserProfileTWBS,
