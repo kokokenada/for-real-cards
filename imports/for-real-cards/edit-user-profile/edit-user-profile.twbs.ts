@@ -25,11 +25,11 @@ import {EditUserProfileBase} from "../../common-app/src/ui-ng2/edit-user-profile
   <div class="panel-body">
     <div class="form-group">
       <label for="username">Username:</label>
-      <input [(ngModel)]="userEditted.username" type="text" class="form-control" id="username"/>
+      <input [(ngModel)]="userEditted.username" name="username" type="text" class="form-control" id="username"/>
     </div>
     <div class="form-group">
       <label for="email">Email</label><span> (optional)</span>
-      <input [(ngModel)]="userEditted.emails[0].address" type="text" class="form-control" id="email"/>
+      <input [(ngModel)]="userEditted.emails[0].address" name="address" type="text" class="form-control" id="email"/>
     </div>
     <div class="form-group">
       <button (click)="save()" class="btn btn-primary pull-right">Save</button>

@@ -88,9 +88,6 @@ export class ForRealCardsTopFrame extends TopFrame implements OnInit {
     super();
     this.addMiddlware(forRealCardsModule)
     reduxModules.configure();
-  }
-
-  ngOnInit() {
     Menus.addMenu({id: 'topbar'});
 
     Menus.addSubMenuItem('topbar', {
@@ -137,6 +134,10 @@ export class ForRealCardsTopFrame extends TopFrame implements OnInit {
         this.loginModule.actions.logout();
       }
     });
+
+  }
+
+  ngOnInit() {
   }
 
   navigateToEnter() {

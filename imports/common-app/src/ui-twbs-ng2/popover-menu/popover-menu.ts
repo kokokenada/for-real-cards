@@ -6,14 +6,14 @@ import { Menus, MenuItem } from "../../ui/index";
   selector: 'popover-menu',
   template: `
 
-    <span dropdown (on-toggle)="toggled($event)">
-      <span dropdownToggle class="fa fa-bars" style="font-size: x-large" aria-hidden="true"></span>
-      <ul class="dropdown-menu dropdown-menu-right" >
+    <span dropdown>
+      <span dropdownToggle class="fa fa-bars" style="font-size: x-large"></span>
+      <ul dropdownMenu class="dropdown-menu dropdown-menu-right" >
         <li
             *ngFor="let item of getMenuItems() | menuFilter"
             (click)="itemSelected(item)"
         >
-          <p>{{item.title}}</p>
+          <p class="dropdown-item">{{item.title}}</p>
         </li>      
       </ul>
     </span>
