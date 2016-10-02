@@ -6,13 +6,10 @@ import { Component, NgZone, ViewChild } from '@angular/core';
 //import { ionicBootstrap, MenuController, NavController } from 'ionic-angular';
 declare let ionicBootstrap, MenuController, NavController; // Shut up compiler until we have another go at Ionic
 import { DragulaService} from 'ng2-dragula/ng2-dragula';
-import { NgRedux } from 'ng2-redux';
 
 import {
-  ForRealCardsActions,
   ForRealCardsModule,
   ForRealCardsAsync,
-  GamePlayActions,
   GamePlayAsync,
   GamePlayModule,
 } from '../ui';
@@ -24,15 +21,12 @@ import { EditUserProfileIonic } from "../edit-user-profile/edit-user-profile.ion
 import { EnterGame } from "../enter-game/enter-game";
 import { RunGameTabs } from "../run-game/run-game-tabs.ionic";
 import { RunGameTableContainer } from "../run-game/run-game-table-container";
-import {TopFrameHeader} from "./top-frame-header";
-import {ConnectModule} from "../../common-app/src/ui/redux/connect/connect.module";
 import {LoginModule} from "../../common-app/src/ui/redux/login/login.module";
-import {UsersModule} from "../../common-app/src/ui/redux/users/users.module";
-import {UploaderModule} from "../../common-app/src/ui/redux/uploader/uploader.module";
-import {IAppState} from "../../common-app/src/ui/redux/state.interface";
 import {Menus} from "../../common-app/src/ui/services/menus";
 import {MenuItem} from "../../common-app/src/ui/services/menu-item";
 import {PlatformToolsIonic} from "../../common-app/src/ui-ionic/platform-tools/platform-tools-ionic";
+import {ReduxModules} from "./redux-modules";
+import {LoginActions} from "../../common-app/src/ui/redux/login/login-actions.class";
 
 
 @Component({
@@ -59,10 +53,8 @@ import {PlatformToolsIonic} from "../../common-app/src/ui-ionic/platform-tools/p
 `,
   viewProviders: [DragulaService],
   providers: [
-    ForRealCardsActions,
     ForRealCardsModule,
     ForRealCardsAsync,
-    GamePlayActions,
     GamePlayAsync,
     GamePlayModule
   ]
@@ -74,16 +66,12 @@ class ForRealCardsTopFrame extends TopFrame {
   constructor(
     private menu: MenuController,
     private ngZone:NgZone,
-    connectModule:ConnectModule,
     loginModule:LoginModule,
-    forRealCardsModule:ForRealCardsModule,
-    gamePlatModule:GamePlayModule,
-    usersModule:UsersModule,
-    uploaderModule:UploaderModule,
-    ngRedux:NgRedux<IAppState>
+    reduxModules:ReduxModules
+
 ) { //, private navParams:NavParams) {
     super();
-    this.topFrameConfigure(connectModule, loginModule, forRealCardsModule, gamePlatModule, usersModule, uploaderModule, ngRedux);
+    reduxModules.configure();
 
     Menus.addMenu({id: 'topbar'});
 
@@ -119,7 +107,7 @@ class ForRealCardsTopFrame extends TopFrame {
       title: 'Logout',
       roles: ['*'],
       callback: (menuItem:MenuItem)=> {
-        loginModule.actions.logout();
+        LoginActions.logout();
       }
     });
 

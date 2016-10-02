@@ -2,7 +2,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AccountsModal} from './accounts-modal';
 import {AccountsAdminActions} from "../../ui/redux/accounts-admin/accounts-admin-actions.class";
-import {ModalActions} from "../../ui/redux/modal/modal-actions.class";
 
 @Component({
   selector: 'delete-account-modal',
@@ -19,12 +18,8 @@ import {ModalActions} from "../../ui/redux/modal/modal-actions.class";
 `
 })
 export class DeleteAccountModal extends AccountsModal implements OnInit {
-  constructor(private accountsAdminActions:AccountsAdminActions, private modalActions:ModalActions) {
-    super(modalActions);
-  }
-
   deleteAccount() {
-    this.accountsAdminActions.deleteRequest(this.user._id);
+    AccountsAdminActions.deleteRequest(this.user._id);
     this.close();
   }
 }

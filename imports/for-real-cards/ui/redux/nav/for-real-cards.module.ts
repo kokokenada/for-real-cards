@@ -14,9 +14,8 @@ import {IPayloadAction} from "../../../../common-app/src/ui/redux/action.interfa
 @Injectable()
 export class ForRealCardsModule extends ReduxModule<IAppState, IPayloadAction>  {
   reducer={name:'forRealCardsReducer', reducer:forRealCardsReducer};
-
+  action = ForRealCardsActions;
   constructor(
-    public actions:ForRealCardsActions,
     private async:ForRealCardsAsync
   ) {
     super();

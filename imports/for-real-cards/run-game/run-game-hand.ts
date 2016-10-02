@@ -75,7 +75,7 @@ export class RunGameHand extends RunGame implements OnInit {
   }
   
   takeTrick():void {
-    this.gamePlayActions.takeTrick(this.gameState);
+    GamePlayActions.takeTrick(this.gameState);
   }
   
   shouldShowSort():boolean {
@@ -95,7 +95,7 @@ export class RunGameHand extends RunGame implements OnInit {
       let card = hand.cardsInHand[i];
       cardOrder.push(card);
     }
-    this.gamePlayActions.sortHand(this.gameState, cardOrder);
+    GamePlayActions.sortHand(this.gameState, cardOrder);
   }
 
   deal() {
@@ -105,7 +105,7 @@ export class RunGameHand extends RunGame implements OnInit {
     this.dealModelService.open(defaultGameConfig).then(
       (gameConfig:GameConfig)=>{
         if (gameConfig) {
-          this.gamePlayActions.deal(this.gameState, gameConfig);
+          GamePlayActions.deal(this.gameState, gameConfig);
         }
       }, (error)=> {
         this.commonPopups.alert(error);
@@ -126,7 +126,7 @@ export class RunGameHand extends RunGame implements OnInit {
     this.commonPopups.confirm(prompt).then(
       (result)=> {
         if (result) {
-          this.gamePlayActions.undo(this.gameState, action._id);
+          GamePlayActions.undo(this.gameState, action._id);
         }
       }, (error)=> {
         this.commonPopups.alert(error);

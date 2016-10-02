@@ -8,7 +8,6 @@ import { Component } from '@angular/core';
 import {DealModalBase} from "./deal-modal-base";
 
 import template from "./deal-modal.twbs.html";
-import {ModalActions} from "../../common-app/src/ui/redux/modal/modal-actions.class";
 
 @Component(
   {
@@ -17,7 +16,4 @@ import {ModalActions} from "../../common-app/src/ui/redux/modal/modal-actions.cl
   }
 )
 export class DealModal extends DealModalBase {
-  constructor(private myModalActions:ModalActions) {
-    super(myModalActions);
-  }
 }

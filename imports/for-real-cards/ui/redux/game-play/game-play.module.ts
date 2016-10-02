@@ -14,10 +14,9 @@ import {IPayloadAction} from "../../../../common-app/src/ui/redux/action.interfa
 @Injectable()
 export class GamePlayModule extends ReduxModule<IAppState, IPayloadAction>  {
   reducer={name: 'gamePlayReducer', reducer:gamePlayReducer};
-
+  actions = GamePlayActions;
   constructor(
     private gamePlayEpics:GamePlayAsync,
-    public actions:GamePlayActions
   ) {
     super();
     this.middlewares.push(

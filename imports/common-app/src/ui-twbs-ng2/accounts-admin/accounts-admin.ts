@@ -62,7 +62,7 @@ export class AccountsAdmin {
   computation:Tracker.Computation;
   static throttledSearch(search:string) {  };
 
-  constructor(private ngZone:NgZone, private modalActions:ModalActions) {
+  constructor(private ngZone:NgZone) {
     this.usersArray = [];
     this.skip = 0;
     this.sort = {key: 'username', direction:1};
@@ -84,23 +84,23 @@ export class AccountsAdmin {
   }
 
   updateUser(user:User) {
-    this.modalActions.openRequest(UpdateAccountModal, {user});
+    ModalActions.openRequest(UpdateAccountModal, {user});
   }
 
   deleteUser(user:User) {
-    this.modalActions.openRequest(DeleteAccountModal, {user});
+    ModalActions.openRequest(DeleteAccountModal, {user});
   }
 
   infoUser(user:User) {
-    this.modalActions.openRequest(InfoAccountModal, {user});
+    ModalActions.openRequest(InfoAccountModal, {user});
   }
 
   impersonateUser(user:User) {
-    this.modalActions.openRequest(ImpersonateAccountModal, {user});
+    ModalActions.openRequest(ImpersonateAccountModal, {user});
   }
 
   updateRoles() {
-    this.modalActions.openRequest(UpdateRolesModal);
+    ModalActions.openRequest(UpdateRolesModal);
 //          this.computation.invalidate();
   }
 

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountsModal } from './accounts-modal';
 import { AccountsAdminActions } from "../../ui/redux/accounts-admin/accounts-admin-actions.class";
-import {ModalActions} from "../../ui/redux/modal/modal-actions.class";
 
 declare let Meteor:any;  // Meteor.connection barfs
 
@@ -24,12 +23,9 @@ declare let Meteor:any;  // Meteor.connection barfs
 `
 })
 export class ImpersonateAccountModal extends AccountsModal implements OnInit {
-  constructor(private accountsAdminActions:AccountsAdminActions, private modalActions:ModalActions) {
-    super(modalActions);
-  }
 
   impersonate():void {
-    this.accountsAdminActions.impersonateRequest(this.user._id);
+    AccountsAdminActions.impersonateRequest(this.user._id);
   }
 }
 

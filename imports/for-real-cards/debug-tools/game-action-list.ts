@@ -163,7 +163,7 @@ export class GameActionList {
   password: string;
   gameId: string;
 
-  constructor(private forRealCardsActions:ForRealCardsActions, private ngZone:NgZone) {}
+  constructor(private ngZone:NgZone) {}
 
   ngOnInit() {
     this.gamePlayReducer.subscribe( (gamePlayState:IGamePlayState)=>{
@@ -174,7 +174,7 @@ export class GameActionList {
   }
 
   displayGame() {
-    this.forRealCardsActions.loadGameRequest(this.gameId, this.password);
+    ForRealCardsActions.loadGameRequest(this.gameId, this.password);
   }
 
   getActions():GamePlayAction[] {

@@ -22,10 +22,8 @@ import {CommonPopups} from "../../common-app/src/ui-ng2/common-popups/common-pop
 export abstract class RunGame {
   @select() gamePlayReducer$;
   @select() forRealCardsReducer$;
-  gamePlayActions :GamePlayActions;
   dragulaService: DragulaService;
   ngZone:NgZone;
-  forRealCardsActions:ForRealCardsActions;
   injector: Injector;
   dealModelService:DealModalService;
   commonPopups:CommonPopups;
@@ -37,10 +35,8 @@ export abstract class RunGame {
 
   constructor(injector: Injector) {
     this.injector = injector;
-    this.gamePlayActions = injector.get(GamePlayActions);
     this.dragulaService = injector.get(DragulaService);
     this.ngZone = injector.get(NgZone);
-    this.forRealCardsActions = injector.get(ForRealCardsActions);
     this.dealModelService = injector.get(DealModalService);
     this.commonPopups = injector.get(CommonPopups);
   }
@@ -64,7 +60,7 @@ export abstract class RunGame {
           if (pathname.length>=3) {
             let subUrl:string = pathname[1];
             let gameId:string = pathname[2];
-            this.forRealCardsActions.loadGameRequest(gameId, '');
+            ForRealCardsActions.loadGameRequest(gameId, '');
           }
         }
       });
@@ -120,7 +116,7 @@ export abstract class RunGame {
 //        console.log('drop')
 //        console.log(dragAndDrop)
 
-        dragAndDrop.runActions(this.gamePlayActions);
+        dragAndDrop.runActions();
         
       });
     }
@@ -239,7 +235,7 @@ export abstract class RunGame {
   }
 
   showHand():void {
-    this.gamePlayActions.showHand(this.gameState);
+    GamePlayActions.showHand(this.gameState);
   }
   
   landscapeCardStyle():CardImageStyle {

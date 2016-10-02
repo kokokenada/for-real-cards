@@ -18,9 +18,6 @@ import {ILoginState} from "./login.types"
 
 @Injectable()
 export class LoginAsync {
-  constructor(private loginActions: LoginActions) {
-  }
-
   login = (action$: Observable<IPayloadAction>) => {
     return action$
       .filter(({type}) => type === LoginActions.LOGIN_REQUEST)
@@ -30,7 +27,7 @@ export class LoginAsync {
             LoginService.login(payload.credentials)
           )
           .do((payloadAction: IPayloadAction) => {
-            this.loginActions.watchUser();
+            LoginActions.watchUser();
             LoginService.watchCurrentUser();
           })
           .catch(error => Observable.of(error));
@@ -46,7 +43,7 @@ export class LoginAsync {
             LoginService.register(payload.credentials)
           )
           .do((payloadAction: IPayloadAction) => {
-            this.loginActions.watchUser();
+            LoginActions.watchUser();
             LoginService.watchCurrentUser();
           })
           .catch(error => Observable.of(error));
@@ -63,7 +60,7 @@ export class LoginAsync {
             LoginService.createTempUser()
           )
           .do((payloadAction: IPayloadAction) => {
-            this.loginActions.watchUser();
+            LoginActions.watchUser();
             LoginService.watchCurrentUser();
           })
           .catch(error => Observable.of(error));

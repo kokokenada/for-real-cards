@@ -3,7 +3,6 @@ import { AccountsModal } from './accounts-modal';
 import 'meteor/underscore'
 import 'meteor/alanning:roles'
 import {AccountsAdminActions} from "../../ui/redux/accounts-admin/accounts-admin-actions.class";
-import {ModalActions} from "../../ui/redux/modal/modal-actions.class";
 
 @Component({
 	selector: 'update-roles-modal',
@@ -35,15 +34,15 @@ import {ModalActions} from "../../ui/redux/modal/modal-actions.class";
 `})
 export class UpdateRolesModal extends AccountsModal implements OnInit {
 	newRole:string;
-	constructor(private accountsAdminActions:AccountsAdminActions, private modalActions:ModalActions) {
-		super(modalActions);
+	constructor() {
+		super();
 	}
 
 	addRole():void {
-		this.accountsAdminActions.systemRoleChangeRequest(this.newRole, true);
+		AccountsAdminActions.systemRoleChangeRequest(this.newRole, true);
 	}
 
 	removeRole(role:string):void {
-		this.accountsAdminActions.systemRoleChangeRequest(this.newRole, false);
+		AccountsAdminActions.systemRoleChangeRequest(this.newRole, false);
 	}
 }

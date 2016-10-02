@@ -8,8 +8,6 @@ import {IModalState} from "./modal.types";
 export class ModalService {
   inProgress:boolean = false;
   @select() modalReducer;
-  constructor(private modalActions:ModalActions) {
-  }
 
   asPromise<T>(compoent:Component, params:any={}):Promise<T> {
     return new Promise<T>( (resolve, reject)=>{
@@ -33,7 +31,7 @@ export class ModalService {
             this.inProgress = false;
           }
         );
-        this.modalActions.openRequest(compoent, params);
+        ModalActions.openRequest(compoent, params);
       }
     });
   }

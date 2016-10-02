@@ -27,8 +27,7 @@ export class ModalDialog implements  OnInit {
   needsRemoval = false;
   constructor(
     private ngZone: NgZone,
-    private _cmpFctryRslvr: ComponentFactoryResolver,
-    private modalActions: ModalActions
+    private _cmpFctryRslvr: ComponentFactoryResolver
   ) {}
 
   ngOnInit() {
@@ -37,10 +36,10 @@ export class ModalDialog implements  OnInit {
         if (modalState.lastEvent===ModalActions.MODAL_OPEN_REQUEST) {
           this.setComponent(modalState.component);
           this.style = {display: 'inline-block'};
-          this.modalActions.openSuccess();
+          ModalActions.openSuccess();
         } else if (modalState.lastEvent===ModalActions.MODAL_RESOLVE_REQUEST) {
           this.style = {display: "none"}
-          this.modalActions.resolveSuccess();
+          ModalActions.resolveSuccess();
         }
       } );
     });

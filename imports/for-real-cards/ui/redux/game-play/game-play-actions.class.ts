@@ -3,21 +3,18 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 
-import {Injectable} from '@angular/core';
-import {NgRedux} from 'ng2-redux';
 import {List} from "immutable";
 import * as log from 'loglevel';
 
 import { Card, CardSuit, CardRank, Deck, GameConfig, GamePlayActionType, GamePlayAction, Hand, HandInterface, VisibilityType } from "../../../api";
 import { IGamePlayState } from "./game-play.types";
-import {IAppState} from "../../../../common-app/src/ui/redux/state.interface";
 import {AccountTools} from "../../../../common-app/src/ui/services/account-tools";
 import {ReduxModuleUtil} from "../../../../common-app/src/ui/redux/redux-module-util";
+import {ReduxModuleCombiner} from "../../../../common-app/src/ui/redux/redux-module-combiner";
 
 const _prefix = 'FRC_GAMEPLAY_';
 const _prefix_length = _prefix.length;
 
-@Injectable()
 export class GamePlayActions {
   private static prefix = _prefix;
   static GAME_PLAY_INITIALIZE = GamePlayActions.prefix + 'GAME_PLAY_INITIALIZE';
@@ -27,9 +24,6 @@ export class GamePlayActions {
   static GAME_PLAY_ACTIONSSS_PUSH = GamePlayActions.prefix + 'GAME_PLAY_ACTIONSSS_PUSH'; // Triple S to be more distinctive from singluar form
   static GAME_PLAY_ERROR = GamePlayActions.prefix + 'GAME_PLAY_ERROR';
 
-  constructor(private ngRedux: NgRedux<IAppState>) {
-  }
-
   static isGamePlayAction(actionType: string): boolean {
     return actionType.substr(0, _prefix_length) === _prefix;
   }
@@ -38,13 +32,13 @@ export class GamePlayActions {
    * Sets game Id and kicks off watching for data changes
    * @param gameId
    */
-  initialize(gameId: string): void {
+  static initialize(gameId: string): void {
     let newGameAction: GamePlayAction = new GamePlayAction({
       gameId: gameId,
       creatorId: AccountTools.userId(),
       actionType: GamePlayActionType.NEW_GAME
     });
-    this.ngRedux.dispatch({type: GamePlayActions.GAME_PLAY_INITIALIZE, payload: {gameId}});
+    ReduxModuleCombiner.ngRedux.dispatch({type: GamePlayActions.GAME_PLAY_INITIALIZE, payload: {gameId}});
     this.receiveAction(newGameAction);
   }
 
@@ -52,36 +46,36 @@ export class GamePlayActions {
    * Writes an action to the database
    * @param action
    */
-  private pushAction(action: GamePlayAction): void {
-    this.ngRedux.dispatch({type: GamePlayActions.GAME_PLAY_ACTION_PUSH, payload: {gamePlayAction: action}});
+  private static pushAction(action: GamePlayAction): void {
+    ReduxModuleCombiner.ngRedux.dispatch({type: GamePlayActions.GAME_PLAY_ACTION_PUSH, payload: {gamePlayAction: action}});
   }
 
   /**
    * Writes an array of actions to the database
    * @param actions
    */
-  private pushActions(actions: GamePlayAction[]): void {
-    this.ngRedux.dispatch({type: GamePlayActions.GAME_PLAY_ACTIONSSS_PUSH, payload: {gamePlayActions: actions}});
+  private static pushActions(actions: GamePlayAction[]): void {
+    ReduxModuleCombiner.ngRedux.dispatch({type: GamePlayActions.GAME_PLAY_ACTIONSSS_PUSH, payload: {gamePlayActions: actions}});
   }
 
   /**
    * Processes an action locally
    * @param action
    */
-  receiveAction(action: GamePlayAction) {
-    this.ngRedux.dispatch({type: GamePlayActions.GAME_PLAY_ACTION_RECIEVED, payload: {gamePlayAction: action}});
+  static receiveAction(action: GamePlayAction) {
+    ReduxModuleCombiner.ngRedux.dispatch({type: GamePlayActions.GAME_PLAY_ACTION_RECIEVED, payload: {gamePlayAction: action}});
   }
 
   /**
    * Processes an actions locally
    * @param actions
    */
-  receiveActions(actions: GamePlayAction[]) {
-    this.ngRedux.dispatch({type: GamePlayActions.GAME_PLAY_ACTIONSSS_RECIEVED, payload: {gamePlayActions: actions}});
+  static receiveActions(actions: GamePlayAction[]) {
+    ReduxModuleCombiner.ngRedux.dispatch({type: GamePlayActions.GAME_PLAY_ACTIONSSS_RECIEVED, payload: {gamePlayActions: actions}});
   }
 
-  newHand(gameId: string, hand: HandInterface) {
-    this.ngRedux.dispatch(
+  static newHand(gameId: string, hand: HandInterface) {
+    ReduxModuleCombiner.ngRedux.dispatch(
       {
         type: GamePlayActions.GAME_PLAY_ACTION_RECIEVED,
         payload: {
@@ -97,9 +91,9 @@ export class GamePlayActions {
     );
   }
 
-  deal(gameState: IGamePlayState, gameConfig: GameConfig) {
+  static deal(gameState: IGamePlayState, gameConfig: GameConfig) {
 
-    this.pushAction(new GamePlayAction({  // Push RESET separately because it is a different undo block
+    GamePlayActions.pushAction(new GamePlayAction({  // Push RESET separately because it is a different undo block
       gameId: gameState.gameId,
       creatorId: AccountTools.userId(),
       actionType: GamePlayActionType.RESET
@@ -167,11 +161,11 @@ export class GamePlayActions {
       }));
     }
 
-    this.pushActions(actions);
+    GamePlayActions.pushActions(actions);
 
   }
 
-  deckToHand(gameState: IGamePlayState, visibilityType: VisibilityType, toPlayerId: string = Meteor.userId()): void {
+  static deckToHand(gameState: IGamePlayState, visibilityType: VisibilityType, toPlayerId: string = Meteor.userId()): void {
     let action: GamePlayAction = new GamePlayAction({
       gameId: gameState.gameId,
       creatorId: Meteor.userId(),
@@ -180,11 +174,11 @@ export class GamePlayActions {
       actionType: GamePlayActionType.DECK_TO_HAND,
       cards: [gameState.tableFaceDown.get(0)]
     });
-    this.pushAction(action);
+    GamePlayActions.pushAction(action);
   }
 
 
-  showHand(gameState: IGamePlayState, fromPlayerId: string = Meteor.userId()): void {
+  static showHand(gameState: IGamePlayState, fromPlayerId: string = Meteor.userId()): void {
     let action: GamePlayAction = new GamePlayAction({
       gameId: gameState.gameId,
       creatorId: Meteor.userId(),
@@ -193,11 +187,11 @@ export class GamePlayActions {
       actionType: GamePlayActionType.HAND_TO_TABLE,
       cards: GamePlayActions.getHandFromUserId(gameState.hands, fromPlayerId).cardsInHand
     });
-    this.pushAction(action);
+    GamePlayActions.pushAction(action);
 
   }
 
-  cardToTable(gameState: IGamePlayState, suit: CardSuit, rank: CardRank, visibilityType: VisibilityType, fromPlayerId: string = Meteor.userId()): void {
+  static cardToTable(gameState: IGamePlayState, suit: CardSuit, rank: CardRank, visibilityType: VisibilityType, fromPlayerId: string = Meteor.userId()): void {
     let action: GamePlayAction = new GamePlayAction({
       gameId: gameState.gameId,
       creatorId: Meteor.userId(),
@@ -206,11 +200,11 @@ export class GamePlayActions {
       actionType: GamePlayActionType.HAND_TO_TABLE,
       cards: [new Card({suit: suit, rank: rank})]
     });
-    this.pushAction(action);
+    GamePlayActions.pushAction(action);
   }
 
 
-  handToPile(gameState: IGamePlayState, suit: CardSuit, rank: CardRank, fromPlayerId: string = Meteor.userId()): void {
+  static handToPile(gameState: IGamePlayState, suit: CardSuit, rank: CardRank, fromPlayerId: string = Meteor.userId()): void {
     let action: GamePlayAction = new GamePlayAction({
       gameId: gameState.gameId,
       creatorId: Meteor.userId(),
@@ -219,10 +213,10 @@ export class GamePlayActions {
       actionType: GamePlayActionType.HAND_TO_PILE,
       cards: [new Card({suit: suit, rank: rank})]
     });
-    this.pushAction(action);
+    GamePlayActions.pushAction(action);
   }
 
-  pileToHand(gameState: IGamePlayState, suit: CardSuit, rank: CardRank, toPlayerId: string = Meteor.userId()): void {
+  static pileToHand(gameState: IGamePlayState, suit: CardSuit, rank: CardRank, toPlayerId: string = Meteor.userId()): void {
     let action: GamePlayAction = new GamePlayAction({
       gameId: gameState.gameId,
       creatorId: Meteor.userId(),
@@ -231,10 +225,10 @@ export class GamePlayActions {
       actionType: GamePlayActionType.PILE_TO_HAND,
       cards: [new Card({suit: suit, rank: rank})]
     });
-    this.pushAction(action);
+    GamePlayActions.pushAction(action);
   }
 
-  sortHand(gameState: IGamePlayState, cards: Card[], toPlayerId: string = Meteor.userId()): void {
+  static sortHand(gameState: IGamePlayState, cards: Card[], toPlayerId: string = Meteor.userId()): void {
     let action: GamePlayAction = new GamePlayAction({
       gameId: gameState.gameId,
       creatorId: Meteor.userId(),
@@ -242,10 +236,10 @@ export class GamePlayActions {
       actionType: GamePlayActionType.HAND_SORT,
       cards: cards
     });
-    this.pushAction(action);
+    GamePlayActions.pushAction(action);
   }
 
-  pileToDeck(gameState: IGamePlayState, cards: Card[]) {
+  static pileToDeck(gameState: IGamePlayState, cards: Card[]) {
     let action: GamePlayAction = new GamePlayAction({
       gameId: gameState.gameId,
       creatorId: Meteor.userId(),
@@ -253,10 +247,10 @@ export class GamePlayActions {
       actionType: GamePlayActionType.PILE_TO_DECK,
       cards: cards
     });
-    this.pushAction(action);
+    GamePlayActions.pushAction(action);
   }
 
-  handToDeck(gameState: IGamePlayState, suit: CardSuit, rank: CardRank, fromPlayerId: string = Meteor.userId()) {
+  static handToDeck(gameState: IGamePlayState, suit: CardSuit, rank: CardRank, fromPlayerId: string = Meteor.userId()) {
     let action: GamePlayAction = new GamePlayAction({
       gameId: gameState.gameId,
       creatorId: Meteor.userId(),
@@ -264,10 +258,10 @@ export class GamePlayActions {
       actionType: GamePlayActionType.HAND_TO_DECK,
       cards: [new Card({suit: suit, rank: rank})]
     });
-    this.pushAction(action);
+    GamePlayActions.pushAction(action);
   }
 
-  tableToHand(gameState: IGamePlayState, suit: CardSuit, rank: CardRank, toPlayerId: string = Meteor.userId()): void {
+  static tableToHand(gameState: IGamePlayState, suit: CardSuit, rank: CardRank, toPlayerId: string = Meteor.userId()): void {
     let action: GamePlayAction = new GamePlayAction({
       gameId: gameState.gameId,
       creatorId: Meteor.userId(),
@@ -276,7 +270,7 @@ export class GamePlayActions {
       actionType: GamePlayActionType.TABLE_TO_HAND,
       cards: [new Card({suit: suit, rank: rank})]
     });
-    this.pushAction(action);
+    GamePlayActions.pushAction(action);
   }
 
 
@@ -289,7 +283,7 @@ export class GamePlayActions {
     return true;
   }
 
-  takeTrick(gameState: IGamePlayState, toPlayerId: string = Meteor.userId()): void {
+  static takeTrick(gameState: IGamePlayState, toPlayerId: string = Meteor.userId()): void {
     if (!GamePlayActions.trickReady(gameState))
       throw new Meteor.Error('all-users-must-have-1-card-on-table', "All the users must have 1 card on the table for you to take thr trick");
     let trick: Card[] = [];
@@ -303,7 +297,7 @@ export class GamePlayActions {
       actionType: GamePlayActionType.TAKE_TRICK,
       cards: trick
     });
-    this.pushAction(action);
+    GamePlayActions.pushAction(action);
 
   }
 
@@ -348,8 +342,8 @@ export class GamePlayActions {
     }
   }
 
-  undo(gameState: IGamePlayState, actionId: string) {
-    this.pushAction(
+  static undo(gameState: IGamePlayState, actionId: string) {
+    GamePlayActions.pushAction(
       new GamePlayAction({
         actionType: GamePlayActionType.UNDO,
         gameId: gameState.gameId,
@@ -359,8 +353,8 @@ export class GamePlayActions {
     );
   }
 
-  error(error) {
-    this.ngRedux.dispatch(
+  static error(error) {
+    ReduxModuleCombiner.ngRedux.dispatch(
       ReduxModuleUtil.errorFactory(GamePlayActions.GAME_PLAY_ERROR, {error: error.error})
     );
   }

@@ -20,10 +20,8 @@ import {MenuItem} from "../../common-app/src/ui/services/menu-item";
 import {COMMON_APP_SINGLETONS} from "../../common-app/src/ui-ng2/common-app-ng.module";
 
 import {
-  ForRealCardsActions,
   ForRealCardsModule,
   ForRealCardsAsync,
-  GamePlayActions,
   GamePlayAsync,
   GamePlayModule
 } from '../ui';
@@ -49,6 +47,7 @@ import {RunGameTable} from "../run-game/run-game-table";
 import {RunGameHand} from "../run-game/run-game-hand";
 import {RunGameHandAndTable} from "../run-game/run-game-hand-and-table";
 import {ReduxModules} from "./redux-modules";
+import {LoginActions} from "../../common-app/src/ui/redux/login/login-actions.class";
 
 const appRoutes: Routes = [
   {path: '', component: Start},
@@ -83,8 +82,7 @@ export class ForRealCardsTopFrame extends TopFrame implements OnInit {
   constructor(private router: Router,
               private ngZone: NgZone,
               private reduxModules:ReduxModules,
-              forRealCardsModule:ForRealCardsModule,
-              private loginModule: LoginModule) {
+              forRealCardsModule:ForRealCardsModule) {
     super();
     this.addMiddlware(forRealCardsModule)
     reduxModules.configure();
@@ -131,7 +129,7 @@ export class ForRealCardsTopFrame extends TopFrame implements OnInit {
       title: 'Logout',
       roles: ['*'],
       callback: (menuItem: MenuItem)=> {
-        this.loginModule.actions.logout();
+        LoginActions.logout();
       }
     });
 
@@ -196,10 +194,8 @@ export class ForRealCardsTopFrame extends TopFrame implements OnInit {
   providers: [
     ReduxModules,
     DealModalService,
-    ForRealCardsActions,
     ForRealCardsModule,
     ForRealCardsAsync,
-    GamePlayActions,
     GamePlayAsync,
     GamePlayModule,
     ...COMMON_APP_SINGLETONS]

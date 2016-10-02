@@ -12,12 +12,11 @@ import { UploaderActions } from "./uploader-actions.class";
 
 @Injectable()
 export class UploaderAsync {
-  constructor(private actions: UploaderActions) {}
 
   startUpload = (action$: Observable<IPayloadAction>): Observable<IPayloadAction> => {
     return action$.filter(({ type }) => type === UploaderActions.UPLOAD_START_REQUEST)
       .do(({ payload }) => {
-        UploaderService.uploadFileRequest(payload.file, payload.store, this.actions);
+        UploaderService.uploadFileRequest(payload.file, payload.store);
       })
       .map( ()=> { return {type:'NOOP'}}); // Don't return self. If you do, race condition occrus
   };
@@ -25,7 +24,7 @@ export class UploaderAsync {
   cameraUpload = (action$: Observable<IPayloadAction>): Observable<IPayloadAction> => {
     return action$.filter(({ type }) => type === UploaderActions.UPLOAD_CAMERA_PIC_REQUEST)
       .do(({ payload }) => {
-        UploaderService.uploadImageFromCamera(payload.store, this.actions);
+        UploaderService.uploadImageFromCamera(payload.store);
       })
       .map( ()=> { return {type:'NOOP'}}); // Don't return self. If you do, race condition occrus
   };

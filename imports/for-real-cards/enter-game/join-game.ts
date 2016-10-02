@@ -98,14 +98,11 @@ export class JoinGame {
   password: string;
   gameId: string;
 
-  constructor(private forRealCardsActions: ForRealCardsActions) {
-  }
-
   joinGame() {
-    this.forRealCardsActions.joinGameRequest(this.gameId, this.password);
+    ForRealCardsActions.joinGameRequest(this.gameId, this.password);
   };
 
   displayGame() {
-    this.forRealCardsActions.viewGameRequest(this.gameId, this.password);
+    ForRealCardsActions.viewGameRequest(this.gameId, this.password);
   };
 }

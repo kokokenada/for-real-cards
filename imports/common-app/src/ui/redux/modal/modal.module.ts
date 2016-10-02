@@ -10,8 +10,8 @@ import { ModalActions} from "./modal-actions.class";
 @Injectable()
 export class ModalModule extends ReduxModule<IAppState, IPayloadAction>  {
   reducer={name:'modalReducer', reducer: modalReducer};
-
-  constructor(private modalAsync:ModalAsync, public actions:ModalActions) {
+  actions = ModalActions;
+  constructor(private modalAsync:ModalAsync) {
     super();
     this.middlewares.push(modalAsync.modalMiddleware);
   }

@@ -1,12 +1,8 @@
 
 import {CommonPopupParametersInterface} from "./common-popup-params.interface";
 import {ModalBase} from "../modal/modal-base";
-import {ModalActions} from "../../ui/redux/modal/modal-actions.class";
 
 export class CommonPopupModal extends ModalBase {
-  constructor(modalActions:ModalActions) {
-    super(modalActions);
-  }
   componentParameters:CommonPopupParametersInterface;
   titleText:string;
   messageText:string;

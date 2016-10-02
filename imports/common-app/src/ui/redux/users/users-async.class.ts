@@ -15,7 +15,6 @@ import { IDocumentChange } from "../../reactive-data/document-change.interface";
 
 @Injectable()
 export class UsersAsync {
-  constructor(private usersActions: UsersActions) {}
 
   watchUsers = (action$: Observable<IPayloadAction>) => {
     return action$.filter(({ type }) => type === UsersActions.WATCH)

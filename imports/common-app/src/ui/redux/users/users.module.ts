@@ -13,8 +13,8 @@ import { UsersActions } from "./users-actions.class";
  */
 export class UsersModule extends ReduxModule<IAppState, IPayloadAction >  {
   reducer={name: 'usersReducer', reducer: usersReducer};
-
-  constructor(private usersEpics:UsersAsync, public actions:UsersActions) {
+  actions = UsersActions;
+  constructor(private usersEpics:UsersAsync) {
     super();
     this.epics.push(usersEpics.watchUsers);
   }

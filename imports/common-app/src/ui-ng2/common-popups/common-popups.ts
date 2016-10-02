@@ -9,7 +9,7 @@ import {ModalService} from "../../ui/redux/modal/modal.service";
 
 @Injectable()
 export class CommonPopups {
-  constructor(private modalActions:ModalActions, private modalService:ModalService) {
+  constructor(private modalService:ModalService) {
     CommonPopups.init();
   }
   private static instance;
@@ -34,7 +34,7 @@ export class CommonPopups {
       okText: okText
     };
 
-    this.modalActions.openRequest(CommonPopups.instance.AlertModal, params);
+    ModalActions.openRequest(CommonPopups.instance.AlertModal, params);
   }
   confirm(messageText:string, titleText:string="", okText:string="OK", cancelText:string="Cancel"):Promise<boolean> {
     let params:CommonPopupParametersInterface = {

@@ -10,8 +10,8 @@ import { ConnectActions } from "./connect-actions.class";
 @Injectable()
 export class ConnectModule extends ReduxModule<IAppState, IPayloadAction>  {
   reducer={name:'connectReducer', reducer:connectReducer};
-
-  constructor(private connectEpics:ConnectAsync, public actions:ConnectActions) {
+  actions = ConnectActions;
+  constructor(private connectEpics:ConnectAsync) {
     super();
     this.epics.push(
       connectEpics.attempt,

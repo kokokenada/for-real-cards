@@ -29,7 +29,7 @@ export class Start {
   connectionState:IConnectState;
   credentials:Credentials;
   active:boolean = true;
-  constructor(private ngZone:NgZone, private loginActions:LoginActions) {}
+  constructor(private ngZone:NgZone) {}
   ngOnInit() {
     this.loginReducer.subscribe( (state:ILoginState)=>{  /// Hmm.  Is there a way of doing this automatically?
       this.state = state;
@@ -54,15 +54,15 @@ export class Start {
   }
 
   login() {
-    this.loginActions.login(this.credentials);
+    LoginActions.login(this.credentials);
   }
 
   register() {
-    this.loginActions.register(this.credentials)
+    LoginActions.register(this.credentials)
   }
 
   tempUser() {
-    this.loginActions.loginAsTemporaryUser()
+    LoginActions.loginAsTemporaryUser()
   }
 
   debug():void {

@@ -8,6 +8,7 @@ import { Component, Input, Injector } from '@angular/core';
 import {RunGame} from './run-game.ts';
 import {Card, Deck} from "../api/index";
 import {CardImageStyle} from "../api/interfaces/card-image-style.interface";
+import {GamePlayActions} from "../ui/redux/game-play/game-play-actions.class";
 
 @Component(
   {
@@ -73,6 +74,6 @@ export class DeckView extends RunGame {
       });
       Deck.shuffle(seed, this.getCardsInPile());
     }
-    this.gamePlayActions.pileToDeck(this.gameState, this.getCardsInPile());
+    GamePlayActions.pileToDeck(this.gameState, this.getCardsInPile());
   }
 }

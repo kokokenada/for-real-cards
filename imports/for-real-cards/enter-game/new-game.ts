@@ -62,11 +62,8 @@ function template():string {
 )
 export class NewGame {
   password:string;
-  constructor(private forRealCardsActions:ForRealCardsActions) {
-
-  }
   newGame() {
-    this.forRealCardsActions.newGame(this.password);
+    ForRealCardsActions.newGame(this.password);
   }
 }
 

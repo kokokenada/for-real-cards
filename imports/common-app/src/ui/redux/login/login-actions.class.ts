@@ -1,13 +1,9 @@
-import { Injectable } from '@angular/core';
-import { NgRedux } from 'ng2-redux';
-
 import { User } from "../../../../../common-app-api/src/api/models/user.model";
 import { IDocumentChange } from "../../reactive-data/document-change.interface";
-import { IAppState } from '../state.interface';
 import { IPayloadAction } from "../action.interface";
 import { Credentials } from "../../services/credentials";
+import {ReduxModuleCombiner} from "../redux-module-combiner";
 
-@Injectable()
 export class LoginActions {
   private static prefix = 'CA_LOGIN_';
   static LOGIN_REQUEST = LoginActions.prefix + 'LOGIN_REQUEST';
@@ -26,30 +22,28 @@ export class LoginActions {
   static WATCH_USER_FIRST_READ = LoginActions.prefix + 'WATCHED_USER_FIRST_READ';
   static WATCHED_USER_CHANGED = LoginActions.prefix + 'WATCHED_USER_CHANGED';
 
-  constructor(private ngRedux: NgRedux<IAppState>) {}
-
-  login(credentials:Credentials):void {
-    this.ngRedux.dispatch({ type: LoginActions.LOGIN_REQUEST, payload: {credentials: credentials}});
+  static login(credentials:Credentials):void {
+    ReduxModuleCombiner.ngRedux.dispatch({ type: LoginActions.LOGIN_REQUEST, payload: {credentials: credentials}});
   }
 
-  logout():void {
-    this.ngRedux.dispatch({ type: LoginActions.LOGOUT_REQUEST});
+  static logout():void {
+    ReduxModuleCombiner.ngRedux.dispatch({ type: LoginActions.LOGOUT_REQUEST});
   }
 
-  register(credentials:Credentials):void {
-    this.ngRedux.dispatch({ type: LoginActions.REGISTRATION_REQUEST, payload: {credentials: credentials}});
+  static register(credentials:Credentials):void {
+    ReduxModuleCombiner.ngRedux.dispatch({ type: LoginActions.REGISTRATION_REQUEST, payload: {credentials: credentials}});
   }
 
-  loginAsTemporaryUser():void {
-    this.ngRedux.dispatch({ type: LoginActions.TEMP_USER_REQUEST});
+  static loginAsTemporaryUser():void {
+    ReduxModuleCombiner.ngRedux.dispatch({ type: LoginActions.TEMP_USER_REQUEST});
   }
 
-  saveUser(user:User): void {
-    this.ngRedux.dispatch({type: LoginActions.SAVE_USER_REQUEST, payload: {user: user}});
+  static saveUser(user:User): void {
+    ReduxModuleCombiner.ngRedux.dispatch({type: LoginActions.SAVE_USER_REQUEST, payload: {user: user}});
   }
 
-  watchUser() : void {
-    this.ngRedux.dispatch({type: LoginActions.WATCH_USER});
+  static watchUser() : void {
+    ReduxModuleCombiner.ngRedux.dispatch({type: LoginActions.WATCH_USER});
   }
 
   static watchedUserFirstReadFactory(user:User):IPayloadAction {

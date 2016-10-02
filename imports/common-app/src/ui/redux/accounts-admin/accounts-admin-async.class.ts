@@ -7,7 +7,7 @@ import {IAccountsAdminActionPayload, IAccountsAdminState} from "./accounts-admin
 
 @Injectable()
 export class AccountsAdminAsync {
-  constructor(private actions: AccountsAdminActions, private accountsAdminService: AccountsAdminService) {
+  constructor(private accountsAdminService: AccountsAdminService) {
   }
   // TODO: Error hanlding
   modalMiddleware = (state: IAccountsAdminState) => next => (action: IPayloadAction) => {
@@ -16,7 +16,7 @@ export class AccountsAdminAsync {
       case AccountsAdminActions.DELETE_REQUEST: {
         this.accountsAdminService.deleteAccount(payload.userId).then(
           ()=> {
-            this.actions.deleteSuceeded(payload.userId);
+            AccountsAdminActions.deleteSuceeded(payload.userId);
           }
         );
         break;
@@ -24,7 +24,7 @@ export class AccountsAdminAsync {
       case AccountsAdminActions.IMPERSONATE_REQUEST: {
         this.accountsAdminService.impersonate(payload.userId).then(
           ()=> {
-            this.actions.impersonateSuceeded(payload.userId);
+            AccountsAdminActions.impersonateSuceeded(payload.userId);
           }
         );
         break;
@@ -33,13 +33,13 @@ export class AccountsAdminAsync {
         if (payload.add) {
           this.accountsAdminService.addUserRole(payload.userId, payload.role).then(
             ()=> {
-              this.actions.userRoleChangeSuceeded(payload.userId, payload.role, payload.add);
+              AccountsAdminActions.userRoleChangeSuceeded(payload.userId, payload.role, payload.add);
             }
           );
         } else {
           this.accountsAdminService.removeUserRole(payload.userId, payload.role).then(
             ()=> {
-              this.actions.userRoleChangeSuceeded(payload.userId, payload.role, payload.add);
+              AccountsAdminActions.userRoleChangeSuceeded(payload.userId, payload.role, payload.add);
             }
           );
         }
@@ -49,13 +49,13 @@ export class AccountsAdminAsync {
         if (payload.add) {
           this.accountsAdminService.addRole(payload.role).then(
             ()=> {
-              this.actions.systemRoleChangeSuceeded(payload.role, payload.add);
+              AccountsAdminActions.systemRoleChangeSuceeded(payload.role, payload.add);
             }
           );
         } else {
           this.accountsAdminService.removeRole(payload.role).then(
             ()=> {
-              this.actions.systemRoleChangeSuceeded(payload.role, payload.add);
+              AccountsAdminActions.systemRoleChangeSuceeded(payload.role, payload.add);
             }
           );
         }

@@ -14,8 +14,6 @@ import {IPayloadAction} from "../../../../common-app/src/ui/redux/action.interfa
 
 @Injectable()
 export class ForRealCardsAsync {
-  constructor(private forRealCardActions: ForRealCardsActions, private gamePlayAction:GamePlayActions) {
-  }
 
   gameNavigationMiddleware = (state: IForRealCardsState) => next => (action: IPayloadAction) => {
     let payload: IForRealCardsActionPayload = action.payload;
@@ -24,10 +22,10 @@ export class ForRealCardsAsync {
         Meteor.call('ForRealCardsNewGame', payload.password, (error, gameId)=> {
           if (error) {
             log.error(error);
-            this.forRealCardActions.error(error);
+            ForRealCardsActions.error(error);
           } else {
-            this.gamePlayAction.initialize(gameId);
-            this.forRealCardActions.joinGameSuccess(gameId);
+            GamePlayActions.initialize(gameId);
+            ForRealCardsActions.joinGameSuccess(gameId);
           }
         });
         break;
@@ -37,15 +35,15 @@ export class ForRealCardsAsync {
             log.error('ForRealCardsJoinGame returned error');
             log.error(error);
             if (error.error==="gameId-not-found") {
-              this.forRealCardActions.error(new Meteor.Error('gameId-not-found', "That game ID does not exist. Game Id=" + payload.gameId));
+              ForRealCardsActions.error(new Meteor.Error('gameId-not-found', "That game ID does not exist. Game Id=" + payload.gameId));
             } else {
-              this.forRealCardActions.error(error);
+              ForRealCardsActions.error(error);
             }
           } else {
             log.debug('ForRealCardsJoinGame returned OK');
             log.debug(result);
-            this.gamePlayAction.initialize(payload.gameId);
-            this.forRealCardActions.joinGameSuccess(payload.gameId);
+            GamePlayActions.initialize(payload.gameId);
+            ForRealCardsActions.joinGameSuccess(payload.gameId);
           }
         });
         break;
@@ -55,13 +53,13 @@ export class ForRealCardsAsync {
           if (error) {
             log.error('ForRealCardsViewGameCheck returned error');
             log.error(error);
-            this.forRealCardActions.error(error);
+            ForRealCardsActions.error(error);
           } else {
-            this.gamePlayAction.initialize(payload.gameId);
+            GamePlayActions.initialize(payload.gameId);
             if (action.type===ForRealCardsActions.VIEW_GAME_REQUEST)
-              this.forRealCardActions.viewGameSuccess(payload.gameId);
+              ForRealCardsActions.viewGameSuccess(payload.gameId);
             else
-              this.forRealCardActions.loadGameSuccess(payload.gameId);
+              ForRealCardsActions.loadGameSuccess(payload.gameId);
           }
         });
         break;

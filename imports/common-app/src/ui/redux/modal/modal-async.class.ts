@@ -7,7 +7,7 @@ import {ModalService} from "./modal.service";
 
 @Injectable()
 export class ModalAsync {
-  constructor(private actions: ModalActions, private modalService:ModalService) {
+  constructor(private modalService:ModalService) {
   }
 
   modalMiddleware = (state: IModalState) => next => (action: IPayloadAction) => {

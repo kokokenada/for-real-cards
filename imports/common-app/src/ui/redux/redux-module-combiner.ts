@@ -16,7 +16,8 @@ export class ReduxModuleCombiner {
   private reducers: ReducersMapObject = {};
   private middlewares: any[] = []; // TODO: How to I properly type this?
   private enhancers: any[] = [];
-  private ngRedux: NgRedux<IAppState>;
+  public static ngRedux: NgRedux<IAppState>;
+
 
   /**
    * Logs all actions and states after they are dispatched.
@@ -36,7 +37,7 @@ export class ReduxModuleCombiner {
 
   configure(modules: ReduxModule<IAppState, IPayloadAction>[],
             ngRedux: NgRedux<IAppState>) {
-    this.ngRedux = ngRedux;
+    ReduxModuleCombiner.ngRedux = ngRedux;
     modules.forEach((module: ReduxModule<IAppState, IPayloadAction>)=> {
 
       let reducer: ReducersMapObject = {};

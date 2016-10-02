@@ -15,6 +15,7 @@ import {IAppState} from "../../common-app/src/ui/redux/state.interface";
 import {UploaderModule} from "../../common-app/src/ui/redux/uploader/uploader.module";
 import {ModalModule} from "../../common-app/src/ui/redux/modal/modal.module";
 import {AccountsAdminModule} from "../../common-app/src/ui/redux/accounts-admin/accounts-admin.module";
+import {LoginActions} from "../../common-app/src/ui/redux/login/login-actions.class";
 
 @Injectable()
 export class ReduxModules {
@@ -44,6 +45,6 @@ export class ReduxModules {
       this.uploaderModule,
       this.usersModule],
       this.ngRedux);
-    this.loginModule.actions.watchUser(); // for auto login
+    LoginActions.watchUser(); // for auto login
   }
 }

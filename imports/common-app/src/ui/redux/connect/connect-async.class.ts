@@ -12,17 +12,16 @@ import { ConnectActions } from "./connect-actions.class";
 
 @Injectable()
 export class ConnectAsync {
-  constructor(private connectActions: ConnectActions) {}
 
   connect = (action$: Observable<IPayloadAction>) => {
     return action$.filter(({ type }) => type === ConnectActions.CONNECT_START)
       .flatMap(({ payload }) => {
         if (ConnectService.isConnected()) {
           // We're already connected, so dispatch a success reponse
-          return Observable.from([this.connectActions.successFactory(ConnectService.getServerURL())]);
+          return Observable.from([ConnectActions.successFactory(ConnectService.getServerURL())]);
         } else {
           // Not connected,
-          return Observable.from([this.connectActions.attemptFactory(ConnectService.getServerURL())]);
+          return Observable.from([ConnectActions.attemptFactory(ConnectService.getServerURL())]);
         }
       });
   };
@@ -31,10 +30,10 @@ export class ConnectAsync {
     return action$.filter(({ type }) => type === ConnectActions.CONNECT_ATTEMPT)
       .flatMap(({ payload }) => {
         if (ConnectService.isConnected()) {
-          return Observable.from([this.connectActions.successFactory(ConnectService.getServerURL())]);
+          return Observable.from([ConnectActions.successFactory(ConnectService.getServerURL())]);
         } else {
           ConnectService.reconnect();
-          return Observable.from([this.connectActions.attemptFactory(ConnectService.getServerURL())]).delay(5000);
+          return Observable.from([ConnectActions.attemptFactory(ConnectService.getServerURL())]).delay(5000);
         }
       });
   };
@@ -44,7 +43,7 @@ export class ConnectAsync {
       .flatMap(({ payload }) => {
         ConnectService.disconnect();
         ConnectService.setServerTo(payload.serverURL);
-        return Observable.from([this.connectActions.attemptFactory(ConnectService.getServerURL())]);
+        return Observable.from([ConnectActions.attemptFactory(ConnectService.getServerURL())]);
       }
     );
   };

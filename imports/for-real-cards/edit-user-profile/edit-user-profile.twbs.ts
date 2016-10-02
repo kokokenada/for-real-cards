@@ -6,9 +6,6 @@
 import { Component, NgZone } from '@angular/core';
 import { select } from 'ng2-redux';
 
-//import { FormGroup, FormControl } from '@angular/forms';
-import {LoginActions} from "../../common-app/src/ui/redux/login/login-actions.class";
-import {UploaderActions} from "../../common-app/src/ui/redux/uploader/uploader-actions.class";
 import {EditUserProfileBase} from "../../common-app/src/ui-ng2/edit-user-profile/edit-user-profile.base";
 
 @Component({
@@ -79,12 +76,12 @@ export class EditUserProfileTWBS extends EditUserProfileBase {
   @select() loginReducer;
   @select() uploaderReducer;
 
-  constructor(private ngZone:NgZone, private loginActions:LoginActions, private uploaderActions:UploaderActions) {
+  constructor(private ngZone:NgZone) {
     super();
   }
   ngOnInit()
   {
-    this.initialize(this.ngZone, this.loginReducer, this.loginActions, this.uploaderActions, this.uploaderReducer);
+    this.initialize(this.ngZone, this.loginReducer, this.uploaderReducer);
   }
 
 }

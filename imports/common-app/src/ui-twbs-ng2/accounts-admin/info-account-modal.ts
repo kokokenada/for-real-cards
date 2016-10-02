@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountsModal } from './accounts-modal';
-import {ModalActions} from "../../ui/redux/modal/modal-actions.class";
 
 @Component({
   selector: 'info-account-modal',
@@ -26,8 +25,8 @@ import {ModalActions} from "../../ui/redux/modal/modal-actions.class";
 `
 })
 export class InfoAccountModal extends AccountsModal implements OnInit {
-  constructor(private modalActions:ModalActions) {
-    super(modalActions);
+  constructor() {
+    super();
   }
 
   getXMLDump():string {

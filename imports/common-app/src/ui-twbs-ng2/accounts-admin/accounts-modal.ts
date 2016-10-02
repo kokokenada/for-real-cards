@@ -1,16 +1,15 @@
-import { select } from 'ng2-redux';
 import 'meteor/alanning:roles'
 
 import { User } from '../../../../common-app-api/src/api/models/user.model';
-import { IModalState, ModalActions } from "../../ui";
+import { IModalState } from "../../ui";
 import { ModalBase } from "../../ui-ng2";
 
 export class AccountsModal extends ModalBase {
   user:User;
   protected _error:string;
 
-  constructor(modalActions:ModalActions) {
-    super(modalActions)
+  constructor() {
+    super()
   }
 
   ngOnInit() {
