@@ -15,7 +15,7 @@ export abstract class ModalBase<PARAMS, RESULT> implements OnInit{
     );
   }
 
-  close(payload:any=undefined) {
+  close(payload:RESULT=undefined) {
     ModalActions.resolveRequest(payload);
   }
 }
