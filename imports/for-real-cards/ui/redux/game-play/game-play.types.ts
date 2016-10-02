@@ -14,7 +14,6 @@ import {IAppState} from "../../../../common-app/src/ui/redux/state.interface";
 
 export interface IGamePlayState extends IAppState {
   gameId:string;
-  lastNotified:Date;
   hands:List<Hand>;
   tableFaceDown:List<Card>;
   tablePile:List<Card>;
