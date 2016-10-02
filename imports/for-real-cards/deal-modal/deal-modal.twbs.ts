@@ -3,7 +3,7 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 
 import {DealModalBase} from "./deal-modal-base";
 

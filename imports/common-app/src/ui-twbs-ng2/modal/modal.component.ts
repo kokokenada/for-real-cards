@@ -36,12 +36,12 @@ export class ModalDialog implements  OnInit {
       console.log(modalState)
 
       this.ngZone.run( ()=>{
-        if (modalState.opening) {
+        if (modalState.lastEvent===ModalActions.MODAL_OPEN_REQUEST) {
           this.setComponent(modalState.component);
           console.log("openRequest event in ModalDialog")
           this.style = {display: 'inline-block'};
           this.modalActions.openSuccess();
-        } else if (modalState.closing) {
+        } else if (modalState.lastEvent===ModalActions.MODAL_RESOLVE_REQUEST) {
           this.style = {display: "none"}
           this.modalActions.resolveSuccess();
         }

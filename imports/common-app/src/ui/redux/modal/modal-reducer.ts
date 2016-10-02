@@ -8,9 +8,7 @@ const INITIAL_STATE:IModalState = {
   params: {},
   result: {},
   component: null,
-  displaying:false,
-  opening:false,
-  closing:false
+  lastEvent: ''
 };
 
 export function modalReducer(
@@ -20,16 +18,13 @@ export function modalReducer(
   let payload:IModalActionPayload = action.payload;
   switch (action.type) {
     case ModalActions.MODAL_OPEN_REQUEST:
-      console.log('in modalReducer open')
-      console.log(state)
-      console.log(action)
-      return Object.assign({}, state, {params: payload.params, opening:true, component: payload.component});
+      return Object.assign({}, state, {params: payload.params, opening:true, component: payload.component, lastEvent:action.type});
     case ModalActions.MODAL_OPEN_SUCCESS:
-      return Object.assign({}, state, {displaying:true, opening:false});
+      return Object.assign({}, state, {displaying:true, opening:false, lastEvent:action.type});
     case ModalActions.MODAL_RESOLVE_REQUEST:
-      return Object.assign({}, state, {result: payload.result, closing:true});
+      return Object.assign({}, state, {result: payload.result, closing:true, lastEvent:action.type});
     case ModalActions.MODAL_RESOLVE_SUCCESS:
-      return Object.assign({}, state, {closing:false, displaying:false});
+      return Object.assign({}, state, {closing:false, displaying:false, lastEvent:action.type});
     default:
       return state;
   }

@@ -18,9 +18,11 @@ export class ModalService {
       } else {
         this.inProgress = true;
         const subscription:Subscription = this.modalReducer.subscribe(
-          (result:IModalState)=>{
-            if (result.closing) {
-              resolve(result.params);
+          (state:IModalState)=>{
+            console.log('modoal promis sub event')
+            console.log(state)
+            if (state.lastEvent === ModalActions.MODAL_RESOLVE_SUCCESS) {
+              resolve(state.result);
               subscription.unsubscribe();
               this.inProgress = false;
             }

@@ -6,7 +6,6 @@ import { IModalState, ModalActions } from "../../ui";
 import { ModalBase } from "../../ui-ng2";
 
 export class AccountsModal extends ModalBase {
-  @select() modalReducer;
   user:User;
   protected _error:string;
 
@@ -15,7 +14,7 @@ export class AccountsModal extends ModalBase {
   }
 
   ngOnInit() {
-    this.modalReducer.subscribe(
+    this.modalReducer$.subscribe(
       (state:IModalState)=>{
         this.user = state.params.user;
       }
