@@ -26,9 +26,9 @@ import {AccountsAdminActions} from "../../ui/redux/accounts-admin/accounts-admin
               <span class="pull-right">{{role}}</span>
             </li>
           </ul>
-          <p *ngIf="!getRoles().length">This account has no roles.</p>
+          <p *ngIf="!getRoles()">This account has no roles.</p>
           
-          <ul *ngIf="getUnsetRoles().length" class="list-group">
+          <ul *ngIf="getUnsetRoles()" class="list-group">
             <li *ngFor="let newRole of getUnsetRoles()" class="list-group-item">
             <button type="button" (click)="addRole(newRole)" class="btn btn-success">
               <span class="fa fa-plus-circle"></span> 
