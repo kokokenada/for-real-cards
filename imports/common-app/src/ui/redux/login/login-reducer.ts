@@ -1,4 +1,4 @@
-import { User } from "../../../../../common-app-api";
+import { User } from "../../../../../common-app-api/src/api/models/user.model";
 
 import { IPayloadAction } from '../action.interface';
 import { LoginActions } from './login-actions.class';
@@ -17,7 +17,6 @@ export const LOGIN_INITIAL_STATE:ILoginState = {
 export function loginReducer(
   state: ILoginState = LOGIN_INITIAL_STATE,
   action: IPayloadAction): ILoginState {
-
   let payload:ILoginActionPayload = action.payload;
   switch (action.type) {
     case LoginActions.LOGIN_REQUEST:

@@ -1,7 +1,6 @@
-import { Component } from '@angular/core';
-import {AccountsModal} from './accounts-modal';
-import {User} from '../../../../common-app-api';
-import * as log from 'loglevel';
+import { Component, OnInit } from '@angular/core';
+import { AccountsModal } from './accounts-modal';
+import { AccountsAdminActions } from "../../ui/redux/accounts-admin/accounts-admin-actions.class";
 
 declare let Meteor:any;  // Meteor.connection barfs
 
@@ -23,28 +22,10 @@ declare let Meteor:any;  // Meteor.connection barfs
  
 `
 })
-export class ImpersonateAccountModal extends AccountsModal {
-  constructor() {
-    super();
-  }
+export class ImpersonateAccountModal extends AccountsModal implements OnInit {
 
-  static openUser(user:User):Promise<any> {
-    return AccountsModal._open(ImpersonateAccountModal, 'impersonate-account-modal', user);
-  }
-  
   impersonate():void {
-    Meteor.call('impersonateUser', this.user._id, (error)=> {
-      if (error) {
-        this._error = error.message;
-        log.error(error);
-      } else {
-        Meteor.connection.setUserId(this.user._id);
-/*        if (AccountsAdminTools.config.impersonationSuccess) {
-          AccountsAdminTools.config.impersonationSuccess();
-        }*/
-        super.complete();
-      }
-    });
+    AccountsAdminActions.impersonateRequest(this.user._id);
   }
 }
 

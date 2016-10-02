@@ -6,7 +6,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/catch';
 
-import { User } from "../../../../../common-app-api";
+import { User } from "../../../../../common-app-api/src/api/models/user.model";
 
 import { UsersService } from "./users.service";
 import { UsersActions } from "./users-actions.class";
@@ -15,7 +15,6 @@ import { IDocumentChange } from "../../reactive-data/document-change.interface";
 
 @Injectable()
 export class UsersAsync {
-  constructor(private usersActions: UsersActions) {}
 
   watchUsers = (action$: Observable<IPayloadAction>) => {
     return action$.filter(({ type }) => type === UsersActions.WATCH)

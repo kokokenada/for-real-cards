@@ -4,10 +4,10 @@ import * as log from 'loglevel';
 import { Observable } from 'rxjs';
 
 import {Credentials} from "../../services/credentials";
-import {User} from '../../../../../common-app-api';
+import { User } from "../../../../../common-app-api/src/api/models/user.model";
 import {LoginActions} from "./login-actions.class";
 import {IPayloadAction} from "../action.interface";
-import {BaseApp} from "../base-app.class";
+import {ReduxModuleUtil} from "../redux-module-util";
 import {IDocumentChange} from "../../reactive-data/document-change.interface";
 import {MeteorCursorObservers} from "../../reactive-data/meteor-cursor-observers";
 
@@ -23,7 +23,7 @@ export class LoginService {
         (error)=> {
           if (error) {
             log.info(error);
-            reject(BaseApp.errorFactory(LoginActions.LOGIN_ERROR, error));
+            reject(ReduxModuleUtil.errorFactory(LoginActions.LOGIN_ERROR, error));
           } else {
             log.info('Login successful.');
             resolve(
@@ -51,7 +51,7 @@ export class LoginService {
       }, (error)=> {
         if (error) {
           log.error(error);
-          reject(BaseApp.errorFactory(LoginActions.LOGIN_ERROR, error));
+          reject(ReduxModuleUtil.errorFactory(LoginActions.LOGIN_ERROR, error));
         } else {
           log.info("Register successful.")
           resolve(LoginActions.loginSuccessFactory(
@@ -66,7 +66,7 @@ export class LoginService {
     return new Promise((resolve, reject)=>{
       Meteor.call('CommonGetNextSequence', 'temp_user', (error, result)=> {
         if (error) {
-          reject(BaseApp.errorFactory(LoginActions.LOGIN_ERROR, error));
+          reject(ReduxModuleUtil.errorFactory(LoginActions.LOGIN_ERROR, error));
         } else {
           let userId = 'tmp_' + result.toString();
           let credentials:Credentials = new Credentials(
@@ -79,7 +79,7 @@ export class LoginService {
               log.info("Registering tmp user successful.")
               resolve(action);
             }, (error)=> {  // Is this required or can I depend on rejection in AccountTools.register?
-              reject(BaseApp.errorFactory(LoginActions.LOGIN_ERROR, error));
+              reject(ReduxModuleUtil.errorFactory(LoginActions.LOGIN_ERROR, error));
             }
           );
         }
@@ -95,14 +95,14 @@ export class LoginService {
         function (error, numberAffected:number) {
           if (error) {
             log.error(error);
-            reject(BaseApp.errorFactory(LoginActions.LOGIN_ERROR, error));
+            reject(ReduxModuleUtil.errorFactory(LoginActions.LOGIN_ERROR, error));
           } else {
             if (numberAffected === 1) {
               resolve(LoginActions.saveUserResponseFactory(edittedUserObject));
             } else {
               let errorDescription:string = 'Unexpected number of records affected. (' + numberAffected + ')';
               log.error(errorDescription);
-              reject(BaseApp.errorFactory(LoginActions.LOGIN_ERROR, error));
+              reject(ReduxModuleUtil.errorFactory(LoginActions.LOGIN_ERROR, error));
             }
           }
         }
@@ -116,7 +116,7 @@ export class LoginService {
         if (error) {
           log.error('Error logging out')
           log.error(error)
-          reject(BaseApp.errorFactory(LoginActions.LOGIN_ERROR, error));
+          reject(ReduxModuleUtil.errorFactory(LoginActions.LOGIN_ERROR, error));
         } else {
           resolve(LoginActions.loggedOutFactory());
         }
@@ -133,7 +133,7 @@ export class LoginService {
         onStop: (error)=> {
           if (error) {
             log.error(error);
-            reject(BaseApp.errorFactory(LoginActions.LOGIN_ERROR, error));
+            reject(ReduxModuleUtil.errorFactory(LoginActions.LOGIN_ERROR, error));
           }
         }
       });

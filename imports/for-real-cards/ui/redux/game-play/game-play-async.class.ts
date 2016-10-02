@@ -9,14 +9,6 @@ import * as log from 'loglevel';
 import { Observable} from 'rxjs/Observable';
 
 import {
-  BatchAndWatch,
-  IDocumentChange,
-  IPayloadAction,
-  EDocumentChangeType,
-  MeteorCursorObservers
-} from "../../../../common-app";
-
-import {
   GameSubscriptionOptions,
   GAME_SUBSCRIPTION_NAME,
   GamePlayActionCollection,
@@ -27,12 +19,18 @@ import {
 
 import {GamePlayActions} from "./game-play-actions.class";
 import { IGamePlayState, IGamePlayActionPayload } from "./game-play.types";
+import {IPayloadAction} from "../../../../common-app/src/ui/redux/action.interface";
+import {
+  IDocumentChange,
+  EDocumentChangeType
+} from "../../../../common-app/src/ui/reactive-data/document-change.interface";
+import {
+  MeteorCursorObservers,
+  BatchAndWatch
+} from "../../../../common-app/src/ui/reactive-data/meteor-cursor-observers";
 
 @Injectable()
 export class GamePlayAsync {
-
-  constructor(private gamePlayActions: GamePlayActions) {
-  }
 
   gamePlayMiddleware = (gameState: IGamePlayState) => next => (action: IPayloadAction) => {
     let payload: IGamePlayActionPayload = action.payload;
@@ -40,19 +38,19 @@ export class GamePlayAsync {
       case GamePlayActions.GAME_PLAY_ACTION_PUSH:
         Meteor.call('fastcards.NewAction', payload.gamePlayAction, (error)=> {
           if (error) {
-            this.gamePlayActions.error(error);
+            GamePlayActions.error(error);
           }
         });
         break;
       case GamePlayActions.GAME_PLAY_ACTIONSSS_PUSH:
         Meteor.call('fastcards.NewActions', payload.gamePlayActions, (error)=> {
           if (error) {
-            this.gamePlayActions.error(error);
+            GamePlayActions.error(error);
           }
         });
         break;
       case GamePlayActions.GAME_PLAY_INITIALIZE:
-        watchGamePlayActionsAndHand(this.gamePlayActions, payload.gameId);
+        watchGamePlayActionsAndHand(payload.gameId);
         break;
     }
     return next(action);
@@ -84,14 +82,14 @@ function isBufferReady(knownHands:HandInterface[], buffer:GamePlayAction[]):bool
   return wholeBufferReady;
 }
 
-function runSubscription(gamePlayActions: GamePlayActions, gameId:string) {
+function runSubscription(gameId:string) {
   let options: GameSubscriptionOptions = {gameId: gameId};
   return Meteor.subscribe(GAME_SUBSCRIPTION_NAME, options, {
     onStop: (error) => {
       if (error) {
         log.error("Error returned from Meteor.subscribe");
         log.error(error);
-        gamePlayActions.error(error);
+        GamePlayActions.error(error);
       }
     },
     onReady: ()=> {
@@ -100,9 +98,9 @@ function runSubscription(gamePlayActions: GamePlayActions, gameId:string) {
   });
 }
 
-function watchGamePlayActionsAndHand(gamePlayActions: GamePlayActions, gameId:string) {
+function watchGamePlayActionsAndHand(gameId:string) {
   Tracker.autorun(()=> {
-    let subscriptionHandle = runSubscription(gamePlayActions, gameId);
+    let subscriptionHandle = runSubscription(gameId);
 
     let isReady = subscriptionHandle.ready();
     if (isReady) {
@@ -115,13 +113,13 @@ function watchGamePlayActionsAndHand(gamePlayActions: GamePlayActions, gameId:st
         (handChange:IDocumentChange<HandInterface>) => {
           switch (handChange.changeType) {
             case EDocumentChangeType.NEW: {
-              gamePlayActions.newHand(gameId, handChange.newDocument);
+              GamePlayActions.newHand(gameId, handChange.newDocument);
               knownHands.push(handChange.newDocument);
               if (isBufferReady(knownHands, buffer)) {
-                gamePlayActions.receiveActions(buffer);
+                GamePlayActions.receiveActions(buffer);
                 buffer = [];
               }
-              subscriptionHandle = runSubscription(gamePlayActions, gameId); // Rerun subscription so users gets refreshed (reactive join issue)
+              subscriptionHandle = runSubscription(gameId); // Rerun subscription so users gets refreshed (reactive join issue)
               break;
             }
             default: // TODO: handle user leaving
@@ -143,12 +141,12 @@ function watchGamePlayActionsAndHand(gamePlayActions: GamePlayActions, gameId:st
               break;
             }
             default:
-              gamePlayActions.error('only expecting new game state records')
+              GamePlayActions.error('only expecting new game state records')
           }
 
         });
         if (isBufferReady(knownHands, buffer)) {
-          gamePlayActions.receiveActions(buffer);
+          GamePlayActions.receiveActions(buffer);
           buffer = [];
         }
       });
@@ -160,14 +158,14 @@ function watchGamePlayActionsAndHand(gamePlayActions: GamePlayActions, gameId:st
 
               // If the hand is not read yet, defer.  There is probably a more streamy way (Observable.bufferWhen???)
               if ( isHandReady(knownHands, action) ){
-                gamePlayActions.receiveAction(action);
+                GamePlayActions.receiveAction(action);
               } else {
                 buffer.push(action);
               }
               break;
             }
             default:
-              gamePlayActions.error('only expecting new game state records')
+              GamePlayActions.error('only expecting new game state records')
           }
         }
         );

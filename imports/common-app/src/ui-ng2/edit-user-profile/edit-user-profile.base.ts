@@ -2,7 +2,8 @@ import { Observable } from 'rxjs'
 import { NgZone } from '@angular/core';
 import * as log from 'loglevel';
 
-import { AvatarOriginalStore, User } from '../../../../common-app-api';
+import { User } from '../../../../common-app-api/src/api/models/user.model';
+import { AvatarOriginalStore } from '../../../../common-app-api/src/api/models/avatar.model';
 import {PlatformTools} from "../platform-tools/platform-tools";
 import { LoginActions, ILoginState, UploaderActions } from "../../ui";
 import {IUploaderState} from "../../ui/redux/uploader/uploader.types";
@@ -13,13 +14,9 @@ export abstract class EditUserProfileBase {
   userEditted:User;
   uploaderState:IUploaderState;
   private ngZoneBase:NgZone;
-  private loginActionsBase:LoginActions;
-  private uploaderActionsBase:UploaderActions;
 
-  initialize(ngBase:NgZone, loginStateObserver:Observable<ILoginState>, loginActions:LoginActions, uploaderActions:UploaderActions, uploadStateObserver:Observable<IUploaderState>) {
+  initialize(ngBase:NgZone, loginStateObserver:Observable<ILoginState>, uploadStateObserver:Observable<IUploaderState>) {
     this.ngZoneBase = ngBase;
-    this.loginActionsBase = loginActions;
-    this.uploaderActionsBase = uploaderActions;
     loginStateObserver.subscribe( (loginState:ILoginState)=>{
       ngBase.run( ()=>{
         let user:User = loginState.user;
@@ -48,7 +45,7 @@ export abstract class EditUserProfileBase {
     if (this.userEditted.emails[0].address.length===0) {  // remove null address
       this.userEditted.emails.splice(0);
     }
-    this.loginActionsBase.saveUser(this.userEditted);
+    LoginActions.saveUser(this.userEditted);
     this.addEmptyEmailIfNeeded(this.userEditted);
   }
 
@@ -65,7 +62,7 @@ export abstract class EditUserProfileBase {
     }
     this._preventAndStop(event);
     let file = e.dataTransfer.files[0];
-    this.uploaderActionsBase.uploadStartRequest(file, AvatarOriginalStore)
+    UploaderActions.uploadStartRequest(file, AvatarOriginalStore)
     this.hasBaseDropZoneOver = e;
   }
 
@@ -83,7 +80,7 @@ export abstract class EditUserProfileBase {
     console.log(e)
     console.log(e.srcElement.files[0]);
     let file = e.srcElement.files[0];
-    this.uploaderActionsBase.uploadStartRequest(file, AvatarOriginalStore)
+    UploaderActions.uploadStartRequest(file, AvatarOriginalStore)
   }
 
   avatarUrl():string {
@@ -99,7 +96,7 @@ export abstract class EditUserProfileBase {
   }
 
   getImageFromCamera():void {
-    this.uploaderActionsBase.uploadCameraPicRequest(AvatarOriginalStore);
+    UploaderActions.uploadCameraPicRequest(AvatarOriginalStore);
   }
 
 }

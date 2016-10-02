@@ -3,8 +3,7 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 
-import {IAppState} from "../../../../common-app";
-
+import {IAppState} from "../../../../common-app/src/ui/redux/state.interface";
 
 export interface IForRealCardsState extends IAppState {
   gameDescription:string;

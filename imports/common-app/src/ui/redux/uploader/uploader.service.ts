@@ -16,7 +16,7 @@ export interface UploadFileInfo {
 
 export class UploaderService {
 
-  private static addToCommonUploaderOptions(options, actions: UploaderActions) {
+  private static addToCommonUploaderOptions(options) {
     return Object.assign({},
       {
         adaptive: true,
@@ -31,22 +31,22 @@ export class UploaderService {
         maxTries: 5,
 
         onError: function (err) {
-          actions.uploadError(err);
+          UploaderActions.uploadError(err);
         },
         onAbort: function (file) {
           console.log(file.name + ' upload has been aborted');
         },
         onComplete: function (file) {
-          actions.uploadSuccess(file._id);
+          UploaderActions.uploadSuccess(file._id);
         },
         onCreate: function (file) {
           console.log(file.name + ' has been created with ID ' + file._id);
         },
         onProgress: function (file, progress) {
-          actions.uploadProgress(file.name, progress * 100);
+          UploaderActions.uploadProgress(file.name, progress * 100);
         },
         onStart: function (file) {
-          actions.uploadStarted(file.name);
+          UploaderActions.uploadStarted(file.name);
         },
         onStop: function (file) {
           console.log(file.name + ' stopped');
@@ -55,7 +55,7 @@ export class UploaderService {
     );
   }
 
-  private static makeUploader(file, collection, uploaderActions: UploaderActions): any {
+  private static makeUploader(file, collection): any {
     // Prepare the file to insert in database, note that we don't provide an URL,
     // it will be set automatically by the uploader when file transfer is complete.
     let passedFile = {
@@ -80,18 +80,18 @@ export class UploaderService {
           // The document to save in the collection
           file: passedFile,
           // The error callback
-        }, uploaderActions)
+        })
     );
     return uploader;
   }
 
-  static uploadFileRequest(currentFile, collection, actions: UploaderActions): void {
-    let uploader = UploaderService.makeUploader(currentFile, collection, actions);
-    actions.uploadStartResponse(uploader);
+  static uploadFileRequest(currentFile, collection): void {
+    let uploader = UploaderService.makeUploader(currentFile, collection);
+    UploaderActions.uploadStartResponse(uploader);
     uploader.start();
   }
 
-  static uploadImageFromCamera(collection, actions: UploaderActions, options = {
+  static uploadImageFromCamera(collection, options = {
     quality: 50,
     destinationType: Camera.DestinationType.FILE_URI,
     sourceType: Camera.PictureSourceType.CAMERA,
@@ -104,12 +104,12 @@ export class UploaderService {
     correctOrientation: true
   }): void {
     if (!Meteor.isCordova) {
-      actions.uploadError('This is a cordova only function');
+      UploaderActions.uploadError('This is a cordova only function');
     } else {
       MeteorCameraUI.getPicture({ width: options.targetWidth, height: options.targetHeight }, (error, dataURL) => {
 
         if (error) {
-          actions.uploadError(error);
+          UploaderActions.uploadError(error);
         }
 
         const blob = MeteorCameraUI.dataURIToBlob(dataURL);
@@ -122,10 +122,10 @@ export class UploaderService {
           data: blob,
           file: file,
           store: collection
-        }, actions));
+        }));
 
         uploader.start();
-        actions.uploadStartResponse(uploader);
+        UploaderActions.uploadStartResponse(uploader);
 
       });
     }

@@ -1,5 +1,5 @@
 
-import { User } from '../../../../../common-app-api';
+import { User } from "../../../../../common-app-api/src/api/models/user.model";
 import { Credentials } from "../../services/credentials";
 import { IDocumentChange } from "../../reactive-data/document-change.interface";
 
@@ -20,5 +20,6 @@ export interface ILoginActionPayload {
   userId?: string,
   documentChange?:IDocumentChange<User>,
   autoLogin?: boolean
+  error?: any
 }
 

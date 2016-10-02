@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { CommonPopupModal } from "../../ui-ng2/common-popups/common-popup.class";
 
@@ -20,9 +20,4 @@ import { CommonPopupModal } from "../../ui-ng2/common-popups/common-popup.class"
 `
   })
 export class ConfirmModal extends CommonPopupModal {
-  @Input() componentParameters;
-  
-  constructor() {
-    super();
-  }
 }

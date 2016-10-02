@@ -97,7 +97,7 @@ shell-server@0.2.1
 spacebars@1.0.12
 spacebars-compiler@1.0.12
 srp@1.0.9
-standard-minifier-css@1.2.0
+standard-minifier-css@1.2.1
 standard-minifier-js@1.2.0
 templating@1.2.14
 templating-tools@1.0.4

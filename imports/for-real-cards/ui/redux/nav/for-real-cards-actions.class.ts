@@ -1,15 +1,6 @@
-/**
- * Copyright Ken Ono, Fabrica Technolology 2016
- * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
- */
+import {ReduxModuleUtil} from "../../../../common-app/src/ui/redux/redux-module-util";
+import {ReduxModuleCombiner} from "../../../../common-app/src/ui/redux/redux-module-combiner";
 
-import { Injectable } from '@angular/core';
-import { NgRedux } from 'ng2-redux';
-
-
-import { BaseApp, IAppState } from '../../../../common-app';
-
-@Injectable()
 export class ForRealCardsActions {
   private static prefix = 'FRC_';
   static START_NEW_GAME_REQUEST = ForRealCardsActions.prefix + 'START_NEW_GAME_REQUEST';
@@ -21,38 +12,35 @@ export class ForRealCardsActions {
   static LOAD_GAME_REQUEST = ForRealCardsActions.prefix + 'LOAD_GAME_REQUEST';
   static LOAD_GAME_SUCCESS = ForRealCardsActions.prefix + 'LOAD_GAME_SUCCESS';
 
-  constructor(private ngRedux: NgRedux<IAppState>) {
+  static newGame(password:string) : void {
+    ReduxModuleCombiner.ngRedux.dispatch({type:ForRealCardsActions.START_NEW_GAME_REQUEST, payload: {password:password}});
   }
 
-  newGame(password:string) : void {
-    this.ngRedux.dispatch({type:ForRealCardsActions.START_NEW_GAME_REQUEST, payload: {password:password}});
+  static joinGameRequest(gameId:string, password:string) : void {
+    ReduxModuleCombiner.ngRedux.dispatch({type:ForRealCardsActions.JOIN_GAME_REQUEST, payload: {gameId:gameId , password:password}});
   }
 
-  joinGameRequest(gameId:string, password:string) : void {
-    this.ngRedux.dispatch({type:ForRealCardsActions.JOIN_GAME_REQUEST, payload: {gameId:gameId , password:password}});
+  static joinGameSuccess(gameId:string) {
+    ReduxModuleCombiner.ngRedux.dispatch({type:ForRealCardsActions.JOIN_GAME_SUCCESS, payload: {gameId:gameId}});
   }
 
-  joinGameSuccess(gameId:string) {
-    this.ngRedux.dispatch({type:ForRealCardsActions.JOIN_GAME_SUCCESS, payload: {gameId:gameId}});
+  static loadGameRequest(gameId:string, password:string) {
+    ReduxModuleCombiner.ngRedux.dispatch({type:ForRealCardsActions.LOAD_GAME_REQUEST, payload: {gameId:gameId , password:password}});
   }
 
-  loadGameRequest(gameId:string, password:string) {
-    this.ngRedux.dispatch({type:ForRealCardsActions.LOAD_GAME_REQUEST, payload: {gameId:gameId , password:password}});
+  static loadGameSuccess(gameId:string) {
+    ReduxModuleCombiner.ngRedux.dispatch({type:ForRealCardsActions.LOAD_GAME_SUCCESS, payload: {gameId:gameId}});
   }
 
-  loadGameSuccess(gameId:string) {
-    this.ngRedux.dispatch({type:ForRealCardsActions.LOAD_GAME_SUCCESS, payload: {gameId:gameId}});
+  static viewGameRequest(gameId:string, password:string) {
+    ReduxModuleCombiner.ngRedux.dispatch({type:ForRealCardsActions.VIEW_GAME_REQUEST, payload: {gameId:gameId , password:password}});
   }
 
-  viewGameRequest(gameId:string, password:string) {
-    this.ngRedux.dispatch({type:ForRealCardsActions.VIEW_GAME_REQUEST, payload: {gameId:gameId , password:password}});
+  static viewGameSuccess(gameId:string) {
+    ReduxModuleCombiner.ngRedux.dispatch({type:ForRealCardsActions.VIEW_GAME_SUCCESS, payload: {gameId:gameId}});
   }
 
-  viewGameSuccess(gameId:string) {
-    this.ngRedux.dispatch({type:ForRealCardsActions.VIEW_GAME_SUCCESS, payload: {gameId:gameId}});
-  }
-
-  error(error) {
-    this.ngRedux.dispatch( BaseApp.errorFactory(ForRealCardsActions.ENTER_GAME_FAIL, error) );
+  static error(error) {
+    ReduxModuleCombiner.ngRedux.dispatch( ReduxModuleUtil.errorFactory(ForRealCardsActions.ENTER_GAME_FAIL, error) );
   }
 }

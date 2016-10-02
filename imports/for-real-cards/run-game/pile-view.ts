@@ -12,7 +12,6 @@ import { CardImageStyle } from "../api/index";
 @Component(
   {
     selector: 'pile-view',
-    directives: [PlayingCard],
     template: `
 
 <playing-card 

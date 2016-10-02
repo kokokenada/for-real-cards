@@ -1,28 +1,19 @@
-/**
- * Created by kenono on 2016-04-16.
- */
-
 import { Component, Input, NgZone } from '@angular/core';
-import { DROPDOWN_DIRECTIVES } from 'ng2-bootstrap/ng2-bootstrap';
-
-import { Menus, MenuItem } from "../ui/index";
-import { MenuFilterPipe}  from '../ui-ng2';
+import { Menus, MenuItem } from "../../ui/index";
 
 
 @Component({
   selector: 'popover-menu',
-  directives: [DROPDOWN_DIRECTIVES],
-  pipes: [MenuFilterPipe],
   template: `
 
-    <span dropdown (on-toggle)="toggled($event)">
-      <span dropdownToggle class="fa fa-bars" style="font-size: x-large" aria-hidden="true"></span>
-      <ul class="dropdown-menu dropdown-menu-right" >
+    <span dropdown>
+      <span dropdownToggle class="fa fa-bars" style="font-size: x-large"></span>
+      <ul dropdownMenu class="dropdown-menu dropdown-menu-right" >
         <li
             *ngFor="let item of getMenuItems() | menuFilter"
             (click)="itemSelected(item)"
         >
-          <p>{{item.title}}</p>
+          <p class="dropdown-item">{{item.title}}</p>
         </li>      
       </ul>
     </span>

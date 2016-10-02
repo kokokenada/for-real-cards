@@ -7,7 +7,7 @@ import * as log from 'loglevel';
 let run:any;
 declare let require:any;
 
-import { PlatformTools, TargetPlatformId } from '../imports/common-app';
+import { PlatformTools, TargetPlatformId } from '../imports/common-app/src/ui-ng2/platform-tools/platform-tools';
 if (Meteor.isCordova) {
   console.log("Cordova detected. Setting platform to TWBS_WEB.");
   PlatformTools.setTargetPlatform(TargetPlatformId.TWBS_WEB); // or IONIC

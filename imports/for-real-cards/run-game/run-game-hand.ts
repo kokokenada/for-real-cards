@@ -5,25 +5,19 @@
 
 import { Component, Input, Injector, OnInit, ViewEncapsulation } from '@angular/core';
 import { Meteor } from 'meteor/meteor';
-import { Dragula } from 'ng2-dragula/ng2-dragula';
-
-
-import { CommonAppButton, CommonPopups, PlatformTools, Tools } from '../../common-app';
 
 import { RunGame } from './run-game.ts';
 import { DealModalService } from "../deal-modal/deal-modal.service"
-import { PlayingCard } from "../playing-card/playing-card";
 import { Card, CardImageStyle, GameConfig, CardLocation, CardCountAllowed, Hand} from "../api";
 import { ActionFormatted, GamePlayActions} from "../ui";
-import { DeckView } from "./deck-view";
-import { PileView } from "./pile-view";
 
 import template from "./run-game-hand.html"
+import {PlatformTools} from "../../common-app/src/ui-ng2/platform-tools/platform-tools";
+import {Tools} from "../../common-app/src/ui/services/tools";
 
 @Component(
   {
     selector: 'run-game-hand',
-    directives: [DeckView, Dragula, PileView, PlayingCard, CommonAppButton],
     providers: [DealModalService],
     encapsulation: ViewEncapsulation.None, // Require for Dragula .gu-transit
     template: template
@@ -81,7 +75,7 @@ export class RunGameHand extends RunGame implements OnInit {
   }
   
   takeTrick():void {
-    this.gamePlayActions.takeTrick(this.gameState);
+    GamePlayActions.takeTrick(this.gameState);
   }
   
   shouldShowSort():boolean {
@@ -101,7 +95,7 @@ export class RunGameHand extends RunGame implements OnInit {
       let card = hand.cardsInHand[i];
       cardOrder.push(card);
     }
-    this.gamePlayActions.sortHand(this.gameState, cardOrder);
+    GamePlayActions.sortHand(this.gameState, cardOrder);
   }
 
   deal() {
@@ -111,10 +105,10 @@ export class RunGameHand extends RunGame implements OnInit {
     this.dealModelService.open(defaultGameConfig).then(
       (gameConfig:GameConfig)=>{
         if (gameConfig) {
-          this.gamePlayActions.deal(this.gameState, gameConfig);
+          GamePlayActions.deal(this.gameState, gameConfig);
         }
       }, (error)=> {
-        CommonPopups.alert(error);
+        this.commonPopups.alert(error);
       }
     );
   }
@@ -129,13 +123,13 @@ export class RunGameHand extends RunGame implements OnInit {
 
     let prompt:string = "Undo " + action.actionDescription() + " done by "
       + (action.creatorId === Meteor.userId() ? "yourself" : action.creator());
-    CommonPopups.confirm(prompt).then(
+    this.commonPopups.confirm(prompt).then(
       (result)=> {
         if (result) {
-          this.gamePlayActions.undo(this.gameState, action._id);
+          GamePlayActions.undo(this.gameState, action._id);
         }
       }, (error)=> {
-        CommonPopups.alert(error);
+        this.commonPopups.alert(error);
       }
     );
   }

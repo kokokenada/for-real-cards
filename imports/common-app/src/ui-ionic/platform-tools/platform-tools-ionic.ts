@@ -7,9 +7,6 @@ import { Injectable, Injector } from '@angular/core'
 declare let NavParams:any;
 declare let Modal:any;
 
-import {ModalEventType, ModalEvent} from "../../ui-ng2/modal/modal-event.class";
-import {ModalService} from "../../ui-ng2/modal/modal.service";
-
 @Injectable()
 export class PlatformToolsIonic {
   private static nav:any;
@@ -17,18 +14,6 @@ export class PlatformToolsIonic {
   static initializeWithRouter(nav:any) {
     PlatformToolsIonic.nav = nav;
     let modalInstance;
-    ModalService.subscribe((modalEvent:ModalEvent)=> {
-      if (modalEvent.eventType === ModalEventType.OPEN) {
-        modalInstance = Modal.create(modalEvent.componentType, modalEvent.componentParameters);
-        nav.present(modalInstance).then(
-          (result)=>{
-            ModalService.notifyDisplayed();
-          }
-        );
-      } else if (modalEvent.eventType === ModalEventType.CLOSE) {
-        modalInstance.dismiss();
-      }
-    });
   }
   private static checkInit() {
     if (!PlatformToolsIonic.nav) {

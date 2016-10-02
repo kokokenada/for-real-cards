@@ -1,5 +1,5 @@
 import * as moment from 'moment';
-import {AccountTools} from '/imports/common-app';
+import {AccountTools} from '../../common-app/src/ui/services/account-tools';
 
 
 

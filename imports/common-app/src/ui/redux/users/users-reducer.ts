@@ -3,8 +3,8 @@ import Immutable = require('immutable');
 import { IPayloadAction } from '../action.interface';
 import { UsersActions } from './users-actions.class';
 import {IUsersActionPayload, IUsersState  } from './users.types'
-import {BaseApp} from "../base-app.class";
-import {User} from "../../../../../common-app-api/";
+import { ReduxModuleUtil } from "../redux-module-util";
+import { User } from "../../../../../common-app-api/src/api/models/user.model";
 import {IDocumentChange, EDocumentChangeType} from "../../reactive-data/document-change.interface";
 
 const INITIAL_STATE:IUsersState = {
@@ -19,7 +19,7 @@ export function usersReducer(
   let payload:IUsersActionPayload = action.payload;
   switch (action.type) {
     case UsersActions.READ_BATCH_RESPONSE:
-      return {users: BaseApp.arrayToMap<User>(payload.users) };
+      return {users: ReduxModuleUtil.arrayToMap<User>(payload.users) };
     case UsersActions.CHANGE:
       let changeDoc:IDocumentChange<User>=payload.documentChange;
       switch (changeDoc.changeType) {

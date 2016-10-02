@@ -1,18 +1,20 @@
-/**
+/*
  * Copyright Ken Ono, Fabrica Technolology 2016
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 //import { require } from 'meteor/modules'
 declare var require:any;
 
-import { Injectable, Inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 
-import { ModalService, PlatformTools } from '/imports/common-app';
 
 import { GameConfig } from "../api/index";
+import {ModalService} from "../../common-app/src/ui/redux/modal/modal.service";
+import {PlatformTools} from "../../common-app/src/ui-ng2/platform-tools/platform-tools";
 
 @Injectable()
 export class DealModalService {
+  constructor(private modalService:ModalService) {}
   open(gameConfig:GameConfig):Promise<GameConfig> {
     let dealModal;
     if (PlatformTools.isIonic()) {
@@ -22,6 +24,6 @@ export class DealModalService {
     } else {
       throw "Unsupported platform";
     }
-    return ModalService.open(dealModal, "frc-deal-modal", {gameConfig: gameConfig});
+    return this.modalService.asPromise<GameConfig>(dealModal, {gameConfig: gameConfig});
   }
 }

@@ -73,7 +73,7 @@ export class DragAndDrop {
   }
   
   
-  runActions(gamePlayActions:GamePlayActions) {
+  runActions() {
     switch (this.source) {
       case CardLocation.HAND: {
         switch (this.target) {
@@ -89,22 +89,22 @@ export class DragAndDrop {
                 cardOrder.push(card);
               }
             }
-            gamePlayActions.sortHand(this.gameState, cardOrder);
+            GamePlayActions.sortHand(this.gameState, cardOrder);
             this.el.remove(); // Let actions observable update
             break;
           }
           case CardLocation.DECK: {
-            gamePlayActions.handToDeck(this.gameState, this.suit, this.rank);
+            GamePlayActions.handToDeck(this.gameState, this.suit, this.rank);
             this.el.remove(); // Let actions observable update
             break;
           }
           case CardLocation.PILE: {
-            gamePlayActions.handToPile(this.gameState, this.suit, this.rank);
+            GamePlayActions.handToPile(this.gameState, this.suit, this.rank);
             this.el.remove(); // Let actions observable update
             break;
           }
           case CardLocation.TABLE: {
-            gamePlayActions.cardToTable(this.gameState, this.suit, this.rank, VisibilityType.ALL);
+            GamePlayActions.cardToTable(this.gameState, this.suit, this.rank, VisibilityType.ALL);
             this.el.remove(); // Let actions observable update
             break;
           }
@@ -116,7 +116,7 @@ export class DragAndDrop {
       case CardLocation.DECK: {
         switch (this.target) {
           case CardLocation.HAND: {
-            gamePlayActions.deckToHand(this.gameState, VisibilityType.PLAYER);
+            GamePlayActions.deckToHand(this.gameState, VisibilityType.PLAYER);
             this.el.remove(); // Let actions observable update
             break;
           }
@@ -143,12 +143,12 @@ export class DragAndDrop {
       case CardLocation.PILE: {
         switch (this.target) {
           case CardLocation.HAND: {
-            gamePlayActions.pileToHand(this.gameState, this.suit, this.rank);
+            GamePlayActions.pileToHand(this.gameState, this.suit, this.rank);
             this.el.remove(); // Let actions observable update
             break;
           }
           case CardLocation.DECK: {
-            gamePlayActions.pileToDeck(this.gameState, [this.getCard()]);
+            GamePlayActions.pileToDeck(this.gameState, [this.getCard()]);
             this.el.remove(); // Let actions observable update
             break;
           }
@@ -170,7 +170,7 @@ export class DragAndDrop {
       case CardLocation.TABLE: {
         switch (this.target) {
           case CardLocation.HAND: {
-            gamePlayActions.tableToHand(this.gameState, this.suit, this.rank);
+            GamePlayActions.tableToHand(this.gameState, this.suit, this.rank);
             this.el.remove(); // Let actions observable update
             break;
           }

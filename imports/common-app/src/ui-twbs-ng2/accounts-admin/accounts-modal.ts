@@ -1,39 +1,31 @@
-import { Input } from '@angular/core';
 import 'meteor/alanning:roles'
-import {Type} from '@angular/core';
 
-import { User} from '../../../../common-app-api';
-import {ModalService} from '../../ui-ng2/modal/modal.service';
+import { User } from '../../../../common-app-api/src/api/models/user.model';
+import { IModalState } from "../../ui";
+import { ModalBase } from "../../ui-ng2";
 
-export class AccountsModal {
-  @Input() componentParameters;
+export class AccountsModal extends ModalBase {
   user:User;
   protected _error:string;
 
   constructor() {
+    super()
   }
 
-  ngOnChanges(obj) {
-//    console.log("ngOnChnages accounts modal")
-//    console.log(this)
-    if (obj.componentParameters) {
-      this.user = this.componentParameters.user;
-      if (this.user && !this.user.profile)
-        this.user.profile = {};
-    }
-//    console.log(this)
-  }
-
-  protected static _open(component:Type, selector:string, user:User):Promise<any> {
-    return ModalService.open(component, selector, {user: user})
+  ngOnInit() {
+    this.modalReducer$.subscribe(
+      (state:IModalState)=>{
+        this.user = state.params.user;
+      }
+    );
   }
 
   cancel() {
-    ModalService.close(false);
+    this.close(false);
   }
 
   complete() {
-    ModalService.close(true);
+    this.close(true);
   }
 
   get error():string {
@@ -50,7 +42,4 @@ export class AccountsModal {
     return User.getDisplayName(this.user);
   }
 
-  timeoutApply():void {
-    //Meteor.setTimeout(()=>{this.$scope.$apply()}, 0)
-  }
 }

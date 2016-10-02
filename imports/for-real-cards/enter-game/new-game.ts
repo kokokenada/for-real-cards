@@ -5,8 +5,8 @@
 
 import * as log from 'loglevel';
 import {Component} from '@angular/core';
-import {PlatformTools, TargetPlatformId} from '../../common-app';
 import {ForRealCardsActions} from "../ui/redux/nav/for-real-cards-actions.class";
+import {PlatformTools, TargetPlatformId} from "../../common-app/src/ui-ng2/platform-tools/platform-tools";
 
 function template():string {
   switch (PlatformTools.getTargetPlatforrm()) {
@@ -40,7 +40,7 @@ function template():string {
     <div class="panel-body">
       <div class="form-group">
         <label for="password">Password (optional):</label>
-        <input class="form-control" [(ngModel)]="password" type="text" id="password">
+        <input class="form-control" [(ngModel)]="password" name="password" type="text" id="password">
       </div>
       <button type="button" class="btn btn-success btn-block" (click)="newGame()">
         Start Game
@@ -62,11 +62,8 @@ function template():string {
 )
 export class NewGame {
   password:string;
-  constructor(private forRealCardsActions:ForRealCardsActions) {
-
-  }
   newGame() {
-    this.forRealCardsActions.newGame(this.password);
+    ForRealCardsActions.newGame(this.password);
   }
 }
 

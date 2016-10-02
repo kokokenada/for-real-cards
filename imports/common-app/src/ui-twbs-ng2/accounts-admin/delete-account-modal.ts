@@ -1,8 +1,7 @@
-import { Meteor } from 'meteor/meteor';
-import {Component} from '@angular/core';
+
+import {Component, OnInit} from '@angular/core';
 import {AccountsModal} from './accounts-modal';
-import {User} from '../../../../common-app-api';
-import * as log from 'loglevel';
+import {AccountsAdminActions} from "../../ui/redux/accounts-admin/accounts-admin-actions.class";
 
 @Component({
   selector: 'delete-account-modal',
@@ -18,23 +17,9 @@ import * as log from 'loglevel';
 		
 `
 })
-export class DeleteAccountModal extends AccountsModal {
-  constructor() {
-    super();
-  }
-
-  static openUser(user:User) {
-    return AccountsModal._open(DeleteAccountModal, 'delete-account-modal', user);
-  }
-
-
+export class DeleteAccountModal extends AccountsModal implements OnInit {
   deleteAccount() {
-    Meteor.call('deleteUser', this.user._id, (error)=> {
-      if (error) {
-        log.error(error);
-        this._error = error.message;
-      }
-      this.complete();
-    });
+    AccountsAdminActions.deleteRequest(this.user._id);
+    this.close();
   }
 }

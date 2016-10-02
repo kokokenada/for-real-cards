@@ -10,24 +10,23 @@ import { select } from 'ng2-redux';
 
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
 
-
 import { Card, CardCountAllowed, CardLocation, Deck, DeckLocation, GameConfig, Hand } from '../api';
 import { DragAndDrop, ForRealCardsActions, GameRenderingTools, INITIAL_STATE_GAME_PLAY, INITIAL_STATE_FOR_REAL_CARDS } from '../ui';
 
 import { CardImageStyle} from "../api/interfaces/card-image-style.interface";
 import { GamePlayActions, IForRealCardsState, IGamePlayRecord} from "../ui";
 import {DealModalService} from "../deal-modal/deal-modal.service";
+import {CommonPopups} from "../../common-app/src/ui-ng2/common-popups/common-popups";
 
 
 export abstract class RunGame {
   @select() gamePlayReducer$;
   @select() forRealCardsReducer$;
-  gamePlayActions :GamePlayActions;
   dragulaService: DragulaService;
   ngZone:NgZone;
-  forRealCardsActions:ForRealCardsActions;
   injector: Injector;
   dealModelService:DealModalService;
+  commonPopups:CommonPopups;
 
   abstract childInit();
   gameState:IGamePlayRecord;
@@ -36,11 +35,10 @@ export abstract class RunGame {
 
   constructor(injector: Injector) {
     this.injector = injector;
-    this.gamePlayActions = injector.get(GamePlayActions);
     this.dragulaService = injector.get(DragulaService);
     this.ngZone = injector.get(NgZone);
-    this.forRealCardsActions = injector.get(ForRealCardsActions);
     this.dealModelService = injector.get(DealModalService);
+    this.commonPopups = injector.get(CommonPopups);
   }
 
   ngOnInit() {
@@ -62,7 +60,7 @@ export abstract class RunGame {
           if (pathname.length>=3) {
             let subUrl:string = pathname[1];
             let gameId:string = pathname[2];
-            this.forRealCardsActions.loadGameRequest(gameId, '');
+            ForRealCardsActions.loadGameRequest(gameId, '');
           }
         }
       });
@@ -118,7 +116,7 @@ export abstract class RunGame {
 //        console.log('drop')
 //        console.log(dragAndDrop)
 
-        dragAndDrop.runActions(this.gamePlayActions);
+        dragAndDrop.runActions();
         
       });
     }
@@ -237,7 +235,7 @@ export abstract class RunGame {
   }
 
   showHand():void {
-    this.gamePlayActions.showHand(this.gameState);
+    GamePlayActions.showHand(this.gameState);
   }
   
   landscapeCardStyle():CardImageStyle {

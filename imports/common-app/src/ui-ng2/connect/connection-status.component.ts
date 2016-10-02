@@ -24,10 +24,10 @@ import {IConnectState, ConnectActions} from "../../ui";
 export class ConnectionStatus implements OnInit {
   @select() connectReducer;
   connectState:IConnectState;
-  constructor(private ngZone:NgZone, private connectActions:ConnectActions) {}
+  constructor(private ngZone:NgZone) {}
 
   ngOnInit() {
-    this.connectActions.checkConnection();
+    ConnectActions.checkConnection();
     this.connectReducer.subscribe( (state:IConnectState)=>{
       this.ngZone.run( ()=> {
         this.connectState = state;
@@ -41,7 +41,7 @@ export class ConnectionStatus implements OnInit {
     let url:string = window.prompt("New server address", this.connectState.serverURL);
     if (url !== null) {
       localStorage.setItem('server_url', url);
-      this.connectActions.setServerURL(url);
+      ConnectActions.setServerURL(url);
     }
   };
 }

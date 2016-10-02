@@ -1,6 +1,6 @@
 ///<reference path='../../../../../../node_modules/immutable/dist/immutable.d.ts'/>
 import Immutable = require('immutable');
-import {User} from "../../../../../common-app-api";
+import { User } from "../../../../../common-app-api/src/api/models/user.model";
 import {IDocumentChange } from "../../reactive-data/document-change.interface";
 
 export interface IUsersState {

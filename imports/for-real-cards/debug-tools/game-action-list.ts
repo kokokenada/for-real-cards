@@ -6,13 +6,10 @@
 import { Component, Input, NgZone } from '@angular/core';
 import { select } from 'ng2-redux';
 
-import { AccountTools, PlatformTools } from '../../common-app';
-
 import { GamePlayAction, Hand } from '../api/index'
 import { ActionFormatted, ForRealCardsActions, IGamePlayState } from "../ui";
-
-import { TopFrameHeader } from "../top-frame/top-frame-header";
-import { PlayingCard } from "../playing-card/playing-card"
+import {PlatformTools} from "../../common-app/src/ui-ng2/platform-tools/platform-tools";
+import {AccountTools} from "../../common-app/src/ui/services/account-tools";
 
 function genericTableContent():string {
 return `
@@ -20,18 +17,19 @@ return `
   <div class="form-group">
     <label class="control-label" for="gameId">Game Id:</label>
     <input 
-      [(ngModel)]="gameId" 
+      [(ngModel)]="gameId"
+      name="gameId"
       type="text" 
       class="form-control" 
       id="gameId"
       ngControl="formGameId" 
-      #formGameId="ngForm" 
+      #formGameId="ngModel" 
       required
     />
   </div>
   <div class="form-group">
     <label class="control-label" for="password">Password (if required):</label>
-    <input [(ngModel)]="password" type="text" class="form-control" id="password"/>
+    <input [(ngModel)]="password" name="password" type="text" class="form-control" id="password"/>
   </div>
   <button class="xs-col-4"
     [disabled]="!displayGameForm.form.valid" 
@@ -157,7 +155,6 @@ function template():string {
 
 @Component({
   selector: 'game-action-list',
-  directives: [PlayingCard, TopFrameHeader],
   template: template()}
 )
 export class GameActionList {
@@ -166,7 +163,7 @@ export class GameActionList {
   password: string;
   gameId: string;
 
-  constructor(private forRealCardsActions:ForRealCardsActions, private ngZone:NgZone) {}
+  constructor(private ngZone:NgZone) {}
 
   ngOnInit() {
     this.gamePlayReducer.subscribe( (gamePlayState:IGamePlayState)=>{
@@ -177,7 +174,7 @@ export class GameActionList {
   }
 
   displayGame() {
-    this.forRealCardsActions.loadGameRequest(this.gameId, this.password);
+    ForRealCardsActions.loadGameRequest(this.gameId, this.password);
   }
 
   getActions():GamePlayAction[] {

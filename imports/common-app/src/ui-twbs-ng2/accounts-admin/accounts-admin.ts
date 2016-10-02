@@ -1,16 +1,16 @@
 import { Component, NgZone } from '@angular/core';
 import { Session } from 'meteor/session';
-import { PagingTools, FilterDefinition, SortDefinitionSingle } from "../../ui"
-import { User, AccountsAdminTools, Field } from '../../../../common-app-api';
+import { FilterDefinition, SortDefinitionSingle } from '../../../../common-app-api/src/api/services/page-tools';
+import { User } from '../../../../common-app-api/src/api/models/user.model';
+import { AccountsAdminTools, Field } from '../../../../common-app-api/src/api/services/accounts-admin-tools';
 
 import { UpdateAccountModal } from './update-account-modal';
 import {DeleteAccountModal} from "./delete-account-modal";
 import { Tracker } from 'meteor/tracker'
-import {CommonPopupsTWBS} from '../common-popups/common-popups.twbs'
 import {InfoAccountModal} from './info-account-modal'
 import {ImpersonateAccountModal} from './impersonate-account-modal';
 import {UpdateRolesModal} from "./update-roles-modal";
-import {AccountTools} from "../../ui/index";
+import {AccountTools, ModalActions} from "../../ui/index";
 
 @Component({
   selector: 'accounts-admin',
@@ -84,41 +84,24 @@ export class AccountsAdmin {
   }
 
   updateUser(user:User) {
-    UpdateAccountModal.openUser(user)
+    ModalActions.openRequest(UpdateAccountModal, {user});
   }
 
   deleteUser(user:User) {
-    DeleteAccountModal.openUser(user).then(
-      (payload:boolean)=> {
-        if (payload) {
-          this.computation.invalidate();
-        }
-      },
-      (error)=>{
-        CommonPopupsTWBS.alert(error)
-      }
-    );
+    ModalActions.openRequest(DeleteAccountModal, {user});
   }
 
   infoUser(user:User) {
-    InfoAccountModal.openUser(user);
+    ModalActions.openRequest(InfoAccountModal, {user});
   }
 
   impersonateUser(user:User) {
-    ImpersonateAccountModal.openUser(user);
+    ModalActions.openRequest(ImpersonateAccountModal, {user});
   }
 
   updateRoles() {
-    UpdateRolesModal.openRoles().then(
-      (payload:boolean)=> {
-        if (payload) {
-          this.computation.invalidate();
-        }
-      },
-      (error)=>{
-        CommonPopupsTWBS.alert(error)
-      }
-    );
+    ModalActions.openRequest(UpdateRolesModal);
+//          this.computation.invalidate();
   }
 
   fields():Field[] {

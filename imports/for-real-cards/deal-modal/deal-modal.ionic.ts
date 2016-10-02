@@ -5,14 +5,11 @@
 
 import { Component, Input } from '@angular/core';
 
-import { ModalService } from '/imports/common-app';
-
 import {DealModalBase} from "./deal-modal-base";
 
 @Component(
   {
     selector: 'frc-deal-modal',
-    providers: [ModalService],
     templateUrl: '/imports/for-real-cards/deal-modal/deal-modal.ionic.html'
   }
 )

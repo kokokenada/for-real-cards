@@ -43,7 +43,7 @@
     <div class="form-group">
       <label class="col-xs-6" for="game-name">Game Name</label>
       <div class="col-xs-6">
-        <input [(ngModel)]="gameConfig.name" type="text" class="form-control" id="game-name"/>
+        <input [(ngModel)]="gameConfig.name" name="name" type="text" class="form-control" id="game-name"/>
       </div>
     </div>
 
@@ -52,6 +52,7 @@
       <div class="col-xs-3">
         <input
                 [(ngModel)]="gameConfig.minimumNumberOfPlayers"
+                name = "minimumNumberOfPlayers"
                 type="number"
                 class="form-control"
                 id="minimumNumberOfPlayers"/>
@@ -59,6 +60,7 @@
       <div class="col-xs-3">
         <input
                 [(ngModel)]="gameConfig.maximumNumberOfPlayers"
+                name = "maximumNumberOfPlayers"
                 type="number"
                 class="form-control"
                 id="maximumNumberOfPlayers"/>
@@ -88,6 +90,7 @@
       <div class="col-xs-6">
         <input
                 [(ngModel)]="gameConfig.numberOfCardsToPlayer"
+                name = "numberOfCardsToPlayer"
                 type="number"
                 class="form-control"
                 id="numberOfCardsToPlayer"/>

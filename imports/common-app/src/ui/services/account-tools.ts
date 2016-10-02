@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 
-import {User} from '../../../../common-app-api';
+import {User} from '../../../../common-app-api/src/api/models/user.model';
 
 export class AccountTools {
 

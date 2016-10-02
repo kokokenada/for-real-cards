@@ -6,10 +6,7 @@
 import { Component, NgZone } from '@angular/core';
 import { select } from 'ng2-redux';
 
-//import { FormGroup, FormControl } from '@angular/forms';
-import { EditUserProfileBase } from '../../common-app/index';
-import {LoginActions} from "../../common-app/src/ui/redux/login/login-actions.class";
-import {UploaderActions} from "../../common-app/src/ui/redux/uploader/uploader-actions.class";
+import {EditUserProfileBase} from "../../common-app/src/ui-ng2/edit-user-profile/edit-user-profile.base";
 
 @Component({
   selector: 'edit-user-profile',
@@ -25,11 +22,11 @@ import {UploaderActions} from "../../common-app/src/ui/redux/uploader/uploader-a
   <div class="panel-body">
     <div class="form-group">
       <label for="username">Username:</label>
-      <input [(ngModel)]="userEditted.username" type="text" class="form-control" id="username"/>
+      <input [(ngModel)]="userEditted.username" name="username" type="text" class="form-control" id="username"/>
     </div>
     <div class="form-group">
       <label for="email">Email</label><span> (optional)</span>
-      <input [(ngModel)]="userEditted.emails[0].address" type="text" class="form-control" id="email"/>
+      <input [(ngModel)]="userEditted.emails[0].address" name="address" type="text" class="form-control" id="email"/>
     </div>
     <div class="form-group">
       <button (click)="save()" class="btn btn-primary pull-right">Save</button>
@@ -79,12 +76,12 @@ export class EditUserProfileTWBS extends EditUserProfileBase {
   @select() loginReducer;
   @select() uploaderReducer;
 
-  constructor(private ngZone:NgZone, private loginActions:LoginActions, private uploaderActions:UploaderActions) {
+  constructor(private ngZone:NgZone) {
     super();
   }
   ngOnInit()
   {
-    this.initialize(this.ngZone, this.loginReducer, this.loginActions, this.uploaderActions, this.uploaderReducer);
+    this.initialize(this.ngZone, this.loginReducer, this.uploaderReducer);
   }
 
 }

@@ -2,9 +2,9 @@
  * Copyright Ken Ono, Fabrica Technolology 2016
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
-import {Component, Input} from '@angular/core';
-import {TargetPlatformId, PlatformTools} from '../../common-app';
+import {Component } from '@angular/core';
 import {ForRealCardsActions} from "../ui/redux/nav/for-real-cards-actions.class";
+import {PlatformTools, TargetPlatformId} from "../../common-app/src/ui-ng2/platform-tools/platform-tools";
 
 function template(): string {
   switch (PlatformTools.getTargetPlatforrm()) {
@@ -55,17 +55,18 @@ function template(): string {
         <label class="control-label" for="gameId">Game Id:</label>
         <input 
           [(ngModel)]="gameId" 
+          name="gameId"
           type="text" 
           class="form-control" 
           id="gameId"
           ngControl="formGameId" 
-          #formGameId="ngForm" 
+          #formGameId="ngModel" 
           required
         />
       </div>
       <div class="form-group">
         <label class="control-label" for="password">Password (if required):</label>
-        <input [(ngModel)]="password" type="text" class="form-control" id="password">
+        <input [(ngModel)]="password" name="password" type="text" class="form-control" id="password">
       </div>
       <button 
         [disabled]="!joinGameForm.form.valid" 
@@ -97,14 +98,11 @@ export class JoinGame {
   password: string;
   gameId: string;
 
-  constructor(private forRealCardsActions: ForRealCardsActions) {
-  }
-
   joinGame() {
-    this.forRealCardsActions.joinGameRequest(this.gameId, this.password);
+    ForRealCardsActions.joinGameRequest(this.gameId, this.password);
   };
 
   displayGame() {
-    this.forRealCardsActions.viewGameRequest(this.gameId, this.password);
+    ForRealCardsActions.viewGameRequest(this.gameId, this.password);
   };
 }

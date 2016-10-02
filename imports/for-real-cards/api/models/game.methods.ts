@@ -6,7 +6,8 @@
 import { Meteor } from 'meteor/meteor';
 import * as log from 'loglevel';
 
-import { AccountsAdminTools, getNextSequence } from '../../../common-app-api';
+import { AccountsAdminTools } from '../../../common-app-api/src/api/services/accounts-admin-tools';
+import { getNextSequence } from '../../../common-app-api/src/api/models/counter.model';
 
 import { Game, GameCollection } from './game.model.ts';
 import { HandCollection, HandInterface, Hand } from './hand.model.ts';
