@@ -1,7 +1,7 @@
 
-export interface IModalState { // TODO: Add type paremeters like IModalState<PARAMS, RESULT>
-  params:any,
-  result:any,
+export interface IModalState<PARAMS,RESULT> { // TODO: Add type paremeters like IModalState<PARAMS, RESULT>
+  params:PARAMS,
+  result:RESULT,
   component:any,
   lastEvent:string
 }

@@ -31,7 +31,7 @@ export class ModalDialog implements  OnInit {
   ) {}
 
   ngOnInit() {
-    this.subscription = this.modalReducer.subscribe( (modalState:IModalState)=>{
+    this.subscription = this.modalReducer.subscribe( (modalState:IModalState<any, any>)=>{
       this.ngZone.run( ()=>{
         if (modalState.lastEvent===ModalActions.MODAL_OPEN_REQUEST) {
           this.setComponent(modalState.component);

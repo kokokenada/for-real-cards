@@ -14,6 +14,7 @@ import { ActionFormatted, GamePlayActions} from "../ui";
 import template from "./run-game-hand.html"
 import {PlatformTools} from "../../common-app/src/ui-ng2/platform-tools/platform-tools";
 import {Tools} from "../../common-app/src/ui/services/tools";
+import {DealModalParamAndResult} from "../deal-modal/deal-modal-params-and-result";
 
 @Component(
   {
@@ -103,9 +104,9 @@ export class RunGameHand extends RunGame implements OnInit {
     if (this.gameState)
       defaultGameConfig = this.gameState.currentGameConfig;
     this.dealModelService.open(defaultGameConfig).then(
-      (gameConfig:GameConfig)=>{
-        if (gameConfig) {
-          GamePlayActions.deal(this.gameState, gameConfig);
+      (dealModalParamAndResult:DealModalParamAndResult)=>{
+        if (dealModalParamAndResult && dealModalParamAndResult.gameConfig) {
+          GamePlayActions.deal(this.gameState, dealModalParamAndResult.gameConfig);
         }
       }, (error)=> {
         this.commonPopups.alert(error);

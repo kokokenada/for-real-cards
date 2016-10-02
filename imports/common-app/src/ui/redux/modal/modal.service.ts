@@ -9,16 +9,14 @@ export class ModalService {
   inProgress:boolean = false;
   @select() modalReducer;
 
-  asPromise<T>(compoent:Component, params:any={}):Promise<T> {
-    return new Promise<T>( (resolve, reject)=>{
+  asPromise<PARAMS, RESULT>(compoent:Component, params:PARAMS):Promise<RESULT> {
+    return new Promise<RESULT>( (resolve, reject)=>{
       if (this.inProgress) {
         reject("Modal promise currently in progress");
       } else {
         this.inProgress = true;
         const subscription:Subscription = this.modalReducer.subscribe(
-          (state:IModalState)=>{
-            console.log('modoal promis sub event')
-            console.log(state)
+          (state:IModalState<PARAMS, RESULT>)=>{
             if (state.lastEvent === ModalActions.MODAL_RESOLVE_SUCCESS) {
               resolve(state.result);
               subscription.unsubscribe();

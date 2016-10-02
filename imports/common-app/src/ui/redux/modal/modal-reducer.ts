@@ -4,7 +4,7 @@ import { IPayloadAction } from '../action.interface';
 import { ModalActions } from './modal-actions.class';
 import {IModalActionPayload, IModalState} from './modal.types'
 
-const INITIAL_STATE:IModalState = {
+const INITIAL_STATE:IModalState<any, any> = {
   params: {},
   result: {},
   component: null,
@@ -12,8 +12,8 @@ const INITIAL_STATE:IModalState = {
 };
 
 export function modalReducer(
-  state: IModalState = INITIAL_STATE,
-  action: IPayloadAction): IModalState
+  state: IModalState<any, any> = INITIAL_STATE,
+  action: IPayloadAction): IModalState<any, any>
 {
   let payload:IModalActionPayload = action.payload;
   switch (action.type) {

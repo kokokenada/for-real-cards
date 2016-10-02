@@ -1,14 +1,15 @@
 import {Deck, GameConfig, defaultGames, DeckLocation, UserCommand} from "../api/index";
 import {ModalBase} from '../../common-app/src/ui-ng2/modal/modal-base';
 import {IModalState} from "../../common-app/src/ui/redux/modal/modal.types";
+import {DealModalParamAndResult} from "./deal-modal-params-and-result";
 
-export class DealModalBase extends ModalBase {
+export class DealModalBase extends ModalBase<DealModalParamAndResult, DealModalParamAndResult> {
   gameConfig: GameConfig;
   selectedPreset:string;
 
   ngOnInit() {
     this.modalReducer$.subscribe(
-      (state:IModalState)=>{
+      (state:IModalState<DealModalParamAndResult, DealModalParamAndResult>)=>{
         this.gameConfig = state.params.gameConfig;
       }
     );
