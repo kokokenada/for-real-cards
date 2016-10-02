@@ -4,7 +4,7 @@ import { CommonAppNg, COMMON_APP_NG_EXPORTS } from "../ui-ng2";
 import { Avatar } from "./avatar/avatar";
 import { ModalDialog } from "./modal/modal.component";
 import { PopoverMenu } from "./popover-menu/popover-menu";
-import { DropdownModule } from 'ng2-bootstrap/ng2-bootstrap';
+import { Ng2BootstrapModule } from 'ng2-bootstrap/ng2-bootstrap';
 import {UpdateAccountModal} from "./accounts-admin/update-account-modal";
 import {UpdateRolesModal} from "./accounts-admin/update-roles-modal";
 import {InfoAccountModal} from "./accounts-admin/info-account-modal";
@@ -32,10 +32,14 @@ const COMMON_APP_NG_TWBS_EXPORTS = [
   ...DYNAMIC
 ];
 
+const PASSTHROUGH_MODULES =[
+  CommonModule, CommonAppNg, Ng2BootstrapModule
+];
+
 @NgModule({
-  imports: [CommonModule, CommonAppNg, DropdownModule],
+  imports: [...PASSTHROUGH_MODULES],
   declarations: [...COMMON_APP_NG_TWBS_EXPORTS],
-  exports: [...COMMON_APP_NG_TWBS_EXPORTS, ...COMMON_APP_NG_EXPORTS],
+  exports: [...COMMON_APP_NG_TWBS_EXPORTS, ...COMMON_APP_NG_EXPORTS, ...PASSTHROUGH_MODULES],
   entryComponents: [...DYNAMIC]
 })
 export class CommonAppNgTWBS {}
