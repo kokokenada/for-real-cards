@@ -17,9 +17,6 @@ export function modalReducer(
   state: IModalState = INITIAL_STATE,
   action: IPayloadAction): IModalState
 {
-  console.log('in modalReducer')
-  console.log(state)
-  console.log(action)
   let payload:IModalActionPayload = action.payload;
   switch (action.type) {
     case ModalActions.MODAL_OPEN_REQUEST:

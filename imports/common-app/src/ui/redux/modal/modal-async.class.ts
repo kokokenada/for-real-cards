@@ -17,5 +17,6 @@ export class ModalAsync {
 //        this.modalService.openRequest(payload.component);
       }
     }
+    return next(action);
   }
 }

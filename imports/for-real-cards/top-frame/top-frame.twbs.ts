@@ -3,25 +3,18 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 
-import {Component, OnInit, ModuleWithProviders, NgZone} from '@angular/core';
+import {Component, Injector, OnInit, NgModuleRef, ModuleWithProviders, NgZone} from '@angular/core';
 import {Routes, RouterModule, Router} from '@angular/router';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
-import {NgRedux} from 'ng2-redux';
 import {DragulaService} from 'ng2-dragula/ng2-dragula';
 import {NgModule}      from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {DragulaModule} from 'ng2-dragula/ng2-dragula';
 import {TabsModule} from 'ng2-bootstrap/ng2-bootstrap';
 
-import {ModalModule} from "../../common-app/src/ui/redux/modal/modal.module";
 import {AccountsAdmin} from "../../common-app/src/ui-twbs-ng2/accounts-admin/accounts-admin";
 import {CommonAppNgTWBS} from "../../common-app/src/ui-twbs-ng2/common-app-ng-twbs.module";
-import {IAppState} from "../../common-app/src/ui/redux/state.interface";
-import {ReduxModuleCombiner} from "../../common-app/src/ui/redux/redux-module-combiner";
-import {ConnectModule} from "../../common-app/src/ui/redux/connect/connect.module";
 import {LoginModule} from "../../common-app/src/ui/redux/login/login.module";
-import {UsersModule} from "../../common-app/src/ui/redux/users/users.module";
-import {UploaderModule} from "../../common-app/src/ui/redux/uploader/uploader.module";
 import {Menus} from "../../common-app/src/ui/services/menus";
 import {MenuItem} from "../../common-app/src/ui/services/menu-item";
 import {COMMON_APP_SINGLETONS} from "../../common-app/src/ui-ng2/common-app-ng.module";
@@ -55,6 +48,7 @@ import {PileView} from "../run-game/pile-view";
 import {RunGameTable} from "../run-game/run-game-table";
 import {RunGameHand} from "../run-game/run-game-hand";
 import {RunGameHandAndTable} from "../run-game/run-game-hand-and-table";
+import {ReduxModules} from "./redux-modules";
 
 const appRoutes: Routes = [
   {path: '', component: Start},
@@ -75,15 +69,6 @@ export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);
   {
     selector: 'for-real-cards-top-frame',
     viewProviders: [DragulaService],
-    providers: [
-      DealModalService,
-      ForRealCardsActions,
-      ForRealCardsModule,
-      ForRealCardsAsync,
-      GamePlayActions,
-      GamePlayAsync,
-      GamePlayModule
-    ],
     template: `
 <div class="row">
   <top-frame-header class="col-xs-10"></top-frame-header>
@@ -97,30 +82,15 @@ export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);
 export class ForRealCardsTopFrame extends TopFrame implements OnInit {
   constructor(private router: Router,
               private ngZone: NgZone,
-              private ngRedux: NgRedux<IAppState>,
-              private reduxModuleCombiner: ReduxModuleCombiner,
-              private connectModule: ConnectModule,
-              private loginModule: LoginModule,
-              private modalModule: ModalModule,
-              private forRealCardsModule: ForRealCardsModule,
-              private gamePlatModule: GamePlayModule,
-              private usersModule: UsersModule,
-              private uploaderModule: UploaderModule) {
+              private reduxModules:ReduxModules,
+              forRealCardsModule:ForRealCardsModule,
+              private loginModule: LoginModule) {
     super();
+    this.addMiddlware(forRealCardsModule)
+    reduxModules.configure();
   }
 
   ngOnInit() {
-
-    this.topFrameConfigure(
-      this.connectModule,
-      this.loginModule,
-      this.modalModule,
-      this.forRealCardsModule,
-      this.gamePlatModule,
-      this.usersModule,
-      this.uploaderModule,
-      this.ngRedux,
-      this.reduxModuleCombiner);
     Menus.addMenu({id: 'topbar'});
 
     Menus.addSubMenuItem('topbar', {
@@ -220,9 +190,19 @@ export class ForRealCardsTopFrame extends TopFrame implements OnInit {
     RunGameHandAndTable,
     RunGameTable,
     RunGameTabs,
-    Start],
+    Start
+  ],
   bootstrap: [ForRealCardsTopFrame],
-  providers: [...COMMON_APP_SINGLETONS]
+  providers: [
+    ReduxModules,
+    DealModalService,
+    ForRealCardsActions,
+    ForRealCardsModule,
+    ForRealCardsAsync,
+    GamePlayActions,
+    GamePlayAsync,
+    GamePlayModule,
+    ...COMMON_APP_SINGLETONS]
 })
 export class AppModule {
 }
@@ -231,7 +211,15 @@ export class AppModule {
 export function run() {
   const platform = platformBrowserDynamic();
 
+
   platform.bootstrapModule(AppModule);
+/*.then(
+    (moduleRef:NgModuleRef<any>)=>{
+      const reduxModule:ReduxModules = moduleRef.injector.get(ReduxModules);
+      reduxModule.configure();
+    }
+  );
+*/
 }
 
 export function prepare(): void {

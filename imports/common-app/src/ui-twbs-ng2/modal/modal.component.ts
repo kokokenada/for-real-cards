@@ -1,4 +1,4 @@
-import { Component, ComponentFactoryResolver, ComponentRef, ElementRef, OnInit, ReflectiveInjector, ViewContainerRef, ViewChild } from "@angular/core"
+import { Component, ComponentFactoryResolver, ComponentRef, ElementRef, OnInit, NgZone, ReflectiveInjector, ViewContainerRef, ViewChild } from "@angular/core"
 import {Subscription} from 'rxjs';
 import { select } from 'ng2-redux';
 
@@ -25,6 +25,7 @@ export class ModalDialog implements  OnInit {
   style:Object = {display: 'none'};
   subscription:Subscription;
   constructor(
+    private ngZone: NgZone,
     private _cmpFctryRslvr: ComponentFactoryResolver,
     private modalActions: ModalActions
   ) {}
@@ -34,15 +35,17 @@ export class ModalDialog implements  OnInit {
       console.log("modalState in ModalDialog")
       console.log(modalState)
 
-      if (modalState.opening) {
-        this.setComponent(modalState.component);
-        console.log("openRequest event in ModalDialog")
-        this.style = {display: 'inline-block'};
-        this.modalActions.openSuccess();
-      } else if (modalState.closing) {
-        this.style = {display: "none"}
-        this.modalActions.resolveSuccess();
-      }
+      this.ngZone.run( ()=>{
+        if (modalState.opening) {
+          this.setComponent(modalState.component);
+          console.log("openRequest event in ModalDialog")
+          this.style = {display: 'inline-block'};
+          this.modalActions.openSuccess();
+        } else if (modalState.closing) {
+          this.style = {display: "none"}
+          this.modalActions.resolveSuccess();
+        }
+      } );
     });
   }
   ngOnDestroy() {
@@ -53,12 +56,6 @@ export class ModalDialog implements  OnInit {
 
   setComponent(component) {
     let cmp = this.createComponent(this._placeHolder, component);
-
-    // set inputs..
-    cmp.instance.name = 'peter';
-
-    // set outputs..
-    cmp.instance.clicked.subscribe(event => console.log(`clicked: ${event}`));
 
     // all inputs/outputs set? add it to the DOM ..
     this._placeHolder.insert(cmp.hostView);
