@@ -9,8 +9,10 @@ export class ModalService {
   inProgress:boolean = false;
   @select() modalReducer;
   subscription:Subscription;
+  resolve;
+  reject;
 
-  private checkSubscription(resolve, reject) {
+  private checkSubscription() { // A single subscription is maintained so previous invocations do not cause immediate resolution
     if (!this.subscription) {
       this.subscription = this.modalReducer.subscribe(
         (state:IModalState<any, any>)=>{
@@ -18,12 +20,12 @@ export class ModalService {
           console.log(state)
           if (state.lastEvent === ModalActions.MODAL_RESOLVE_SUCCESS) {
             console.log('RESOLVING')
-            resolve(state.result);
+            this.resolve(state.result);
             this.inProgress = false;
           }
         },
         (error)=>{
-          reject(error);
+          this.reject(error);
           this.inProgress = false;
         }
       );
@@ -36,7 +38,9 @@ export class ModalService {
         reject("Modal promise currently in progress");
       } else {
         this.inProgress = true;
-        this.checkSubscription(resolve, reject);
+        this.resolve = resolve;
+        this.reject = reject;
+        this.checkSubscription();
         ModalActions.openRequest(compoent, params);
       }
     });
