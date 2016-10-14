@@ -3,12 +3,15 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 
-import { Component, Input, Injector } from '@angular/core';
+import { Component, Input, NgZone } from '@angular/core';
+import { DragulaService } from 'ng2-dragula/ng2-dragula';
 
 import {RunGame} from './run-game.ts';
 import {Card, Deck} from "../api/index";
 import {CardImageStyle} from "../api/interfaces/card-image-style.interface";
 import {GamePlayActions} from "../ui/redux/game-play/game-play-actions.class";
+import {CommonPopups} from "../../common-app/src/ui-ng2/common-popups/common-popups";
+import {DealModalService} from "../deal-modal/deal-modal.service";
 
 @Component(
   {
@@ -50,8 +53,13 @@ import {GamePlayActions} from "../ui/redux/game-play/game-play-actions.class";
 export class DeckView extends RunGame {
   @Input() imgStyle:CardImageStyle;
 
-  constructor(private injectorInjection: Injector) {
-    super(injectorInjection);
+  constructor(
+    protected dragulaService: DragulaService,
+    protected ngZone:NgZone,
+    protected dealModelService:DealModalService,
+    protected commonPopups:CommonPopups,
+  ) {
+    super();
   }
 
   childInit(){};

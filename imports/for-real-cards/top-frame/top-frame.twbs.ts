@@ -14,7 +14,6 @@ import {TabsModule} from 'ng2-bootstrap/ng2-bootstrap';
 
 import {AccountsAdmin} from "../../common-app/src/ui-twbs-ng2/accounts-admin/accounts-admin";
 import {CommonAppNgTWBS} from "../../common-app/src/ui-twbs-ng2/common-app-ng-twbs.module";
-import {LoginModule} from "../../common-app/src/ui/redux/login/login.module";
 import {Menus} from "../../common-app/src/ui/services/menus";
 import {MenuItem} from "../../common-app/src/ui/services/menu-item";
 import {COMMON_APP_SINGLETONS} from "../../common-app/src/ui-ng2/common-app-ng.module";

@@ -3,7 +3,8 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 
-import { Component, Injector, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnInit, NgZone, ViewEncapsulation } from '@angular/core';
+import { DragulaService } from 'ng2-dragula/ng2-dragula';
 
 import { GameRenderingTools } from "../ui";
 import { Card, Coordinates, Deck, Hand} from "../api/index";
@@ -12,6 +13,8 @@ import { RunGame } from './run-game.ts';
 import template from "./run-game-table.html"
 import {PlatformTools} from "../../common-app/src/ui-ng2/platform-tools/platform-tools";
 import {Tools} from "../../common-app/src/ui/services/tools";
+import {CommonPopups} from "../../common-app/src/ui-ng2/common-popups/common-popups";
+import {DealModalService} from "../deal-modal/deal-modal.service";
 
 const TABLE_ZONE_CENTER_RADIUS = 20;
 const TABLE_ZONE_OUTER_RADIUS = 30;
@@ -28,13 +31,18 @@ export class RunGameTable extends RunGame implements OnInit {
   @Input() width:string;
   @Input() height:string;
   @Input() forPlayer:string;
-  constructor(private injectorInjection: Injector) {
-    super(injectorInjection);
+  constructor(
+    protected dragulaService: DragulaService,
+    protected ngZone:NgZone,
+    protected dealModelService:DealModalService,
+    protected commonPopups:CommonPopups,
+  ) {
+    super();
   }
 
   childInit() {
     if (PlatformTools.isIonic())  {
-      let navParams = PlatformTools.getNavParams(this.injector);
+      let navParams = PlatformTools.getNavParams();
       if (navParams) {
         this.width = navParams.data.width;
         this.height = navParams.data.height;

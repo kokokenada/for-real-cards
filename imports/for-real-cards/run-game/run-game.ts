@@ -4,7 +4,7 @@
  */
 import { Meteor } from 'meteor/meteor';
 import * as log from 'loglevel';
-import { Injector, NgZone } from '@angular/core';
+import { NgZone } from '@angular/core';
 import { select } from 'ng2-redux';
 
 
@@ -22,23 +22,17 @@ import {CommonPopups} from "../../common-app/src/ui-ng2/common-popups/common-pop
 export abstract class RunGame {
   @select() gamePlayReducer$;
   @select() forRealCardsReducer$;
-  dragulaService: DragulaService;
-  ngZone:NgZone;
-  injector: Injector;
-  dealModelService:DealModalService;
-  commonPopups:CommonPopups;
+  protected abstract dragulaService: DragulaService;
+  protected abstract ngZone:NgZone;
+  protected abstract dealModelService:DealModalService;
+  protected abstract commonPopups:CommonPopups;
 
   abstract childInit();
   gameState:IGamePlayRecord;
   forRealCardsState:IForRealCardsState;
   protected static dragAndDropInitialized:boolean = false;
 
-  constructor(injector: Injector) {
-    this.injector = injector;
-    this.dragulaService = injector.get(DragulaService);
-    this.ngZone = injector.get(NgZone);
-    this.dealModelService = injector.get(DealModalService);
-    this.commonPopups = injector.get(CommonPopups);
+  constructor() {
   }
 
   ngOnInit() {
