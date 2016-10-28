@@ -9,7 +9,7 @@ import { LoginActions } from "./login-actions.class";
 
 @Injectable()
 export class LoginModule extends ReduxModule<IAppState, IPayloadAction>  {
-  reducer={name:'loginReducer', reducer:loginReducer};
+  reducers=[{name:'loginReducer', reducer:loginReducer}];
   action = LoginActions;
   constructor(private loginEpics:LoginAsync) {
     super();

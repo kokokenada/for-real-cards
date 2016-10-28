@@ -8,7 +8,7 @@ import { ModalActions} from "./modal-actions.class";
 
 @Injectable()
 export class ModalModule extends ReduxModule<IAppState, IPayloadAction>  {
-  reducer={name:'modalReducer', reducer: modalReducer};
+  reducers=[{name:'modalReducer', reducer: modalReducer}];
   actions = ModalActions;
   initialize():void {}
 }
