@@ -40,8 +40,6 @@ export class ForRealCardsAsync {
               ForRealCardsActions.error(error);
             }
           } else {
-            log.debug('ForRealCardsJoinGame returned OK');
-            log.debug(result);
             GamePlayActions.initialize(payload.gameId);
             ForRealCardsActions.joinGameSuccess(payload.gameId);
           }
