@@ -104,7 +104,6 @@ function watchGamePlayActionsAndHand(gameId:string) {
 
     let isReady = subscriptionHandle.ready();
     if (isReady) {
-      log.debug('in watchGamePlayActionsAndHand and isReady');
       let knownHands:HandInterface[] = [];
       let buffer:GamePlayAction[] = [];
       let handsCursor: Mongo.Cursor<any> = HandCollection.find({gameId: gameId}, {sort: {dateCreated: 1}});
@@ -128,7 +127,7 @@ function watchGamePlayActionsAndHand(gameId:string) {
           }
         }
       );
-      log.debug('execute action query. gameId:' + gameId);
+//      log.debug('execute action query. gameId:' + gameId);
       let actionCursor: Mongo.Cursor<any> = GamePlayActionCollection.find({gameId: gameId}, {sort: {dateCreated: 1}});
 
       let gameActions$:Observable<IDocumentChange<GamePlayAction>> = MeteorCursorObservers.fromMeteorCursor<GamePlayAction>(actionCursor);
