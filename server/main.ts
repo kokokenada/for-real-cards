@@ -17,6 +17,9 @@ Meteor.startup(function() {
   BrowserPolicy.content.allowOriginForAll('https://for-real-cards.fabrica.tech');
   BrowserPolicy.content.allowOriginForAll('http://for-real-cards.scalingo.io');
   BrowserPolicy.content.allowOriginForAll('http://for-real-cards.fabrica.tech');
+  BrowserPolicy.content.allowOriginForAll('https://www.googletagmanager.com');
+  BrowserPolicy.content.allowOriginForAll('http://www.google-analytics.com');
+
   BrowserPolicy.content.allowEval();
   BrowserPolicy.framing.disallow();
 });

@@ -48,8 +48,6 @@ export class ReduxModuleCombiner {
         reducerInModule[reducer.name] = reducer.reducer;
         this.reducers = Object.assign(this.reducers, reducerInModule);
       } );
-      console.log("Reducers")
-      console.log(this.reducers)
       module.epics.forEach((epic)=> {
         this.middlewares.push(createEpicMiddleware(epic))
       });

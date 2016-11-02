@@ -9,6 +9,7 @@ import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import {DragulaService} from 'ng2-dragula/ng2-dragula';
 import {NgModule}      from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
+import { NgReduxRouter } from "ng2-redux-router"
 import {DragulaModule} from 'ng2-dragula/ng2-dragula';
 import {TabsModule} from 'ng2-bootstrap/ng2-bootstrap';
 
@@ -197,6 +198,7 @@ export class ForRealCardsTopFrame extends TopFrame implements OnInit {
     ForRealCardsAsync,
     GamePlayAsync,
     GamePlayModule,
+    NgReduxRouter,
     ...COMMON_APP_SINGLETONS]
 })
 export class AppModule {
