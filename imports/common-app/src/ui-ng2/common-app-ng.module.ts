@@ -55,7 +55,7 @@ export const COMMON_APP_SINGLETONS = [
 ];
 
 @NgModule({
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NgReduxModule.forRoot()],
   declarations: [COMMON_APP_EXPORTED_DECLARATIONS],
   exports: COMMON_APP_NG_EXPORTS
 })
