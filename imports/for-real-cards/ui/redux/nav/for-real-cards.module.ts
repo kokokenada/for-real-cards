@@ -11,7 +11,7 @@ import {ReduxModule} from "../../../../common-app/src/ui/redux/redux-module.clas
 import { NgReduxRouter, UPDATE_LOCATION, routerReducer } from 'ng2-redux-router';
 import {IAppState} from "../../../../common-app/src/ui/redux/state.interface";
 import {IPayloadAction} from "../../../../common-app/src/ui/redux/action.interface";
-import { createMiddleware } from "redux-gtm";
+import { createMiddleware, EventDefinitionsMap, EventHelpers } from "redux-gtm";
 import { LoginActions } from "../../../../common-app/src/ui/redux/login/login-actions.class";
 import {GamePlayActions} from "../game-play/game-play-actions.class";
 import {IGamePlayActionPayload} from "../game-play/game-play.types";
@@ -30,28 +30,27 @@ export class ForRealCardsModule extends ReduxModule<IAppState, IPayloadAction>  
   ) {
     super();
 
-    const eventDefinitions = {};
+    const eventDefinitions:EventDefinitionsMap = {};
     eventDefinitions[LoginActions.LOGGED_IN] = {
-      eventName: 'REDUX_EVENT',
-      eventFields: (prevState, action:IGamePlayActionPayload)=> ({
-        REDUX_hitType: 'event',
-        REDUX_eventCategory: 'LOGIN',
-        REDUX_eventAction: 'login',
-      })
+      eventFields: (prevState, action:IGamePlayActionPayload)=> (
+        EventHelpers.createGAevent({
+          eventCategory: 'LOGIN',
+          eventAction: 'login',
+        })
+      )
     };
     eventDefinitions[UPDATE_LOCATION] = {
-      eventName: 'REDUX_EVENT',
-      eventFields: (prevState, action)=> ({
-        REDUX_hitType: 'pageview',
-        REDUX_page: action.payload + "!!!"
-      })};
+      eventFields: (prevState, action)=> (
+        EventHelpers.createGApageview(action.payload)
+      )
+    };
     eventDefinitions[GamePlayActions.GAME_PLAY_ACTION_PUSH ] = {
-      eventName: 'REDUX_EVENT',
-      eventFields: (prevState, action:IGamePlayActionPayload)=> ({
-        REDUX_hitType: 'event',
-        REDUX_eventCategory: 'GAME_PLAY',
-        REDUX_eventAction: action.gamePlayAction ? GamePlayActionType[action.gamePlayAction.actionType] : "multiple"
-      })
+      eventFields: (prevState, action:IGamePlayActionPayload)=> (
+        EventHelpers.createGAevent({
+          eventCategory: 'GAME_PLAY',
+          eventAction: action.gamePlayAction ? GamePlayActionType[action.gamePlayAction.actionType] : "multiple"
+        })
+      )
     };
 
     const analyticsMiddleware = createMiddleware(eventDefinitions);
