@@ -35,10 +35,7 @@ All files under import/for-real-cards are released in GPL 3.0.  All other files 
 * Login with Facebook (etc)
 * Automatic deletion of tmp users
 * Welcome page with links to apps
-* Upgrades (Angular rc6 or final)
 * Get pagination working (ng2-paginate)
-* Fix null in login field bug
-* Fix delayed paint on user admin
 * Add croping in avatar upload
 * Add cropping of Avatar
 * NgMaterial Styling
@@ -48,6 +45,7 @@ All files under import/for-real-cards are released in GPL 3.0.  All other files 
 ### Gameplay
 * Refresh or deep linking with game ID in URL should work (wait until Angular 2 upgraded to final and use correct router) 
 * Leave game, boot a player from a game
+* More performant state history for UNDO
 * More game templates
   * Hearts
   * Poker

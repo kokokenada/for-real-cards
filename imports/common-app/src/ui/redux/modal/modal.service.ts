@@ -8,29 +8,39 @@ import {IModalState} from "./modal.types";
 export class ModalService {
   inProgress:boolean = false;
   @select() modalReducer;
+  subscription:Subscription;
+  resolve;
+  reject;
 
-  asPromise<T>(compoent:Component, params:any={}):Promise<T> {
-    return new Promise<T>( (resolve, reject)=>{
+  private checkSubscription() { // A single subscription is maintained so previous invocations do not cause immediate resolution
+    if (!this.subscription) {
+      this.subscription = this.modalReducer.subscribe(
+        (state:IModalState<any, any>)=>{
+          console.log('IN MODAL PROMISE SUBSCRIPTION CALLBACK')
+          console.log(state)
+          if (state.lastEvent === ModalActions.MODAL_RESOLVE_SUCCESS) {
+            console.log('RESOLVING')
+            this.resolve(state.result);
+            this.inProgress = false;
+          }
+        },
+        (error)=>{
+          this.reject(error);
+          this.inProgress = false;
+        }
+      );
+    }
+  }
+
+  asPromise<PARAMS, RESULT>(compoent:Component, params:PARAMS):Promise<RESULT> {
+    return new Promise<RESULT>( (resolve, reject)=>{
       if (this.inProgress) {
         reject("Modal promise currently in progress");
       } else {
         this.inProgress = true;
-        const subscription:Subscription = this.modalReducer.subscribe(
-          (state:IModalState)=>{
-            console.log('modoal promis sub event')
-            console.log(state)
-            if (state.lastEvent === ModalActions.MODAL_RESOLVE_SUCCESS) {
-              resolve(state.result);
-              subscription.unsubscribe();
-              this.inProgress = false;
-            }
-          },
-          (error)=>{
-            reject(error);
-            subscription.unsubscribe();
-            this.inProgress = false;
-          }
-        );
+        this.resolve = resolve;
+        this.reject = reject;
+        this.checkSubscription();
         ModalActions.openRequest(compoent, params);
       }
     });

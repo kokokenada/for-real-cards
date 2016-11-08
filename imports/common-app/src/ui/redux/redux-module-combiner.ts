@@ -40,13 +40,14 @@ export class ReduxModuleCombiner {
     ReduxModuleCombiner.ngRedux = ngRedux;
     modules.forEach((module: ReduxModule<IAppState, IPayloadAction>)=> {
 
-      let reducer: ReducersMapObject = {};
-      console.log(module.reducer.name)
-      if (this.reducers[module.reducer.name]) {
-        throw "Two included reducers have the identical name of " + module.reducer.name;
-      }
-      reducer[module.reducer.name] = module.reducer.reducer;
-      this.reducers = Object.assign(this.reducers, reducer);
+      module.reducers.forEach( (reducer:any)=>{
+        let reducerInModule: ReducersMapObject = {};
+        if (this.reducers[reducer.name]) {
+          throw "Two included reducers have the identical name of " + reducer.name;
+        }
+        reducerInModule[reducer.name] = reducer.reducer;
+        this.reducers = Object.assign(this.reducers, reducerInModule);
+      } );
       module.epics.forEach((epic)=> {
         this.middlewares.push(createEpicMiddleware(epic))
       });

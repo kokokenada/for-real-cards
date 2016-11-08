@@ -12,7 +12,7 @@ import { UsersActions } from "./users-actions.class";
  * Watches a group of users and notifies of changes
  */
 export class UsersModule extends ReduxModule<IAppState, IPayloadAction >  {
-  reducer={name: 'usersReducer', reducer: usersReducer};
+  reducers=[{name: 'usersReducer', reducer: usersReducer}];
   actions = UsersActions;
   constructor(private usersEpics:UsersAsync) {
     super();

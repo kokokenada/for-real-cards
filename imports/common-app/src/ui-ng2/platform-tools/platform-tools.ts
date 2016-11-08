@@ -76,10 +76,10 @@ export class PlatformTools {
     }
   }
 
-  static getNavParams(injector:Injector):any {
+  static getNavParams():any {
     switch (PlatformTools.targetPlatForm) {
       case TargetPlatformId.IONIC:
-        return PlatformTools.platformSpecificTools.getNavParams(injector);
+        return PlatformTools.platformSpecificTools.getNavParams();
       default:
         throw "Unsupported or unexpected platform id";
     }

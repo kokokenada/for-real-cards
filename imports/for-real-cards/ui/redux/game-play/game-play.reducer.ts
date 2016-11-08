@@ -3,8 +3,8 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 
-import { makeTypedFactory} from 'typed-immutable-record';
-import { List, OrderedMap} from "immutable";
+import { makeTypedFactory } from 'typed-immutable-record';
+import {  List, OrderedMap} from "immutable";
 
 import * as log from 'loglevel';
 
@@ -25,7 +25,6 @@ export const GamePlayFactory = makeTypedFactory<IGamePlayState, IGamePlayRecord>
   hands: List<Hand>(),
   tableFaceDown: List<Card>(),
   tablePile: List<Card>(),
-  lastNotified: null,
   actions: OrderedMap<string, GamePlayAction>(),
   currentGameConfig: GameConfig.getDefaultConfig(),
   undoneIds: List<string>(),
@@ -75,15 +74,20 @@ function processGamePlayAction(transient: IGamePlayRecord, gamePlayAction: GameP
     return transient;
   }
   gamePlayAction.sequencePosition = transient.actions.size;
-  gamePlayAction.previousState = GamePlayFactory(transient);
+  gamePlayAction.previousState = transient.toJS();  // Temporary fix. TODO figure out a more performant way to copy the state and restore it in UNDO
+//  console.group(GamePlayActionType[gamePlayAction.actionType]);
+//  console.log('PROCESSING GAME PLAY ACTION: ' + GamePlayActionType[gamePlayAction.actionType]);
+//  console.log('gamePlayAction.previousState:')
+//  console.log(gamePlayAction.previousState)
+//  console.log('gamePlayAction::')
+//  console.log(gamePlayAction);
   transient.set('actions', transient.actions.set(id, gamePlayAction));
   if (GamePlayActions.isUndone(transient, gamePlayAction)) {
-    //log.debug('not doing gamePlayAction because it is undone');
+//    console.log('not doing gamePlayAction because it is undone');
+//    console.groupEnd();
     return transient;
   }
 
-//  console.log('PROCESSING GAME PLAY ACTION: ' + GamePlayActionType[gamePlayAction.actionType]);
-//  console.log(gamePlayAction);
   switch (gamePlayAction.actionType) {
     case GamePlayActionType.NEW_GAME:
       transient.set('gameId', gamePlayAction.gameId);
@@ -298,12 +302,30 @@ function processGamePlayAction(transient: IGamePlayRecord, gamePlayAction: GameP
       let actionIdBeingUndone = gamePlayAction.relatedActionId;
       addUndone(readState, actionIdBeingUndone);
       let foundUndoAction = readState.actions.get(actionIdBeingUndone);
-      foundUndoAction.previousState.forEach( (value:any, key:string)=>{
-        // To preserve the UNDO history and allow for a redo, we'll only rollback part of the state
-        if (key!=='actions' && key !=='undoneIds' && key!=='idCounter') {
-          transient.set(key, value);
-        }
-      });
+      console.log('foundUndoAction')
+      console.log(foundUndoAction)
+      console.log(foundUndoAction.previousState)
+      let handList = List();
+      foundUndoAction.previousState.hands.forEach( (o)=>{
+        console.log(o)
+        handList = handList.push(new Hand(o));
+      })
+      console.log(handList.toJS())
+      transient.set('hands', handList);
+      transient.set('tableFaceDown', List(foundUndoAction.previousState.tableFaceDown));
+      transient.set('tablePile', List(foundUndoAction.previousState.tablePile));
+      transient.set('currentGameConfig', new GameConfig(foundUndoAction.previousState.currentGameConfig));
+
+
+      /*      foundUndoAction.previousState.forEach( (value:any, key:string)=>{
+              // To preserve the UNDO history and allow for a redo, we'll only rollback part of the state
+              if (key!=='actions' && key !=='undoneIds' && key!=='idCounter') {
+                transient.set(key, value);
+                console.log('transient.set(key, value);')
+                console.log(key)
+                console.log(value)
+              }
+            });*/
       break;
     }
 
@@ -312,6 +334,9 @@ function processGamePlayAction(transient: IGamePlayRecord, gamePlayAction: GameP
       log.error(gamePlayAction);
       console.trace();
   }
+//  console.log('result:')
+//  console.log(transient.toJS());
+//  console.groupEnd();
   return transient;
 }
 

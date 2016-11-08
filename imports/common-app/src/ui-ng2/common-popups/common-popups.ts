@@ -43,6 +43,6 @@ export class CommonPopups {
       cancelText: cancelText,
       okText: okText
     };
-    return this.modalService.asPromise(CommonPopups.instance.Confirm, params);
+    return this.modalService.asPromise<CommonPopupParametersInterface, boolean>(CommonPopups.instance.ConfirmModal, params);
   }
 }

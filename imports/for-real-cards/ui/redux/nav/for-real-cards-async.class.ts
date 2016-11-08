@@ -10,7 +10,7 @@ import { IForRealCardsState, IForRealCardsActionPayload} from "./for-real-cards.
 import { ForRealCardsActions } from "./for-real-cards-actions.class";
 import { GamePlayActions } from "../game-play/game-play-actions.class";
 import { HandInterface } from "../../../api/";
-import {IPayloadAction} from "../../../../common-app/src/ui/redux/action.interface";
+import { IPayloadAction } from "../../../../common-app/src/ui/redux/action.interface";
 
 @Injectable()
 export class ForRealCardsAsync {
@@ -40,8 +40,6 @@ export class ForRealCardsAsync {
               ForRealCardsActions.error(error);
             }
           } else {
-            log.debug('ForRealCardsJoinGame returned OK');
-            log.debug(result);
             GamePlayActions.initialize(payload.gameId);
             ForRealCardsActions.joinGameSuccess(payload.gameId);
           }

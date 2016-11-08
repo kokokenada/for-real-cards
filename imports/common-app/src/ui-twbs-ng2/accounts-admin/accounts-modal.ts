@@ -3,8 +3,9 @@ import 'meteor/alanning:roles'
 import { User } from '../../../../common-app-api/src/api/models/user.model';
 import { IModalState } from "../../ui";
 import { ModalBase } from "../../ui-ng2";
+import { AccountModalParams } from "./account-modal-params";
 
-export class AccountsModal extends ModalBase {
+export class AccountsModal extends ModalBase<AccountModalParams, boolean> {
   user:User;
   protected _error:string;
 
@@ -14,7 +15,7 @@ export class AccountsModal extends ModalBase {
 
   ngOnInit() {
     this.modalReducer$.subscribe(
-      (state:IModalState)=>{
+      (state:IModalState<AccountModalParams, boolean>)=>{
         this.user = state.params.user;
       }
     );

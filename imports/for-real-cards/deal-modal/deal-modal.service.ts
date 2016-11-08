@@ -7,15 +7,15 @@ declare var require:any;
 
 import { Injectable } from '@angular/core';
 
-
+import { ModalService } from "../../common-app/src/ui/redux/modal/modal.service";
+import { PlatformTools } from "../../common-app/src/ui-ng2/platform-tools/platform-tools";
 import { GameConfig } from "../api/index";
-import {ModalService} from "../../common-app/src/ui/redux/modal/modal.service";
-import {PlatformTools} from "../../common-app/src/ui-ng2/platform-tools/platform-tools";
+import { DealModalParamAndResult } from "./deal-modal-params-and-result";
 
 @Injectable()
 export class DealModalService {
   constructor(private modalService:ModalService) {}
-  open(gameConfig:GameConfig):Promise<GameConfig> {
+  open(gameConfig:GameConfig):Promise<DealModalParamAndResult> {
     let dealModal;
     if (PlatformTools.isIonic()) {
       dealModal = require("./deal-modal.ionic").DealModal;
@@ -24,6 +24,6 @@ export class DealModalService {
     } else {
       throw "Unsupported platform";
     }
-    return this.modalService.asPromise<GameConfig>(dealModal, {gameConfig: gameConfig});
+    return this.modalService.asPromise<DealModalParamAndResult, DealModalParamAndResult>(dealModal, {gameConfig: gameConfig});
   }
 }

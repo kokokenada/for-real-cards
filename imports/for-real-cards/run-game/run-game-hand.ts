@@ -3,8 +3,9 @@
  * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
  */
 
-import { Component, Input, Injector, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, Input, NgZone, OnInit, ViewEncapsulation } from '@angular/core';
 import { Meteor } from 'meteor/meteor';
+import { DragulaService } from 'ng2-dragula/ng2-dragula';
 
 import { RunGame } from './run-game.ts';
 import { DealModalService } from "../deal-modal/deal-modal.service"
@@ -14,6 +15,8 @@ import { ActionFormatted, GamePlayActions} from "../ui";
 import template from "./run-game-hand.html"
 import {PlatformTools} from "../../common-app/src/ui-ng2/platform-tools/platform-tools";
 import {Tools} from "../../common-app/src/ui/services/tools";
+import {DealModalParamAndResult} from "../deal-modal/deal-modal-params-and-result";
+import {CommonPopups} from "../../common-app/src/ui-ng2/common-popups/common-popups";
 
 @Component(
   {
@@ -25,13 +28,18 @@ import {Tools} from "../../common-app/src/ui/services/tools";
 )
 export class RunGameHand extends RunGame implements OnInit {
   @Input() showTableProxy:string;
-  constructor(private injectorInjection: Injector) {
-    super(injectorInjection);
+  constructor(
+    protected dragulaService: DragulaService,
+    protected ngZone:NgZone,
+    protected dealModelService:DealModalService,
+    protected commonPopups:CommonPopups,
+  ) {
+    super();
   }
 
   childInit() {
     if (PlatformTools.isIonic())  {
-      let navParams = PlatformTools.getNavParams(this.injector);
+      let navParams = PlatformTools.getNavParams();
       if (navParams) {
         this.showTableProxy = navParams.data.showTableProxy;
       }
@@ -103,9 +111,9 @@ export class RunGameHand extends RunGame implements OnInit {
     if (this.gameState)
       defaultGameConfig = this.gameState.currentGameConfig;
     this.dealModelService.open(defaultGameConfig).then(
-      (gameConfig:GameConfig)=>{
-        if (gameConfig) {
-          GamePlayActions.deal(this.gameState, gameConfig);
+      (dealModalParamAndResult:DealModalParamAndResult)=>{
+        if (dealModalParamAndResult && dealModalParamAndResult.gameConfig) {
+          GamePlayActions.deal(this.gameState, dealModalParamAndResult.gameConfig);
         }
       }, (error)=> {
         this.commonPopups.alert(error);

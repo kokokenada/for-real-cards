@@ -1,22 +1,27 @@
 
 import {CommonPopupParametersInterface} from "./common-popup-params.interface";
 import {ModalBase} from "../modal/modal-base";
+import {IModalState} from "../../ui/redux/modal/modal.types";
 
-export class CommonPopupModal extends ModalBase {
+export class CommonPopupModal extends ModalBase<CommonPopupParametersInterface, boolean> {
   componentParameters:CommonPopupParametersInterface;
   titleText:string;
   messageText:string;
   cancelText:string;
   okText:string;
 
-  onModalInit(componentParameters:CommonPopupParametersInterface) {
-    this.componentParameters = componentParameters;
-    this.titleText = this.componentParameters.titleText;
-    this.messageText = this.componentParameters.messageText;
-    this.okText = this.componentParameters.okText;
-    this.cancelText = this.componentParameters.cancelText;
+  ngOnInit() {
+    this.modalReducer$.subscribe(
+      (state:IModalState<CommonPopupParametersInterface, boolean>)=>{
+        this.componentParameters = state.params;
+        this.titleText = this.componentParameters.titleText;
+        this.messageText = this.componentParameters.messageText;
+        this.okText = this.componentParameters.okText;
+        this.cancelText = this.componentParameters.cancelText;
+      }
+    );
   }
-  
+
   ok() {
     this.close(true);
   }

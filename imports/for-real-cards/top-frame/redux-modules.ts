@@ -32,7 +32,7 @@ export class ReduxModules {
     private reduxModuleCombiner:ReduxModuleCombiner
   ) {}
   configure() {
-    if (Meteor.isDevelopment)
+    if (Meteor.isDevelopment && false)
       this.reduxModuleCombiner.turnOnConsoleLogging();
 
     this.reduxModuleCombiner.configure([
