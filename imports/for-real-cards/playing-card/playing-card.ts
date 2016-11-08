@@ -1,8 +1,3 @@
-/**
- * Copyright Ken Ono, Fabrica Technolology 2016
- * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
- */
-
 import {Meteor} from 'meteor/meteor';
 import { Component, Input } from '@angular/core';
 import {Card} from '../api/models/card.model'

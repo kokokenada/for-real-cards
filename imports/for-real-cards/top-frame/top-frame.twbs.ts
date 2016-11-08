@@ -1,8 +1,3 @@
-/**
- * Copyright Ken Ono, Fabrica Technolology 2016
- * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
- */
-
 import {Component, Injector, OnInit, NgModuleRef, ModuleWithProviders, NgZone} from '@angular/core';
 import {Routes, RouterModule, Router} from '@angular/router';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';

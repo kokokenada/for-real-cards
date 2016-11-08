@@ -1,8 +1,3 @@
-/**
- * Copyright Ken Ono, Fabrica Technolology 2016
- * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
- */
-
 import {IForRealCardsState, IForRealCardsActionPayload} from "./for-real-cards.types";
 import {ForRealCardsActions} from "./for-real-cards-actions.class";
 import {IPayloadAction} from "../../../../common-app/src/ui/redux/action.interface";

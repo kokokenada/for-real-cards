@@ -1,7 +1,3 @@
-/**
- * Copyright Ken Ono, Fabrica Technolology 2016
- * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
- */
 import {Component } from '@angular/core';
 import {ForRealCardsActions} from "../ui/redux/nav/for-real-cards-actions.class";
 import {PlatformTools, TargetPlatformId} from "../../common-app/src/ui-ng2/platform-tools/platform-tools";

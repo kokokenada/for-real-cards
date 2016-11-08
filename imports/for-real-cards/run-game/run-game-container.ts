@@ -1,8 +1,3 @@
-/**
- * Copyright Ken Ono, Fabrica Technolology 2016
- * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
- */
-
 import { NgZone } from '@angular/core';
 import { Observable } from 'rxjs';
 import {IGamePlayRecord} from "../ui/redux/game-play/game-play.types";

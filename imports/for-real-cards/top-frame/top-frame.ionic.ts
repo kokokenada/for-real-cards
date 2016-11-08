@@ -1,7 +1,3 @@
-/**
- * Copyright Ken Ono, Fabrica Technolology 2016
- * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
- */
 import { Component, NgZone, ViewChild } from '@angular/core';
 //import { ionicBootstrap, MenuController, NavController } from 'ionic-angular';
 declare let ionicBootstrap, MenuController, NavController; // Shut up compiler until we have another go at Ionic
