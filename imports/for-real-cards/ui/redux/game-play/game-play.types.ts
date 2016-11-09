@@ -1,8 +1,3 @@
-/**
- * Copyright Ken Ono, Fabrica Technolology 2016
- * Source code license under Creative Commons - Attribution-NonCommercial 2.0 Canada (CC BY-NC 2.0 CA)
- */
-
 import {TypedRecord} from 'typed-immutable-record';
 import {Hand, HandInterface} from "../../../api/models/hand.model";
 import {Card} from "../../../api/models/card.model";

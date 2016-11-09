@@ -21,9 +21,7 @@ web and mobile progress, to Ionic or React Native on mobile, while preserving al
 
 # LICENSE
 
-Common-app components are MIT
-For Real Cards are Creative Common Attribution-NonCommercial
-All files under import/for-real-cards are released in GPL 3.0.  All other files are MIT.
+MIT
 
 ## To Do
 ### Framework
