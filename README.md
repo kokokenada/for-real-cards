@@ -1,4 +1,3 @@
-[![Stories in Ready](https://badge.waffle.io/kokokenada/for-real-cards.png?label=ready&title=Ready)](https://waffle.io/kokokenada/for-real-cards)
 # For Real Cards
 An app for learning or demonstrating techniques and the start of a common collection of reusable components.  It uses Angular 2 and Meteor.
 
@@ -25,21 +24,19 @@ web and mobile progress, to Ionic or React Native on mobile, while preserving al
 MIT
 
 ## To Do
+
+[Waffle Board](https://waffle.io/kokokenada/for-real-cards)
+
+
+[![Stories in Ready](https://badge.waffle.io/kokokenada/for-real-cards.png?label=ready&title=Ready)](https://waffle.io/kokokenada/for-real-cards)
+
+To do: add as issues:
+
 ### Framework
 * Fix styling of edit profile
-* Error handling (logins, users, etc)
-* Change Password
-* Password recovery
-* Fix modal dialogs
-* Login with Facebook (etc)
 * Automatic deletion of tmp users
-* Welcome page with links to apps
+* Welcome page 
 * Get pagination working (ng2-paginate)
-* Add croping in avatar upload
-* Add cropping of Avatar
-* NgMaterial Styling
-* Ionic Styling
-* Re-use API's for native app (Reactive Native Script???)
 
 ### Gameplay
 * Refresh or deep linking with game ID in URL should work (wait until Angular 2 upgraded to final and use correct router) 
