@@ -41,12 +41,22 @@ export class ForRealCardsModule extends ReduxModule<IAppState, IPayloadAction>  
       )
     };
     eventDefinitions[GamePlayActions.GAME_PLAY_ACTION_PUSH ] = {
-      eventFields: (prevState, action:IGamePlayActionPayload)=> (
-        EventHelpers.createGAevent({
+      eventFields: (prevState, action)=> {
+        let payload:IGamePlayActionPayload = action.payload;
+        return EventHelpers.createGAevent({
           eventCategory: 'GAME_PLAY',
-          eventAction: action.gamePlayAction ? GamePlayActionType[action.gamePlayAction.actionType] : "multiple"
+          eventAction: payload.gamePlayAction ? GamePlayActionType[payload.gamePlayAction.actionType] : "multiple"
         })
-      )
+      }
+    };
+    eventDefinitions[GamePlayActions.GAME_PLAY_ACTIONSSS_PUSH ] = {
+      eventFields: (prevState, action)=> {
+        let payload:IGamePlayActionPayload = action.payload;
+        return EventHelpers.createGAevent({
+          eventCategory: 'GAME_PLAY',
+          eventAction: payload.gamePlayAction ? GamePlayActionType[payload.gamePlayAction.actionType] : "multiple"
+        })
+      }
     };
 
     const analyticsMiddleware = createMiddleware(eventDefinitions);
