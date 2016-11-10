@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/kokokenada/for-real-cards.png?label=ready&title=Ready)](https://waffle.io/kokokenada/for-real-cards)
 # For Real Cards
 An app for learning or demonstrating techniques and the start of a common collection of reusable components.  It uses Angular 2 and Meteor.
 
