@@ -11,7 +11,9 @@ import { createMiddleware, EventDefinitionsMap, EventHelpers } from "redux-gtm";
 import { LoginActions } from "../../../../common-app/src/ui/redux/login/login-actions.class";
 import {GamePlayActions} from "../game-play/game-play-actions.class";
 import {IGamePlayActionPayload} from "../game-play/game-play.types";
-import {GamePlayActionType} from "../../../api/models/action.model";
+import {GamePlayActionType, GamePlayActionInterface} from "../../../api/models/action.model";
+import {ConnectActions} from "../../../../common-app/src/ui/redux/connect/connect-actions.class";
+import {UploaderActions} from "../../../../common-app/src/ui/redux/uploader/uploader-actions.class";
 
 @Injectable()
 export class ForRealCardsModule extends ReduxModule<IAppState, IPayloadAction>  {
@@ -45,19 +47,120 @@ export class ForRealCardsModule extends ReduxModule<IAppState, IPayloadAction>  
         let payload:IGamePlayActionPayload = action.payload;
         return EventHelpers.createGAevent({
           eventCategory: 'GAME_PLAY',
-          eventAction: payload.gamePlayAction ? GamePlayActionType[payload.gamePlayAction.actionType] : "multiple"
+          eventAction: GamePlayActionType[payload.gamePlayAction.actionType]
         })
       }
     };
+
     eventDefinitions[GamePlayActions.GAME_PLAY_ACTIONSSS_PUSH ] = {
       eventFields: (prevState, action)=> {
         let payload:IGamePlayActionPayload = action.payload;
+
+        let manyEvents =  [];
+        payload.gamePlayActions.forEach( (event:GamePlayActionInterface)=>{
+          manyEvents.push(EventHelpers.createGAevent({
+            eventCategory: 'GAME_PLAY',
+            eventAction: GamePlayActionType[event.actionType]
+          }))
+        })
+        console.log("MANY EVENTS");
+        console.log(manyEvents);
+
+
         return EventHelpers.createGAevent({
           eventCategory: 'GAME_PLAY',
           eventAction: payload.gamePlayAction ? GamePlayActionType[payload.gamePlayAction.actionType] : "multiple"
         })
       }
     };
+
+
+
+/*
+    let eventGenerator = (gameActionString:string, gameActionType:number) =>{
+      return (prevState, reduxAction)=>{
+        let payload:IGamePlayActionPayload = reduxAction.payload;
+        payload.gamePlayActions.forEach( (event:GamePlayActionInterface)=>{
+          if (event.actionType===gameActionType) {
+            return EventHelpers.createGAevent({
+              eventCategory: 'GAME_PLAY',
+              eventAction: gameActionString
+            })
+          }
+        });
+      }
+    };
+    // Build an array for every game action
+    let gameActionEvents = [];
+    for (let property in GamePlayActionType) {
+      if (
+        GamePlayActionType.hasOwnProperty(property) &&  // not in prototype
+        /^\d+$/.test(property)                          // A number (TypeScript enums contain both number and name properties)
+      ) {
+        let i = Number(property);
+        gameActionEvents.push(
+          {
+            eventFields: eventGenerator(GamePlayActionType[i], i)
+          }
+        );
+      }
+    }
+    eventDefinitions[GamePlayActions.GAME_PLAY_ACTIONSSS_PUSH ] = gameActionEvents;
+*/
+    // Error Logging
+
+    // Discuss.  Better to have an EventHelper error logger? Eliminate double ConnectActions.CONNECT_FAIL
+    eventDefinitions[ConnectActions.CONNECT_FAIL] = {
+      eventFields: (prevState, action)=> {
+        let payload:IGamePlayActionPayload = action.payload;
+        return EventHelpers.createGAevent({
+          eventCategory: 'error',
+          eventAction: ConnectActions.CONNECT_FAIL
+        })
+      }
+    };
+
+    eventDefinitions[LoginActions.LOGIN_ERROR] = {
+      eventFields: (prevState, action)=> {
+        let payload:IGamePlayActionPayload = action.payload;
+        return EventHelpers.createGAevent({
+          eventCategory: 'error',
+          eventAction: LoginActions.LOGIN_ERROR
+        })
+      }
+    };
+
+    eventDefinitions[UploaderActions.UPLOAD_FAIL] = {
+      eventFields: (prevState, action)=> {
+        let payload:IGamePlayActionPayload = action.payload;
+        return EventHelpers.createGAevent({
+          eventCategory: 'error',
+          eventAction: UploaderActions.UPLOAD_FAIL
+        })
+      }
+    };
+
+    eventDefinitions[ForRealCardsActions.ENTER_GAME_FAIL] = {
+      eventFields: (prevState, action)=> {
+        let payload:IGamePlayActionPayload = action.payload;
+        return EventHelpers.createGAevent({
+          eventCategory: 'error',
+          eventAction: ForRealCardsActions.ENTER_GAME_FAIL
+        })
+      }
+    };
+
+    eventDefinitions[GamePlayActions.GAME_PLAY_ERROR] = {
+      eventFields: (prevState, action)=> {
+        let payload:IGamePlayActionPayload = action.payload;
+        return EventHelpers.createGAevent({
+          eventCategory: 'error',
+          eventAction: GamePlayActions.GAME_PLAY_ERROR
+        })
+      }
+    };
+
+
 
     const analyticsMiddleware = createMiddleware(eventDefinitions);
 
