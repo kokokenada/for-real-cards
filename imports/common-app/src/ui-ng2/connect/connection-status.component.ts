@@ -13,7 +13,7 @@ import {IConnectState, ConnectActions} from "../../ui";
   selector: 'ca-connection-status',
   template: `
 <div 
-  *ngIf="!connectState?.connected" 
+  *ngIf="!connectState?.connected && connectState?.connecting && connectState?.retryCount>1" 
   class="alert alert-danger"
   (click)="setServer()"
 >
