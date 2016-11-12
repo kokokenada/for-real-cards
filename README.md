@@ -33,12 +33,12 @@ MIT
 To do: add as issues:
 
 ### Framework
-* Fix styling of edit profile
 * Automatic deletion of tmp users
-* Welcome page 
 * Get pagination working (ng2-paginate)
 
 ### Gameplay
+* Welcome page 
+* Fix styling of edit profile
 * Refresh or deep linking with game ID in URL should work (wait until Angular 2 upgraded to final and use correct router) 
 * Leave game, boot a player from a game
 * More performant state history for UNDO
