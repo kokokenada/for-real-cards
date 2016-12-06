@@ -1,5 +1,3 @@
-///<reference path='../../../../../../node_modules/immutable/dist/immutable.d.ts'/>
-import Immutable = require('immutable');
 import { IPayloadAction } from '../action.interface';
 import { ModalActions } from './modal-actions.class';
 import {IModalActionPayload, IModalState} from './modal.types'
