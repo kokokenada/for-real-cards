@@ -1,5 +1,3 @@
-///<reference path='../../../../../../node_modules/immutable/dist/immutable.d.ts'/>
-import Immutable = require('immutable');
 import { IPayloadAction } from '../action.interface';
 import { UploaderActions } from './uploader-actions.class';
 import {IUploaderActionPayload, IUploaderState} from './uploader.types'
