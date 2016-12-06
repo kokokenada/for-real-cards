@@ -1,6 +1,3 @@
-///<reference path='../../../../../../node_modules/immutable/dist/immutable.d.ts'/>
-import Immutable = require('immutable');
-
 export interface IUploaderState {
   uploadInProgress:boolean;
   lastUploadSuccess?:boolean;
