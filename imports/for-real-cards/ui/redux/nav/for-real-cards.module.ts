@@ -1,5 +1,6 @@
 import {Injectable} from "@angular/core";
 
+import { Extensions } from 'redux-gtm';
 import {forRealCardsReducer} from "./for-real-cards.reducer";
 import {ForRealCardsActions} from "./for-real-cards-actions.class";
 import {ForRealCardsAsync} from "./for-real-cards-async.class";
@@ -52,42 +53,17 @@ export class ForRealCardsModule extends ReduxModule<IAppState, IPayloadAction>  
       }
     };
 
-    eventDefinitions[GamePlayActions.GAME_PLAY_ACTIONSSS_PUSH ] = {
-      eventFields: (prevState, action)=> {
-        let payload:IGamePlayActionPayload = action.payload;
-
-        let manyEvents =  [];
-        payload.gamePlayActions.forEach( (event:GamePlayActionInterface)=>{
-          manyEvents.push(EventHelpers.createGAevent({
-            eventCategory: 'GAME_PLAY',
-            eventAction: GamePlayActionType[event.actionType]
-          }))
-        })
-        console.log("MANY EVENTS");
-        console.log(manyEvents);
-
-
-        return EventHelpers.createGAevent({
-          eventCategory: 'GAME_PLAY',
-          eventAction: payload.gamePlayAction ? GamePlayActionType[payload.gamePlayAction.actionType] : "multiple"
-        })
-      }
-    };
-
-
-
-/*
     let eventGenerator = (gameActionString:string, gameActionType:number) =>{
       return (prevState, reduxAction)=>{
         let payload:IGamePlayActionPayload = reduxAction.payload;
-        payload.gamePlayActions.forEach( (event:GamePlayActionInterface)=>{
-          if (event.actionType===gameActionType) {
-            return EventHelpers.createGAevent({
-              eventCategory: 'GAME_PLAY',
-              eventAction: gameActionString
-            })
-          }
-        });
+        if (payload.gamePlayActions.some( (event:GamePlayActionInterface)=>{
+          return event.actionType===gameActionType;
+        } )) {
+          return EventHelpers.createGAevent({
+            eventCategory: 'GAME_PLAY',
+            eventAction: gameActionString
+          })
+        }
       }
     };
     // Build an array for every game action
@@ -100,13 +76,14 @@ export class ForRealCardsModule extends ReduxModule<IAppState, IPayloadAction>  
         let i = Number(property);
         gameActionEvents.push(
           {
-            eventFields: eventGenerator(GamePlayActionType[i], i)
+            eventFields: eventGenerator(GamePlayActionType[i], i),
+            eventSchema: {eventCategory: value => value === 'GAME_PLAY' }
           }
         );
       }
     }
     eventDefinitions[GamePlayActions.GAME_PLAY_ACTIONSSS_PUSH ] = gameActionEvents;
-*/
+
     // Error Logging
 
     // Discuss.  Better to have an EventHelper error logger? Eliminate double ConnectActions.CONNECT_FAIL
@@ -162,7 +139,8 @@ export class ForRealCardsModule extends ReduxModule<IAppState, IPayloadAction>  
 
 
 
-    const analyticsMiddleware = createMiddleware(eventDefinitions);
+    const logger = Extensions.logger();
+    const analyticsMiddleware = createMiddleware(eventDefinitions, { logger });
 
     this.middlewares.push(
       this.async.gameNavigationMiddleware,
