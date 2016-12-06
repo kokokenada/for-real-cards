@@ -1,8 +1,5 @@
 import { Injectable } from '@angular/core';
 
-///<reference path='../../../../../node_modules/immutable/dist/immutable.d.ts'/>
-import Immutable = require('immutable');
-
 import {combineReducers, Reducer, ReducersMapObject} from 'redux';
 import {NgRedux} from "ng2-redux";
 
