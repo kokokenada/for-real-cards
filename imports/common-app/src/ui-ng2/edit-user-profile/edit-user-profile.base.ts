@@ -55,15 +55,15 @@ export abstract class EditUserProfileBase {
       e.dataTransfer.dropEffect = 'copy';
     }
 
-  fileDrop(e:any):void {
+  fileDrop(event:any):void {
     var transfer = this._getTransfer(event);
     if (!transfer) {
       return;
     }
     this._preventAndStop(event);
-    let file = e.dataTransfer.files[0];
+    let file = event.dataTransfer.files[0];
     UploaderActions.uploadStartRequest(file, AvatarOriginalStore)
-    this.hasBaseDropZoneOver = e;
+    this.hasBaseDropZoneOver = event;
   }
 
   private _getTransfer = function (event) {

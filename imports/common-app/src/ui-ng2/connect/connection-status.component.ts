@@ -8,6 +8,8 @@ import {
 import { select } from 'ng2-redux';
 
 import {IConnectState, ConnectActions} from "../../ui";
+declare const window: any;
+declare const localStorage: any;
 
 @Component({
   selector: 'ca-connection-status',

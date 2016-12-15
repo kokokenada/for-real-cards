@@ -1,5 +1,4 @@
 import { Meteor } from 'meteor/meteor';
-import * as log from 'loglevel';
 import { NgZone } from '@angular/core';
 import { select } from 'ng2-redux';
 
@@ -14,6 +13,7 @@ import { GamePlayActions, IForRealCardsState, IGamePlayRecord} from "../ui";
 import {DealModalService} from "../deal-modal/deal-modal.service";
 import {CommonPopups} from "../../common-app/src/ui-ng2/common-popups/common-popups";
 
+declare const window: any;
 
 export abstract class RunGame {
   @select() gamePlayReducer$;
