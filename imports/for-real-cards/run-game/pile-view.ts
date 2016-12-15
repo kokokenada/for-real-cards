@@ -1,7 +1,7 @@
 import { Component, Input, NgZone } from '@angular/core';
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
 
-import { RunGame } from './run-game.ts';
+import { RunGame } from './run-game';
 import { CardImageStyle } from "../api/index";
 import {CommonPopups} from "../../common-app/src/ui-ng2/common-popups/common-popups";
 import {DealModalService} from "../deal-modal/deal-modal.service";

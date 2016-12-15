@@ -1,7 +1,7 @@
 import 'seedrandom';
 import { List } from "immutable";
 
-import {Card, CardRank, CardSuit} from './card.model.ts';
+import {Card, CardRank, CardSuit} from './card.model';
 
 let decks: Deck[] = [];
 

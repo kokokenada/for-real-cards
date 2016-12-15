@@ -1,8 +1,8 @@
 import { Meteor } from 'meteor/meteor';
 import * as log from 'loglevel';
 
-import { HandCollection, Hand } from './hand.model.ts';
-import { GamePlayActionCollection } from "./action.model.ts";
+import { HandCollection, Hand } from './hand.model';
+import { GamePlayActionCollection } from "./action.model";
 import {AccountsAdminTools} from "../../../common-app-api/src/api/services/accounts-admin-tools";
 
 export interface GameSubscriptionOptions {

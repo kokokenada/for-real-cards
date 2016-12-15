@@ -1,7 +1,7 @@
 import { Component, Input, NgZone } from '@angular/core';
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
 
-import {RunGame} from './run-game.ts';
+import {RunGame} from './run-game';
 import {Card, Deck} from "../api/index";
 import {CardImageStyle} from "../api/interfaces/card-image-style.interface";
 import {GamePlayActions} from "../ui/redux/game-play/game-play-actions.class";

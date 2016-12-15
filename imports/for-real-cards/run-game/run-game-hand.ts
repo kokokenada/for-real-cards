@@ -2,7 +2,7 @@ import { Component, Input, NgZone, OnInit, ViewEncapsulation } from '@angular/co
 import { Meteor } from 'meteor/meteor';
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
 
-import { RunGame } from './run-game.ts';
+import { RunGame } from './run-game';
 import { DealModalService } from "../deal-modal/deal-modal.service"
 import { Card, CardImageStyle, GameConfig, CardLocation, CardCountAllowed, Hand} from "../api";
 import { ActionFormatted, GamePlayActions} from "../ui";

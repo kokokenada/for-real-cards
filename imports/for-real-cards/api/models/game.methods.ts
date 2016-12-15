@@ -4,8 +4,8 @@ import * as log from 'loglevel';
 import { AccountsAdminTools } from '../../../common-app-api/src/api/services/accounts-admin-tools';
 import { getNextSequence } from '../../../common-app-api/src/api/models/counter.model';
 
-import { Game, GameCollection } from './game.model.ts';
-import { HandCollection, HandInterface, Hand } from './hand.model.ts';
+import { Game, GameCollection } from './game.model';
+import { HandCollection, HandInterface, Hand } from './hand.model';
 
 function joinGame(gameId:string, userId:string, password:string):HandInterface {
   let game:Game = <Game>GameCollection.findOne({_id: gameId});
