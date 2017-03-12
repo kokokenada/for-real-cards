@@ -2,7 +2,7 @@ import { User } from "../../../../../common-app-api/src/api/models/user.model";
 import { IDocumentChange } from "../../reactive-data/document-change.interface";
 import { IPayloadAction } from "../action.interface";
 import { Credentials } from "../../services/credentials";
-import {ReduxModuleCombiner} from "../redux-module-combiner";
+import { ReduxModuleCombiner } from "../redux-module-combiner";
 
 export class LoginActions {
   private static prefix = 'CA_LOGIN_';
