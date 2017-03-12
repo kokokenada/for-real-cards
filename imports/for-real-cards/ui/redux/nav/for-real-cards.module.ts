@@ -15,6 +15,9 @@ import {IGamePlayActionPayload} from "../game-play/game-play.types";
 import {GamePlayActionType, GamePlayActionInterface} from "../../../api/models/action.model";
 import {ConnectActions} from "../../../../common-app/src/ui/redux/connect/connect-actions.class";
 import {UploaderActions} from "../../../../common-app/src/ui/redux/uploader/uploader-actions.class";
+import {PlatformTools} from "../../../../common-app/src/ui-ng2/platform-tools/platform-tools";
+
+declare const cordova: any;
 
 @Injectable()
 export class ForRealCardsModule extends ReduxModule<IAppState, IPayloadAction>  {
@@ -137,12 +140,57 @@ export class ForRealCardsModule extends ReduxModule<IAppState, IPayloadAction>  
       }
     };
 
-
-
     const logger = Extensions.logger();
-    const analyticsMiddleware = createMiddleware(eventDefinitions, { logger });
+    const extensions:any = {logger};
 
-    this.middlewares.push(
+
+    if (false && PlatformTools.isCordova()) { // TODO: put behind formal feature toggle & complete feature
+
+
+// It returns true when online, otherwise, returns false
+      const isConnected = (state) => {
+        console.log('in isConnected')
+        console.log(state)
+        console.log(state.connectReducer.get('connected'))
+        return state.connectReducer.get('connected')
+      };
+
+// Create the offline storage extension.
+      const offlineStorage = Extensions.offlineWeb(isConnected);
+
+      const tagManager = cordova.require('com.jareddickson.cordova.tag-manager.TagManager');
+      const gtmId = 'GTM-W9LZN4';  // your Google Tag Manager ID for mobile container
+      const intervalPeriod = 30;    // seconds
+
+      // Initialize your GTM container
+      tagManager.init(null, null, gtmId, intervalPeriod);
+
+      // Create a custom data layer extension
+      const customDataLayer = {
+        push(event) {
+          switch (event.hitType) {
+            case 'event':
+              tagManager.trackEvent(null, null, event.eventCategory, event.eventAction, event.eventLabel, event.eventValue);
+              break;
+
+            case 'pageview':
+              tagManager.trackPage(null, null, event.page);
+              break;
+
+            default:
+              break;
+          }
+        }
+      };
+      extensions.customDataLayer = customDataLayer;
+      extensions.offlineStorage = offlineStorage;
+      console.log('done cordova analytics init');
+      console.log(extensions)
+    }
+
+    const analyticsMiddleware = createMiddleware(eventDefinitions, extensions);
+
+     this.middlewares.push(
       this.async.gameNavigationMiddleware,
       analyticsMiddleware
     );
