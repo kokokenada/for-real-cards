@@ -4,9 +4,9 @@ import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import {DragulaService} from 'ng2-dragula/ng2-dragula';
 import {NgModule}      from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
-import { NgReduxRouter } from "ng2-redux-router"
+import { NgReduxRouter } from "@angular-redux/router"
 import {DragulaModule} from 'ng2-dragula/ng2-dragula';
-import {TabsModule} from 'ng2-bootstrap/ng2-bootstrap';
+import {TabsModule} from 'ng2-bootstrap';
 
 import {AccountsAdmin} from "../../common-app/src/ui-twbs-ng2/accounts-admin/accounts-admin";
 import {CommonAppNgTWBS} from "../../common-app/src/ui-twbs-ng2/common-app-ng-twbs.module";

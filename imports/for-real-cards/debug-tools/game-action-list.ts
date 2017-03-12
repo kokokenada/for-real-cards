@@ -1,5 +1,5 @@
 import { Component, Input, NgZone } from '@angular/core';
-import { select } from 'ng2-redux';
+import { select } from '@angular-redux/store';
 
 import { GamePlayAction, Hand } from '../api/index'
 import { ActionFormatted, ForRealCardsActions, IGamePlayState } from "../ui";

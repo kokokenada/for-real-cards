@@ -5,7 +5,7 @@ import {forRealCardsReducer} from "./for-real-cards.reducer";
 import {ForRealCardsActions} from "./for-real-cards-actions.class";
 import {ForRealCardsAsync} from "./for-real-cards-async.class";
 import {ReduxModule} from "../../../../common-app/src/ui/redux/redux-module.class";
-import { NgReduxRouter, UPDATE_LOCATION, routerReducer } from 'ng2-redux-router';
+import { NgReduxRouter, UPDATE_LOCATION, routerReducer } from '@angular-redux/router';
 import {IAppState} from "../../../../common-app/src/ui/redux/state.interface";
 import {IPayloadAction} from "../../../../common-app/src/ui/redux/action.interface";
 import { createMiddleware, EventDefinitionsMap, EventHelpers } from "redux-gtm";

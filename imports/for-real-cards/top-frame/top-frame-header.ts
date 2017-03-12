@@ -1,5 +1,5 @@
 import { Component, NgZone, OnInit } from '@angular/core';
-import { select } from 'ng2-redux';
+import { select } from '@angular-redux/store';
 
 import { IForRealCardsState, INITIAL_STATE_FOR_REAL_CARDS } from "../ui";
 import {PlatformTools} from "../../common-app/src/ui-ng2/platform-tools/platform-tools";

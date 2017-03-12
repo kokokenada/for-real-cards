@@ -1,5 +1,5 @@
 import { Component, NgZone } from '@angular/core';
-import { select } from 'ng2-redux';
+import { select } from '@angular-redux/store';
 
 import {IGamePlayRecord} from "../ui/redux/game-play/game-play.types";
 

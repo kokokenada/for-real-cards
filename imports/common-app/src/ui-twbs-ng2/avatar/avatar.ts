@@ -2,7 +2,7 @@
  * Created by kenono on 2016-04-23.
  */
 import { Component, Input, NgZone } from '@angular/core';
-import { select } from 'ng2-redux';
+import { select } from '@angular-redux/store';
 import { User } from "../../../../common-app-api/src/api/models/user.model";
 import { IUsersState } from "../../ui/redux/users/users.types";
 

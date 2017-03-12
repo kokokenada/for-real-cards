@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { NgRedux } from "ng2-redux";
+import { NgRedux } from "@angular-redux/store";
 
 import {ForRealCardsModule, GamePlayModule } from "../ui";
 import {ReduxModuleCombiner} from "../../common-app/src/ui/redux/redux-module-combiner";

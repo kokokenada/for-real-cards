@@ -1,5 +1,5 @@
 import { Component, NgZone } from '@angular/core';
-import { select } from 'ng2-redux';
+import { select } from '@angular-redux/store';
 import * as log from 'loglevel';
 
 //import * as templateTWBS from './start.twbs.html';  //This also works and doesn't cause webstorm to complain

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import {combineReducers, Reducer, ReducersMapObject} from 'redux';
-import {NgRedux} from "ng2-redux";
+import {NgRedux} from "@angular-redux/store";
 
 import {IAppState} from "./state.interface";
 import {ReduxModule} from "./redux-module.class";

@@ -1,6 +1,6 @@
 import { Injectable, Component } from '@angular/core';
 import {Subscription} from 'rxjs';
-import { select } from 'ng2-redux';
+import { select } from '@angular-redux/store';
 import {ModalActions} from "./modal-actions.class";
 import {IModalState} from "./modal.types";
 

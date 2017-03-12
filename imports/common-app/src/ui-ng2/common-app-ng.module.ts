@@ -1,7 +1,7 @@
 import { NgModule }      from '@angular/core';
 import { CommonModule }      from '@angular/common';
 import { FormsModule }      from '@angular/forms';
-import { NgReduxModule } from 'ng2-redux';
+import { NgReduxModule } from '@angular-redux/store';
 
 import { ConnectionStatus } from "./connect/connection-status.component";
 import { CommonAppButton } from "./button/common-app-button";
@@ -55,7 +55,7 @@ export const COMMON_APP_SINGLETONS = [
 ];
 
 @NgModule({
-  imports: [CommonModule, FormsModule, NgReduxModule.forRoot()],
+  imports: [CommonModule, FormsModule, NgReduxModule],
   declarations: [COMMON_APP_EXPORTED_DECLARATIONS],
   exports: COMMON_APP_NG_EXPORTS
 })

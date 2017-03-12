@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { NgZone } from '@angular/core';
-import { select } from 'ng2-redux';
+import { select } from '@angular-redux/store';
 
 
 import { DragulaService } from 'ng2-dragula/ng2-dragula';

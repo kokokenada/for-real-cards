@@ -1,6 +1,6 @@
 import { Component, ComponentFactoryResolver, ComponentRef, ElementRef, OnInit, NgZone, ReflectiveInjector, ViewContainerRef, ViewChild } from "@angular/core"
 import {Subscription} from 'rxjs';
-import { select } from 'ng2-redux';
+import { select } from '@angular-redux/store';
 
 import {IModalState} from "../../ui/redux/modal/modal.types";
 import {ModalActions} from "../../ui/redux/modal/modal-actions.class";

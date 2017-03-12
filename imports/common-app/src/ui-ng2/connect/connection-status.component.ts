@@ -5,7 +5,7 @@ import {
   OnInit
 } from '@angular/core';
 
-import { select } from 'ng2-redux';
+import { select } from '@angular-redux/store';
 
 import {IConnectState, ConnectActions} from "../../ui";
 declare const window: any;

@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { select } from 'ng2-redux';
+import { select } from '@angular-redux/store';
 
 import {MenuItem} from "../../ui/services/menu-item";
 import {ILoginState, LOGIN_INITIAL_STATE} from "../../ui";

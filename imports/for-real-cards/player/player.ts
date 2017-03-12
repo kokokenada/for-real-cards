@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Subscription } from 'rxjs'
-import { select } from 'ng2-redux';
+import { select } from '@angular-redux/store';
 
 import { User } from '../../common-app-api/src/api/models/user.model';
 import { Card, Hand } from  '../api/index';
