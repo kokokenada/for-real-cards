@@ -21,6 +21,9 @@ import {CommonPopups} from "./common-popups/common-popups";
 import {AccountsAdminModule} from "../ui/redux/accounts-admin/accounts-admin.module";
 import {AccountsAdminAsync} from "../ui/redux/accounts-admin/accounts-admin-async.class";
 import {AccountsAdminService} from "../ui/redux/accounts-admin/accounts-admin.service";
+import {FeatureToggleModule} from "../ui/redux/feature-toggle/feature-toggle.module";
+import {FeatureToggleActions} from "../ui/redux/feature-toggle/feature-toggle.actions";
+import {ToggleRouter} from "../ui/redux/feature-toggle/feature-toggle-router";
 
 const COMMON_APP_EXPORTED_DECLARATIONS = [
   // Common-app
@@ -43,6 +46,9 @@ export const COMMON_APP_SINGLETONS = [
   CommonPopups,
   ConnectAsync,
   ConnectModule,
+  FeatureToggleModule,
+  FeatureToggleActions,
+  ToggleRouter,
   LoginAsync,
   LoginModule,
   ModalModule,
