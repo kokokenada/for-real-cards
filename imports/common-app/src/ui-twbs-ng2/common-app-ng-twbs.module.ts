@@ -31,9 +31,6 @@ const COMMON_APP_NG_TWBS_EXPORTS = [
   AccountsAdmin,
   ...DYNAMIC
 ];
-console.log(DropdownModule)
-console.log(DropdownModule.forRoot())
-console.log(DropdownModule.forRoot().providers)
 const PASSTHROUGH_MODULES =[
   CommonModule, CommonAppNg, Ng2BootstrapModule, DropdownModule
 ];
