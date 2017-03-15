@@ -74,11 +74,10 @@ export class ReduxModules {
       )
     };
     eventDefinitions[UPDATE_LOCATION] = {
-      eventFields: (action) => ( //PageView
+      eventFields: (action): PageView => (
         {
           hitType: 'pageview',
-          page: action.payload,
-          event: 'REDUX_GTM_GA_EVENT'
+          page: action.payload
         }
       )
     };
@@ -94,9 +93,9 @@ export class ReduxModules {
     };
 
     let eventGenerator = (gameActionString:string, gameActionType:number) =>{
-      return (reduxAction): Event => {
+      return (reduxAction): Event | {} => {
         let payload:IGamePlayActionPayload = reduxAction.payload;
-        if (payload.gamePlayActions.some( (event:GamePlayActionInterface)=>{
+        if (payload.gamePlayActions.some( (event:GamePlayActionInterface)=>{ // Is this an event of interest
             return event.actionType===gameActionType;
           } )) {
           return {
@@ -104,9 +103,12 @@ export class ReduxModules {
             eventCategory: 'GAME_PLAY',
             eventAction: gameActionString
           }
+        } else {
+          return {};
         }
       }
     };
+
     // Build an array for every game action
     let gameActionEvents = [];
     for (let property in GamePlayActionType) {
@@ -123,7 +125,6 @@ export class ReduxModules {
         );
       }
     }
-    console.log(gameActionEvents)
     eventDefinitions[GamePlayActions.GAME_PLAY_ACTIONSSS_PUSH ] = gameActionEvents;
 
     // Error Logging
