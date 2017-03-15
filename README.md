@@ -3,6 +3,14 @@ An app for learning or demonstrating techniques and the start of a common collec
 
 I am blogging about my experiences here [www.fabrica.tech](http://www.fabrica.tech)
  
+## Getting Started (development)
+
+* install meteor
+* clone the repo locally
+* cd <local directory>
+* npm install
+* meteor
+
 ## Common-app
 Reusable commponents to serve a startting point for other apps.  Will be broken off into a seperate repository.
 
