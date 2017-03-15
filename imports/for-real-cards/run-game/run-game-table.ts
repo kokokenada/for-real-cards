@@ -4,6 +4,7 @@ import { DragulaService } from 'ng2-dragula/ng2-dragula';
 import { GameRenderingTools } from "../ui";
 import { Card, Coordinates, Deck, Hand} from "../api/index";
 import { RunGame } from './run-game';
+import { CardImageStyle} from "../api/interfaces/card-image-style.interface";
 
 import template from "./run-game-table.html"
 import {PlatformTools} from "../../common-app/src/ui-ng2/platform-tools/platform-tools";

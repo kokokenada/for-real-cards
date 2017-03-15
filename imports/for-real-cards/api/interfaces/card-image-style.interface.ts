@@ -1,4 +1,5 @@
 export interface CardImageStyle {
-  height: string;
-  width: string;
+  height?: string;
+  width?: string;
+  transform?: string;
 }

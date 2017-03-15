@@ -227,16 +227,26 @@ export abstract class RunGame {
   showHand():void {
     GamePlayActions.showHand(this.gameState);
   }
-  
-  landscapeCardStyle():CardImageStyle {
+
+
+  cardCountStyle(landscape:boolean) {
+    return landscape ?  {position: 'absolute', top:'5%', left:'65%'} : {position: 'absolute', top:0, left:'85%'};
+  }
+
+  cardImgStyle(landscape:boolean):CardImageStyle {
+    return landscape ? this.landscapeCardStyle() : this.portraitCardStyle();
+  }
+
+  private landscapeCardStyle():CardImageStyle {
+    // https://waapi.github.io/tool-transforms/
     return {
-      // transform-not:rotate(90deg) scale(0.5, 3.5) !important; <!--transform:rotate(90deg) translate(-2.6vh, 0) !important;-->
-      height: '100%',
-      width: '100%' // !important needed?
+      transform: 'rotate(90deg) translateY(50%) translateY(-50%)',
+      //height: '100%',
+      //width: '100%' // !important needed?
     }
   }
 
-  portraitCardStyle():CardImageStyle {
+  private portraitCardStyle():CardImageStyle {
     return {
       height: '100%',
       width: '100%'

@@ -14,13 +14,13 @@ import {DealModalService} from "../deal-modal/deal-modal.service";
     template: `
 <!-- The image--> 
 <img [hidden]="!numberOfCards()" [src]="URL()"
-  [ngStyle]="imgStyle"
+  [ngStyle]="cardImgStyle(landscape)"
   data-drag-source="DECK"
 />
 <!-- CARD COUNT-->
 <label [hidden]="!numberOfCards()" 
   class="card-count"
-  style="position: absolute; top:0; left:85%; ">
+  [ngStyle]="cardCountStyle(landscape)">
   {{numberOfCards()}}
  </label>
 <!--FLIP THE DECK BUTTONS-->  
@@ -38,7 +38,7 @@ import {DealModalService} from "../deal-modal/deal-modal.service";
   <button class="btn btn-block btn-default" 
       style="font-size: x-small; white-space: normal; height: 50%" 
       [hidden]="!cardsInPile(true)" 
-      (click)="vm.pileToDeck()">
+      (click)="pileToDeck()">
       Shuffle & Move
   </button>
 </div> 
@@ -46,7 +46,7 @@ import {DealModalService} from "../deal-modal/deal-modal.service";
   }
 )
 export class DeckView extends RunGame {
-  @Input() imgStyle:CardImageStyle;
+  @Input() landscape:boolean;
 
   constructor(
     protected dragulaService: DragulaService,

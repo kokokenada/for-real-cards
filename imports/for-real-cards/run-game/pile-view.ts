@@ -14,7 +14,7 @@ import {DealModalService} from "../deal-modal/deal-modal.service";
 <playing-card 
   [hidden]="!numberOfCards()"
   [card]="topCardInPile()" 
-  [imgStyle]="imgStyle"
+  [imgStyle]="cardImgStyle(landscape)"
   [attr.data-card-rank]="topCardInPile()?.rank"
   [attr.data-card-suit]="topCardInPile()?.suit"
 >
@@ -22,7 +22,7 @@ import {DealModalService} from "../deal-modal/deal-modal.service";
 <label 
   *ngIf="numberOfCards()" 
   class="card-count" 
-  style="position: absolute; 10%; top:0%; left:85%; ">
+  [ngStyle]="cardCountStyle(landscape)">
   {{numberOfCards()}}
 </label>
 <div *ngIf="numberOfCards()===0"  
@@ -33,7 +33,7 @@ import {DealModalService} from "../deal-modal/deal-modal.service";
   }
 )
 export class PileView extends RunGame {
-  @Input() imgStyle:CardImageStyle;
+  @Input() landscape:boolean;
   constructor(
     protected dragulaService: DragulaService,
     protected ngZone:NgZone,

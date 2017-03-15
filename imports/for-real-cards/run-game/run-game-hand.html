@@ -15,7 +15,7 @@
           [ngStyle]="dropAreaStyle()"
           data-drag-source="DECK"
           data-drop-target="DECK"
-          [imgStyle]="landscapeCardStyle()"
+          [landscape]="true"
   >
   </deck-view>
   <!-- PILE -->
@@ -23,7 +23,7 @@
           *ngIf="shouldShowPile()"
           [dragula]="'drag-and-drop'"
           [ngStyle]="dropAreaStyle()"
-          [imgStyle]="landscapeCardStyle()"
+          [landscape]="true"
           [attr.data-card-rank]="topCardInPile()?.rank"
           [attr.data-card-suit]="topCardInPile()?.suit"
           data-drag-source="PILE"
