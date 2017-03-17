@@ -93,7 +93,7 @@ export class ReduxModules {
     };
 
     let eventGenerator = (gameActionString:string, gameActionType:number) =>{
-      return (reduxAction): Event | {} => {
+      return (reduxAction): Event => {
         let payload:IGamePlayActionPayload = reduxAction.payload;
         if (payload.gamePlayActions.some( (event:GamePlayActionInterface)=>{ // Is this an event of interest
             return event.actionType===gameActionType;
@@ -103,8 +103,6 @@ export class ReduxModules {
             eventCategory: 'GAME_PLAY',
             eventAction: gameActionString
           }
-        } else {
-          return {};
         }
       }
     };
