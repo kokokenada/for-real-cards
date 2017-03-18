@@ -95,7 +95,7 @@ export class ReduxModules {
     let eventGenerator = (gameActionString:string, gameActionType:number) =>{
       return (reduxAction): Event => {
         let payload:IGamePlayActionPayload = reduxAction.payload;
-        if (payload.gamePlayActions.some( (event:GamePlayActionInterface)=>{ // Is this an event of interest
+        if (payload.gamePlayActions.some( (event:GamePlayActionInterface)=>{ // Is this event the one that fired
             return event.actionType===gameActionType;
           } )) {
           return {
