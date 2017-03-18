@@ -43,6 +43,7 @@ import {RunGameHand} from "../run-game/run-game-hand";
 import {RunGameHandAndTable} from "../run-game/run-game-hand-and-table";
 import {ReduxModules} from "./redux-modules";
 import {LoginActions} from "../../common-app/src/ui/redux/login/login-actions.class";
+import {EditGameConfig} from "../edit-game-config/edit-game-config";
 
 const appRoutes: Routes = [
   {path: '', component: Start},
@@ -53,6 +54,7 @@ const appRoutes: Routes = [
   {path: 'edit-profile', component: EditUserProfileTWBS},
   {path: 'frc-deal-modal', component: DealModal},
   {path: 'accounts-admin', component: AccountsAdmin},
+  {path: 'edit-game-config', component: EditGameConfig},
   {path: 'game-action-list', component: GameActionList}
 ];
 
@@ -89,6 +91,15 @@ export class ForRealCardsTopFrame extends TopFrame implements OnInit {
       roles: ['admin'],
       callback: ()=> {
         this.router.navigate(['/accounts-admin']);
+      }
+    });
+
+    Menus.addSubMenuItem('topbar', {
+      id: 'admin.edit-game-config',
+      title: 'Edit Game Config',
+      roles: ['admin'],
+      callback: ()=> {
+        this.router.navigate(['/edit-game-config']);
       }
     });
 
@@ -170,6 +181,7 @@ export class ForRealCardsTopFrame extends TopFrame implements OnInit {
     DealModal,
     DeckView,
     EditUserProfileTWBS,
+    EditGameConfig,
     EnterGame,
     ForRealCardsTopFrame,
     GameActionList,

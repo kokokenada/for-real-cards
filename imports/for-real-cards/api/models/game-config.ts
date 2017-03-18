@@ -60,6 +60,7 @@ export class GameConfig {
   name:string;
   minimumNumberOfPlayers:number;
   maximumNumberOfPlayers:number;
+  dealerCanSelectNumberOfCards: boolean;
   deck:Deck; // Not persisted
   _deck_id:DeckId; // Persisted
   numberOfCardsToPlayer:number;
@@ -79,7 +80,8 @@ export class GameConfig {
     userCommands:UserCommand[],
     turnCardUpAfterDeal?:boolean,
     numberOfCardsToPlayerFaceUp?:number,
-    _deck_id?:DeckId
+    _deck_id?:DeckId,
+    dealerCanSelectNumberOfCards?:boolean
   }) {
     this.name=attributes.name;
     this.minimumNumberOfPlayers = attributes.minimumNumberOfPlayers;
@@ -103,7 +105,8 @@ export class GameConfig {
       }
     }
     this.userCommands = returnValue; // Need to keep the same array object so $digest loop doesn't freak out
-    this.numberOfCardsToPlayerFaceUp =attributes.numberOfCardsToPlayerFaceUp ? attributes.numberOfCardsToPlayerFaceUp : 0;  
+    this.numberOfCardsToPlayerFaceUp = attributes.numberOfCardsToPlayerFaceUp ? attributes.numberOfCardsToPlayerFaceUp : 0;
+    this.dealerCanSelectNumberOfCards = attributes.dealerCanSelectNumberOfCards;
   }
   static getLocationString(deckLocation:DeckLocation):string {
     switch (deckLocation) {
