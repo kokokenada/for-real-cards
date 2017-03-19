@@ -100,6 +100,18 @@ let UserCommmandSchema = new SimpleSchema({
   }
 });
 
+let GameDealSequence = new SimpleSchema({
+  dealLocation: {
+    type: Number
+  },
+  minimumNumberOfCards: {
+    type: Number
+  },
+  maximumNumberOfCards: {
+    type: Number
+  }
+});
+
 let GameConfigSchema = new SimpleSchema({
   name: {
     type: String,
@@ -114,8 +126,11 @@ let GameConfigSchema = new SimpleSchema({
   _deck_id: {
     type:Number
   },
-  numberOfCardsToPlayer: {
-    type: Number
+  dealSequence: {
+    type:Array
+  },
+  "dealSequence.$": {
+    type: GameDealSequence
   },
   deckLocationAfterDeal: {
     type: Number
@@ -131,10 +146,6 @@ let GameConfigSchema = new SimpleSchema({
   }, 
   turnCardUpAfterDeal: {
     type: Boolean,
-    optional: true
-  },
-  numberOfCardsToPlayerFaceUp: {
-    type: Number,
     optional: true
   }
 });

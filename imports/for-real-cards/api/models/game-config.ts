@@ -22,6 +22,18 @@ export const enum CardCountAllowed {
 }
 const NUMBER_OF_CARD_COUNT_OPTIONS = 3;
 
+export enum DealLocation {
+  HAND_HIDDEN, //0
+  CENTER_FACEUP, //1
+  HAND_FACEUP //2
+}
+
+export interface DealSequence {
+  dealLocation: DealLocation;
+  minimumNumberOfCards: number;
+  maximumNumberOfCards: number
+}
+
 export class UserCommand {
   from:CardLocation;
   to:CardLocation;
@@ -63,8 +75,7 @@ export class GameConfig {
   dealerCanSelectNumberOfCards: boolean;
   deck:Deck; // Not persisted
   _deck_id:DeckId; // Persisted
-  numberOfCardsToPlayer:number;
-  numberOfCardsToPlayerFaceUp:number;
+  dealSequence: DealSequence[];
   deckLocationAfterDeal: DeckLocation;
   turnCardUpAfterDeal:boolean;
   hasTricks: boolean;
@@ -74,12 +85,11 @@ export class GameConfig {
     minimumNumberOfPlayers:number,
     maximumNumberOfPlayers:number,
     deck:Deck,
-    numberOfCardsToPlayer:number,
+    dealSequence:DealSequence[],
     deckLocationAfterDeal:DeckLocation,
     hasTricks:boolean,
     userCommands:UserCommand[],
     turnCardUpAfterDeal?:boolean,
-    numberOfCardsToPlayerFaceUp?:number,
     _deck_id?:DeckId,
     dealerCanSelectNumberOfCards?:boolean
   }) {
@@ -91,7 +101,7 @@ export class GameConfig {
     if (!this.deck && this._deck_id) {
       this.deck = Deck.getDeck(this._deck_id);
     }
-    this.numberOfCardsToPlayer=attributes.numberOfCardsToPlayer;
+    this.dealSequence = attributes.dealSequence ? attributes.dealSequence.slice(0) : [];
     this.deckLocationAfterDeal=attributes.deckLocationAfterDeal;
     this.turnCardUpAfterDeal=attributes.turnCardUpAfterDeal;
     this.hasTricks=attributes.hasTricks;
@@ -105,7 +115,6 @@ export class GameConfig {
       }
     }
     this.userCommands = returnValue; // Need to keep the same array object so $digest loop doesn't freak out
-    this.numberOfCardsToPlayerFaceUp = attributes.numberOfCardsToPlayerFaceUp ? attributes.numberOfCardsToPlayerFaceUp : 0;
     this.dealerCanSelectNumberOfCards = attributes.dealerCanSelectNumberOfCards;
   }
   static getLocationString(deckLocation:DeckLocation):string {
@@ -148,7 +157,13 @@ export class GameConfig {
       minimumNumberOfPlayers: 2,
       maximumNumberOfPlayers: 5,
       deck: Deck.getDeck(DeckId.STANDARD_ACE_HIGH),
-      numberOfCardsToPlayer: 5,
+      dealSequence: [
+        {
+          dealLocation: DealLocation.HAND_HIDDEN,
+          minimumNumberOfCards: 5,
+          maximumNumberOfCards: 5
+        }
+      ],
       deckLocationAfterDeal: DeckLocation.CENTER,
       turnCardUpAfterDeal: true,
       hasTricks: false,
@@ -230,7 +245,13 @@ export let defaultGames:GameConfig[] = [
     minimumNumberOfPlayers: 2,
     maximumNumberOfPlayers: 5,
     deck: Deck.getDeck(DeckId.STANDARD_ACE_HIGH),
-    numberOfCardsToPlayer: 8,
+    dealSequence: [
+      {
+        dealLocation: DealLocation.HAND_HIDDEN,
+        minimumNumberOfCards: 8,
+        maximumNumberOfCards: 8
+      }
+    ],
     deckLocationAfterDeal: DeckLocation.CENTER,
     turnCardUpAfterDeal: true,
     hasTricks: false,
@@ -245,7 +266,13 @@ export let defaultGames:GameConfig[] = [
     minimumNumberOfPlayers: 4,
     maximumNumberOfPlayers: 4,
     deck: Deck.getDeck(DeckId.EUCHURE),
-    numberOfCardsToPlayer: 5,
+    dealSequence: [
+      {
+        dealLocation: DealLocation.HAND_HIDDEN,
+        minimumNumberOfCards: 5,
+        maximumNumberOfCards: 5
+      }
+    ],
     deckLocationAfterDeal: DeckLocation.CENTER,
     turnCardUpAfterDeal: true,
     hasTricks: true,
@@ -262,7 +289,13 @@ export let defaultGames:GameConfig[] = [
     minimumNumberOfPlayers: 2,
     maximumNumberOfPlayers: 4,
     deck: Deck.getDeck(DeckId.STANDARD_ACE_HIGH),
-    numberOfCardsToPlayer: 10,
+    dealSequence: [
+      {
+        dealLocation: DealLocation.HAND_HIDDEN,
+        minimumNumberOfCards: 10,
+        maximumNumberOfCards: 10
+      }
+    ],
     deckLocationAfterDeal: DeckLocation.CENTER,
     turnCardUpAfterDeal: true,
     hasTricks: false,

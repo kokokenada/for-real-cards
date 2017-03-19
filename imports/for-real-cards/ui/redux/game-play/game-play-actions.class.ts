@@ -6,6 +6,7 @@ import { IGamePlayState } from "./game-play.types";
 import {AccountTools} from "../../../../common-app/src/ui/services/account-tools";
 import {ReduxModuleUtil} from "../../../../common-app/src/ui/redux/redux-module-util";
 import {ReduxModuleCombiner} from "../../../../common-app/src/ui/redux/redux-module-combiner";
+import {DealSequence, DealLocation} from "../../../api/models/game-config";
 
 const _prefix = 'FRC_GAMEPLAY_';
 const _prefix_length = _prefix.length;
@@ -120,7 +121,9 @@ export class GamePlayActions {
     // Give cards to players
     let deckPosition = 0;
     gameState.hands.forEach((hand: Hand)=> {
-      if (gameConfig.numberOfCardsToPlayer > 0) {
+      let dealSequence:DealSequence = gameConfig.dealSequence[0]; // TODO: Figure out which sequence we are in
+      let numberOfCards:number = dealSequence.maximumNumberOfCards; // TODO: Support variale # of cards
+      if (dealSequence.dealLocation===DealLocation.HAND_HIDDEN) {
         let toPlayerAction: GamePlayAction = new GamePlayAction({
           gameId: gameState.gameId,
           creatorId: Meteor.userId(),
@@ -128,13 +131,13 @@ export class GamePlayActions {
           visibilityType: VisibilityType.PLAYER,
           toPlayerId: hand.userId
         });
-        for (let i = 0; i < gameConfig.numberOfCardsToPlayer; i++) {
+        for (let i = 0; i < numberOfCards; i++) {
           toPlayerAction.cards.push(initializeAction.cards[deckPosition++]);
         }
         actions.push(toPlayerAction);
       }
 
-      if (gameConfig.numberOfCardsToPlayerFaceUp > 0) {
+      if (dealSequence.dealLocation===DealLocation.HAND_FACEUP) {
         let toPlayerAction: GamePlayAction = new GamePlayAction({
           gameId: gameState.gameId,
           creatorId: Meteor.userId(),
@@ -142,7 +145,7 @@ export class GamePlayActions {
           visibilityType: VisibilityType.ALL,
           toPlayerId: hand.userId
         });
-        for (let i = 0; i < gameConfig.numberOfCardsToPlayerFaceUp; i++) {
+        for (let i = 0; i < numberOfCards; i++) {
           toPlayerAction.cards.push(initializeAction.cards[deckPosition++]);
         }
         actions.push(toPlayerAction);
