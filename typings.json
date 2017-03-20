@@ -6,6 +6,7 @@
   },
   "globalDependencies": {
     "es6-shim": "registry:dt/es6-shim#0.31.2+20160317120654",
+    "index": "file:node_modules/@types/mocha/index.d.ts",
     "loglevel": "registry:dt/loglevel#1.4.0+20160412141402",
     "meteor-roles": "registry:dt/meteor-roles#1.2.14+20160317120654",
     "underscore": "registry:dt/underscore#1.7.0+20160505190121"
