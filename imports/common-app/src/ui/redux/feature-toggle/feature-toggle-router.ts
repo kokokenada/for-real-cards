@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import "rxjs/add/operator/pairwise";
 import { NgRedux } from '@angular-redux/store';
 
 import { IAppState } from '../state.interface';

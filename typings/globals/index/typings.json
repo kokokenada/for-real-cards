@@ -1,8 +1,8 @@
 {
   "resolution": "main",
   "tree": {
-    "src": "/Users/kenono/apps/for-real-cards/node_modules/@types/mocha/index.d.ts",
-    "raw": "file:node_modules/@types/mocha/index.d.ts",
-    "typings": "/Users/kenono/apps/for-real-cards/node_modules/@types/mocha/index.d.ts"
+    "src": "/Users/kenono/apps/for-real-cards/node_modules/@types/chai-spies/index.d.ts",
+    "raw": "file:node_modules/@types/chai-spies/index.d.ts",
+    "typings": "/Users/kenono/apps/for-real-cards/node_modules/@types/chai-spies/index.d.ts"
   }
 }
