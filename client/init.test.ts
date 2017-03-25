@@ -1,3 +1,4 @@
+// From: meteor create --example angular2-boilerplate
 // angular2-meteor polyfills
 import "angular2-meteor-polyfills";
 import "zone.js/dist/async-test";
