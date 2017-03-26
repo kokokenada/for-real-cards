@@ -1,15 +1,22 @@
 import { Component, Input, NgZone } from '@angular/core';
 import { select } from '@angular-redux/store';
 
-import { GamePlayAction, Hand } from '../api/index'
+import { GamePlayAction, GamePlayActionType, Hand } from '../api/index'
 import { ActionFormatted, ForRealCardsActions, IGamePlayState } from "../ui";
-import {PlatformTools} from "../../common-app/src/ui-ng2/platform-tools/platform-tools";
-import {AccountTools} from "../../common-app/src/ui/services/account-tools";
+import { PlatformTools } from "../../common-app/src/ui-ng2/platform-tools/platform-tools";
+import { AccountTools } from "../../common-app/src/ui/services/account-tools";
 
 function genericTableContent():string {
 return `
-<form class="form-inline" #displayGameForm="ngForm">
+<form #displayGameForm="ngForm">
   <div class="form-group">
+    <label class="control-label" for="displayType">Include Script</label>
+    <div class="btn-group">
+      <label class="btn btn-primary" name="displayType" [(ngModel)]="displayMode" btnRadio="noScript">No Script</label>
+      <label class="btn btn-primary" name="displayType" [(ngModel)]="displayMode" btnRadio="script">Script</label>
+    </div>
+  </div>
+  <div class="form-group form-inline ">
     <label class="control-label" for="gameId">Game Id:</label>
     <input 
       [(ngModel)]="gameId"
@@ -22,11 +29,12 @@ return `
       required
     />
   </div>
-  <div class="form-group">
+  <div class="form-group form-inline">
     <label class="control-label" for="password">Password (if required):</label>
-    <input [(ngModel)]="password" name="password" type="text" class="form-control" id="password"/>
+    <input [(ngModel)]="password" name="password" type="text" class="form-control" id="password" ngControl="formGameId" 
+      #formGameId="ngModel" />
   </div>
-  <button class="xs-col-4"
+  <button class="col "
     [disabled]="!displayGameForm.form.valid" 
     (click)="displayGame()" 
     class="btn btn-default">
@@ -105,6 +113,19 @@ return `
           <playing-card *ngFor="let card of action.previousState.tablePile" [card]="card" [imgStyle]="{height: 'auto', width: '100%'}" style="display:inline-block; width:40px"></playing-card>
         </td>             
       </tr>
+      <tr *ngIf="displayMode==='script'">
+        <td colspan="8">
+          <textarea style="width:100%; height: 200px">
+          {{testScriptState(action)}}
+          </textarea>
+        </td>
+      <tr *ngIf="displayMode==='script'">
+        <td colspan="8">
+          <textarea style="width:100%; height: 200px">
+          {{testScriptAction(action)}}
+          </textarea>
+        </td>
+      </tr>
     </template>
   </tbody>
 </table>
@@ -154,6 +175,7 @@ function template():string {
 )
 export class GameActionList {
   @select() gamePlayReducer;
+  public displayMode:string = 'visual';
   gamePlayState:IGamePlayState;
   password: string;
   gameId: string;
@@ -202,6 +224,45 @@ export class GameActionList {
 
   visibilityTypeDescription(action:GamePlayAction):string {
     return new ActionFormatted(action).visibilityTypeDescription();
+  }
+
+
+  testScriptAction(action:GamePlayAction):string {
+    const replacer = (key, value) => {
+      switch (key) {
+        case 'actionType': {
+          return 'GamePlayActionType.' + GamePlayActionType[value]
+        }
+        case 'currentGameConfig':
+        case 'previousState':
+          return undefined;
+        default:
+          return value;
+      }
+    };
+     return `
+      action = {
+        type: GamePlayActions.GAME_PLAY_ACTION_RECIEVED,
+        payload: {gamePlayAction:
+          ` + JSON.stringify(action, replacer, '    ') + ` 
+        }
+      };
+`
+  }
+
+  testScriptState(action:GamePlayAction):string {
+    const replacer = (key, value) => {
+      switch (key) {
+        case 'actionsXXX':
+          return undefined;
+        default:
+          return value;
+      }
+    };
+    return `
+      // State resulting from previous action
+      obj = ` + JSON.stringify(action.previousState, replacer, '    ') + `;
+`
   }
 
 }
