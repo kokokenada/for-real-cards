@@ -5,6 +5,7 @@ import { GamePlayAction, GamePlayActionType, Hand } from '../api/index'
 import { ActionFormatted, ForRealCardsActions, IGamePlayState } from "../ui";
 import { PlatformTools } from "../../common-app/src/ui-ng2/platform-tools/platform-tools";
 import { AccountTools } from "../../common-app/src/ui/services/account-tools";
+import {GamePlayFunctions} from "../ui/redux/game-play/game-play.functions";
 
 function genericTableContent():string {
 return `
@@ -240,11 +241,26 @@ export class GameActionList {
           return value;
       }
     };
+    const addNewHandIfThere = (action:GamePlayAction) => {
+      if (action.actionType === GamePlayActionType.NEW_HAND ) {
+        const userId = action.toPlayerId;
+        const handIndex = GamePlayFunctions.getHandIndexFromUserId(this.gamePlayState.hands, userId);
+        const hand:Hand = this.gamePlayState.hands.get(handIndex);
+        const handPruned:Hand = Object.assign({}, hand);
+        handPruned.cardsFaceDown = [];
+        handPruned.cardsFaceUp = [];
+        handPruned.cardsInHand = [];
+        return 'newHand: ' + JSON.stringify(handPruned, null, '    ');
+      } else {
+        return '';
+      }
+    }
      return `
       action = {
         type: GamePlayActions.GAME_PLAY_ACTION_RECIEVED,
         payload: {gamePlayAction:
           ` + JSON.stringify(action, replacer, '    ') + ` 
+          ` + addNewHandIfThere(action) + `
         }
       };
 `

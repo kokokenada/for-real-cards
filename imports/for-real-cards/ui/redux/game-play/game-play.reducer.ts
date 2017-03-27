@@ -14,6 +14,7 @@ import {Card} from "../../../api/models/card.model";
 import {Hand} from "../../../api/models/hand.model";
 import {Deck} from "../../../api/models/deck.model";
 import {IPayloadAction} from "../../../../common-app/src/ui/redux/action.interface";
+import {GamePlayFunctions} from "./game-play.functions";
 
 export const GamePlayFactory = makeTypedFactory<IGamePlayState, IGamePlayRecord>({
   gameId: '',
@@ -339,14 +340,9 @@ function addUndone(state: IGamePlayRecord, actionId: string) {
   state.set('undoneIds', state.undoneIds.push(actionId));
 }
 
-function getHandIndexFromUserId(hands: List<Hand>, userId: string): number {
-  return hands.findIndex((hand: Hand)=> {
-    return hand.userId === userId
-  });
-}
 
 function getHandForWriting(transientState: IGamePlayRecord, playerId: string): Hand {
-  let handIndex: number = getHandIndexFromUserId(transientState.hands, playerId);
+  let handIndex: number = GamePlayFunctions.getHandIndexFromUserId(transientState.hands, playerId);
   if (handIndex === -1) {
     log.error('cannot find playerId %s is hands', playerId);
     console.trace();

@@ -79,6 +79,7 @@ export class GamePlayActions {
             _id: 'newhand:' + hand._id, // Ensure gamePlayAction has unique ID to prevent double processing
             gameId: gameId,
             creatorId: AccountTools.userId(),
+            toPlayerId: hand.userId,
             actionType: GamePlayActionType.NEW_HAND
           },
           newHand: hand
