@@ -22,6 +22,4 @@ export class LoginModule extends ReduxModule<IAppState, IPayloadAction>  {
       loginEpics.saveUser
     );
   }
-
-  initialize():void {}
 }

@@ -15,7 +15,4 @@ export class AccountsAdminModule extends ReduxModule<IAppState, IPayloadAction> 
     super();
     this.middlewares.push(accountsAdminAsync.modalMiddleware);
   }
-
-  initialize():void {
-  }
 }

@@ -19,6 +19,4 @@ export class ConnectModule extends ReduxModule<IAppState, IPayloadAction>  {
       connectEpics.setNewServer
     );
   }
-
-  initialize():void {}
 }

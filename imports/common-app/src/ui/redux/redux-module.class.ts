@@ -8,5 +8,5 @@ export abstract class ReduxModule<STATE, ACTION> {
   middlewares:any[]=[];   // Normal redux middleware
   enhancers:any[]=[];
   actions:Object;
-  abstract initialize():void;
+  initialize():void {};
 }

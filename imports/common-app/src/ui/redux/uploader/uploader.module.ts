@@ -18,7 +18,4 @@ export class UploaderModule extends ReduxModule<IAppState, IPayloadAction>  {
       uploaderEpics.cameraUpload
     );
   }
-
-  initialize():void {
-  }
 }

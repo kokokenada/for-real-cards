@@ -13,6 +13,4 @@ export class FeatureToggleModule extends ReduxModule<IAppState, IPayloadAction> 
   constructor() {
     super();
   }
-
-  initialize():void {}
 }

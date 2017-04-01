@@ -19,6 +19,4 @@ export class GamePlayModule extends ReduxModule<IAppState, IPayloadAction>  {
       gamePlayEpics.gamePlayMiddleware
     );
   }
-
-  initialize():void {}
 }

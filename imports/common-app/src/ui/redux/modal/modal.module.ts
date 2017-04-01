@@ -10,5 +10,4 @@ import { ModalActions} from "./modal-actions.class";
 export class ModalModule extends ReduxModule<IAppState, IPayloadAction>  {
   reducers=[{name:'modalReducer', reducer: modalReducer}];
   actions = ModalActions;
-  initialize():void {}
 }
