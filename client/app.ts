@@ -3,19 +3,31 @@ import 'zone.js/dist/zone';
 import { Meteor } from 'meteor/meteor';
 import * as log from 'loglevel';
 //import ionicSelector from 'ionic-selector';
-
+import {featureToggleConfigs} from '../imports/for-real-cards/top-frame/feature-toggle.config';
 let run:any;
 declare let require:any;
 
 import { PlatformTools, TargetPlatformId } from '../imports/common-app/src/ui-ng2/platform-tools/platform-tools';
 if (Meteor.isCordova) {
-  console.log("Cordova detected. Setting platform to TWBS_WEB.");
-  PlatformTools.setTargetPlatform(TargetPlatformId.TWBS_WEB); // or IONIC
-  run =  require("../imports/for-real-cards/top-frame/top-frame.twbs.ts").run; // "../imports/for-real-cards/top-frame/top-frame.ionic";
+  if (featureToggleConfigs['mobile-ionic'].setting) {
+    console.log("Cordova detected. Setting platform to IONIC.");
+    PlatformTools.setTargetPlatform(TargetPlatformId.IONIC);
+    run =  require("../imports/for-real-cards/top-frame/top-frame.ionic").run;
+  } else {
+    console.log("Cordova detected. Setting platform to TWBS_WEB.");
+    PlatformTools.setTargetPlatform(TargetPlatformId.TWBS_WEB);
+    run =  require("../imports/for-real-cards/top-frame/top-frame.twbs.ts").run;
+  }
 } else {
-  console.log("Setting platform to TWBS_WEB");
-  PlatformTools.setTargetPlatform(TargetPlatformId.TWBS_WEB);
-  run =  require("../imports/for-real-cards/top-frame/top-frame.twbs.ts").run;
+  if (featureToggleConfigs['desktop-ionic'].setting) {
+    console.log("Setting platform to IONIC while in desktop mode");
+    PlatformTools.setTargetPlatform(TargetPlatformId.IONIC);
+    run =  require("../imports/for-real-cards/top-frame/top-frame.ionic").run;
+  } else {
+    console.log("Setting platform to TWBS_WEB");
+    PlatformTools.setTargetPlatform(TargetPlatformId.TWBS_WEB);
+    run =  require("../imports/for-real-cards/top-frame/top-frame.twbs.ts").run;
+  }
 }
 
 import { enableProdMode } from '@angular/core';

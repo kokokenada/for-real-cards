@@ -44,6 +44,7 @@ import {RunGameHandAndTable} from "../run-game/run-game-hand-and-table";
 import {ReduxModules} from "./redux-modules";
 import {LoginActions} from "../../common-app/src/ui/redux/login/login-actions.class";
 import {EditGameConfig} from "../edit-game-config/edit-game-config";
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 const appRoutes: Routes = [
   {path: '', component: Start},
@@ -68,7 +69,7 @@ export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);
     template: `
 <div class="row">
   <top-frame-header class="col-xs-10"></top-frame-header>
-  <popover-menu class="pull-right col-xs-1" [menuId]="'topbar'"></popover-menu>
+  <popover-menu class="col-xs-1" [menuId]="'topbar'"></popover-menu>
 </div>
 <router-outlet></router-outlet>
 <modal-dialog></modal-dialog>
@@ -176,7 +177,7 @@ export class ForRealCardsTopFrame extends TopFrame implements OnInit {
 }
 
 @NgModule({
-  imports: [BrowserModule, CoreModule, CommonAppNgTWBS, DragulaModule, routing, TabsModule],
+  imports: [BrowserModule, CoreModule, CommonAppNgTWBS, DragulaModule, routing, NgbModule.forRoot()],
   declarations: [
     DealModal,
     DeckView,

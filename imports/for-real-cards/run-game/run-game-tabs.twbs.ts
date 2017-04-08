@@ -8,17 +8,23 @@ import { RunGameContainer } from "./run-game-container";
     selector: 'run-game-tabs',
     template:  `
  
-  <tabset active="active">
-    <tab index="0" heading="Hand and Table">
-      <run-game-hand-and-table></run-game-hand-and-table>
-    </tab>
-    <tab index="1" heading="Hand">
-      <run-game-hand showTableProxy="true"></run-game-hand>    
-    </tab> 
-    <tab index="2" heading="Table">
-     <run-game-table height="90vw" width="100hw"></run-game-table>  
-    </tab>
-  </tabset>
+  <ngb-tabset active="active">
+    <ngb-tab title="Hand and Table">
+      <template ngbTabContent>
+        <run-game-hand-and-table></run-game-hand-and-table>
+      </template>
+    </ngb-tab>
+    <ngb-tab title="Hand">
+      <template ngbTabContent>
+        <run-game-hand showTableProxy="true"></run-game-hand>    
+      </template>
+    </ngb-tab> 
+    <ngb-tab title="Table">
+      <template ngbTabContent>
+        <run-game-table height="90vw" width="100hw"></run-game-table>  
+      </template>
+    </ngb-tab>
+  </ngb-tabset>
       `
   }
 )

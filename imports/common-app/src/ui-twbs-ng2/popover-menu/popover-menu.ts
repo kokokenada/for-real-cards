@@ -1,22 +1,23 @@
 import { Component, Input, NgZone } from '@angular/core';
 import { Menus, MenuItem } from "../../ui/index";
 
-
 @Component({
   selector: 'popover-menu',
   template: `
 
-    <span dropdown>
-      <span dropdownToggle class="fa fa-bars" style="font-size: x-large"></span>
-      <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" >
+    <div class="btn-group" dropdown>
+      <button dropdownToggle type="button" class="btn btn-primary dropdown-toggle" style="font-size: x-large"></button>
+      <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
         <li
             *ngFor="let item of getMenuItems() | menuFilter"
             (click)="itemSelected(item)"
+            role="menuitem"
+            class="dropdown-item"
         >
-          <p class="dropdown-item">{{item.title}}</p>
+          {{item.title}}
         </li>      
       </ul>
-    </span>
+    </div>
 `,
 })
 export class PopoverMenu {

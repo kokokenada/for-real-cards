@@ -1,6 +1,5 @@
-import { Component, NgZone, ViewChild } from '@angular/core';
-//import { ionicBootstrap, MenuController, NavController } from 'ionic-angular';
-declare let ionicBootstrap, MenuController, NavController; // Shut up compiler until we have another go at Ionic
+import {Component, NgModule, NgZone, ViewChild} from '@angular/core';
+import {MenuController, NavController, TabsModule} from 'ionic-angular';
 import { DragulaService} from 'ng2-dragula/ng2-dragula';
 
 import {
@@ -23,6 +22,24 @@ import {MenuItem} from "../../common-app/src/ui/services/menu-item";
 import {PlatformToolsIonic} from "../../common-app/src/ui-ionic/platform-tools/platform-tools-ionic";
 import {ReduxModules} from "./redux-modules";
 import {LoginActions} from "../../common-app/src/ui/redux/login/login-actions.class";
+import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
+import {BrowserModule} from '@angular/platform-browser';
+import {CoreModule} from './core.module';
+import {DragulaModule} from 'ng2-dragula';
+import {DealModal} from '../deal-modal/deal-modal.ionic';
+import {DeckView} from '../run-game/deck-view';
+import {EditGameConfig} from '../edit-game-config/edit-game-config';
+import {JoinGame} from '../enter-game/join-game';
+import {NewGame} from '../enter-game/new-game';
+import {PileView} from '../run-game/pile-view';
+import {Player} from '../player/player';
+import {PlayingCard} from '../playing-card/playing-card';
+import {RunGameHand} from '../run-game/run-game-hand';
+import {RunGameHandAndTable} from '../run-game/run-game-hand-and-table';
+import {RunGameTable} from '../run-game/run-game-table';
+import {DealModalService} from '../deal-modal/deal-modal.service';
+import {COMMON_APP_SINGLETONS} from '../../common-app/src/ui-ng2/common-app-ng.module';
+import { NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 
 @Component({
@@ -147,10 +164,46 @@ class ForRealCardsTopFrame extends TopFrame {
     });
   }
 }
+// CommonAppNgTWBS, routing, , EditUserProfileTWBS, NgReduxRouter,
+@NgModule({
+  imports: [BrowserModule, CoreModule,  DragulaModule, TabsModule, NgbModule.forRoot()],
+  declarations: [
+    DealModal,
+    DeckView,
+    EditGameConfig,
+    EnterGame,
+    ForRealCardsTopFrame,
+    GameActionList,
+    JoinGame,
+    NewGame,
+    PileView,
+    Player,
+    PlayingCard,
+    RunGameTableContainer,
+    RunGameHand,
+    RunGameHandAndTable,
+    RunGameTable,
+    RunGameTabs,
+    Start
+  ],
+  bootstrap: [ForRealCardsTopFrame],
+  providers: [
+    ReduxModules,
+    DealModalService,
+    ForRealCardsModule,
+    ForRealCardsAsync,
+    GamePlayAsync,
+    GamePlayModule,
+    ...COMMON_APP_SINGLETONS]
+})
+export class AppModule {
+}
 
 export function run(): void {
-  ionicBootstrap(ForRealCardsTopFrame, [
-  ]);
+  const platform = platformBrowserDynamic();
+
+  platform.bootstrapModule(AppModule);
+
 }
 
 declare let cordova:any;

@@ -19,7 +19,7 @@ export class PlatformTools {
     switch (PlatformTools.targetPlatForm) {
       case TargetPlatformId.IONIC:
       {
-        require('../../ui-ionic/scss/ionic.scss' + ''); // The + '' prevents Meteor build from pucking if ionic.scss is not there
+// done by main now?        require('../../ui-ionic/scss/ionic.scss' + ''); // The + '' prevents Meteor build from puking if ionic.scss is not there
         PlatformTools.platformSpecificTools = require('../../ui-ionic/platform-tools/platform-tools-ionic' + '');
         //require('../../ui-ionic/scss/test.css');
         break;
