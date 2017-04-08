@@ -25,7 +25,8 @@ const NUMBER_OF_CARD_COUNT_OPTIONS = 3;
 export enum DealLocation {
   HAND_HIDDEN, //0
   CENTER_FACEUP, //1
-  HAND_FACEUP //2
+  CENTER_FACEUP_SHOWALL, // 2
+  HAND_FACEUP //3
 }
 
 export interface DealSequence {
@@ -305,6 +306,40 @@ export let defaultGames:GameConfig[] = [
       new UserCommand(CardLocation.HAND, CardLocation.PILE, CardCountAllowed.ONE),  // Put a card onto pile
       new UserCommand(CardLocation.HAND, CardLocation.TABLE, CardCountAllowed.ALL), // Put your hand on the table when you have won
       new UserCommand(CardLocation.HAND, CardLocation.HAND, CardCountAllowed.ONE)   // Users can sort their hand
+    ],
+  }),
+  new GameConfig({
+    name: "Texas Holdem",
+    minimumNumberOfPlayers: 2,
+    maximumNumberOfPlayers: 10,
+    deck: Deck.getDeck(DeckId.STANDARD_ACE_HIGH),
+    dealSequence: [
+      {
+        dealLocation: DealLocation.HAND_HIDDEN,
+        minimumNumberOfCards: 2,
+        maximumNumberOfCards: 2
+      },
+      {
+        dealLocation: DealLocation.CENTER_FACEUP_SHOWALL,
+        minimumNumberOfCards: 3,
+        maximumNumberOfCards: 3
+      },
+      {
+        dealLocation: DealLocation.CENTER_FACEUP_SHOWALL,
+        minimumNumberOfCards: 1,
+        maximumNumberOfCards: 1
+      },
+      {
+        dealLocation: DealLocation.CENTER_FACEUP_SHOWALL,
+        minimumNumberOfCards: 1,
+        maximumNumberOfCards: 1
+      }
+    ],
+    deckLocationAfterDeal: DeckLocation.WITH_DEALER,
+    turnCardUpAfterDeal: false,
+    hasTricks: false,
+    userCommands: [
+      new UserCommand(CardLocation.HAND, CardLocation.TABLE, CardCountAllowed.ALL) // Put your hand on the table
     ],
   })
 ];
