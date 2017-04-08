@@ -8,6 +8,7 @@ App.info({
 });
 App.setPreference('android:versionCode', 5);
 App.accessRule("*");
+App.accessRule("http://localhost");
 App.accessRule("https://for-real-cards.scalingo.io");
 App.accessRule("https://for-real-cards.fabrica.tech");
 App.accessRule('data:*', { type: 'navigation' });
