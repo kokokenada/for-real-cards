@@ -8,7 +8,7 @@ import { Menus, MenuItem } from "../../ui/index";
 
     <span dropdown>
       <span dropdownToggle class="fa fa-bars" style="font-size: x-large"></span>
-      <ul dropdownMenu class="dropdown-menu dropdown-menu-right" >
+      <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" >
         <li
             *ngFor="let item of getMenuItems() | menuFilter"
             (click)="itemSelected(item)"

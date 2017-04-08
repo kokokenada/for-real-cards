@@ -12,7 +12,7 @@ import {ModalActions} from "../../ui/redux/modal/modal-actions.class";
   <div class="modal" [ngStyle]="style" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
-          <template #placeHolder></template>
+          <ng-template #placeHolder></ng-template>
       </div>
     </div>
   </div>

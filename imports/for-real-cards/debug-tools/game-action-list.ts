@@ -56,7 +56,7 @@ return `
     </tr>    
   </thead>
   <tbody>
-    <template ngFor let-action [ngForOf]="getActions()">
+    <ng-template ngFor let-action [ngForOf]="getActions()">
       <tr>
         <td>{{action._id}}</td>
         <td>{{actionTime(action)}}</td>
@@ -127,7 +127,7 @@ return `
           </textarea>
         </td>
       </tr>
-    </template>
+    </ng-template>
   </tbody>
 </table>
 `
