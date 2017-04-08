@@ -8,7 +8,7 @@ import {
   PageView, Event, Exception
 } from 'redux-beacon/targets/google-analytics';
 
-import { NgReduxRouter, UPDATE_LOCATION, routerReducer } from '@angular-redux/router';
+import { UPDATE_LOCATION } from '@angular-redux/router';
 
 import {
   ForRealCardsModule,

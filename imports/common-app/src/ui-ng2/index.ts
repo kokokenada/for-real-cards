@@ -1,3 +1,4 @@
+export * from "./avatar/avatar";
 export * from "./platform-tools/platform-tools";
 export * from "./button/common-app-button";
 export * from "./common-popups/common-popups";

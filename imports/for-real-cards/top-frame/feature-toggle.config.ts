@@ -19,7 +19,7 @@ export const featureToggleConfigs: IFeatureToggleConfigSet = {
     description: 'Use ionic desktop'
   },
   'mobile-ionic': {
-    setting: true,
+    setting: false,
     description: 'Use ionic desktop'
   }
 };

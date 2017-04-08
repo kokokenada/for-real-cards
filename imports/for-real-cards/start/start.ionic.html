@@ -17,7 +17,7 @@
         <ion-label floating>Username:</ion-label>
         <ion-input
                 [(ngModel)]="credentials.username"
-                type="text" ngControl="username" #username="ngForm" required id="username">
+                type="text" ngControl="username" #username="ngModel" required id="username">
         </ion-input>
       </ion-item>
       <p [hidden]="username.valid || username.pristine" danger>
@@ -32,7 +32,7 @@
         <ion-input
                 [(ngModel)]="credentials.password"
                 type="password"
-                ngControl="password" #password="ngForm" required id="password">
+                ngControl="password" #password="ngModel" required id="password">
         </ion-input>
         <p [hidden]="password.valid || password.pristine" danger>
           Password is required

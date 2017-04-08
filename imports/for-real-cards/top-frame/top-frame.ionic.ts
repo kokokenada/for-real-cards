@@ -1,5 +1,6 @@
 import {Component, NgModule, NgZone, ViewChild} from '@angular/core';
 import {MenuController, NavController, TabsModule} from 'ionic-angular';
+import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { DragulaService} from 'ng2-dragula/ng2-dragula';
 
 import {
@@ -40,9 +41,11 @@ import {RunGameTable} from '../run-game/run-game-table';
 import {DealModalService} from '../deal-modal/deal-modal.service';
 import {COMMON_APP_SINGLETONS} from '../../common-app/src/ui-ng2/common-app-ng.module';
 import { NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {CommonAppNgIonic} from '../../common-app/src/ui-ionic/common-app-ng-ionic.module';
 
 
 @Component({
+  selector: 'selector: for-real-cards-top-frame',
   template: `
 <!-- logged out menu -->
 <ion-menu id="topFrameMenu" [content]="myNav">
@@ -64,13 +67,7 @@ import { NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 <ion-nav  #myNav [root]="rootPage" swipe-back-enabled="true"></ion-nav>
 `,
-  viewProviders: [DragulaService],
-  providers: [
-    ForRealCardsModule,
-    ForRealCardsAsync,
-    GamePlayAsync,
-    GamePlayModule
-  ]
+  viewProviders: [DragulaService]
 })
 class ForRealCardsTopFrame extends TopFrame {
   @ViewChild('myNav') nav: NavController;
@@ -166,7 +163,9 @@ class ForRealCardsTopFrame extends TopFrame {
 }
 // CommonAppNgTWBS, routing, , EditUserProfileTWBS, NgReduxRouter,
 @NgModule({
-  imports: [BrowserModule, CoreModule,  DragulaModule, TabsModule, NgbModule.forRoot()],
+  imports: [
+    IonicModule.forRoot(ForRealCardsTopFrame),
+    BrowserModule, CoreModule, CommonAppNgIonic, DragulaModule, TabsModule, NgbModule.forRoot()],
   declarations: [
     DealModal,
     DeckView,
@@ -186,7 +185,7 @@ class ForRealCardsTopFrame extends TopFrame {
     RunGameTabs,
     Start
   ],
-  bootstrap: [ForRealCardsTopFrame],
+  bootstrap: [IonicApp],
   providers: [
     ReduxModules,
     DealModalService,

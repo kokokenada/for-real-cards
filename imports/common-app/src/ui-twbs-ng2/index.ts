@@ -1,4 +1,3 @@
-export * from "./avatar/avatar"
 export * from "./common-popups/common-popups.twbs";
 export * from "./popover-menu/popover-menu";
 export * from "./accounts-admin/accounts-admin";
