@@ -11,6 +11,9 @@ I am blogging about my experiences here [www.fabrica.tech](http://www.fabrica.te
 * npm install
 * meteor
 
+##Test
+meteor test --driver-package practicalmeteor:mocha
+
 ## Common-app
 Reusable commponents to serve a startting point for other apps.  Will be broken off into a seperate repository.
 
