@@ -44,6 +44,7 @@ import {ReduxModules} from "./redux-modules";
 import {LoginActions} from "../../common-app/src/ui/redux/login/login-actions.class";
 import {EditGameConfig} from "../edit-game-config/edit-game-config";
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {PileViewShowAll} from '../run-game/pile-show-all-view';
 
 const appRoutes: Routes = [
   {path: '', component: Start},
@@ -188,6 +189,7 @@ export class ForRealCardsTopFrame extends TopFrame implements OnInit {
     JoinGame,
     NewGame,
     PileView,
+    PileViewShowAll,
     Player,
     PlayingCard,
     RunGameTableContainer,

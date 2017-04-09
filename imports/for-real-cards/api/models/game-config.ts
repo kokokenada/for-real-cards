@@ -32,7 +32,8 @@ export enum DealLocation {
 export interface DealSequence {
   dealLocation: DealLocation;
   minimumNumberOfCards: number;
-  maximumNumberOfCards: number
+  maximumNumberOfCards: number,
+  description?: string
 }
 
 export class UserCommand {
@@ -317,22 +318,26 @@ export let defaultGames:GameConfig[] = [
       {
         dealLocation: DealLocation.HAND_HIDDEN,
         minimumNumberOfCards: 2,
-        maximumNumberOfCards: 2
+        maximumNumberOfCards: 2,
+        description: 'Hole Cards'
       },
       {
         dealLocation: DealLocation.CENTER_FACEUP_SHOWALL,
         minimumNumberOfCards: 3,
-        maximumNumberOfCards: 3
+        maximumNumberOfCards: 3,
+        description: 'The Flop'
       },
       {
         dealLocation: DealLocation.CENTER_FACEUP_SHOWALL,
         minimumNumberOfCards: 1,
-        maximumNumberOfCards: 1
+        maximumNumberOfCards: 1,
+        description: 'The Turn'
       },
       {
         dealLocation: DealLocation.CENTER_FACEUP_SHOWALL,
         minimumNumberOfCards: 1,
-        maximumNumberOfCards: 1
+        maximumNumberOfCards: 1,
+        description: 'The River'
       }
     ],
     deckLocationAfterDeal: DeckLocation.WITH_DEALER,

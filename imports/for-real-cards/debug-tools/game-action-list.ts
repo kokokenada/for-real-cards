@@ -3,177 +3,159 @@ import { select } from '@angular-redux/store';
 
 import { GamePlayAction, GamePlayActionType, Hand } from '../api/index'
 import { ActionFormatted, ForRealCardsActions, IGamePlayState } from "../ui";
-import { PlatformTools } from "../../common-app/src/ui-ng2/platform-tools/platform-tools";
 import { AccountTools } from "../../common-app/src/ui/services/account-tools";
 import {GamePlayFunctions} from "../ui/redux/game-play/game-play.functions";
 
-function genericTableContent():string {
-return `
-<form #displayGameForm="ngForm">
-  <div class="form-group">
-    <label class="control-label" for="displayType">Include Script</label>
-    <div class="btn-group">
-      <label class="btn btn-primary" name="displayType" [(ngModel)]="displayMode" btnRadio="noScript">No Script</label>
-      <label class="btn btn-primary" name="displayType" [(ngModel)]="displayMode" btnRadio="script">Script</label>
-    </div>
-  </div>
-  <div class="form-group form-inline ">
-    <label class="control-label" for="gameId">Game Id:</label>
-    <input 
-      [(ngModel)]="gameId"
-      name="gameId"
-      type="text" 
-      class="form-control" 
-      id="gameId"
-      ngControl="formGameId" 
-      #formGameId="ngModel" 
-      required
-    />
-  </div>
-  <div class="form-group form-inline">
-    <label class="control-label" for="password">Password (if required):</label>
-    <input [(ngModel)]="password" name="password" type="text" class="form-control" id="password" ngControl="formGameId" 
-      #formGameId="ngModel" />
-  </div>
-  <button class="col "
-    [disabled]="!displayGameForm.form.valid" 
-    (click)="displayGame()" 
-    class="btn btn-default">
-      View
-  </button>
-</form>
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>id</th>
-      <th>Time</th>      
-      <th>Action</th>
-      <th>Created By</th>
-      <th>To Player</th>
-      <th>From Player</th>
-      <th>Realted Id</th>
-      <th>Visiblity Type</th>
-    </tr>    
-  </thead>
-  <tbody>
-    <ng-template ngFor let-action [ngForOf]="getActions()">
+@Component({
+  selector: 'game-action-list',
+  template: `
+    <form #displayGameForm="ngForm">
+      <div class="form-group">
+        <label class="control-label" for="displayType">Include Script</label>
+        <div class="btn-group">
+          <label class="btn btn-primary" name="displayType" [(ngModel)]="displayMode" btnRadio="noScript">No
+            Script</label>
+          <label class="btn btn-primary" name="displayType" [(ngModel)]="displayMode" btnRadio="script">Script</label>
+        </div>
+      </div>
+      <div class="form-group form-inline ">
+        <label class="control-label" for="gameId">Game Id:</label>
+        <input
+                [(ngModel)]="gameId"
+                name="gameId"
+                type="text"
+                class="form-control"
+                id="gameId"
+                ngControl="formGameId"
+                #formGameId="ngModel"
+                required
+        />
+      </div>
+      <div class="form-group form-inline">
+        <label class="control-label" for="password">Password (if required):</label>
+        <input [(ngModel)]="password" name="password" type="text" class="form-control" id="password"
+               ngControl="formGameId"
+               #formGameId="ngModel"/>
+      </div>
+      <button class="col "
+              [disabled]="!displayGameForm.form.valid"
+              (click)="displayGame()"
+              class="btn btn-default">
+        View
+      </button>
+    </form>
+    <table class="table table-striped">
+      <thead>
       <tr>
-        <td>{{action._id}}</td>
-        <td>{{actionTime(action)}}</td>
-        <td>{{actionDescription(action)}} ({{action.actionType}})</td>
-        <td>{{creator(action)}}</td>
-        <td>{{toPlayer(action)}}</td>
-        <td>{{fromPlayer(action)}}</td>
-        <td>{{action.relatedActionId}}</td>
-        <td>{{visibilityTypeDescription(action)}}</td>
+        <th>id</th>
+        <th>Time</th>
+        <th>Action</th>
+        <th>Created By</th>
+        <th>To Player</th>
+        <th>From Player</th>
+        <th>Realted Id</th>
+        <th>Visiblity Type</th>
       </tr>
-      <tr [hidden]="action.cards?.length===0">
-        <td>Cards:</td>
-        <td colspan="5">
-          <playing-card *ngFor="let card of action.cards" [card]="card" [imgStyle]="{height: 'auto', width: '100%'}" style="display:inline-block; width:40px"></playing-card>
-        </td>
-      </tr>
-      <tr *ngIf="action.previousState">
-        <td>Previous State Hands:</td>
-        <td colspan="5">
-          <table class="table table-striped">
-            <thead>
+      </thead>
+      <tbody>
+      <ng-template ngFor let-action [ngForOf]="getActions()">
+        <tr>
+          <td>{{action._id}}</td>
+          <td>{{actionTime(action)}}</td>
+          <td>{{actionDescription(action)}} ({{action.actionType}})</td>
+          <td>{{creator(action)}}</td>
+          <td>{{toPlayer(action)}}</td>
+          <td>{{fromPlayer(action)}}</td>
+          <td>{{action.relatedActionId}}</td>
+          <td>{{visibilityTypeDescription(action)}}</td>
+        </tr>
+        <tr [hidden]="action.cards?.length===0">
+          <td>Cards:</td>
+          <td colspan="5">
+            <playing-card *ngFor="let card of action.cards" [card]="card" [imgStyle]="{height: 'auto', width: '100%'}"
+                          style="display:inline-block; width:40px"></playing-card>
+          </td>
+        </tr>
+        <tr *ngIf="action.previousState">
+          <td>Previous State Hands:</td>
+          <td colspan="5">
+            <table class="table table-striped">
+              <thead>
               <tr>
-                <th>Player</th>              
+                <th>Player</th>
                 <th>In Hand</th>
                 <th>Face Up</th>
                 <th>Face Down</th>
-              </tr>            
-            </thead>
-            <tbody>
+              </tr>
+              </thead>
+              <tbody>
               <tr *ngFor="let hand of action.previousState.hands">
-                <td>{{handPlayer(hand)}}</td>                              
+                <td>{{handPlayer(hand)}}</td>
                 <td>
-                  <playing-card *ngFor="let card of hand.cardsInHand" [card]="card" [imgStyle]="{height: 'auto', width: '100%'}" style="display:inline-block; width:40px"></playing-card>
+                  <playing-card *ngFor="let card of hand.cardsInHand" [card]="card"
+                                [imgStyle]="{height: 'auto', width: '100%'}"
+                                style="display:inline-block; width:40px"></playing-card>
                 </td>
                 <td>
-                  <playing-card *ngFor="let card of hand.cardsFaceUp" [card]="card" [imgStyle]="{height: 'auto', width: '100%'}" style="display:inline-block; width:40px"></playing-card>
+                  <playing-card *ngFor="let card of hand.cardsFaceUp" [card]="card"
+                                [imgStyle]="{height: 'auto', width: '100%'}"
+                                style="display:inline-block; width:40px"></playing-card>
                 </td>
                 <td>
-                  <playing-card *ngFor="let card of hand.cardsFaceDown" [card]="card" [imgStyle]="{height: 'auto', width: '100%'}" style="display:inline-block; width:40px"></playing-card>
+                  <playing-card *ngFor="let card of hand.cardsFaceDown" [card]="card"
+                                [imgStyle]="{height: 'auto', width: '100%'}"
+                                style="display:inline-block; width:40px"></playing-card>
                 </td>
-              </tr>            
-            </tbody>
-          </table>
-        </td>
-      </tr>
-      <tr *ngIf="action.previousState">
-        <td>Previous State Table Face Down:</td>
-        <td colspan="5">
-          <playing-card *ngFor="let card of action.previousState.tableFaceDown" [card]="card" [imgStyle]="{height: 'auto', width: '100%'}" style="display:inline-block; width:40px"></playing-card>
-        </td>             
-      </tr>              
-      <tr *ngIf="action.previousState">
-        <td>Previous State Table Pile:</td>
-        <td colspan="5">
-          <playing-card *ngFor="let card of action.previousState.tablePile" [card]="card" [imgStyle]="{height: 'auto', width: '100%'}" style="display:inline-block; width:40px"></playing-card>
-        </td>             
-      </tr>
-      <tr *ngIf="displayMode==='script'">
-        <td colspan="8">
+              </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr *ngIf="action.previousState">
+          <td>Previous State Table Face Down:</td>
+          <td colspan="5">
+            <playing-card *ngFor="let card of action.previousState.tableFaceDown" [card]="card"
+                          [imgStyle]="{height: 'auto', width: '100%'}"
+                          style="display:inline-block; width:40px"></playing-card>
+          </td>
+        </tr>
+        <tr *ngIf="action.previousState">
+          <td>Previous State Table Pile:</td>
+          <td colspan="5">
+            <playing-card *ngFor="let card of action.previousState.tablePile" [card]="card"
+                          [imgStyle]="{height: 'auto', width: '100%'}"
+                          style="display:inline-block; width:40px"></playing-card>
+          </td>
+        </tr>
+        <tr *ngIf="displayMode==='script'">
+          <td colspan="8">
           <textarea style="width:100%; height: 200px">
           {{testScriptState(action)}}
           </textarea>
-        </td>
-      <tr *ngIf="displayMode==='script'">
-        <td colspan="8">
+          </td>
+        <tr *ngIf="displayMode==='script'">
+          <td colspan="8">
           <textarea style="width:100%; height: 200px">
           {{testScriptAction(action)}}
           </textarea>
+          </td>
+        </tr>
+      </ng-template>
+      <tr>
+        <td colspan="8">FINAL STATE</td>
+      </tr>
+      <tr>
+        <td>Pile:</td>
+        <td colspan="5">
+          <playing-card *ngFor="let card of gamePlayState.tablePile" [card]="card"
+                        [imgStyle]="{height: 'auto', width: '100%'}"
+                        style="display:inline-block; width:40px"></playing-card>
         </td>
       </tr>
-    </ng-template>
-  </tbody>
-</table>
-`
-}
-
-function template():string {
-  if (PlatformTools.isIonic()) {
-    return `
-<ion-header>
-  <ion-navbar *navbar>
-    <button menuToggle>
-       <ion-icon name='menu'></ion-icon>
-    </button>
-    <ion-title>
-      <top-frame-header></top-frame-header>      
-    </ion-title>
-  </ion-navbar>
-</ion-header>
-
-<!--<ion-content>-->
-  <ion-list>
-    <ion-list-header>
-      Game Action List (debugger)
-    </ion-list-header>    
-    <ion-item>
-      <table>`
-          + genericTableContent() + `
-      </table>
-    </ion-item>
-  </ion-list>
-<!--</ion-content>-->
-`
-  } else {
-    return `
-  <div class="panel-heading">
-    <h3 class="panel-title">Game Action List (debugger)</h3>
-  </div>
-`
-    + genericTableContent()
-  }
-}
-
-@Component({
-  selector: 'game-action-list',
-  template: template()}
-)
+      </tbody>
+    </table>
+  `
+})
 export class GameActionList {
   @select() gamePlayReducer;
   public displayMode:string = 'visual';

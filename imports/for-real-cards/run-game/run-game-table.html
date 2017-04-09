@@ -111,4 +111,15 @@
           data-drop-target="PILE"
   >
   </pile-view>
+  <pile-show-all-view *ngIf="shouldShowPileAll()"
+                      style = "
+        position: absolute;
+        z-index: 10;
+        width:80%; height:20%;
+        top:40%;
+        left: 10%;
+    "
+  >
+
+  </pile-show-all-view>
 </div>

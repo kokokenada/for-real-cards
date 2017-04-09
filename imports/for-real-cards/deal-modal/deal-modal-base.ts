@@ -23,6 +23,10 @@ export class DealModalBase extends ModalBase<DealModalParam, DealModalResult> {
     return GamePlayFunctions.isMidDealSequence(this.gameState);
   }
 
+  nextDealStepDescription() : string {
+    return GamePlayFunctions.nextDealStepDescription(this.gameState);
+  }
+
   getSelectedPreset():string {
     if (this.selectedPreset)
       return this.selectedPreset;

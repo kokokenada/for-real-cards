@@ -110,6 +110,10 @@ let GameDealSequence = new SimpleSchema({
   },
   maximumNumberOfCards: {
     type: Number
+  },
+  description: {
+    type: String,
+    optional: true
   }
 });
 

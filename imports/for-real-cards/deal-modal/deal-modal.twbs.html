@@ -1,50 +1,47 @@
-<form role="form" class="form-horizontal">
-  <div >
-    <h3 >Deal</h3>
-  </div>
-  <div  *ngIf="gameConfig">
-
-    <div class="form-group">
-      <button *ngIf="isMidSequence()">NEXT STEP</button>
-      <label class="col-xs-6" for="game-dropdown">Preset Game</label>
-      <div
-              class="col-xs-6 btn-group"
-              ngbDropdown
-              (click)="$event.preventDefault()"
-      >
-        <button
-                type="button"
-                id="game-dropdown"
-                class="btn btn-primary btn-sm btn-block"
-                ngbDropdownToggle>{{getSelectedPreset()}}
-          <span class="caret"></span>
+<div class="card">
+  <form role="form" class="card-block">
+    <h3 class="card-title">Deal</h3>
+    <div class="card-block container" *ngIf="gameConfig">
+      <div  class="row justify-content-center">
+        <button (click)="nextStep()" class="col-8 btn btn-success" *ngIf="isMidSequence()">
+          Deal Next Cards {{ nextDealStepDescription() ? ' : ' + nextDealStepDescription() : ''}}
         </button>
-        <ul class="dropdown-menu" role="menu" aria-labelledby="single-button">
-          <li
-                  *ngFor="let preset of getPresets(); let i = index"
-                  (click)="selectPreset(i)"
-                  class="dropdown-item">
-            <a href="#">{{preset?.name}}</a>
-          </li>
-        </ul>
+      </div>
+      <div class="row" style="height: 30px;"></div>
+      <div class="form-group row">
+        <label class="col-4 col-form-label" for="game-dropdown">Preset Game</label>
+        <div   class="col-8"
+                ngbDropdown
+                (click)="$event.preventDefault()"
+        >
+          <button class="btn" ngbDropdownToggle>{{getSelectedPreset()}}</button>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="single-button">
+            <li
+                    *ngFor="let preset of getPresets(); let i = index"
+                    (click)="selectPreset(i)"
+                    class="dropdown-item">
+              <a href="#">{{preset?.name}}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="row form-group" *ngIf="gameConfig.dealerCanSelectNumberOfCards">
+        <label class="col-xs-6" for="numberOfCardsToPlayer">Number of Cards to Players</label>
+        <div class="col-xs-6">
+          <input
+                  [(ngModel)]="gameConfig.numberOfCardsToPlayer"
+                  name="numberOfCardsToPlayer"
+                  type="number"
+                  class="form-control"
+                  id="numberOfCardsToPlayer"/>
+        </div>
       </div>
     </div>
-    <div class="form-group" *ngIf="gameConfig.dealerCanSelectNumberOfCards">
-      <label class="col-xs-6" for="numberOfCardsToPlayer">Number of Cards to Players</label>
-      <div class="col-xs-6">
-        <input
-                [(ngModel)]="gameConfig.numberOfCardsToPlayer"
-                name="numberOfCardsToPlayer"
-                type="number"
-                class="form-control"
-                id="numberOfCardsToPlayer"/>
-      </div>
+    <div class="card-footer form-group justify-content-center row">
+      <button (click)="cancel()" class="col-4 btn btn-default pull-right">Never Mind</button>
+      <span class="col-1"></span>
+      <button (click)="deal()" class="col-4 btn btn-success pull-right">
+        {{isMidSequence() ? 'End Hand & Deal' : 'Deal'}}</button>
     </div>
-    <div class="form-group col-md-6">
-      <button (click)="cancel()" class="btn btn-default pull-right">Never Mind</button>
-      <button (click)="deal()" class="btn btn-success pull-right">Deal</button>
-    </div>
-
-
-  </div>
-</form>
+  </form>
+</div>

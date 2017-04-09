@@ -12,6 +12,7 @@ import { CardImageStyle} from "../api/interfaces/card-image-style.interface";
 import { GamePlayActions, IForRealCardsState, IGamePlayRecord} from "../ui";
 import {DealModalService} from "../deal-modal/deal-modal.service";
 import {CommonPopups} from "../../common-app/src/ui-ng2/common-popups/common-popups";
+import {DealLocation, DealSequence} from '../api/models/game-config';
 
 declare const window: any;
 
@@ -206,6 +207,15 @@ export abstract class RunGame {
     );
   }
 
+  shouldShowPileAll() : boolean {
+    let gameState: IGamePlayRecord = this.gameState;
+    let gameConfig: GameConfig = gameState ? gameState.currentGameConfig : null;
+    if (!gameConfig)
+      return false;
+    return !!gameConfig.dealSequence.find( (dealStep:DealSequence) => {
+      return dealStep.dealLocation === DealLocation.CENTER_FACEUP_SHOWALL;
+    } );
+  }
 
   shouldShowDeck():boolean {
     if (this.gameState && this.gameState.currentGameConfig)

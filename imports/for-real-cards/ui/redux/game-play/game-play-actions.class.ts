@@ -132,7 +132,7 @@ export class GamePlayActions {
     // Give cards to players
     let deckPosition = 0;
     gameState.hands.forEach((hand: Hand)=> {
-      let dealSequence:DealSequence = gameConfig.dealSequence[0]; // TODO: Figure out which sequence we are in
+      let dealSequence:DealSequence = gameConfig.dealSequence[0];
       let numberOfCards:number = dealSequence.maximumNumberOfCards; // TODO: Support variale # of cards
       if (dealSequence.dealLocation===DealLocation.HAND_HIDDEN) {
         let toPlayerAction: GamePlayAction = new GamePlayAction({

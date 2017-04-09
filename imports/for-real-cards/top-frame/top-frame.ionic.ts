@@ -42,6 +42,7 @@ import {DealModalService} from '../deal-modal/deal-modal.service';
 import {COMMON_APP_SINGLETONS} from '../../common-app/src/ui-ng2/common-app-ng.module';
 import { NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {CommonAppNgIonic} from '../../common-app/src/ui-ionic/common-app-ng-ionic.module';
+import {PileViewShowAll} from '../run-game/pile-show-all-view';
 
 
 @Component({
@@ -176,6 +177,7 @@ class ForRealCardsTopFrame extends TopFrame {
     JoinGame,
     NewGame,
     PileView,
+    PileViewShowAll,
     Player,
     PlayingCard,
     RunGameTableContainer,

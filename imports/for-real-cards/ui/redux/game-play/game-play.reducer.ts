@@ -9,7 +9,7 @@ import {
   GamePlayAction, GamePlayActionType, VisibilityType,
   GamePlayActionInterface
 } from "../../../api/models/action.model";
-import {GameConfig} from "../../../api/models/game-config";
+import {DealLocation, DealSequence, GameConfig} from "../../../api/models/game-config";
 import {Card} from "../../../api/models/card.model";
 import {Hand} from "../../../api/models/hand.model";
 import {Deck} from "../../../api/models/deck.model";
@@ -130,6 +130,14 @@ function processGamePlayAction(transient: IGamePlayRecord, gamePlayAction: GameP
       transient.set('hands', newHands);
       break;
     }
+    case GamePlayActionType.DEAL_STEP: {
+      const dealSequence : DealSequence = GamePlayFunctions.currentDealStep(readState);
+      let numberOfCards:number = dealSequence.maximumNumberOfCards; // TODO: Support variale # of cards
+      if (dealSequence.dealLocation === DealLocation.CENTER_FACEUP_SHOWALL) {
+        deckToPile(transient, readState, numberOfCards);
+      }
+      break;
+    }
     case GamePlayActionType.DECK_TO_HAND:
       if (checkCards(gamePlayAction)) {
 
@@ -185,9 +193,7 @@ function processGamePlayAction(transient: IGamePlayRecord, gamePlayAction: GameP
       break;
     }
     case GamePlayActionType.DECK_TO_PILE: {
-      let index = 0;
-      transient.set('tablePile', readState.tablePile.push(readState.tableFaceDown.get(index)));
-      transient.set('tableFaceDown', readState.tableFaceDown.splice(index, 1));
+      deckToPile(transient, readState, 1);
       break;
     }
     case GamePlayActionType.HAND_SORT: {
@@ -334,6 +340,14 @@ function processGamePlayAction(transient: IGamePlayRecord, gamePlayAction: GameP
 //  console.log(transient.toJS());
 //  console.groupEnd();
   return transient;
+}
+
+function deckToPile(transient: IGamePlayRecord, readState: IGamePlayRecord, count:number) {
+  let index = 0;
+  for (let i=0; i < count; i++) {
+    transient.set('tablePile', readState.tablePile.push(readState.tableFaceDown.get(index)));
+    transient.set('tableFaceDown', readState.tableFaceDown.splice(index, 1));
+  }
 }
 
 function addUndone(state: IGamePlayRecord, actionId: string) {
