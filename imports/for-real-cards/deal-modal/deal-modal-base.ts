@@ -1,19 +1,28 @@
 import {Deck, GameConfig, defaultGames, DeckLocation, UserCommand} from "../api/index";
 import {ModalBase} from '../../common-app/src/ui-ng2/modal/modal-base';
 import {IModalState} from "../../common-app/src/ui/redux/modal/modal.types";
-import {DealModalParamAndResult} from "./deal-modal-params-and-result";
+import {DealModalParam, DealModalResult} from "./deal-modal-params-and-result";
+import {IGamePlayState} from '../ui/redux/game-play/game-play.types';
+import {GamePlayFunctions} from '../ui/redux/game-play/game-play.functions';
 
-export class DealModalBase extends ModalBase<DealModalParamAndResult, DealModalParamAndResult> {
+export class DealModalBase extends ModalBase<DealModalParam, DealModalResult> {
   gameConfig: GameConfig;
+  gameState: IGamePlayState;
   selectedPreset:string;
 
   ngOnInit() {
     this.modalReducer$.subscribe(
-      (state:IModalState<DealModalParamAndResult, DealModalParamAndResult>)=>{
-        this.gameConfig = state.params.gameConfig;
+      (state:IModalState<DealModalParam, DealModalResult>)=>{
+        this.gameState = state.params.gameState;
+        this.gameConfig = this.gameState.currentGameConfig;
       }
     );
   }
+
+  isMidSequence() : boolean {
+    return GamePlayFunctions.isMidDealSequence(this.gameState);
+  }
+
   getSelectedPreset():string {
     if (this.selectedPreset)
       return this.selectedPreset;
@@ -28,8 +37,10 @@ export class DealModalBase extends ModalBase<DealModalParamAndResult, DealModalP
     this.gameConfig =  _.extend(this.gameConfig, gameConfig);
   }
   deal() {
-    this.gameConfig.pruneUserCommands();
-    this.close({gameConfig: this.gameConfig});
+    this.close({gameConfig: this.gameConfig, nextStep: false});
+  }
+  nextStep() {
+    this.close({nextStep: true});
   }
   cancel() {
     this.close(null);

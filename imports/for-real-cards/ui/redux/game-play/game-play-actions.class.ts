@@ -88,6 +88,16 @@ export class GamePlayActions {
     );
   }
 
+  static nextStep(gameState: IGamePlayState) {
+    GamePlayActions.pushAction(
+      new GamePlayAction({
+        gameId: gameState.gameId,
+        creatorId: AccountTools.userId(),
+        actionType: GamePlayActionType.DEAL_STEP
+      })
+    );
+  }
+
   static deal(gameState: IGamePlayState, gameConfig: GameConfig) {
 
     GamePlayActions.pushAction(new GamePlayAction({  // Push RESET separately because it is a different undo block

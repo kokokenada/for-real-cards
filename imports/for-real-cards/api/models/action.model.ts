@@ -27,6 +27,7 @@ export enum GamePlayActionType {
   HAND_TO_DECK,       // 11
   TABLE_TO_HAND,      // 12
   TAKE_TRICK,         // 13
+  DEAL_STEP,          // 14 - A step in the deal sequence
   UNDO
 }
 

@@ -5,6 +5,7 @@
   <div  *ngIf="gameConfig">
 
     <div class="form-group">
+      <button *ngIf="isMidSequence()">NEXT STEP</button>
       <label class="col-xs-6" for="game-dropdown">Preset Game</label>
       <div
               class="col-xs-6 btn-group"

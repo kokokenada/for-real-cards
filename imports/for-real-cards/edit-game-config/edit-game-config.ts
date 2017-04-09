@@ -68,4 +68,9 @@ export class EditGameConfig {
     return GameConfig.getCardCountAllowedOptions();
   }
 
+
+  save() {
+    this.gameConfig.pruneUserCommands();
+// TO DO
+  }
 }

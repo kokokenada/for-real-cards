@@ -10,7 +10,7 @@ import { ActionFormatted, GamePlayActions} from "../ui";
 import template from "./run-game-hand.html"
 import {PlatformTools} from "../../common-app/src/ui-ng2/platform-tools/platform-tools";
 import {Tools} from "../../common-app/src/ui/services/tools";
-import {DealModalParamAndResult} from "../deal-modal/deal-modal-params-and-result";
+import {DealModalParam, DealModalResult} from "../deal-modal/deal-modal-params-and-result";
 import {CommonPopups} from "../../common-app/src/ui-ng2/common-popups/common-popups";
 
 @Component(
@@ -102,13 +102,14 @@ export class RunGameHand extends RunGame implements OnInit {
   }
 
   deal() {
-    let defaultGameConfig:GameConfig;
-    if (this.gameState)
-      defaultGameConfig = this.gameState.currentGameConfig;
-    this.dealModelService.open(defaultGameConfig).then(
-      (dealModalParamAndResult:DealModalParamAndResult)=>{
-        if (dealModalParamAndResult && dealModalParamAndResult.gameConfig) {
-          GamePlayActions.deal(this.gameState, dealModalParamAndResult.gameConfig);
+    this.dealModelService.open(this.gameState).then(
+      (dealModalResult:DealModalResult)=>{
+        if (dealModalResult && dealModalResult.gameConfig) {
+          if (dealModalResult.nextStep) {
+
+          } else {
+            GamePlayActions.deal(this.gameState, dealModalResult.gameConfig);
+          }
         }
       }, (error)=> {
         this.commonPopups.alert(error);
