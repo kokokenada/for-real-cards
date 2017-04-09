@@ -103,7 +103,7 @@ export class RunGameHand extends RunGame implements OnInit {
   deal() {
     this.dealModelService.open(this.gameState).then(
       (dealModalResult: DealModalResult) => {
-        if (dealModalResult.nextStep) {
+        if (dealModalResult && dealModalResult.nextStep) {
           GamePlayActions.nextStep(this.gameState);
         } else {
           if (dealModalResult && dealModalResult.gameConfig) {
