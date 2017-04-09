@@ -17,7 +17,6 @@ export class ModalDialog implements  OnInit {
   @select() modalReducer;
   subscription:Subscription;
   modalRef: NgbModalRef;
-  needsRemoval = false;
   constructor(
     private ngZone: NgZone,
     private ngbModal : NgbModal
@@ -30,7 +29,7 @@ export class ModalDialog implements  OnInit {
           this.modalRef = this.ngbModal.open(modalState.component);
           ModalActions.openSuccess();
         } else if (modalState.lastEvent===ModalActions.MODAL_RESOLVE_REQUEST) {
-          this.modalRef.close(modalState.result)
+          this.modalRef.close(modalState.result);
           ModalActions.resolveSuccess();
         }
       } );
