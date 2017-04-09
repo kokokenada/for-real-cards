@@ -16,10 +16,7 @@ export class ModalService {
     if (!this.subscription) {
       this.subscription = this.modalReducer.subscribe(
         (state:IModalState<any, any>)=>{
-          console.log('IN MODAL PROMISE SUBSCRIPTION CALLBACK')
-          console.log(state)
           if (state.lastEvent === ModalActions.MODAL_RESOLVE_SUCCESS) {
-            console.log('RESOLVING')
             this.resolve(state.result);
             this.inProgress = false;
           }
