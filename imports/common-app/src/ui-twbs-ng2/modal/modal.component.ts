@@ -6,6 +6,9 @@ import {IModalState} from "../../ui/redux/modal/modal.types";
 import {ModalActions} from "../../ui/redux/modal/modal-actions.class";
 import {NgbActiveModal, NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 
+/*    TODO change to be a service instead of a component
+ */
+
 @Component({
   selector: 'modal-dialog',
   template: ''
@@ -42,18 +45,3 @@ export class ModalDialog implements  OnInit {
 }
 
 
-/*    TODO figure out how to automatically add modal-dialog to document, this version requires it to be user defined
-
-
-
-
- let el = document.getElementById("common-app.modal");
- if (!el) {
- let debugInfo:any;
- el = this.renderer.createElement(document.rootElement, "div", debugInfo);
- this.renderer.setElementAttribute(el, "id", "common-app.modal");
- console.log(el)
- }
- this.componentFactory.selector = selector;
- let componentRef = this.componentFactory.create(this.injector);
- */
