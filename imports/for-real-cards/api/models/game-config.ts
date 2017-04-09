@@ -225,7 +225,7 @@ export class GameConfig {
     for (let i=0; i<this.userCommands.length; i ++) {
       let userCommand = this.userCommands[i];
       if (userCommand.to === cardLocation)
-        return userCommand.cardCountAllowed!==CardCountAllowed.NONE;
+        return userCommand.cardCountAllowed===CardCountAllowed.ONE;
     }
     return false;
   }
