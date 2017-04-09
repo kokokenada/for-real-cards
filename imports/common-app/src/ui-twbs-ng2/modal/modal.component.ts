@@ -4,41 +4,45 @@ import { select } from '@angular-redux/store';
 
 import {IModalState} from "../../ui/redux/modal/modal.types";
 import {ModalActions} from "../../ui/redux/modal/modal-actions.class";
+import {NgbActiveModal, NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'modal-dialog',
-  template: `
-<div class="modal-backdrop" [ngStyle]="style">
-  <div class="modal" [ngStyle]="style" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-          <ng-template #placeHolder></ng-template>
-      </div>
-    </div>
-  </div>
-</div>
-`
+  template: ''
 })
 export class ModalDialog implements  OnInit {
   @select() modalReducer;
-  @ViewChild('placeHolder', {read: ViewContainerRef}) private _placeHolder: ViewContainerRef;
-  style:Object = {display: 'none'};
   subscription:Subscription;
+  modalRef: NgbModalRef;
   needsRemoval = false;
   constructor(
     private ngZone: NgZone,
-    private _cmpFctryRslvr: ComponentFactoryResolver
+    private ngbModal : NgbModal,
+    private activeModal : NgbActiveModal
   ) {}
 
   ngOnInit() {
     this.subscription = this.modalReducer.subscribe( (modalState:IModalState<any, any>)=>{
       this.ngZone.run( ()=>{
         if (modalState.lastEvent===ModalActions.MODAL_OPEN_REQUEST) {
-          this.setComponent(modalState.component);
-          this.style = {display: 'inline-block'};
+          console.log('NEW OPEN')
+          console.log(modalState)
+          console.log(modalState.component)
+          this.modalRef = this.ngbModal.open(modalState.component);
+          this.modalRef.result.then((result) => {
+            console.log(result);
+            console.log('resolve');
+          }, (reason) => {
+            this.modalRef.close();
+            console.log('reject');
+            console.log(reason);
+          });
           ModalActions.openSuccess();
         } else if (modalState.lastEvent===ModalActions.MODAL_RESOLVE_REQUEST) {
-          this.style = {display: "none"}
+          console.log('NEW CLOSE')
+          console.log(modalState)
+          this.modalRef.close(modalState.result)
+            //          this.activeModal.close(modalState.result)
           ModalActions.resolveSuccess();
         }
       } );
@@ -50,27 +54,6 @@ export class ModalDialog implements  OnInit {
       this.subscription.unsubscribe();
   }
 
-  setComponent(component) {
-    if (this.needsRemoval)
-      this._placeHolder.remove();
-    let cmp = this.createComponent(this._placeHolder, component);
-    // all inputs/outputs set? add it to the DOM ..
-    this._placeHolder.insert(cmp.hostView);
-    this.needsRemoval = true;
-  }
-
-  public createComponent (vCref: ViewContainerRef, type: any): ComponentRef<any> {
-
-    let factory = this._cmpFctryRslvr.resolveComponentFactory(type);
-
-    // vCref is needed cause of that injector..
-    let injector = ReflectiveInjector.fromResolvedProviders([], vCref.parentInjector);
-
-    // create component without adding it directly to the DOM
-    let comp = factory.create(injector);
-
-    return comp;
-  }
 }
 
 

@@ -5,18 +5,17 @@ import { Menus, MenuItem } from "../../ui/index";
   selector: 'popover-menu',
   template: `
 
-    <div class="btn-group" dropdown>
-      <button dropdownToggle type="button" class="btn btn-primary dropdown-toggle" style="font-size: x-large"></button>
-      <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
-        <li
+    <div class="d-inline-block" ngbDropdown>
+      <button id="dropdownMenu1" class="btn btn-primary" ngbDropdownToggle style="font-size: x-large"></button>
+      <div class="dropdown-menu dropdown-menu-right">
+        <button
             *ngFor="let item of getMenuItems() | menuFilter"
             (click)="itemSelected(item)"
-            role="menuitem"
             class="dropdown-item"
         >
           {{item.title}}
-        </li>      
-      </ul>
+        </button>      
+      </div>
     </div>
 `,
 })

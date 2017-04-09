@@ -6,7 +6,6 @@ import {NgModule}      from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import { NgReduxRouter } from "@angular-redux/router"
 import {DragulaModule} from 'ng2-dragula/ng2-dragula';
-import {TabsModule} from 'ng2-bootstrap';
 
 import {AccountsAdmin} from "../../common-app/src/ui-twbs-ng2/accounts-admin/accounts-admin";
 import {CommonAppNgTWBS} from "../../common-app/src/ui-twbs-ng2/common-app-ng-twbs.module";
@@ -68,8 +67,8 @@ export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);
     viewProviders: [DragulaService],
     template: `
 <div class="row">
-  <top-frame-header class="col-xs-10"></top-frame-header>
-  <popover-menu class="col-xs-1" [menuId]="'topbar'"></popover-menu>
+  <top-frame-header class="col-10"></top-frame-header>
+  <popover-menu class="col-1" [menuId]="'topbar'"></popover-menu>
 </div>
 <router-outlet></router-outlet>
 <modal-dialog></modal-dialog>
