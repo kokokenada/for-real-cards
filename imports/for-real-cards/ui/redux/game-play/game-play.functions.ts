@@ -15,7 +15,8 @@ export class GamePlayFunctions {
     if (gameState.currentGameConfig.dealSequence.length === 1) {
       return false;
     }
-    return true; // To do, scan actions to find out if we're at the end of the deal sequence
+    const step = GamePlayFunctions.currentStepIndex(gameState);
+    return (step<gameState.currentGameConfig.dealSequence.length - 1);
   }
 
   static currentStepIndex(gameState: IGamePlayState) : number {

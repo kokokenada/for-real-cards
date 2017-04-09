@@ -3,8 +3,8 @@
     <h3 class="card-title">Deal</h3>
     <div class="card-block container" *ngIf="gameConfig">
       <div  class="row justify-content-center">
-        <button (click)="nextStep()" class="col-8 btn btn-success" *ngIf="isMidSequence()">
-          Deal Next Cards {{ nextDealStepDescription() ? ' : ' + nextDealStepDescription() : ''}}
+        <button (click)="nextStep()" class="col-10 btn btn-success" *ngIf="isMidSequence()">
+          {{ nextDealStepDescription() ? ' Deal : ' + nextDealStepDescription() : 'Deal Next Cardss'}}
         </button>
       </div>
       <div class="row" style="height: 30px;"></div>
@@ -38,10 +38,10 @@
       </div>
     </div>
     <div class="card-footer form-group justify-content-center row">
-      <button (click)="cancel()" class="col-4 btn btn-default pull-right">Never Mind</button>
+      <button (click)="cancel()" class="col-5 btn btn-default pull-right">Cancel</button>
       <span class="col-1"></span>
-      <button (click)="deal()" class="col-4 btn btn-success pull-right">
-        {{isMidSequence() ? 'End Hand & Deal' : 'Deal'}}</button>
+      <button (click)="deal()" class="col-5 btn btn-success" [disabled]="!selectedPreset">
+        {{isMidSequence() ? 'New Deal' : 'Deal'}}</button>
     </div>
   </form>
 </div>

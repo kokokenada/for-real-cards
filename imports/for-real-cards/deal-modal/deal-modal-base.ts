@@ -1,6 +1,5 @@
-import {Deck, GameConfig, defaultGames, DeckLocation, UserCommand} from "../api/index";
-import {ModalBase} from '../../common-app/src/ui-ng2/modal/modal-base';
-import {IModalState} from "../../common-app/src/ui/redux/modal/modal.types";
+import {GameConfig, defaultGames } from "../api/index";
+import {ModalBase, IModalState} from '../../common-app/src';
 import {DealModalParam, DealModalResult} from "./deal-modal-params-and-result";
 import {IGamePlayState} from '../ui/redux/game-play/game-play.types';
 import {GamePlayFunctions} from '../ui/redux/game-play/game-play.functions';
@@ -14,7 +13,7 @@ export class DealModalBase extends ModalBase<DealModalParam, DealModalResult> {
     this.modalReducer$.subscribe(
       (state:IModalState<DealModalParam, DealModalResult>)=>{
         this.gameState = state.params.gameState;
-        this.gameConfig = this.gameState.currentGameConfig;
+        this.gameConfig = Object.assign({}, this.gameState ? this.gameState.currentGameConfig : defaultGames[0]);
       }
     );
   }
@@ -30,7 +29,7 @@ export class DealModalBase extends ModalBase<DealModalParam, DealModalResult> {
   getSelectedPreset():string {
     if (this.selectedPreset)
       return this.selectedPreset;
-    return "Tap to select a game pre-set"
+    return "Tap to select"
   }
   getPresets():GameConfig[] {
     return defaultGames;
