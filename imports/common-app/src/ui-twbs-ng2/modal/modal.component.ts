@@ -17,32 +17,17 @@ export class ModalDialog implements  OnInit {
   needsRemoval = false;
   constructor(
     private ngZone: NgZone,
-    private ngbModal : NgbModal,
-    private activeModal : NgbActiveModal
+    private ngbModal : NgbModal
   ) {}
 
   ngOnInit() {
     this.subscription = this.modalReducer.subscribe( (modalState:IModalState<any, any>)=>{
       this.ngZone.run( ()=>{
         if (modalState.lastEvent===ModalActions.MODAL_OPEN_REQUEST) {
-          console.log('NEW OPEN')
-          console.log(modalState)
-          console.log(modalState.component)
           this.modalRef = this.ngbModal.open(modalState.component);
-          this.modalRef.result.then((result) => {
-            console.log(result);
-            console.log('resolve');
-          }, (reason) => {
-            this.modalRef.close();
-            console.log('reject');
-            console.log(reason);
-          });
           ModalActions.openSuccess();
         } else if (modalState.lastEvent===ModalActions.MODAL_RESOLVE_REQUEST) {
-          console.log('NEW CLOSE')
-          console.log(modalState)
           this.modalRef.close(modalState.result)
-            //          this.activeModal.close(modalState.result)
           ModalActions.resolveSuccess();
         }
       } );
