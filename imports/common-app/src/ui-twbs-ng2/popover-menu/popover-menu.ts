@@ -5,8 +5,8 @@ import { Menus, MenuItem } from "../../ui/index";
   selector: 'popover-menu',
   template: `
 
-    <div class="d-inline-block" ngbDropdown>
-      <button id="dropdownMenu1" class="btn btn-primary" ngbDropdownToggle style="font-size: x-large"></button>
+    <div ngbDropdown>
+      <button id="dropdownMenu1" class="btn btn-primary" ngbDropdownToggle></button>
       <div class="dropdown-menu dropdown-menu-right">
         <button
             *ngFor="let item of getMenuItems() | menuFilter"
@@ -28,11 +28,6 @@ export class PopoverMenu {
   getMenuItems():MenuItem[] {
     if (!this.menuItems) {
       let menuItem:MenuItem = Menus.getMenuFromId(this.menuId);
-
-//    console.log('menuId: ' + this.menuId + ' menuItem:');
-//    console.log(menuItem);
-//      console.log('user:' + Meteor.userId())
-//      console.log(Meteor.user())
       if (menuItem){
         this.menuItems = [];
         menuItem.items.forEach((subMenuItem:MenuItem)=>{

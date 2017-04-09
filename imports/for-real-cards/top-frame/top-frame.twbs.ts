@@ -67,7 +67,7 @@ export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);
     selector: 'for-real-cards-top-frame',
     viewProviders: [DragulaService],
     template: `
-<div class="row">
+<div class="container row">
   <top-frame-header class="col-10"></top-frame-header>
   <popover-menu class="col-1" [menuId]="'topbar'"></popover-menu>
 </div>
