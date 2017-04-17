@@ -18,13 +18,13 @@ export class ModalDialog implements  OnInit {
   subscription:Subscription;
   modalRef: NgbModalRef;
   constructor(
-    private ngZone: NgZone,
+//    private ngZone: NgZone, // Not sure why this was there.  Let's take it out and see if anything breaks
     private ngbModal : NgbModal
   ) {}
 
   ngOnInit() {
     this.subscription = this.modalReducer.subscribe( (modalState:IModalState<any, any>)=>{
-      this.ngZone.run( ()=>{
+//      this.ngZone.run( ()=>{
         if (modalState.lastEvent===ModalActions.MODAL_OPEN_REQUEST) {
           this.modalRef = this.ngbModal.open(modalState.component);
           ModalActions.openSuccess();
@@ -32,7 +32,7 @@ export class ModalDialog implements  OnInit {
           this.modalRef.close(modalState.result);
           ModalActions.resolveSuccess();
         }
-      } );
+  //    } );
     });
   }
   ngOnDestroy() {
