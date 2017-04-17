@@ -9,7 +9,7 @@ aldeed:simple-schema@1.5.3
 allow-deny@1.0.5
 angular2-compilers@0.6.6
 autoupdate@1.3.12
-babel-compiler@6.18.1
+babel-compiler@6.18.2
 babel-runtime@1.0.1
 barbatus:caching-compiler@1.1.9
 barbatus:css-compiler@0.4.1
@@ -38,7 +38,7 @@ ddp-rate-limiter@1.0.7
 ddp-server@1.3.14
 deps@1.0.12
 diff-sequence@1.0.7
-ecmascript@0.7.2
+ecmascript@0.7.3
 ecmascript-runtime@0.3.15
 ejson@1.0.13
 email@1.2.0
@@ -65,11 +65,11 @@ mdg:validation-error@0.5.1
 meteor@1.6.1
 meteor-base@1.0.4
 minifier-css@1.2.16
-minifier-js@1.2.18
+minifier-js@2.0.0
 minimongo@1.0.21
 mobile-experience@1.0.4
 mobile-status-bar@1.0.14
-modules@0.8.1
+modules@0.8.2
 modules-runtime@0.7.10
 mongo@1.1.16
 mongo-id@1.0.6
@@ -102,7 +102,7 @@ spacebars@1.0.15
 spacebars-compiler@1.1.2
 srp@1.0.10
 standard-minifier-css@1.3.4
-standard-minifier-js@1.2.3
+standard-minifier-js@2.0.0
 templating@1.3.2
 templating-compiler@1.3.2
 templating-runtime@1.3.2
