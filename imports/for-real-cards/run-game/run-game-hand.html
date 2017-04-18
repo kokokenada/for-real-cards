@@ -2,6 +2,8 @@
   <common-app-button color="primary" label="Deal" (click)="deal()"></common-app-button>
   <common-app-button *ngIf="canShowHand()" color="primary" (click)="showHand()" label="Show Hand"></common-app-button>
   <common-app-button *ngIf="shouldShowTakeTrick()" color="primary" (click)="takeTrick()" label="Take Trick"></common-app-button>
+  <common-app-button *ngIf="shouldShowBets()" color="primary" (click)="bet()" label="Bet"></common-app-button>
+  <common-app-button *ngIf="shouldShowBets()" color="primary" (click)="fold()" label="Fold"></common-app-button>
   <common-app-button *ngIf="shouldShowSort()" color="primary" (click)="sort()" label="Sort Hand"></common-app-button>
   <common-app-button *ngIf="shouldShowUndo()" color="outline pull-right" (click)="undo()" label="Undo"></common-app-button>
 </div>

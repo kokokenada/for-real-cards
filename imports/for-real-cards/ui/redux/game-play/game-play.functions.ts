@@ -48,4 +48,16 @@ export class GamePlayFunctions {
     return gameState.currentGameConfig.dealSequence[GamePlayFunctions.currentStepIndex(gameState)];
   }
 
+  static moneyOnTable(gameState: IGamePlayState) : number {
+    return 0;
+  }
+
+  static moneyPlayerBetting(gameState: IGamePlayState, playerId: string) : number {
+    return 0;
+  }
+
+  static moneyPlayerHas(gameState: IGamePlayState, playerId: string) : number {
+    return 0;
+  }
+
 }

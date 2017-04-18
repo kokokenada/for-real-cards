@@ -45,6 +45,8 @@ import {LoginActions} from "../../common-app/src/ui/redux/login/login-actions.cl
 import {EditGameConfig} from "../edit-game-config/edit-game-config";
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {PileViewShowAll} from '../run-game/pile-show-all-view';
+import {BetlModalService} from '../bet-modal/bet-modal.service';
+import {BetModal} from '../bet-modal/bet-modal';
 
 const appRoutes: Routes = [
   {path: '', component: Start},
@@ -179,6 +181,7 @@ export class ForRealCardsTopFrame extends TopFrame implements OnInit {
 @NgModule({
   imports: [BrowserModule, CoreModule, CommonAppNgTWBS, DragulaModule, routing, NgbModule.forRoot()],
   declarations: [
+    BetModal,
     DealModal,
     DeckView,
     EditUserProfileTWBS,
@@ -199,9 +202,11 @@ export class ForRealCardsTopFrame extends TopFrame implements OnInit {
     RunGameTabs,
     Start
   ],
+  entryComponents: [BetModal],
   bootstrap: [ForRealCardsTopFrame],
   providers: [
     ReduxModules,
+    BetlModalService,
     DealModalService,
     ForRealCardsModule,
     ForRealCardsAsync,

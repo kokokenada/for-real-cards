@@ -1,0 +1,37 @@
+<div class="card">
+  <h3 class="card-title">Bet</h3>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item row">
+      <button class="btn btn-primary col-2" style="background-color: white; color: black" (click)="add(1)">1</button>
+      <button class="btn btn-primary col-2" style="background-color: red; color: white" (click)="add(5)">5</button>
+      <button class="btn btn-primary col-2" style="background-color: blue; color: white" (click)="add(10)">10</button>
+      <button class="btn btn-primary col-2" style="background-color: green; color: white" (click)="add(25)">25</button>
+      <button class="btn btn-primary col-2" style="background-color: black; color: white" (click)="add(100)">100</button>
+      <button class="btn btn-primary col-2" style="background-color: purple; color: white" (click)="add(500)">500</button>
+    </li>
+    <li class="list-group-item row">
+      <div class="col-4">
+      Total Bet: {{bet}}
+      </div>
+      <button class="btn btn-default col-4" (click)="cancel()">Cancel</button>
+      <button class="btn btn-primary col-4" (click)="placeBet()">Place Bet</button>
+    </li>
+  </ul>
+</div>
+<!--
+https://www.thespruce.com/standard-poker-chip-denominations-412236
+
+White, $1
+Yellow, $2 (rarely used)
+Red, $5
+Blue, $10
+Grey, $20
+Green, $25
+Orange, $50
+Black, $100
+Pink, $250
+Purple, $500
+Yellow, $1000 (sometimes burgundy)
+Light Blue, $2000
+Brown, $5000
+-->

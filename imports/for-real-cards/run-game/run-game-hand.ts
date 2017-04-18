@@ -12,6 +12,8 @@ import {PlatformTools} from "../../common-app/src/ui-ng2/platform-tools/platform
 import {Tools} from "../../common-app/src/ui/services/tools";
 import {DealModalParam, DealModalResult} from "../deal-modal/deal-modal-params-and-result";
 import {CommonPopups} from "../../common-app/src/ui-ng2/common-popups/common-popups";
+import {BetlModalService} from '../bet-modal/bet-modal.service';
+import {IBetModalResult} from '../bet-modal/bet-modal.types';
 
 @Component(
   {
@@ -27,6 +29,7 @@ export class RunGameHand extends RunGame implements OnInit {
   constructor(protected dragulaService: DragulaService,
               protected ngZone: NgZone,
               protected dealModelService: DealModalService,
+              protected betModalService: BetlModalService,
               protected commonPopups: CommonPopups,) {
     super();
   }
@@ -86,6 +89,24 @@ export class RunGameHand extends RunGame implements OnInit {
       this.gameState.currentGameConfig &&
       this.gameState.currentGameConfig.findCommand(CardLocation.HAND, CardLocation.HAND).cardCountAllowed !== CardCountAllowed.NONE
     );
+  }
+
+  shouldShowBets(): boolean {
+    return (
+      this.gameState &&
+      this.gameState.currentGameConfig &&
+      this.gameState.currentGameConfig.hasBets
+      );
+  }
+
+  bet() {
+    this.betModalService.open(this.gameState).then( (result:IBetModalResult) => {
+      console.log(result);
+    })
+  }
+
+  fold() {
+    console.log("FOLD")
   }
 
   sort(): void {

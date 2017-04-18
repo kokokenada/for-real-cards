@@ -6,7 +6,6 @@ import * as log from 'loglevel';
 import { HandCollection } from '../models/hand.model';
 import {Card} from './card.model'
 import {GameConfig} from './game-config';
-import {IGamePlayRecord} from "../../ui/";
 import {IGamePlayState} from "../../ui/redux/game-play/game-play.types";
 
 
@@ -28,7 +27,11 @@ export enum GamePlayActionType {
   TABLE_TO_HAND,      // 12
   TAKE_TRICK,         // 13
   DEAL_STEP,          // 14 - A step in the deal sequence
-  UNDO
+  UNDO,               // 15
+  BET,                // 16
+  FOLD,               // 17
+  BUY,                // 18
+  TAKE_MONEY          // 19
 }
 
 export enum VisibilityType {
@@ -52,7 +55,8 @@ class GamePlayActionData {
   gameConfig: GameConfig;
   relatedActionId: string;
   sequencePosition:number;
-  previousState:IGamePlayState;
+  moneyAmount: number;
+  previousState:IGamePlayState; // A memory leak ??? , but handy for now
 }
 
 export interface GamePlayActionInterface extends GamePlayActionData {
@@ -71,7 +75,8 @@ export class GamePlayAction extends GamePlayActionData {
     visibilityType?:VisibilityType,
     cards?:Card[],
     gameConfig?:GameConfig,
-    relatedActionId?:string
+    relatedActionId?:string,
+    moneyAmount?:number
     }) 
   {
     super();
@@ -86,6 +91,7 @@ export class GamePlayAction extends GamePlayActionData {
     this.cards = initialValues.cards || [];
     this.gameConfig = initialValues.gameConfig;
     this.relatedActionId = initialValues.relatedActionId;
+    this.moneyAmount = initialValues.moneyAmount;
   }
 }
 
@@ -143,6 +149,9 @@ let GameConfigSchema = new SimpleSchema({
   hasTricks: {
     type: Boolean
   },
+  hasBets: {
+    type: Boolean
+  },
   userCommands: {
     type:Array
   },
@@ -196,6 +205,10 @@ let GamePlayActionSchema = new SimpleSchema({
   },
   relatedActionId: {
     type: String,
+    optional: true
+  },
+  moneyAmount: {
+    type: Number,
     optional: true
   }
 });

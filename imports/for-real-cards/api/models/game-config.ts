@@ -81,6 +81,7 @@ export class GameConfig {
   deckLocationAfterDeal: DeckLocation;
   turnCardUpAfterDeal:boolean;
   hasTricks: boolean;
+  hasBets: boolean;
   userCommands:UserCommand[];
   constructor(attributes: {
     name:string,
@@ -90,6 +91,7 @@ export class GameConfig {
     dealSequence:DealSequence[],
     deckLocationAfterDeal:DeckLocation,
     hasTricks:boolean,
+    hasBets: boolean,
     userCommands:UserCommand[],
     turnCardUpAfterDeal?:boolean,
     _deck_id?:DeckId,
@@ -107,6 +109,7 @@ export class GameConfig {
     this.deckLocationAfterDeal=attributes.deckLocationAfterDeal;
     this.turnCardUpAfterDeal=attributes.turnCardUpAfterDeal;
     this.hasTricks=attributes.hasTricks;
+    this.hasBets = attributes.hasBets;
     this.userCommands = attributes.userCommands;
     let returnValue:UserCommand[] = [];
     for (let i=0; i<NUMBER_OF_LOCATIONS; i++) {
@@ -169,6 +172,7 @@ export class GameConfig {
       deckLocationAfterDeal: DeckLocation.CENTER,
       turnCardUpAfterDeal: true,
       hasTricks: false,
+      hasBets: false,
       userCommands: GameConfig.getDefaultUserCommands()
     })
   }
@@ -257,6 +261,7 @@ export let defaultGames:GameConfig[] = [
     deckLocationAfterDeal: DeckLocation.CENTER,
     turnCardUpAfterDeal: true,
     hasTricks: false,
+    hasBets: false,
     userCommands: [
       new UserCommand(CardLocation.DECK, CardLocation.HAND, CardCountAllowed.ONE),  // Take a card from the deck
       new UserCommand(CardLocation.HAND, CardLocation.PILE, CardCountAllowed.ONE),  // Put a card onto pile
@@ -278,6 +283,7 @@ export let defaultGames:GameConfig[] = [
     deckLocationAfterDeal: DeckLocation.CENTER,
     turnCardUpAfterDeal: true,
     hasTricks: true,
+    hasBets: false,
     userCommands: [
       new UserCommand(CardLocation.PILE, CardLocation.HAND, CardCountAllowed.ONE), // Pick up turned up card at start of the game
       new UserCommand(CardLocation.HAND, CardLocation.DECK, CardCountAllowed.ONE), // Put back a card after picking it up
@@ -301,6 +307,7 @@ export let defaultGames:GameConfig[] = [
     deckLocationAfterDeal: DeckLocation.CENTER,
     turnCardUpAfterDeal: true,
     hasTricks: false,
+    hasBets: false,
     userCommands: [
       new UserCommand(CardLocation.DECK, CardLocation.HAND, CardCountAllowed.ONE),  // Take a card from the deck
       new UserCommand(CardLocation.PILE, CardLocation.HAND, CardCountAllowed.ONE),  // Take a card form the pile
@@ -343,6 +350,7 @@ export let defaultGames:GameConfig[] = [
     deckLocationAfterDeal: DeckLocation.WITH_DEALER,
     turnCardUpAfterDeal: false,
     hasTricks: false,
+    hasBets: true,
     userCommands: [
       new UserCommand(CardLocation.HAND, CardLocation.TABLE, CardCountAllowed.ALL) // Put your hand on the table
     ],

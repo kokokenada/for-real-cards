@@ -330,7 +330,11 @@ function processGamePlayAction(transient: IGamePlayRecord, gamePlayAction: GameP
             });*/
       break;
     }
-
+    case GamePlayActionType.BET:
+    case GamePlayActionType.BUY:
+    case GamePlayActionType.FOLD:
+    case GamePlayActionType.TAKE_MONEY:
+      break; // Calculating values from action history (experiment)
     default:
       log.error("Unexpected gamePlayAction type");
       log.error(gamePlayAction);
