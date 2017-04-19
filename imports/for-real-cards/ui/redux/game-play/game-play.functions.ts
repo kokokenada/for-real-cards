@@ -36,6 +36,46 @@ export class GamePlayFunctions {
     return index;
   }
 
+
+  static isUndone(state: IGamePlayState, action: GamePlayAction): boolean {
+    return state.undoneIds.indexOf(action._id) !== -1;
+  }
+
+  /**
+   * Iterates through actions of current plays since deal ignoring undo's
+   * @param gameState
+   * @param callback
+   */
+  static forEachActionInCurrentDeal(gameState: IGamePlayState, callback: (action: GamePlayAction) => void) {
+    let result: GamePlayAction[] = [];
+    gameState.actions.forEach( (action:GamePlayAction) => {
+      if (action.actionType === GamePlayActionType.DEAL) {
+        result = [];
+      }
+      if (!GamePlayFunctions.isUndone(gameState, action))
+        result.push(action);
+    });
+    result.forEach( (resultAction: GamePlayAction) => {
+      callback(resultAction);
+    })
+  }
+
+  /**
+   * Iterates through actions of current plays since deal ignoring undo's
+   * @param gameState
+   * @param callback
+   */
+  static forEachActionInCurrentGame(gameState: IGamePlayState, callback: (action: GamePlayAction) => void) {
+    let result: GamePlayAction[] = [];
+    gameState.actions.forEach( (action:GamePlayAction) => {
+      if (action.actionType === GamePlayActionType.DEAL) {
+        result = [];
+      }
+      if (!GamePlayFunctions.isUndone(gameState, action))
+        callback(action);
+    });
+  }
+
   static nextDealStepDescription(gameState: IGamePlayState) : string {
     const index = GamePlayFunctions.currentStepIndex(gameState);
     const dealSequence = gameState.currentGameConfig.dealSequence;
@@ -48,16 +88,50 @@ export class GamePlayFunctions {
     return gameState.currentGameConfig.dealSequence[GamePlayFunctions.currentStepIndex(gameState)];
   }
 
-  static moneyOnTable(gameState: IGamePlayState) : number {
-    return 0;
+  static moneyOnTable(gameState: IGamePlayState, centerOnly: boolean) : number {
+    let result = 0;
+    let notInCenter = 0;
+    GamePlayFunctions.forEachActionInCurrentDeal(gameState, (action:GamePlayAction) => {
+      if (action.actionType === GamePlayActionType.BET) {
+        result += action.moneyAmount;
+        notInCenter = notInCenter  + action.moneyAmount;
+      }
+      if (action.actionType === GamePlayActionType.DEAL_STEP) {
+        notInCenter = 0;
+      }
+    });
+    if (centerOnly)
+      return result - notInCenter;
+    return result;
   }
 
   static moneyPlayerBetting(gameState: IGamePlayState, playerId: string) : number {
-    return 0;
+    let result = 0;
+    GamePlayFunctions.forEachActionInCurrentDeal(gameState, (action:GamePlayAction) => {
+      if (action.actionType === GamePlayActionType.BET && action.creatorId === playerId) {
+        result += action.moneyAmount;
+      }
+      if (action.actionType === GamePlayActionType.DEAL_STEP) {
+        result = 0;
+      }
+    });
+    return result;
   }
 
   static moneyPlayerHas(gameState: IGamePlayState, playerId: string) : number {
-    return 0;
+    let result = 0;
+    GamePlayFunctions.forEachActionInCurrentGame(gameState, (action:GamePlayAction) => {
+      if (action.actionType === GamePlayActionType.BUY && action.creatorId === playerId) {
+        result += action.moneyAmount;
+      }
+      if (action.actionType === GamePlayActionType.BET && action.creatorId === playerId) {
+        result -= action.moneyAmount;
+      }
+      if (action.actionType === GamePlayActionType.TAKE_MONEY && action.creatorId === playerId) {
+        result += action.moneyAmount;
+      }
+    });
+    return result;
   }
 
 }

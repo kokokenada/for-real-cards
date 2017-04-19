@@ -7,6 +7,7 @@ import {AccountTools} from "../../../../common-app/src/ui/services/account-tools
 import {ReduxModuleUtil} from "../../../../common-app/src/ui/redux/redux-module-util";
 import {ReduxModuleCombiner} from "../../../../common-app/src/ui/redux/redux-module-combiner";
 import {DealSequence, DealLocation} from "../../../api/models/game-config";
+import {GamePlayFunctions} from './game-play.functions';
 
 const _prefix = 'FRC_GAMEPLAY_';
 const _prefix_length = _prefix.length;
@@ -314,11 +315,6 @@ export class GamePlayActions {
     return hands.find((hand: Hand)=> hand.userId === userId);
   }
 
-
-  static isUndone(state: IGamePlayState, action: GamePlayAction): boolean {
-    return state.undoneIds.indexOf(action._id) !== -1;
-  }
-
   static isUndoable(state: IGamePlayState, action: GamePlayAction): boolean {
     switch (action.actionType) {
       case GamePlayActionType.HAND_SORT:
@@ -329,7 +325,7 @@ export class GamePlayActions {
       default: {
         if (action.relatedActionId) // If has a related actionId then can't undo because it is like a child action
           return false;
-        return !GamePlayActions.isUndone(state, action); // Don't undo twice
+        return !GamePlayFunctions.isUndone(state, action); // Don't undo twice
       }
     }
   }

@@ -78,7 +78,7 @@ function processGamePlayAction(transient: IGamePlayRecord, gamePlayAction: GameP
 //  console.log('gamePlayAction::')
 //  console.log(gamePlayAction);
   transient.set('actions', transient.actions.set(id, gamePlayAction));
-  if (GamePlayActions.isUndone(transient, gamePlayAction)) {
+  if (GamePlayFunctions.isUndone(transient, gamePlayAction)) {
 //    console.log('not doing gamePlayAction because it is undone');
 //    console.groupEnd();
     return transient;
