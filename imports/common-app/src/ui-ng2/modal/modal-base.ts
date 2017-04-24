@@ -5,7 +5,7 @@ import { ModalActions } from "../../ui/redux/modal/modal-actions.class";
 
 export abstract class ModalBase<PARAMS, RESULT> implements OnInit{
   @select() modalReducer$;
-  protected params;
+  protected params:PARAMS;
 
   ngOnInit(){
     this.modalReducer$.subscribe(
