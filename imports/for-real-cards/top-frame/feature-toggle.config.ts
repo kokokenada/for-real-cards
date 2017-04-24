@@ -4,7 +4,7 @@ import { IFeatureToggleConfigSet } from '../../common-app/src/ui';
 // Beware that the initial settings might be overridden by redux state persistence
 export const featureToggleConfigs: IFeatureToggleConfigSet = {
   'mobile-tracking': {
-    setting: false,
+    setting: true,
     responsible: 'Ken Ono',
     description:
       `Controls if we track mobile usage`,
@@ -21,5 +21,9 @@ export const featureToggleConfigs: IFeatureToggleConfigSet = {
   'mobile-ionic': {
     setting: false,
     description: 'Use ionic desktop'
+  },
+  'analytics-logger': {
+    setting: false,
+    description: 'Analytics events to console'
   }
 };

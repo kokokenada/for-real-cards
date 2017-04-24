@@ -220,9 +220,17 @@ export class ReduxModules {
       console.log('done cordova analytics init');
       const offlineStorage = offlineWeb(isConnected);
 
-      analyticsMiddleware = createMiddleware(eventDefinitions, GoogleTagManager, {  logger, offlineStorage });
+      if (featureToggleConfigs['analytics-logger'].setting) {
+        analyticsMiddleware = createMiddleware(eventDefinitions, GoogleTagManager, {logger, offlineStorage});
+      } else  {
+        analyticsMiddleware = createMiddleware(eventDefinitions, GoogleTagManager, {offlineStorage});
+      }
     } else {
-      analyticsMiddleware = createMiddleware(eventDefinitions, GoogleTagManager, { logger });
+      if (featureToggleConfigs['analytics-logger'].setting) {
+        analyticsMiddleware = createMiddleware(eventDefinitions, GoogleTagManager, { logger });
+      } else {
+        analyticsMiddleware = createMiddleware(eventDefinitions, GoogleTagManager);
+      }
     }
 
 
