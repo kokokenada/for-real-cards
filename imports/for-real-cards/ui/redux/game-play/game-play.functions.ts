@@ -134,4 +134,13 @@ export class GamePlayFunctions {
     return result;
   }
 
+  static hasBets(gameState: IGamePlayState): boolean {
+    let retVal = false;
+    GamePlayFunctions.forEachActionInCurrentGame(gameState, (action:GamePlayAction) => {
+      if (action.actionType === GamePlayActionType.TAKE_MONEY)
+        retVal = true;
+    });
+    return retVal;
+  }
+
 }

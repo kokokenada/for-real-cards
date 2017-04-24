@@ -12,7 +12,7 @@ export class GameRenderingTools {
   }
 
   /**
-   * get CY coordinates of upper left of a box that fits inside the given cirle at the given degrees
+   * get XY coordinates of upper left of a box that fits inside the given cirle at the given degrees
    *
    * @param objectHeight
    * @param objectWidth

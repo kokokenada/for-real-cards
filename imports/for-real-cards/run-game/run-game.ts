@@ -13,6 +13,7 @@ import { GamePlayActions, IForRealCardsState, IGamePlayRecord} from "../ui";
 import {DealModalService} from "../deal-modal/deal-modal.service";
 import {CommonPopups} from "../../common-app/src/ui-ng2/common-popups/common-popups";
 import {DealLocation, DealSequence} from '../api/models/game-config';
+import {GamePlayFunctions} from '../ui/redux/game-play/game-play.functions';
 
 declare const window: any;
 
@@ -261,6 +262,14 @@ export abstract class RunGame {
       height: '100%',
       width: '100%'
     }
+  }
+
+  getBetForHand(hand: Hand): number {
+    return GamePlayFunctions.moneyPlayerBetting(this.gameState, hand.userId);
+  }
+
+  getBetForTable(): number {
+    return GamePlayFunctions.moneyOnTable(this.gameState, true);
   }
 }
 

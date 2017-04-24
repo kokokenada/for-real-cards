@@ -76,6 +76,15 @@ export class RunGameTable extends RunGame implements OnInit {
     return degrees;
   }
 
+  get100BasedCoordinatesForBet(index:number):Coordinates {
+    let degrees = this.degrees(index);
+//    console.log('getCoord')  investigate why these recur
+    //   console.log(index)
+    //  console.log(degrees)
+    return GameRenderingTools.getXY(10, 9, 50, 50, 20, this.degrees(index));
+  }
+
+
   get100BasedCoordinates(index:number):Coordinates {
     let degrees = this.degrees(index);
 //    console.log('getCoord')  investigate why these recur

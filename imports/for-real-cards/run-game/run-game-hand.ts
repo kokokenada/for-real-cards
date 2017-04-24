@@ -101,7 +101,9 @@ export class RunGameHand extends RunGame implements OnInit {
 
   bet() {
     this.betModalService.open(this.gameState).then( (result:IBetModalResult) => {
-      console.log(result);
+      if (result && result.didBet) {
+        GamePlayActions.bet(this.gameState, result.value);
+      }
     })
   }
 

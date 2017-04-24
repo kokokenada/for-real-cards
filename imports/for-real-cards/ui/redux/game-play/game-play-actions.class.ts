@@ -363,4 +363,22 @@ export class GamePlayActions {
       ReduxModuleUtil.errorFactory(GamePlayActions.GAME_PLAY_ERROR, {error: error.error})
     );
   }
+
+  static bet(gameState: IGamePlayState, moneyAmount: number, playerId: string = Meteor.userId()) {
+    GamePlayActions.pushAction(new GamePlayAction({
+      actionType: GamePlayActionType.BET,
+      gameId: gameState.gameId,
+      creatorId: playerId,
+      moneyAmount
+    }));
+  }
+
+  static buy(gameState: IGamePlayState, moneyAmount: number, playerId: string = Meteor.userId()) {
+    GamePlayActions.pushAction(new GamePlayAction({
+      actionType: GamePlayActionType.BUY,
+      gameId: gameState.gameId,
+      creatorId: playerId,
+      moneyAmount
+    }));
+  }
 }

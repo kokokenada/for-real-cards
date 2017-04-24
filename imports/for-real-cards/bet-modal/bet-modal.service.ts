@@ -4,7 +4,6 @@ import {IGamePlayState} from '../ui/redux/game-play/game-play.types';
 import { Injectable } from '@angular/core';
 
 import { ModalService } from "../../common-app/src/ui/redux/modal/modal.service";
-import { GameConfig } from "../api/index";
 import {IBetModalParams, IBetModalResult} from './bet-modal.types';
 import {BetModal} from './bet-modal';
 
