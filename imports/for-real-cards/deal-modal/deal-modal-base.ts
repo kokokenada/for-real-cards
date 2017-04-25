@@ -43,7 +43,10 @@ export class DealModalBase extends ModalBase<DealModalParam, DealModalResult> {
     this.close({gameConfig: this.gameConfig, nextStep: false});
   }
   nextStep() {
-    this.close({nextStep: true});
+    if (GamePlayFunctions.areBetsEven(this.gameState))
+      this.close({nextStep: true});
+    else
+      console.error("BETS NOT EVEN")
   }
   cancel() {
     this.close(null);

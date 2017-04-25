@@ -108,7 +108,7 @@ export class GamePlayFunctions {
   static moneyPlayerBetting(gameState: IGamePlayState, playerId: string) : number {
     let result = 0;
     GamePlayFunctions.forEachActionInCurrentDeal(gameState, (action:GamePlayAction) => {
-      if (action.actionType === GamePlayActionType.BET && action.creatorId === playerId) {
+      if (action.actionType === GamePlayActionType.BET && action.toPlayerId === playerId) {
         result += action.moneyAmount;
       }
       if (action.actionType === GamePlayActionType.DEAL_STEP) {
@@ -120,18 +120,68 @@ export class GamePlayFunctions {
 
   static moneyPlayerHas(gameState: IGamePlayState, playerId: string) : number {
     let result = 0;
+    let hands = {};
+    let currentBet = 0;
     GamePlayFunctions.forEachActionInCurrentGame(gameState, (action:GamePlayAction) => {
-      if (action.actionType === GamePlayActionType.BUY && action.creatorId === playerId) {
+      if (action.actionType===GamePlayActionType.NEW_HAND) { // Add hands as they come in
+        hands[action.toPlayerId]= {action};
+      }
+      if (action.actionType === GamePlayActionType.BUY && action.toPlayerId === playerId) {
         result += action.moneyAmount;
       }
-      if (action.actionType === GamePlayActionType.BET && action.creatorId === playerId) {
+      if (action.actionType === GamePlayActionType.BET && action.toPlayerId === playerId) {
+        currentBet += action.moneyAmount;
         result -= action.moneyAmount;
       }
-      if (action.actionType === GamePlayActionType.TAKE_MONEY && action.creatorId === playerId) {
+      if (action.actionType === GamePlayActionType.TAKE_MONEY && action.toPlayerId === playerId) {
         result += action.moneyAmount;
+      }
+      if (action.actionType === GamePlayActionType.FOLD) {
+        // TRACK WHO HAS FOLDED
+        hands[action.toPlayerId].folded = true;
+      }
+      // NEW ROUND
+      if (action.actionType === GamePlayActionType.DEAL_STEP || action.actionType === GamePlayActionType.DEAL) {
+        // If everybody except player has folded return bet to player
+        let everyoneFolded = true;
+        Object.keys(hands).forEach( (key)=>{
+          if (!(hands[key].folded) && key !== playerId) {
+            everyoneFolded = false;
+          }
+        });
+        if (everyoneFolded) {
+          result += currentBet;
+        }
+        currentBet = 0;
       }
     });
     return result;
+  }
+
+  static hasPlayerFolded(gameState: IGamePlayState, playerId: string) : boolean {
+    let retVal = false;
+    GamePlayFunctions.forEachActionInCurrentDeal(gameState, (action: GamePlayAction) => {
+      if (action.actionType === GamePlayActionType.FOLD && action.toPlayerId === playerId)
+        retVal = true;
+    });
+    return retVal;
+  }
+
+  static areBetsEven(gameState: IGamePlayState): boolean {
+    let retVal = true;
+    let bet: number = null;
+    gameState.hands.forEach( (hand: Hand) => {
+      if ( !GamePlayFunctions.hasPlayerFolded(gameState, hand.userId) ) {
+        if (bet === null) {
+          bet = GamePlayFunctions.moneyPlayerBetting(gameState, hand.userId);
+        } else {
+          if (bet !== GamePlayFunctions.moneyPlayerBetting(gameState, hand.userId)) {
+            retVal = false;
+          }
+        }
+      }
+    } );
+    return retVal;
   }
 
   static hasBets(gameState: IGamePlayState): boolean {

@@ -108,7 +108,9 @@ export class RunGameHand extends RunGame implements OnInit {
   }
 
   fold() {
-    console.log("FOLD")
+    this.commonPopups.confirm("Confirm Fold").then( () => {
+      GamePlayActions.fold(this.gameState);
+    });
   }
 
   sort(): void {

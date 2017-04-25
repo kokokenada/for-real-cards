@@ -368,7 +368,8 @@ export class GamePlayActions {
     GamePlayActions.pushAction(new GamePlayAction({
       actionType: GamePlayActionType.BET,
       gameId: gameState.gameId,
-      creatorId: playerId,
+      toPlayerId: playerId,
+      creatorId: Meteor.userId(),
       moneyAmount
     }));
   }
@@ -377,8 +378,18 @@ export class GamePlayActions {
     GamePlayActions.pushAction(new GamePlayAction({
       actionType: GamePlayActionType.BUY,
       gameId: gameState.gameId,
-      creatorId: playerId,
+      toPlayerId: playerId,
+      creatorId: Meteor.userId(),
       moneyAmount
+    }));
+  }
+
+  static fold(gameState: IGamePlayState, playerId: string = Meteor.userId()) {
+    GamePlayActions.pushAction(new GamePlayAction({
+      actionType: GamePlayActionType.FOLD,
+      gameId: gameState.gameId,
+      toPlayerId: playerId,
+      creatorId: Meteor.userId(),
     }));
   }
 }
