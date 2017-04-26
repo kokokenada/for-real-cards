@@ -47,6 +47,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {PileViewShowAll} from '../run-game/pile-show-all-view';
 import {BetlModalService} from '../bet-modal/bet-modal.service';
 import {BetModal} from '../bet-modal/bet-modal';
+import {BetLedger} from '../bet-ledger/bet-ledger';
 
 const appRoutes: Routes = [
   {path: '', component: Start},
@@ -58,6 +59,7 @@ const appRoutes: Routes = [
   {path: 'frc-deal-modal', component: DealModal},
   {path: 'accounts-admin', component: AccountsAdmin},
   {path: 'edit-game-config', component: EditGameConfig},
+  {path: 'bet-ledger', component: BetLedger},
   {path: 'game-action-list', component: GameActionList}
 ];
 
@@ -132,6 +134,14 @@ export class ForRealCardsTopFrame extends TopFrame implements OnInit {
       }
     });
 
+    Menus.addSubMenuItem('topbar', {
+      id: 'beet-ledger',
+      title: 'Bet Ledger',
+      roles: ['*'],
+      callback: (menuItem: MenuItem)=> {
+        this.router.navigate(['/bet-ledger']);
+      }
+    });
 
     Menus.addSubMenuItem('topbar', {
       id: 'logout',
@@ -181,6 +191,7 @@ export class ForRealCardsTopFrame extends TopFrame implements OnInit {
 @NgModule({
   imports: [BrowserModule, CoreModule, CommonAppNgTWBS, DragulaModule, routing, NgbModule.forRoot()],
   declarations: [
+    BetLedger,
     BetModal,
     DealModal,
     DeckView,
