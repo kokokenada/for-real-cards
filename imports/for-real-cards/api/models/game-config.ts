@@ -86,6 +86,7 @@ export class GameConfig { // Don't forget to update persistence in Action defini
   turnCardUpAfterDeal: boolean;
   hasTricks: boolean;
   hasBets: boolean;
+  alwaysShowTurnedUpCard: boolean;
   userCommands: UserCommand[];
 
   constructor(attributes: {
@@ -99,6 +100,7 @@ export class GameConfig { // Don't forget to update persistence in Action defini
     hasBets: boolean,
     userCommands: UserCommand[],
     turnCardUpAfterDeal?: boolean,
+    alwaysShowTurnedUpCard?: boolean,
     _deck_id?: DeckId,
   }) {
     this.name = attributes.name;
@@ -115,6 +117,7 @@ export class GameConfig { // Don't forget to update persistence in Action defini
     this.hasTricks = attributes.hasTricks;
     this.hasBets = attributes.hasBets;
     this.userCommands = attributes.userCommands;
+    this.alwaysShowTurnedUpCard = attributes.alwaysShowTurnedUpCard;
     let returnValue: UserCommand[] = [];
     for (let i = 0; i < NUMBER_OF_LOCATIONS; i++) {
       for (let j = 0; j < NUMBER_OF_LOCATIONS; j++) {
@@ -381,6 +384,7 @@ export let defaultGames: GameConfig[] = [
     turnCardUpAfterDeal: true,
     hasTricks: true,
     hasBets: false,
+    alwaysShowTurnedUpCard: true,
     userCommands: [
       new UserCommand(CardLocation.HAND, CardLocation.TABLE, CardCountAllowed.ONE),  // Play a card into trick
       new UserCommand(CardLocation.HAND, CardLocation.HAND, CardCountAllowed.ONE)   // Users can sort their hand

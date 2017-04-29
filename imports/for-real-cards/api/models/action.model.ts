@@ -161,6 +161,9 @@ let GameConfigSchema = new SimpleSchema({
   turnCardUpAfterDeal: {
     type: Boolean,
     optional: true
+  },
+  alwaysShowTurnedUpCard: {
+    type: Boolean
   }
 });
 

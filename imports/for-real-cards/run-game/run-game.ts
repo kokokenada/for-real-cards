@@ -199,10 +199,14 @@ export abstract class RunGame {
       this.gameState &&
       this.gameState.currentGameConfig &&
       (
-        this.tricksInProgress()===false &&
+        this.gameState.currentGameConfig.alwaysShowTurnedUpCard
+        ||
         (
-          this.gameState.currentGameConfig.isTarget(CardLocation.PILE) ||
-          this.gameState.currentGameConfig.isSource(CardLocation.PILE)
+          this.tricksInProgress()===false &&
+          (
+            this.gameState.currentGameConfig.isTarget(CardLocation.PILE) ||
+            this.gameState.currentGameConfig.isSource(CardLocation.PILE)
+          )
         )
       )
     );
