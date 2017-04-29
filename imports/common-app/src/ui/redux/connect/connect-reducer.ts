@@ -4,6 +4,7 @@ import { makeTypedFactory } from 'typed-immutable-record';
 import { IPayloadAction } from '../action.interface';
 import { ConnectActions } from './connect-actions.class';
 import {IConnectState, IConnectRecord, IConnectActionPayload} from './connect.types'
+import {LoginActions} from '../login/login-actions.class';
 
 
 export const ConnectFactory = makeTypedFactory<IConnectState, IConnectRecord>({
@@ -39,6 +40,8 @@ export function connectReducer(
       return state.set('connected', false);
     case ConnectActions.CONNECT_SET_SERVER:
       return state.set('connected', false);
+    case LoginActions.LOGGED_IN:
+      return state.set('connected', true);
     default:
       return state;
   }
