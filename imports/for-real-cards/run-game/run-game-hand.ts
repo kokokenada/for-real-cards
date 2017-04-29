@@ -132,7 +132,7 @@ export class RunGameHand extends RunGame implements OnInit {
           GamePlayActions.nextStep(this.gameState);
         } else {
           if (dealModalResult && dealModalResult.gameConfig) {
-            GamePlayActions.deal(this.gameState, dealModalResult.gameConfig);
+            GamePlayActions.deal(this.gameState, dealModalResult.gameConfig, dealModalResult.numberOfCards);
           }
         }
       }, (error) => {

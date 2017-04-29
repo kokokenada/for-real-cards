@@ -37,15 +37,17 @@ export interface DealSequence {
 }
 
 export class UserCommand {
-  from:CardLocation;
-  to:CardLocation;
-  cardCountAllowed:CardCountAllowed;
-  constructor(from:CardLocation, to:CardLocation, cardCountAllowed:CardCountAllowed) {
+  from: CardLocation;
+  to: CardLocation;
+  cardCountAllowed: CardCountAllowed;
+
+  constructor(from: CardLocation, to: CardLocation, cardCountAllowed: CardCountAllowed) {
     this.from = from;
     this.to = to;
     this.cardCountAllowed = cardCountAllowed;
   }
-  private static getCardLocationDescription(cardLocation:CardLocation):string {
+
+  private static getCardLocationDescription(cardLocation: CardLocation): string {
     switch (cardLocation) {
       case CardLocation.DECK:
         return "Deck";
@@ -59,70 +61,72 @@ export class UserCommand {
         throw "Invalid CardLocation";
     }
   }
-  fromDescription():string {
-    return UserCommand.getCardLocationDescription(this.from); 
+
+  fromDescription(): string {
+    return UserCommand.getCardLocationDescription(this.from);
   }
-  toDescription():string {
+
+  toDescription(): string {
     return UserCommand.getCardLocationDescription(this.to);
   }
-  countDescription():string {
+
+  countDescription(): string {
     return GameConfig.getCardCountAllowedDescription(this.cardCountAllowed);
   }
 }
 
-export class GameConfig {
-  name:string;
-  minimumNumberOfPlayers:number;
-  maximumNumberOfPlayers:number;
-  dealerCanSelectNumberOfCards: boolean;
-  deck:Deck; // Not persisted
-  _deck_id:DeckId; // Persisted
+export class GameConfig { // Don't forget to update persistence in Action definition
+  name: string;
+  minimumNumberOfPlayers: number;
+  maximumNumberOfPlayers: number;
+  deck: Deck; // Not persisted
+  _deck_id: DeckId; // Persisted
   dealSequence: DealSequence[];
   deckLocationAfterDeal: DeckLocation;
-  turnCardUpAfterDeal:boolean;
+  turnCardUpAfterDeal: boolean;
   hasTricks: boolean;
   hasBets: boolean;
-  userCommands:UserCommand[];
+  userCommands: UserCommand[];
+
   constructor(attributes: {
-    name:string,
-    minimumNumberOfPlayers:number,
-    maximumNumberOfPlayers:number,
-    deck:Deck,
-    dealSequence:DealSequence[],
-    deckLocationAfterDeal:DeckLocation,
-    hasTricks:boolean,
+    name: string,
+    minimumNumberOfPlayers: number,
+    maximumNumberOfPlayers: number,
+    deck: Deck,
+    dealSequence: DealSequence[],
+    deckLocationAfterDeal: DeckLocation,
+    hasTricks: boolean,
     hasBets: boolean,
-    userCommands:UserCommand[],
-    turnCardUpAfterDeal?:boolean,
-    _deck_id?:DeckId,
-    dealerCanSelectNumberOfCards?:boolean
+    userCommands: UserCommand[],
+    turnCardUpAfterDeal?: boolean,
+    _deck_id?: DeckId,
   }) {
-    this.name=attributes.name;
+    this.name = attributes.name;
     this.minimumNumberOfPlayers = attributes.minimumNumberOfPlayers;
     this.maximumNumberOfPlayers = attributes.maximumNumberOfPlayers;
-    this.deck=attributes.deck;
-    this._deck_id=attributes._deck_id;
+    this.deck = attributes.deck;
+    this._deck_id = attributes._deck_id;
     if (!this.deck && this._deck_id) {
       this.deck = Deck.getDeck(this._deck_id);
     }
     this.dealSequence = attributes.dealSequence ? attributes.dealSequence.slice(0) : [];
-    this.deckLocationAfterDeal=attributes.deckLocationAfterDeal;
-    this.turnCardUpAfterDeal=attributes.turnCardUpAfterDeal;
-    this.hasTricks=attributes.hasTricks;
+    this.deckLocationAfterDeal = attributes.deckLocationAfterDeal;
+    this.turnCardUpAfterDeal = attributes.turnCardUpAfterDeal;
+    this.hasTricks = attributes.hasTricks;
     this.hasBets = attributes.hasBets;
     this.userCommands = attributes.userCommands;
-    let returnValue:UserCommand[] = [];
-    for (let i=0; i<NUMBER_OF_LOCATIONS; i++) {
-      for (let j=0; j<NUMBER_OF_LOCATIONS; j++) {
+    let returnValue: UserCommand[] = [];
+    for (let i = 0; i < NUMBER_OF_LOCATIONS; i++) {
+      for (let j = 0; j < NUMBER_OF_LOCATIONS; j++) {
         returnValue.push(
           new UserCommand(i, j, this.getCommandAbility(i, j))
         );
       }
     }
     this.userCommands = returnValue; // Need to keep the same array object so $digest loop doesn't freak out
-    this.dealerCanSelectNumberOfCards = attributes.dealerCanSelectNumberOfCards;
   }
-  static getLocationString(deckLocation:DeckLocation):string {
+
+  static getLocationString(deckLocation: DeckLocation): string {
     switch (deckLocation) {
       case DeckLocation.CENTER:
         return "Center";
@@ -134,17 +138,18 @@ export class GameConfig {
         throw "Enexpected deck locarion"
     }
   }
-  getUserCommands():UserCommand[] {
+
+  getUserCommands(): UserCommand[] {
     return this.userCommands;
   }
 
-  static getDefaultUserCommands():UserCommand[] {
-    let returnValue:UserCommand[] = [];
-    for (let i=0; i<NUMBER_OF_LOCATIONS; i++) {
-      for (let j=0; j<NUMBER_OF_LOCATIONS; j++) {
-        if (i===j) {  // Same source & Target
+  static getDefaultUserCommands(): UserCommand[] {
+    let returnValue: UserCommand[] = [];
+    for (let i = 0; i < NUMBER_OF_LOCATIONS; i++) {
+      for (let j = 0; j < NUMBER_OF_LOCATIONS; j++) {
+        if (i === j) {  // Same source & Target
           returnValue.push(
-            new UserCommand(i, j, i===CardLocation.HAND ? CardCountAllowed.ONE : CardCountAllowed.NONE) // HAND TO HAND ALLOWED FOR SORT
+            new UserCommand(i, j, i === CardLocation.HAND ? CardCountAllowed.ONE : CardCountAllowed.NONE) // HAND TO HAND ALLOWED FOR SORT
           );
         } else {
           returnValue.push(
@@ -155,8 +160,8 @@ export class GameConfig {
     }
     return returnValue;
   }
-  
-  static getDefaultConfig():GameConfig {
+
+  static getDefaultConfig(): GameConfig {
     return new GameConfig({
       name: "",
       minimumNumberOfPlayers: 2,
@@ -177,10 +182,10 @@ export class GameConfig {
     })
   }
 
-  findCommand(from:CardLocation, to:CardLocation):UserCommand {
+  findCommand(from: CardLocation, to: CardLocation): UserCommand {
     if (!this.userCommands)
       return null;
-    for (let i=0; i<this.userCommands.length; i++) {
+    for (let i = 0; i < this.userCommands.length; i++) {
       let userCommand = this.userCommands[i];
       if (userCommand.from === from && userCommand.to === to) {
         return userCommand;
@@ -189,22 +194,22 @@ export class GameConfig {
     return null;
   }
 
-  getCommandAbility(from:CardLocation, to:CardLocation):CardCountAllowed {
+  getCommandAbility(from: CardLocation, to: CardLocation): CardCountAllowed {
     let userCommand = this.findCommand(from, to);
     if (!userCommand)
       return CardCountAllowed.NONE;
     return userCommand.cardCountAllowed;
   }
-  
-  pruneUserCommands():void {
-    for (let i=0; i<this.userCommands.length; i ++) {
-      if (this.userCommands[i].cardCountAllowed===CardCountAllowed.NONE) {
+
+  pruneUserCommands(): void {
+    for (let i = 0; i < this.userCommands.length; i++) {
+      if (this.userCommands[i].cardCountAllowed === CardCountAllowed.NONE) {
         this.userCommands.splice(i, 1);
       }
     }
   }
-  
-  static getCardCountAllowedDescription(cardCountAllowed:CardCountAllowed):string {
+
+  static getCardCountAllowedDescription(cardCountAllowed: CardCountAllowed): string {
     switch (cardCountAllowed) {
       case CardCountAllowed.NONE:
         return "No";
@@ -217,27 +222,32 @@ export class GameConfig {
     }
   }
 
-  static getCardCountAllowedOptions():string[] {
+  static getCardCountAllowedOptions(): string[] {
     let returnValue = [];
-    for (let i=0; i<NUMBER_OF_CARD_COUNT_OPTIONS; i++) {
+    for (let i = 0; i < NUMBER_OF_CARD_COUNT_OPTIONS; i++) {
       returnValue.push(GameConfig.getCardCountAllowedDescription(i))
     }
     return returnValue;
   }
 
-  isTarget(cardLocation:CardLocation):boolean {
-    for (let i=0; i<this.userCommands.length; i ++) {
+  static dealerCanSelectNumberOfCards(dealSequence: DealSequence): boolean {
+    return !(dealSequence.maximumNumberOfCards === dealSequence.minimumNumberOfCards);
+  }
+
+  isTarget(cardLocation: CardLocation): boolean {
+    for (let i = 0; i < this.userCommands.length; i++) {
       let userCommand = this.userCommands[i];
       if (userCommand.to === cardLocation)
-        return userCommand.cardCountAllowed===CardCountAllowed.ONE;
+        return userCommand.cardCountAllowed === CardCountAllowed.ONE;
     }
     return false;
   }
-  isSource(cardLocation:CardLocation):boolean {
-    for (let i=0; i<this.userCommands.length; i ++) {
+
+  isSource(cardLocation: CardLocation): boolean {
+    for (let i = 0; i < this.userCommands.length; i++) {
       let userCommand = this.userCommands[i];
       if (userCommand.from === cardLocation)
-        return userCommand.cardCountAllowed!==CardCountAllowed.NONE;
+        return userCommand.cardCountAllowed !== CardCountAllowed.NONE;
     }
     return false;
   }
@@ -245,7 +255,7 @@ export class GameConfig {
 
 }
 
-export let defaultGames:GameConfig[] = [
+export let defaultGames: GameConfig[] = [
   new GameConfig({
     name: "Crazy Eights",
     minimumNumberOfPlayers: 2,
@@ -353,6 +363,27 @@ export let defaultGames:GameConfig[] = [
     hasBets: true,
     userCommands: [
       new UserCommand(CardLocation.HAND, CardLocation.TABLE, CardCountAllowed.ALL) // Put your hand on the table
+    ],
+  }),
+  new GameConfig({
+    name: "Wizard",
+    minimumNumberOfPlayers: 2,
+    maximumNumberOfPlayers: 6,
+    deck: Deck.getDeck(DeckId.WIZARD),
+    dealSequence: [
+      {
+        dealLocation: DealLocation.HAND_HIDDEN,
+        minimumNumberOfCards: 1,
+        maximumNumberOfCards: 13
+      }
+    ],
+    deckLocationAfterDeal: DeckLocation.CENTER,
+    turnCardUpAfterDeal: true,
+    hasTricks: true,
+    hasBets: false,
+    userCommands: [
+      new UserCommand(CardLocation.HAND, CardLocation.TABLE, CardCountAllowed.ONE),  // Play a card into trick
+      new UserCommand(CardLocation.HAND, CardLocation.HAND, CardCountAllowed.ONE)   // Users can sort their hand
     ],
   })
 ];

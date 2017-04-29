@@ -99,7 +99,7 @@ export class GamePlayActions {
     );
   }
 
-  static deal(gameState: IGamePlayState, gameConfig: GameConfig) {
+  static deal(gameState: IGamePlayState, gameConfig: GameConfig, numberOfCardsRequested: number) {
 
     GamePlayActions.pushAction(new GamePlayAction({  // Push RESET separately because it is a different undo block
       gameId: gameState.gameId,
@@ -134,7 +134,15 @@ export class GamePlayActions {
     let deckPosition = 0;
     gameState.hands.forEach((hand: Hand)=> {
       let dealSequence:DealSequence = gameConfig.dealSequence[0];
-      let numberOfCards:number = dealSequence.maximumNumberOfCards; // TODO: Support variale # of cards
+      let numberOfCards:number;
+      if (GameConfig.dealerCanSelectNumberOfCards(dealSequence)) {
+        numberOfCards = numberOfCardsRequested;
+        if ( !(numberOfCards > 0) ) {
+          throw "Number of cards must be >0";
+        }
+      } else {
+        numberOfCards = dealSequence.minimumNumberOfCards;
+      }
       if (dealSequence.dealLocation===DealLocation.HAND_HIDDEN) {
         let toPlayerAction: GamePlayAction = new GamePlayAction({
           gameId: gameState.gameId,

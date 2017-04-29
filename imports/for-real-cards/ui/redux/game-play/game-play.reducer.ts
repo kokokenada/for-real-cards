@@ -219,7 +219,8 @@ function processGamePlayAction(transient: IGamePlayRecord, gamePlayAction: GameP
           }
           if (foundCount !== 1) {
             log.error("Invalid sort, card mismatch");
-            //log.error(gamePlayAction);
+            log.error(gamePlayAction);
+            log.error(hand.cardsInHand);
             //console.trace();
             error = true;
           }

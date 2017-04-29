@@ -2,7 +2,7 @@ import {List} from "immutable";
 import {Hand} from "../../../api/";
 import {IGamePlayState} from './game-play.types';
 import {GamePlayAction, GamePlayActionType} from '../../../api/models/action.model';
-import {DealSequence} from '../../../api/models/game-config';
+import {DealSequence, GameConfig} from '../../../api/models/game-config';
 
 export class GamePlayFunctions {
   static getHandIndexFromUserId(hands: List<Hand>, userId: string): number {
@@ -86,6 +86,10 @@ export class GamePlayFunctions {
 
   static currentDealStep(gameState: IGamePlayState) : DealSequence {
     return gameState.currentGameConfig.dealSequence[GamePlayFunctions.currentStepIndex(gameState)];
+  }
+
+  static dealerCanSelectNumberOfCards(gameState: IGamePlayState): boolean {
+    return GameConfig.dealerCanSelectNumberOfCards(GamePlayFunctions.currentDealStep(gameState));
   }
 
   static moneyOnTable(gameState: IGamePlayState, centerOnly: boolean) : number {
