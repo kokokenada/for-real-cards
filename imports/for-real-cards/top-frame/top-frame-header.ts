@@ -9,7 +9,7 @@ import {ILoginState} from "../../common-app/src/ui/redux/login/login.types";
 function template():string {
   if (PlatformTools.isIonic())
     return '{{displayName}} {{gameDescription}}';
-  return '<label><strong>For Real Cards!!</strong> {{displayName}} {{gameDescription}}</label>';
+  return '<label><strong>For Real Cards!</strong> {{displayName}} {{gameDescription}}</label>';
 }
 
 @Component({
