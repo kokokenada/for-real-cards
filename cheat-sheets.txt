@@ -15,4 +15,4 @@ Mobile Build
 
 bump version # in mobile-config.js
 ./mobile-build
-http://ionicframework.com/docs/guide/publishing.html
+http://ionicframework.com/docs/guide/publishing.html (account is fabrica.technology)
