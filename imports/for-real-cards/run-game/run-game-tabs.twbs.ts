@@ -10,19 +10,19 @@ import { RunGameContainer } from "./run-game-container";
  
   <ngb-tabset active="active">
     <ngb-tab title="Hand and Table">
-      <template ngbTabContent>
+      <ng-template ngbTabContent>
         <run-game-hand-and-table></run-game-hand-and-table>
-      </template>
+      </ng-template>
     </ngb-tab>
     <ngb-tab title="Hand">
-      <template ngbTabContent>
+      <ng-template ngbTabContent>
         <run-game-hand showTableProxy="true"></run-game-hand>    
-      </template>
+      </ng-template>
     </ngb-tab> 
     <ngb-tab title="Table">
-      <template ngbTabContent>
+      <ng-template ngbTabContent>
         <run-game-table height="90vw" width="100hw"></run-game-table>  
-      </template>
+      </ng-template>
     </ngb-tab>
   </ngb-tabset>
       `
