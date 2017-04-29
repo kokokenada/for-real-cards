@@ -116,7 +116,6 @@ export class Player {
 
   private getTrickWidthValue():number {
     let numberOfSlots = Math.max(this.hand.tricks[0].length, 4);
-    console.log(100/numberOfSlots)
     return 100/numberOfSlots;
   }
 
