@@ -1,6 +1,8 @@
 Scalingo Deployment
 ===================
 
+git remote add scalingo git@scalingo.com:for-real-cards.git
+
 git push scalingo master
 
 scalingo -a for-real-cards mongo-console
