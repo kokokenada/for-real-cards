@@ -9,6 +9,7 @@ export class DealModalBase extends ModalBase<DealModalParam, DealModalResult> {
   gameState: IGamePlayState;
   selectedPreset: string;
   numberOfCards: number;
+  currentGameName: string;
   static defaultNumberOfCards = 0;
 
   ngOnInit() {
@@ -16,8 +17,10 @@ export class DealModalBase extends ModalBase<DealModalParam, DealModalResult> {
       (state: IModalState<DealModalParam, DealModalResult>) => {
         this.gameState = state.params.gameState;
         this.gameConfig = Object.assign({}, this.gameState ? this.gameState.currentGameConfig : defaultGames[0]);
-        if (this.gameConfig.name)
+        if (this.gameConfig.name) {
           this.selectedPreset = this.gameConfig.name;
+          this.currentGameName = this.gameConfig.name;
+        }
         this.numberOfCards = DealModalBase.defaultNumberOfCards; // default to last
         const dealSequence = GamePlayFunctions.currentDealStep(this.gameState);
         if (this.numberOfCards < dealSequence.minimumNumberOfCards)
@@ -43,7 +46,14 @@ export class DealModalBase extends ModalBase<DealModalParam, DealModalResult> {
   }
 
   dealerCanSelectNumberOfCards(): boolean {
-    return GamePlayFunctions.dealerCanSelectNumberOfCards(this.gameState);
+    if (this.selectedPreset===this.currentGameName)
+      return GamePlayFunctions.dealerCanSelectNumberOfCards(this.gameState);
+    else {
+      const gameConfig : GameConfig = defaultGames.find( (gameConfig: GameConfig) => {
+        return (gameConfig.name === this.selectedPreset);
+      } );
+      return GameConfig.dealerCanSelectNumberOfCards(gameConfig.dealSequence[0]);
+    }
   }
 
   getPresets(): GameConfig[] {
