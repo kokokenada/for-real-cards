@@ -59,8 +59,7 @@ import {IUsersState} from "../../common-app/src/ui/redux/users/users.types";
   <!-- Tricks -->
   <div 
     *ngFor="let trick of getTricks(); let i=index" 
-    [ngStyle]="{'position': 'absolute', 'top':0, 'left':getTrickLeft(i), 'width': getTrickWidth() }"
-    z-index: 200;
+    [ngStyle]="{'position': 'absolute', 'top':0, 'left':getTrickLeft(i), 'width': getTrickWidth(), 'z-index': 200 }"
     [attr.data-cards-in-trick]="trick?.length"
     >
     <img style="height:auto; width:100%" [src]="getCardBackURL()"/>        
@@ -70,7 +69,7 @@ import {IUsersState} from "../../common-app/src/ui/redux/users/users.types";
   <!-- card count -->
   <label [hidden]='!numberOfCards()' 
     class="card-count" 
-    style="position: absolute; 10%; top:80%; left:90%; font-size: x-small; z-index: 250;">
+    style="position: absolute; top:80%; left:90%; font-size: x-small; z-index: 250;">
     {{numberOfCards()}}
   </label>
 
@@ -117,6 +116,7 @@ export class Player {
 
   private getTrickWidthValue():number {
     let numberOfSlots = Math.max(this.hand.tricks[0].length, 4);
+    console.log(100/numberOfSlots)
     return 100/numberOfSlots;
   }
 
