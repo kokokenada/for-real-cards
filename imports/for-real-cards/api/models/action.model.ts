@@ -129,31 +129,39 @@ let GameConfigSchema = new SimpleSchema({
     optional: true
   },
   minimumNumberOfPlayers: {
-    type: Number
+    type: Number,
+    optional: true // it is in fact, required. But SimpleSchema was bitching for no good reason (when gameConfig was null)
   },
   maximumNumberOfPlayers: {
-    type: Number
+    type: Number,
+    optional: true // it is in fact, required. But SimpleSchema was bitching for no good reason (when gameConfig was null)
   },
   _deck_id: {
-    type:Number
+    type:Number,
+    optional: true // it is in fact, required. But SimpleSchema was bitching for no good reason (when gameConfig was null)
   },
   dealSequence: {
-    type:Array
+    type:Array,
+    optional: true // it is in fact, required. But SimpleSchema was bitching for no good reason (when gameConfig was null)
   },
   "dealSequence.$": {
     type: GameDealSequence
   },
   deckLocationAfterDeal: {
-    type: Number
+    type: Number,
+    optional: true // it is in fact, required. But SimpleSchema was bitching for no good reason (when gameConfig was null)
   },
   hasTricks: {
-    type: Boolean
+    type: Boolean,
+    optional: true // it is in fact, required. But SimpleSchema was bitching for no good reason (when gameConfig was null)
   },
   hasBets: {
-    type: Boolean
+    type: Boolean,
+    optional: true // it is in fact, required. But SimpleSchema was bitching for no good reason (when gameConfig was null)
   },
   userCommands: {
-    type:Array
+    type:Array,
+    optional: true // it is in fact, required. But SimpleSchema was bitching for no good reason (when gameConfig was null)
   },
   "userCommands.$": {
     type: UserCommmandSchema
@@ -163,7 +171,8 @@ let GameConfigSchema = new SimpleSchema({
     optional: true
   },
   alwaysShowTurnedUpCard: {
-    type: Boolean
+    type: Boolean,
+    defaultValue: false
   }
 });
 
@@ -272,6 +281,7 @@ function addAction(action:GamePlayAction, userId:string):string {
   action.cardsEncoded = encodeCards(action.cards);
   if (action.gameConfig) {
     action.gameConfig._deck_id = action.gameConfig.deck.id;
+  } else {
   }
   return GamePlayActionCollection.insert(action);
 }
