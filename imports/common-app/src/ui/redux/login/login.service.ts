@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import {Credentials} from "../../services/credentials";
 import { User } from "../../../../../common-app-api/src/api/models/user.model";
 import {LoginActions} from "./login-actions.class";
-import {IPayloadAction} from "../action.interface";
+import {IPayloadAction} from 'redux-package';
 import {ReduxModuleUtil} from "../redux-module-util";
 import {IDocumentChange} from "../../reactive-data/document-change.interface";
 import {MeteorCursorObservers} from "../../reactive-data/meteor-cursor-observers";

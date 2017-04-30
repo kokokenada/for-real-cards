@@ -1,8 +1,7 @@
 import { User } from "../../../../../common-app-api/src/api/models/user.model";
 import { IDocumentChange } from "../../reactive-data/document-change.interface";
-import { IPayloadAction } from "../action.interface";
+import { IPayloadAction, ReduxPackageCombiner } from "redux-package";
 import { Credentials } from "../../services/credentials";
-import { ReduxModuleCombiner } from "../redux-module-combiner";
 
 export class LoginActions {
   private static prefix = 'CA_LOGIN_';
@@ -23,27 +22,27 @@ export class LoginActions {
   static WATCHED_USER_CHANGED = LoginActions.prefix + 'WATCHED_USER_CHANGED';
 
   static login(credentials:Credentials):void {
-    ReduxModuleCombiner.ngRedux.dispatch({ type: LoginActions.LOGIN_REQUEST, payload: {credentials: credentials}});
+    ReduxPackageCombiner.dispatch({ type: LoginActions.LOGIN_REQUEST, payload: {credentials: credentials}});
   }
 
   static logout():void {
-    ReduxModuleCombiner.ngRedux.dispatch({ type: LoginActions.LOGOUT_REQUEST});
+    ReduxPackageCombiner.dispatch({ type: LoginActions.LOGOUT_REQUEST});
   }
 
   static register(credentials:Credentials):void {
-    ReduxModuleCombiner.ngRedux.dispatch({ type: LoginActions.REGISTRATION_REQUEST, payload: {credentials: credentials}});
+    ReduxPackageCombiner.dispatch({ type: LoginActions.REGISTRATION_REQUEST, payload: {credentials: credentials}});
   }
 
   static loginAsTemporaryUser():void {
-    ReduxModuleCombiner.ngRedux.dispatch({ type: LoginActions.TEMP_USER_REQUEST});
+    ReduxPackageCombiner.dispatch({ type: LoginActions.TEMP_USER_REQUEST});
   }
 
   static saveUser(user:User): void {
-    ReduxModuleCombiner.ngRedux.dispatch({type: LoginActions.SAVE_USER_REQUEST, payload: {user: user}});
+    ReduxPackageCombiner.dispatch({type: LoginActions.SAVE_USER_REQUEST, payload: {user: user}});
   }
 
   static watchUser() : void {
-    ReduxModuleCombiner.ngRedux.dispatch({type: LoginActions.WATCH_USER});
+    ReduxPackageCombiner.dispatch({type: LoginActions.WATCH_USER});
   }
 
   static watchedUserFirstReadFactory(user:User):IPayloadAction {

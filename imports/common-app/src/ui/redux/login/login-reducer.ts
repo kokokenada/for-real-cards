@@ -1,6 +1,6 @@
 import { User } from "../../../../../common-app-api/src/api/models/user.model";
 
-import { IPayloadAction } from '../action.interface';
+import { IPayloadAction } from 'redux-package';
 import { LoginActions } from './login-actions.class';
 import { ILoginState, ILoginActionPayload } from './login.types'
 

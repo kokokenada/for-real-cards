@@ -14,7 +14,7 @@ import {
 
 import {GamePlayActions} from "./game-play-actions.class";
 import { IGamePlayState, IGamePlayActionPayload } from "./game-play.types";
-import {IPayloadAction} from "../../../../common-app/src/ui/redux/action.interface";
+import {IPayloadAction} from 'redux-package';
 import {
   IDocumentChange,
   EDocumentChangeType

@@ -13,7 +13,7 @@ import {DealLocation, DealSequence, GameConfig} from "../../../api/models/game-c
 import {Card} from "../../../api/models/card.model";
 import {Hand} from "../../../api/models/hand.model";
 import {Deck} from "../../../api/models/deck.model";
-import {IPayloadAction} from "../../../../common-app/src/ui/redux/action.interface";
+import {IPayloadAction} from 'redux-package';
 import {GamePlayFunctions} from "./game-play.functions";
 
 export const GamePlayFactory = makeTypedFactory<IGamePlayState, IGamePlayRecord>({

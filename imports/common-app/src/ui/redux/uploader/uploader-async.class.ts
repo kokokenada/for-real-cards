@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IPayloadAction  } from '../action.interface';
+import { IPayloadAction  } from 'redux-package';
 import { Observable } from 'rxjs/Observable';
 
 import 'rxjs/add/observable/of';

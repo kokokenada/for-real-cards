@@ -1,6 +1,6 @@
 import {IForRealCardsState, IForRealCardsActionPayload} from "./for-real-cards.types";
 import {ForRealCardsActions} from "./for-real-cards-actions.class";
-import {IPayloadAction} from "../../../../common-app/src/ui/redux/action.interface";
+import {IPayloadAction} from 'redux-package';
 
 export const INITIAL_STATE_FOR_REAL_CARDS = {
   gameDescription: "New Game",

@@ -5,9 +5,9 @@ import {GamePlayActions} from './game-play-actions.class';
 
 import 'mocha';
 import * as chai from "chai";
-import {IGamePlayActionPayload, IGamePlayState} from "./game-play.types";
-import {GamePlayActionInterface, GamePlayAction, GamePlayActionType} from "../../../api/models/action.model";
-import {IPayloadAction} from "../../../../common-app/src/ui/redux/action.interface";
+import {IPayloadAction} from 'redux-package';
+import {IGamePlayState} from './game-play.types';
+import {GamePlayAction, GamePlayActionType} from '../../../api/models/action.model';
 
 describe('gamePlayReducer reducer', () => {
   describe('game sequence 1', () => {

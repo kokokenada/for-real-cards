@@ -1,4 +1,4 @@
-import { IPayloadAction } from '../action.interface';
+import { IPayloadAction } from 'redux-package';
 import { ModalActions } from './modal-actions.class';
 import {IModalActionPayload, IModalState} from './modal.types'
 

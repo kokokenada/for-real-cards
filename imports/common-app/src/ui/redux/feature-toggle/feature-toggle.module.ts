@@ -1,13 +1,11 @@
 import {Injectable} from "@angular/core";
 
-import { ReduxModule } from '../redux-module.class';
+import { ReduxPackage, IAppState, IPayloadAction } from 'redux-package';
 import { featureToggleReducer } from "./feature-toggle.reducer";
-import { IAppState } from "../state.interface";
-import { IPayloadAction } from "../action.interface";
 import { FeatureToggleActions } from './feature-toggle.actions';
 
 @Injectable()
-export class FeatureToggleModule extends ReduxModule<IAppState, IPayloadAction>  {
+export class FeatureToggleModule extends ReduxPackage<IAppState, IPayloadAction>  {
   reducers=[{name:'featureToggleReducer', reducer:featureToggleReducer}];
   action = FeatureToggleActions;
   constructor() {

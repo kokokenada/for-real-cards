@@ -14,7 +14,7 @@ import { ToggleRouter } from './feature-toggle-router';
 import { NgZone } from '@angular/core';
 
 import { TestBed } from '@angular/core/testing';
-import {ReduxModuleCombiner} from "../redux-module-combiner";
+import {ReduxPackageCombiner} from "redux-package";
 import {FeatureToggleModule} from "./feature-toggle.module";
 
 class MockNgZone {
@@ -51,7 +51,6 @@ describe('toggle router', () => {
     beforeEach(() => {
       ngRedux = new NgRedux(new MockNgZone() as NgZone);
       let featureToggleActions: FeatureToggleActions = new FeatureToggleActions();
-      let reduxModuleCombiner: ReduxModuleCombiner = new ReduxModuleCombiner();
       let featureToggleModule: FeatureToggleModule = new FeatureToggleModule();
       toggleRouter = new ToggleRouter(ngRedux, featureToggleActions);
       TestBed.configureTestingModule({
@@ -59,12 +58,11 @@ describe('toggle router', () => {
           {provide: NgRedux, useValue: ngRedux},
           {provide: FeatureToggleActions, useValue: featureToggleActions},
           {provide: ToggleRouter, useValue: toggleRouter},
-          {provide: ReduxModuleCombiner, useValue: reduxModuleCombiner},
           {provide: FeatureToggleModule, useValue: featureToggleModule}
         ],
       });
 
-      reduxModuleCombiner.configure([featureToggleModule], ngRedux);
+      ReduxPackageCombiner.configure([featureToggleModule], ngRedux);
 
       const configs = {
         'cta': {setting: 'contact'}

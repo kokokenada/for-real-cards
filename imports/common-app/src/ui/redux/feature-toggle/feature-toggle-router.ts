@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import "rxjs/add/operator/pairwise";
 import { NgRedux } from '@angular-redux/store';
 
-import { IAppState } from '../state.interface';
+import { IAppState } from 'redux-package';
 import { FeatureToggleActions } from './feature-toggle.actions';
 import { IToggleRecord, IFeatureToggleConfigSet } from './feature-toggle.types';
 import { ToggleUtil, ParseResult } from './feature-toggle-util';

@@ -1,4 +1,12 @@
-import {Component, Injector, OnInit, NgModuleRef, ModuleWithProviders, NgZone} from '@angular/core';
+import 'rxjs';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/observable/of';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/delay';
+import {Component, OnInit, ModuleWithProviders, NgZone} from '@angular/core';
 import {Routes, RouterModule, Router} from '@angular/router';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import {DragulaService} from 'ng2-dragula/ng2-dragula';

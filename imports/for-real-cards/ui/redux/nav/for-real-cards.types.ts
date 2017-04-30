@@ -1,4 +1,4 @@
-import {IAppState} from "../../../../common-app/src/ui/redux/state.interface";
+import {IAppState} from 'redux-package';
 
 export interface IForRealCardsState extends IAppState {
   gameDescription:string;

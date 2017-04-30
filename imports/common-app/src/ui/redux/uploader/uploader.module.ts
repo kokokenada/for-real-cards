@@ -1,14 +1,12 @@
 import {Injectable} from "@angular/core";
 
-import { ReduxModule} from '../redux-module.class';
+import { ReduxPackage, IAppState, IPayloadAction} from 'redux-package';
 import { uploaderReducer} from "./uploader-reducer";
 import { UploaderAsync} from "./uploader-async.class";
-import { IAppState } from "../state.interface";
-import { IPayloadAction } from "../action.interface";
 import { UploaderActions} from "./uploader-actions.class";
 
 @Injectable()
-export class UploaderModule extends ReduxModule<IAppState, IPayloadAction>  {
+export class UploaderModule extends ReduxPackage<IAppState, IPayloadAction>  {
   reducers=[{name:'uploaderReducer', reducer: uploaderReducer}];
   actions = UploaderActions;
   constructor(private uploaderEpics:UploaderAsync) {

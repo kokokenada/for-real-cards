@@ -1,4 +1,4 @@
-import { IPayloadAction } from '../action.interface';
+import { IPayloadAction } from 'redux-package';
 import { UploaderActions } from './uploader-actions.class';
 import {IUploaderActionPayload, IUploaderState} from './uploader.types'
 

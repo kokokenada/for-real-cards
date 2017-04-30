@@ -7,7 +7,6 @@ import { ConnectionStatus } from "./connect/connection-status.component";
 import { CommonAppButton } from "./button/common-app-button";
 import { MenuFilterPipe } from "./menu-filter/menu-filter";
 import {ModalService} from "../ui/redux/modal/modal.service";
-import {ReduxModuleCombiner} from "../ui/redux/redux-module-combiner";
 import {UsersAsync} from "../ui/redux/users/users-async.class";
 import {UsersModule} from "../ui/redux/users/users.module";
 import {UploaderAsync} from "../ui/redux/uploader/uploader-async.class";
@@ -53,7 +52,6 @@ export const COMMON_APP_SINGLETONS = [
   LoginModule,
   ModalModule,
   ModalService,
-  ReduxModuleCombiner,
   UploaderModule,
   UploaderAsync,
   UsersModule,

@@ -1,4 +1,4 @@
-import { IPayloadAction } from '../action.interface';
+import { IPayloadAction } from 'redux-package';
 import { AccountsAdminActions } from './accounts-admin-actions.class';
 import {IAccountsAdminActionPayload, IAccountsAdminState} from './accounts-admin.types'
 

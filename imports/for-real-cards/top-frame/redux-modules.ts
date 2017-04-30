@@ -1,9 +1,19 @@
 import { Injectable } from '@angular/core';
+import 'rxjs';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/observable/of';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/delay';
+
 import { NgRedux } from "@angular-redux/store";
 import { createMiddleware, EventDefinitionsMap, Extensions } from "redux-beacon";
 import { logger } from 'redux-beacon/extensions/logger';
 import { offlineWeb } from 'redux-beacon/extensions/offline-web';
 import { GoogleTagManager } from 'redux-beacon/targets/google-tag-manager';
+import { IAppState, ReduxPackageCombiner, ICombinerOptions } from 'redux-package';
 import {
   PageView, Event, Exception
 } from 'redux-beacon/targets/google-analytics';
@@ -22,11 +32,9 @@ import {
   ConnectModule,
   FeatureToggleModule,
   FeatureToggleActions,
-  IAppState,
   LoginActions,
   LoginModule,
   ModalModule,
-  ReduxModuleCombiner,
   ToggleRouter,
   UploaderActions,
   UploaderModule,
@@ -54,14 +62,12 @@ export class ReduxModules {
     private usersModule: UsersModule,
     private uploaderModule: UploaderModule,
     private ngRedux: NgRedux<IAppState>,
-    private async:ForRealCardsAsync,
-    private reduxModuleCombiner: ReduxModuleCombiner
+    private async:ForRealCardsAsync
   ) {}
   configure() {
-
-    if (featureToggleConfigs['redux-console-logging'].setting) {
-      this.reduxModuleCombiner.turnOnConsoleLogging();
-    }
+    let options : ICombinerOptions = {
+      consoleLogging: featureToggleConfigs['redux-console-logging'].setting
+    };
 
     const eventDefinitions:EventDefinitionsMap = {};
     eventDefinitions[LoginActions.LOGGED_IN] = {
@@ -239,7 +245,7 @@ export class ReduxModules {
       analyticsMiddleware
     );
 
-    this.reduxModuleCombiner.configure([
+    ReduxPackageCombiner.configure([
       this.connectModule,
       this.loginModule,
       this.modalModule,
@@ -249,7 +255,9 @@ export class ReduxModules {
       this.gamePlayModule,
       this.uploaderModule,
       this.usersModule],
-      this.ngRedux);
+      this.ngRedux,
+      options
+    );
     LoginActions.watchUser(); // for auto login
     this.featureTogglesActions.initialize(featureToggleConfigs);
   }

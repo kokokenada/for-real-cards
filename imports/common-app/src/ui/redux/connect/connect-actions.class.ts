@@ -1,5 +1,4 @@
-import { IPayloadAction} from "../action.interface";
-import {ReduxModuleCombiner} from "../redux-module-combiner";
+import { IPayloadAction, ReduxPackageCombiner} from "redux-package";
 
 export class ConnectActions {
   private static prefix = 'CA_CONNECT_';
@@ -10,7 +9,7 @@ export class ConnectActions {
   static CONNECT_SET_SERVER = ConnectActions.prefix + 'SET_SERVER';
 
   static checkConnection():void {
-    ReduxModuleCombiner.ngRedux.dispatch({ type: ConnectActions.CONNECT_START});
+    ReduxPackageCombiner.dispatch({ type: ConnectActions.CONNECT_START});
   }
   static attemptFactory(serverURL:string):IPayloadAction {
     return {type: ConnectActions.CONNECT_ATTEMPT, payload: {serverURL: serverURL}};
@@ -19,7 +18,7 @@ export class ConnectActions {
     return {type: ConnectActions.CONNECT_SUCCESS, payload: {serverURL: serverURL}};
   }
   static setServerURL(serverURL:string):void {
-    ReduxModuleCombiner.ngRedux.dispatch({ type: ConnectActions.CONNECT_SET_SERVER, payload: {serverURL: serverURL}});
+    ReduxPackageCombiner.dispatch({ type: ConnectActions.CONNECT_SET_SERVER, payload: {serverURL: serverURL}});
   }
 
 }

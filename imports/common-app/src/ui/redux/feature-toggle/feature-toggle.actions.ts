@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ReduxModuleCombiner } from "../redux-module-combiner";
+import { ReduxPackageCombiner } from "redux-package";
 
 import { ToggleUtil } from './feature-toggle-util';
 import {IFeatureToggleConfigSet} from "./feature-toggle.types";
@@ -11,14 +11,14 @@ export class FeatureToggleActions {
 
 
   toggleFeatureSetting(target) {
-    ReduxModuleCombiner.ngRedux.dispatch({
+    ReduxPackageCombiner.dispatch({
       type: FeatureToggleActions.TOGGLE_FEATURE,
       payload: ToggleUtil.stripIds(target),
     });
   }
 
   initialize(configSet: IFeatureToggleConfigSet) {
-    ReduxModuleCombiner.ngRedux.dispatch({
+    ReduxPackageCombiner.dispatch({
       type: FeatureToggleActions.FEATURE_TOGGLE_INITIALIZE,
       payload: ToggleUtil.stripIds(configSet),
     });

@@ -4,7 +4,7 @@ import {Card} from "../../../api/models/card.model";
 import {GamePlayAction, GamePlayActionInterface} from "../../../api/models/action.model";
 import {GameConfig} from "../../../api/models/game-config";
 import { List, OrderedMap } from "immutable";
-import {IAppState} from "../../../../common-app/src/ui/redux/state.interface";
+import { IAppState } from 'redux-package';
 
 
 export interface IGamePlayState extends IAppState {

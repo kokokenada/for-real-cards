@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IPayloadAction  } from '../action.interface';
+import { IPayloadAction } from 'redux-package';
 
 import { AccountsAdminService } from "./accounts-admin.service";
 import { AccountsAdminActions } from "./accounts-admin-actions.class";

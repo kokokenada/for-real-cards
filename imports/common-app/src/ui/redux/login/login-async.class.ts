@@ -1,20 +1,20 @@
-import {Injectable} from '@angular/core';
-import {IPayloadAction} from '../action.interface';
-import {Observable} from 'rxjs/Observable';
-import {Store} from "redux";
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Store } from "redux";
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/delay';
+import { IPayloadAction, IAppState } from 'redux-package';
 
 import {User} from "../../../../../common-app-api/src/api/models/user.model";
 
-import {IDocumentChange} from "../../reactive-data/document-change.interface"
-import {IAppState} from "../state.interface";
+import {IDocumentChange} from "../../reactive-data/document-change.interface";
 import {LoginActions} from "./login-actions.class";
 import {LoginService} from "./login.service";
 import {ILoginState} from "./login.types"
+import {IAppStateCommonApp} from '../common-app-store.type';
 
 @Injectable()
 export class LoginAsync {
@@ -95,7 +95,7 @@ export class LoginAsync {
    * @param store
    * @returns {Observable<IPayloadAction>}
    */
-  watchUser = (action$: Observable<IPayloadAction>, store: Store<IAppState>): Observable<IPayloadAction> => {
+  watchUser = (action$: Observable<IPayloadAction>, store: Store<IAppStateCommonApp>): Observable<IPayloadAction> => {
     return action$.filter(({type}) => type === LoginActions.WATCH_USER)
       .flatMap(({payload}) => {
         return Observable.fromPromise( LoginService.watchCurrentUser() )

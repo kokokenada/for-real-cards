@@ -1,7 +1,7 @@
 
 import { makeTypedFactory } from 'typed-immutable-record';
 
-import { IPayloadAction } from '../action.interface';
+import { IPayloadAction } from 'redux-package';
 import { ConnectActions } from './connect-actions.class';
 import {IConnectState, IConnectRecord, IConnectActionPayload} from './connect.types'
 import {LoginActions} from '../login/login-actions.class';

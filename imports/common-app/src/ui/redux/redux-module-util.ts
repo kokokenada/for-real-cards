@@ -1,4 +1,4 @@
-import {IActionError, IPayloadAction} from "./action.interface";
+import { IActionError, IPayloadAction } from 'redux-package';
 import {fromJS, Map} from 'immutable'
 export class ReduxModuleUtil {
 

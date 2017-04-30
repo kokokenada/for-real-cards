@@ -1,14 +1,12 @@
 import {Injectable} from "@angular/core";
 
-import { ReduxModule } from '../redux-module.class';
+import { ReduxPackage, IAppState, IPayloadAction } from 'redux-package';
 import { loginReducer } from "./login-reducer";
 import { LoginAsync } from "./login-async.class";
-import { IAppState } from "../state.interface";
-import { IPayloadAction } from "../action.interface";
 import { LoginActions } from "./login-actions.class";
 
 @Injectable()
-export class LoginModule extends ReduxModule<IAppState, IPayloadAction>  {
+export class LoginModule extends ReduxPackage<IAppState, IPayloadAction>  {
   reducers=[{name:'loginReducer', reducer:loginReducer}];
   action = LoginActions;
   constructor(private loginEpics:LoginAsync) {

@@ -1,5 +1,5 @@
 import { Component, Injectable } from '@angular/core';
-import {ReduxModuleCombiner} from "../redux-module-combiner";
+import { ReduxPackageCombiner } from "redux-package";
 
 export class ModalActions {
   private static prefix = 'CA_MODAL_';
@@ -10,11 +10,11 @@ export class ModalActions {
   static MODAL_RESOLVE_SUCCESS = ModalActions.prefix + 'MODAL_RESOLVE_SUCCESS';
 
   static openRequest(component:Component, params:any={}):void {
-    ReduxModuleCombiner.ngRedux.dispatch({ type: ModalActions.MODAL_OPEN_REQUEST, payload: {component, params}});
+    ReduxPackageCombiner.dispatch({ type: ModalActions.MODAL_OPEN_REQUEST, payload: {component, params}});
   }
 
   static openSuccess():void {
-    ReduxModuleCombiner.ngRedux.dispatch({ type: ModalActions.MODAL_OPEN_SUCCESS});
+    ReduxPackageCombiner.dispatch({ type: ModalActions.MODAL_OPEN_SUCCESS});
   }
 
 //  hide():void {
@@ -22,11 +22,11 @@ export class ModalActions {
 //  }
 
   static resolveRequest(result:any):void {
-    ReduxModuleCombiner.ngRedux.dispatch({ type: ModalActions.MODAL_RESOLVE_REQUEST, payload: {result}});
+    ReduxPackageCombiner.dispatch({ type: ModalActions.MODAL_RESOLVE_REQUEST, payload: {result}});
   }
 
   static resolveSuccess():void {
-    ReduxModuleCombiner.ngRedux.dispatch({ type: ModalActions.MODAL_RESOLVE_SUCCESS});
+    ReduxPackageCombiner.dispatch({ type: ModalActions.MODAL_RESOLVE_SUCCESS});
   }
 
 }

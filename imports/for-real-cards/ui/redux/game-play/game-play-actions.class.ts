@@ -5,7 +5,7 @@ import { Card, CardSuit, CardRank, Deck, GameConfig, GamePlayActionType, GamePla
 import { IGamePlayState } from "./game-play.types";
 import {AccountTools} from "../../../../common-app/src/ui/services/account-tools";
 import {ReduxModuleUtil} from "../../../../common-app/src/ui/redux/redux-module-util";
-import {ReduxModuleCombiner} from "../../../../common-app/src/ui/redux/redux-module-combiner";
+import {ReduxPackageCombiner} from "redux-package";
 import {DealSequence, DealLocation} from "../../../api/models/game-config";
 import {GamePlayFunctions} from './game-play.functions';
 
@@ -35,7 +35,7 @@ export class GamePlayActions {
       creatorId: AccountTools.userId(),
       actionType: GamePlayActionType.NEW_GAME
     });
-    ReduxModuleCombiner.ngRedux.dispatch({type: GamePlayActions.GAME_PLAY_INITIALIZE, payload: {gameId}});
+    ReduxPackageCombiner.dispatch({type: GamePlayActions.GAME_PLAY_INITIALIZE, payload: {gameId}});
     this.receiveAction(newGameAction);
   }
 
@@ -44,7 +44,7 @@ export class GamePlayActions {
    * @param action
    */
   private static pushAction(action: GamePlayAction): void {
-    ReduxModuleCombiner.ngRedux.dispatch({type: GamePlayActions.GAME_PLAY_ACTION_PUSH, payload: {gamePlayAction: action}});
+    ReduxPackageCombiner.dispatch({type: GamePlayActions.GAME_PLAY_ACTION_PUSH, payload: {gamePlayAction: action}});
   }
 
   /**
@@ -52,7 +52,7 @@ export class GamePlayActions {
    * @param actions
    */
   private static pushActions(actions: GamePlayAction[]): void {
-    ReduxModuleCombiner.ngRedux.dispatch({type: GamePlayActions.GAME_PLAY_ACTIONSSS_PUSH, payload: {gamePlayActions: actions}});
+    ReduxPackageCombiner.dispatch({type: GamePlayActions.GAME_PLAY_ACTIONSSS_PUSH, payload: {gamePlayActions: actions}});
   }
 
   /**
@@ -60,7 +60,7 @@ export class GamePlayActions {
    * @param action
    */
   static receiveAction(action: GamePlayAction) {
-    ReduxModuleCombiner.ngRedux.dispatch({type: GamePlayActions.GAME_PLAY_ACTION_RECIEVED, payload: {gamePlayAction: action}});
+    ReduxPackageCombiner.dispatch({type: GamePlayActions.GAME_PLAY_ACTION_RECIEVED, payload: {gamePlayAction: action}});
   }
 
   /**
@@ -68,11 +68,11 @@ export class GamePlayActions {
    * @param actions
    */
   static receiveActions(actions: GamePlayAction[]) {
-    ReduxModuleCombiner.ngRedux.dispatch({type: GamePlayActions.GAME_PLAY_ACTIONSSS_RECIEVED, payload: {gamePlayActions: actions}});
+    ReduxPackageCombiner.dispatch({type: GamePlayActions.GAME_PLAY_ACTIONSSS_RECIEVED, payload: {gamePlayActions: actions}});
   }
 
   static newHand(gameId: string, hand: HandInterface) {
-    ReduxModuleCombiner.ngRedux.dispatch(
+    ReduxPackageCombiner.dispatch(
       {
         type: GamePlayActions.GAME_PLAY_ACTION_RECIEVED,
         payload: {
@@ -367,7 +367,7 @@ export class GamePlayActions {
   }
 
   static error(error) {
-    ReduxModuleCombiner.ngRedux.dispatch(
+    ReduxPackageCombiner.dispatch(
       ReduxModuleUtil.errorFactory(GamePlayActions.GAME_PLAY_ERROR, {error: error.error})
     );
   }
