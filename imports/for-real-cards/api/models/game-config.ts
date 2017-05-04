@@ -389,5 +389,30 @@ export let defaultGames: GameConfig[] = [
       new UserCommand(CardLocation.HAND, CardLocation.TABLE, CardCountAllowed.ONE),  // Play a card into trick
       new UserCommand(CardLocation.HAND, CardLocation.HAND, CardCountAllowed.ONE)   // Users can sort their hand
     ],
+  }),
+  new GameConfig({
+    name: "Pyramid",
+    minimumNumberOfPlayers: 2,
+    maximumNumberOfPlayers: 6,
+    deck: Deck.getDeck(DeckId.WIZARD),
+    dealSequence: [
+      {
+        dealLocation: DealLocation.HAND_HIDDEN,
+        minimumNumberOfCards: 1,
+        maximumNumberOfCards: 13
+      }
+    ],
+    deckLocationAfterDeal: DeckLocation.CENTER,
+    turnCardUpAfterDeal: true,
+    hasTricks: true,
+    hasBets: false,
+    alwaysShowTurnedUpCard: true,
+    userCommands: [
+      new UserCommand(CardLocation.DECK, CardLocation.HAND, CardCountAllowed.ONE),  // Take a card from the deck
+      new UserCommand(CardLocation.PILE, CardLocation.HAND, CardCountAllowed.ONE),  // Take a card form the pile
+      new UserCommand(CardLocation.HAND, CardLocation.PILE, CardCountAllowed.ONE),  // Put a card onto pile
+      new UserCommand(CardLocation.HAND, CardLocation.TABLE, CardCountAllowed.ALL), // Put your hand on the table when you have won
+      new UserCommand(CardLocation.HAND, CardLocation.HAND, CardCountAllowed.ONE)   // Users can sort their hand
+    ],
   })
 ];
