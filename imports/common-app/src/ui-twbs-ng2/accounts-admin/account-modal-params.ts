@@ -1,6 +1,6 @@
 
-import {User} from "../../../../common-app-api/src/api/models/user.model";
+import { IUser} from 'common-app';
 
 export interface AccountModalParams {
-  user:User;
+  user: IUser;
 }

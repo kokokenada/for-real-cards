@@ -1,4 +1,3 @@
-import {Injectable} from '@angular/core';
 import * as log from 'loglevel';
 
 import { Observable} from 'rxjs/Observable';
@@ -18,13 +17,12 @@ import {IPayloadAction} from 'redux-package';
 import {
   IDocumentChange,
   EDocumentChangeType
-} from "../../../../common-app/src/ui/reactive-data/document-change.interface";
+} from 'common-app';
 import {
   MeteorCursorObservers,
   BatchAndWatch
-} from "../../../../common-app/src/ui/reactive-data/meteor-cursor-observers";
+} from "../../../../common-app-meteor";
 
-@Injectable()
 export class GamePlayAsync {
 
   gamePlayMiddleware = (gameState: IGamePlayState) => next => (action: IPayloadAction) => {

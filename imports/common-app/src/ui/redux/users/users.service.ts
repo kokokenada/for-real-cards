@@ -2,15 +2,14 @@
 import { Meteor } from 'meteor/meteor';
 import { Observable } from 'rxjs';
 
-import { User } from "../../../../../common-app-api/src/api/models/user.model";
-import { MeteorCursorObservers } from "../../reactive-data/meteor-cursor-observers";
-import { IDocumentChange } from "../../reactive-data/document-change.interface";
+import { IUser, IDocumentChange } from 'common-app';
+import { MeteorCursorObservers } from '../../../../../common-app-meteor';
 
 export class UsersService {
-  private static userCursor:Mongo.Cursor<User>;
+  private static userCursor:Mongo.Cursor<IUser>;
 
-  static createUsersObserver():Observable<IDocumentChange<User>>
+  static createUsersObserver():Observable<IDocumentChange<IUser>>
   {
-    return MeteorCursorObservers.fromMeteorCursor<User>(Meteor.users.find()); // Depends on subscription being called elsewhere
+    return MeteorCursorObservers.fromMeteorCursor<IUser>(Meteor.users.find()); // Depends on subscription being called elsewhere
   }
 }

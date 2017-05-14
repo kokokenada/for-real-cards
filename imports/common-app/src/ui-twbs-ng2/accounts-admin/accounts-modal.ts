@@ -1,12 +1,12 @@
 import 'meteor/alanning:roles'
 
-import { User } from '../../../../common-app-api/src/api/models/user.model';
+import { LoginFunctions, IUser } from 'common-app';
 import { IModalState } from "../../ui";
 import { ModalBase } from "../../ui-ng2";
 import { AccountModalParams } from "./account-modal-params";
 
 export class AccountsModal extends ModalBase<AccountModalParams, boolean> {
-  user:User;
+  user: IUser;
   protected _error:string;
 
   constructor() {
@@ -40,7 +40,7 @@ export class AccountsModal extends ModalBase<AccountModalParams, boolean> {
   displayName():string {
     if (!this.user)
       return "";
-    return User.getDisplayName(this.user);
+    return LoginFunctions.getDisplayName(this.user);
   }
 
 }

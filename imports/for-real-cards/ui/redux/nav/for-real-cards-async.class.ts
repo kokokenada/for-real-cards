@@ -7,7 +7,6 @@ import { GamePlayActions } from "../game-play/game-play-actions.class";
 import { HandInterface } from "../../../api/";
 import { IPayloadAction } from 'redux-package';
 
-@Injectable()
 export class ForRealCardsAsync {
 
   gameNavigationMiddleware = (state: IForRealCardsState) => next => (action: IPayloadAction) => {

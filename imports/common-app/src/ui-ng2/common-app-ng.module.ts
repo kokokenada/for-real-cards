@@ -11,18 +11,11 @@ import {UsersAsync} from "../ui/redux/users/users-async.class";
 import {UsersModule} from "../ui/redux/users/users.module";
 import {UploaderAsync} from "../ui/redux/uploader/uploader-async.class";
 import {UploaderModule} from "../ui/redux/uploader/uploader.module";
-import {LoginModule} from "../ui/redux/login/login.module";
-import {LoginAsync} from "../ui/redux/login/login-async.class";
-import {ConnectModule} from "../ui/redux/connect/connect.module";
-import {ConnectAsync} from "../ui/redux/connect/connect-async.class";
 import {ModalModule} from "../ui/redux/modal/modal.module";
 import {CommonPopups} from "./common-popups/common-popups";
 import {AccountsAdminModule} from "../ui/redux/accounts-admin/accounts-admin.module";
 import {AccountsAdminAsync} from "../ui/redux/accounts-admin/accounts-admin-async.class";
 import {AccountsAdminService} from "../ui/redux/accounts-admin/accounts-admin.service";
-import {FeatureToggleModule} from "../ui/redux/feature-toggle/feature-toggle.module";
-import {FeatureToggleActions} from "../ui/redux/feature-toggle/feature-toggle.actions";
-import {ToggleRouter} from "../ui/redux/feature-toggle/feature-toggle-router";
 
 const COMMON_APP_EXPORTED_DECLARATIONS = [
   // Common-app
@@ -43,13 +36,6 @@ export const COMMON_APP_SINGLETONS = [
   AccountsAdminAsync,
   AccountsAdminService,
   CommonPopups,
-  ConnectAsync,
-  ConnectModule,
-  FeatureToggleModule,
-  FeatureToggleActions,
-  ToggleRouter,
-  LoginAsync,
-  LoginModule,
   ModalModule,
   ModalService,
   UploaderModule,

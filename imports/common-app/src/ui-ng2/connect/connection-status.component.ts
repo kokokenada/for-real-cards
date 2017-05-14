@@ -7,7 +7,7 @@ import {
 
 import { select } from '@angular-redux/store';
 
-import {IConnectState, ConnectActions} from "../../ui";
+import {IConnectState, ConnectActions, CONNECT_PACKAGE_NAME} from 'common-app'
 declare const window: any;
 declare const localStorage: any;
 
@@ -24,7 +24,7 @@ declare const localStorage: any;
 `
 })
 export class ConnectionStatus implements OnInit {
-  @select() connectReducer;
+  @select(CONNECT_PACKAGE_NAME) connectReducer;
   connectState:IConnectState;
   constructor(private ngZone:NgZone) {}
 

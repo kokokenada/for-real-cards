@@ -1,5 +1,5 @@
 import { Component, Input, NgZone } from '@angular/core';
-import { Menus, MenuItem } from "../../ui/index";
+import { Menus, MenuItem } from 'common-app';
 
 @Component({
   selector: 'popover-menu',
@@ -9,7 +9,7 @@ import { Menus, MenuItem } from "../../ui/index";
       <button id="dropdownMenu1" class="btn btn-primary" ngbDropdownToggle></button>
       <div class="dropdown-menu dropdown-menu-right">
         <button
-            *ngFor="let item of getMenuItems() | menuFilter"
+            *ngFor="let item of menuItems | menuFilter"
             (click)="itemSelected(item)"
             class="dropdown-item"
         >
@@ -20,23 +20,9 @@ import { Menus, MenuItem } from "../../ui/index";
 `,
 })
 export class PopoverMenu {
-  @Input() menuId: string;
   constructor(private ngZone:NgZone) {
   }
-  private menuItems:MenuItem[];
-
-  getMenuItems():MenuItem[] {
-    if (!this.menuItems) {
-      let menuItem:MenuItem = Menus.getMenuFromId(this.menuId);
-      if (menuItem){
-        this.menuItems = [];
-        menuItem.items.forEach((subMenuItem:MenuItem)=>{
-          this.menuItems.push(subMenuItem);
-        });
-      }
-    }
-    return this.menuItems;
-  }
+  @Input() menuItems:MenuItem[];
 
   itemSelected(menuItem:MenuItem) {
     menuItem.selected();

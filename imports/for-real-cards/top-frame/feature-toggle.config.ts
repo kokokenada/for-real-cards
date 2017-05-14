@@ -1,4 +1,4 @@
-import { IFeatureToggleConfigSet } from '../../common-app/src/ui';
+import { IFeatureToggleConfigSet } from 'common-app';
 
 
 // Beware that the initial settings might be overridden by redux state persistence
@@ -11,7 +11,7 @@ export const featureToggleConfigs: IFeatureToggleConfigSet = {
     shouldExpireAt: new Date('2017-08-31')
   },
   'redux-console-logging': {
-    setting: false,
+    setting: true,
     description: 'turns on or off console logging of redux state changes'
   },
   'desktop-ionic': {

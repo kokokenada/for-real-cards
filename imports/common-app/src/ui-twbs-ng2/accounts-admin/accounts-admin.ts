@@ -1,8 +1,8 @@
 import { Component, NgZone } from '@angular/core';
 import { Session } from 'meteor/session';
-import { FilterDefinition, SortDefinitionSingle } from '../../../../common-app-api/src/api/services/page-tools';
-import { User } from '../../../../common-app-api/src/api/models/user.model';
-import { AccountsAdminTools, Field } from '../../../../common-app-api/src/api/services/accounts-admin-tools';
+import { FilterDefinition, SortDefinitionSingle } from '../../../../common-app-meteor';
+import { IUser } from 'common-app';
+import { AccountsAdminTools, Field } from '../../../../common-app-meteor';
 
 import { UpdateAccountModal } from './update-account-modal';
 import {DeleteAccountModal} from "./delete-account-modal";
@@ -55,7 +55,7 @@ import {AccountTools, ModalActions} from "../../ui/index";
 })
 export class AccountsAdmin {
   searchFilter:string;
-  usersArray:User[];
+  usersArray: IUser[];
   skip:number;
   sort:SortDefinitionSingle;
   filter:string;
@@ -83,19 +83,19 @@ export class AccountsAdmin {
     return {filter: this.filter, skip: this.skip, sort:this.sort};
   }
 
-  updateUser(user:User) {
+  updateUser(user: IUser) {
     ModalActions.openRequest(UpdateAccountModal, {user});
   }
 
-  deleteUser(user:User) {
+  deleteUser(user: IUser) {
     ModalActions.openRequest(DeleteAccountModal, {user});
   }
 
-  infoUser(user:User) {
+  infoUser(user: IUser) {
     ModalActions.openRequest(InfoAccountModal, {user});
   }
 
-  impersonateUser(user:User) {
+  impersonateUser(user: IUser) {
     ModalActions.openRequest(ImpersonateAccountModal, {user});
   }
 
@@ -109,7 +109,7 @@ export class AccountsAdmin {
   }
 
 
-  users():User[] {
+  users(): IUser[] {
     return this.usersArray;
   }
 

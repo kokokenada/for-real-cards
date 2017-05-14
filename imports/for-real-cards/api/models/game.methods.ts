@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import * as log from 'loglevel';
 
-import { AccountsAdminTools } from '../../../common-app-api/src/api/services/accounts-admin-tools';
+import { AccountsAdminTools } from '../../../common-app-meteor';
 import { getNextSequence } from '../../../common-app-api/src/api/models/counter.model';
 
 import { Game, GameCollection } from './game.model';

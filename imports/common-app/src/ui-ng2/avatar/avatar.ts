@@ -3,7 +3,7 @@
  */
 import { Component, Input, NgZone } from '@angular/core';
 import { select } from '@angular-redux/store';
-import { User } from "../../../../common-app-api/src/api/models/user.model";
+import { IUser } from 'common-app';
 import { IUsersState } from "../../ui/redux/users/users.types";
 
 @Component({
@@ -26,10 +26,9 @@ export class Avatar {
   ngOnInit() {
     this.usersReducer.subscribe( (usersState:IUsersState)=>{
       this.ngZone.run(()=>{
-        this.imageURL = User.getAvatarURL( usersState.users.get(this.userId) );
+        this.imageURL = usersState.users.get(this.userId)['avatar-thumb'];
       });
     } );
-
   }
 
   getImageUrl():string {

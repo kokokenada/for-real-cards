@@ -1,6 +1,7 @@
 import { Component, NgZone } from '@angular/core';
 import { select } from '@angular-redux/store';
 import {EditUserProfileBase} from "../../common-app/src/ui-ng2/edit-user-profile/edit-user-profile.base";
+import {LOGIN_PACKAGE_NAME} from 'common-app';
 
 @Component({
   selector: 'edit-user-profile',
@@ -71,7 +72,7 @@ import {EditUserProfileBase} from "../../common-app/src/ui-ng2/edit-user-profile
 })
 
 export class EditUserProfileIonic extends EditUserProfileBase {
-  @select() loginReducer;
+  @select(LOGIN_PACKAGE_NAME) loginReducer;
   @select() uploaderReducer;
 
   constructor(private ngZone:NgZone) {

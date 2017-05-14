@@ -9,7 +9,7 @@ import {ActionFormatted, GamePlayActions} from "../ui";
 
 import template from "./run-game-hand.html"
 import {PlatformTools} from "../../common-app/src/ui-ng2/platform-tools/platform-tools";
-import {Tools} from "../../common-app/src/ui/services/tools";
+import {Tools} from 'common-app';
 import {DealModalParam, DealModalResult} from "../deal-modal/deal-modal-params-and-result";
 import {CommonPopups} from "../../common-app/src/ui-ng2/common-popups/common-popups";
 import {BetlModalService} from '../bet-modal/bet-modal.service';

@@ -1,15 +1,14 @@
 ///<reference path='../../../../../../node_modules/immutable/dist/immutable.d.ts'/>
 import Immutable = require('immutable');
-import { User } from "../../../../../common-app-api/src/api/models/user.model";
-import {IDocumentChange } from "../../reactive-data/document-change.interface";
+import { IUser, IDocumentChange } from 'common-app';
 
 export interface IUsersState {
-  users:Immutable.Map<string, User>;
+  users:Immutable.Map<string, IUser>;
 }
 
 export interface IUsersActionPayload {
-  users?:User[];
-  documentChange?:IDocumentChange<User>;
+  users?:IUser[];
+  documentChange?:IDocumentChange<IUser>;
 }
 
 

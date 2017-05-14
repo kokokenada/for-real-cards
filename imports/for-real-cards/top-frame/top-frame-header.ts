@@ -3,8 +3,7 @@ import { select } from '@angular-redux/store';
 
 import { IForRealCardsState, INITIAL_STATE_FOR_REAL_CARDS } from "../ui";
 import {PlatformTools} from "../../common-app/src/ui-ng2/platform-tools/platform-tools";
-import {LOGIN_INITIAL_STATE} from "../../common-app/src/ui/redux/login/login-reducer";
-import {ILoginState} from "../../common-app/src/ui/redux/login/login.types";
+import {ILoginState, LOGIN_INITIAL_STATE, LOGIN_PACKAGE_NAME} from 'common-app';
 
 function template():string {
   if (PlatformTools.isIonic())
@@ -17,7 +16,7 @@ function template():string {
   template: template()
 })
 export class TopFrameHeader implements OnInit {
-  @select() loginReducer;
+  @select(LOGIN_PACKAGE_NAME) loginReducer;
   @select() forRealCardsReducer;
   gameDescription:string;
   displayName:string;

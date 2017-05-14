@@ -1,17 +1,17 @@
 import { Observable } from 'rxjs'
 import { NgZone } from '@angular/core';
-import * as log from 'loglevel';
 
-import { User } from '../../../../common-app-api/src/api/models/user.model';
+
+import { IUser, LoginActions, ILoginState,  } from 'common-app';
 import { AvatarOriginalStore } from '../../../../common-app-api/src/api/models/avatar.model';
 import {PlatformTools} from "../platform-tools/platform-tools";
-import { LoginActions, ILoginState, UploaderActions } from "../../ui";
+import { UploaderActions } from "../../ui";
 import {IUploaderState} from "../../ui/redux/uploader/uploader.types";
 
 export abstract class EditUserProfileBase {
   avatarURL:string;
   hasBaseDropZoneOver:boolean = false;
-  userEditted:User;
+  userEditted:IUser;
   uploaderState:IUploaderState;
   private ngZoneBase:NgZone;
 
@@ -19,7 +19,7 @@ export abstract class EditUserProfileBase {
     this.ngZoneBase = ngBase;
     loginStateObserver.subscribe( (loginState:ILoginState)=>{
       ngBase.run( ()=>{
-        let user:User = loginState.user;
+        let user: IUser = loginState.user;
         if (user)
           this.addEmptyEmailIfNeeded(user);
         this.userEditted = user;
@@ -34,7 +34,7 @@ export abstract class EditUserProfileBase {
     });
   }
 
-  private addEmptyEmailIfNeeded(user:User):void {
+  private addEmptyEmailIfNeeded(user: IUser):void {
     if (!user.emails || user.emails.length===0) { // Make sure template has something to read/write
       user.emails = [];
       user.emails.push({address: ""});

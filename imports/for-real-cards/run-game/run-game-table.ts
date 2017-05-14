@@ -8,7 +8,7 @@ import { CardImageStyle} from "../api/interfaces/card-image-style.interface";
 
 import template from "./run-game-table.html"
 import {PlatformTools} from "../../common-app/src/ui-ng2/platform-tools/platform-tools";
-import {Tools} from "../../common-app/src/ui/services/tools";
+import { Tools } from 'common-app';
 import {CommonPopups} from "../../common-app/src/ui-ng2/common-popups/common-popups";
 import {DealModalService} from "../deal-modal/deal-modal.service";
 

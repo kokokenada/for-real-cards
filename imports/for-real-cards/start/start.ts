@@ -8,19 +8,20 @@ import * as log from 'loglevel';
 import templateTWBS from './start.twbs.html';
 import templateIonic from './start.ionic.html';
 import {PlatformTools} from "../../common-app/src/ui-ng2/platform-tools/platform-tools";
-import {ILoginState} from "../../common-app/src/ui/redux/login/login.types";
-import {LoginActions} from "../../common-app/src/ui/redux/login/login-actions.class";
-import {Credentials} from "../../common-app/src/ui/services/credentials";
-import {IConnectState} from "../../common-app/src/ui/redux/connect/connect.types";
-
+import {
+  Credentials,
+  IConnectState,
+  LoginActions,
+  ILoginState, LOGIN_PACKAGE_NAME, CONNECT_PACKAGE_NAME
+} from 'common-app';
 
 @Component({
   template: PlatformTools.isIonic() ? templateIonic : templateTWBS,
   selector: 'start'
 })
 export class Start {
-  @select() loginReducer;
-  @select() connectReducer;
+  @select(LOGIN_PACKAGE_NAME) loginReducer;
+  @select(CONNECT_PACKAGE_NAME) connectReducer;
   state:ILoginState;
   connectionState:IConnectState;
   credentials:Credentials;

@@ -17,9 +17,14 @@ import {DragulaModule} from 'ng2-dragula/ng2-dragula';
 
 import {AccountsAdmin} from "../../common-app/src/ui-twbs-ng2/accounts-admin/accounts-admin";
 import {CommonAppNgTWBS} from "../../common-app/src/ui-twbs-ng2/common-app-ng-twbs.module";
-import {Menus} from "../../common-app/src/ui/services/menus";
-import {MenuItem} from "../../common-app/src/ui/services/menu-item";
 import {COMMON_APP_SINGLETONS} from "../../common-app/src/ui-ng2/common-app-ng.module";
+
+import {
+  LoginActions,
+  Menus,
+  MenuItem
+} from 'common-app';
+
 
 import {
   ForRealCardsModule,
@@ -27,6 +32,8 @@ import {
   GamePlayAsync,
   GamePlayModule
 } from '../ui';
+
+
 
 import {DealModal} from "../deal-modal/deal-modal.twbs";
 import {EditUserProfileTWBS} from '../edit-user-profile/edit-user-profile.twbs';
@@ -49,7 +56,6 @@ import {RunGameTable} from "../run-game/run-game-table";
 import {RunGameHand} from "../run-game/run-game-hand";
 import {RunGameHandAndTable} from "../run-game/run-game-hand-and-table";
 import {ReduxModules} from "./redux-modules";
-import {LoginActions} from "../../common-app/src/ui/redux/login/login-actions.class";
 import {EditGameConfig} from "../edit-game-config/edit-game-config";
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {PileViewShowAll} from '../run-game/pile-show-all-view';
@@ -83,7 +89,7 @@ export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);
     template: `
 <div class="container row">
   <top-frame-header class="col-10"></top-frame-header>
-  <popover-menu class="col-1" [menuId]="'topbar'"></popover-menu>
+  <popover-menu class="col-1" [menuItems]="menuItems"></popover-menu>
 </div>
 <router-outlet></router-outlet>
 <modal-dialog></modal-dialog>
@@ -91,6 +97,7 @@ export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);
   }
 )
 export class ForRealCardsTopFrame extends TopFrame implements OnInit {
+  menuItems:MenuItem[];
   constructor(private router: Router,
               private ngZone: NgZone,
               private reduxModules:ReduxModules,
@@ -98,9 +105,14 @@ export class ForRealCardsTopFrame extends TopFrame implements OnInit {
     super();
     this.addMiddlware(forRealCardsModule)
     reduxModules.configure();
-    Menus.addMenu({id: 'topbar'});
+    this.initMenus();
+  }
 
-    Menus.addSubMenuItem('topbar', {
+  private initMenus() {
+    let menu = new Menus();
+    menu.addMenu({id: 'topbar'});
+
+    menu.addSubMenuItem('topbar', {
       id: 'admin.users',
       title: 'User Admin',
       roles: ['admin'],
@@ -109,7 +121,7 @@ export class ForRealCardsTopFrame extends TopFrame implements OnInit {
       }
     });
 
-    Menus.addSubMenuItem('topbar', {
+    menu.addSubMenuItem('topbar', {
       id: 'admin.edit-game-config',
       title: 'Edit Game Config',
       roles: ['admin'],
@@ -118,7 +130,7 @@ export class ForRealCardsTopFrame extends TopFrame implements OnInit {
       }
     });
 
-    Menus.addSubMenuItem('topbar', {
+    menu.addSubMenuItem('topbar', {
       id: 'admin.game-debug',
       title: 'Debug Actions',
       roles: ['admin'],
@@ -127,7 +139,7 @@ export class ForRealCardsTopFrame extends TopFrame implements OnInit {
       }
     });
 
-    Menus.addSubMenuItem('topbar', {
+    menu.addSubMenuItem('topbar', {
       id: 'launch-pad',
       title: 'Start or Join Game',
       callback: ()=> {
@@ -136,7 +148,7 @@ export class ForRealCardsTopFrame extends TopFrame implements OnInit {
     });
 
 
-    Menus.addSubMenuItem('topbar', {
+    menu.addSubMenuItem('topbar', {
       id: 'edit-user-profile',
       title: 'Profile',
       callback: ()=> {
@@ -144,7 +156,7 @@ export class ForRealCardsTopFrame extends TopFrame implements OnInit {
       }
     });
 
-    Menus.addSubMenuItem('topbar', {
+    menu.addSubMenuItem('topbar', {
       id: 'bet-ledger',
       title: 'Bet Ledger',
       roles: ['*'],
@@ -153,7 +165,7 @@ export class ForRealCardsTopFrame extends TopFrame implements OnInit {
       }
     });
 
-    Menus.addSubMenuItem('topbar', {
+    menu.addSubMenuItem('topbar', {
       id: 'info',
       title: 'App Info',
       roles: ['*'],
@@ -163,7 +175,7 @@ export class ForRealCardsTopFrame extends TopFrame implements OnInit {
     });
 
 
-    Menus.addSubMenuItem('topbar', {
+    menu.addSubMenuItem('topbar', {
       id: 'logout',
       title: 'Logout',
       roles: ['*'],
@@ -172,6 +184,7 @@ export class ForRealCardsTopFrame extends TopFrame implements OnInit {
       }
     });
 
+    this.menuItems = menu.getMenu('topbar').items;
   }
 
   ngOnInit() {

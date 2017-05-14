@@ -1,25 +1,25 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { select } from '@angular-redux/store';
 
-import {MenuItem} from "../../ui/services/menu-item";
-import {ILoginState, LOGIN_INITIAL_STATE} from "../../ui";
-import { User } from "../../../../common-app-api/src/api/models/user.model";
+import {MenuItem, ILoginState, LOGIN_INITIAL_STATE, IUser, LOGIN_PACKAGE_NAME} from 'common-app';
 
 @Pipe({
   name: 'menuFilter',
   pure: false
 })
 export class MenuFilterPipe implements PipeTransform {
-  @select() loginReducer;
-  private user:User;
+  @select(LOGIN_PACKAGE_NAME) loginState;
+  private user: IUser;
   constructor() {
     console.log('MenuFilterPipe init');
-    this.loginReducer.subscribe( (loginState:ILoginState)=>{
+    this.loginState.subscribe( (loginState:ILoginState)=>{
       loginState = loginState || LOGIN_INITIAL_STATE;
       this.user = loginState.user;
     })
   }
   transform(allMenus: MenuItem[]) {
+//    if (!allMenus)
+//        return null;
     return allMenus.filter( (menuItem) => { return menuItem.shouldRender(this.user)});
   }
 }

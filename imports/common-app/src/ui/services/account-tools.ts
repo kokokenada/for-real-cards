@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 
-import {User} from '../../../../common-app-api/src/api/models/user.model';
+import { IUser } from 'common-app';
 
 export class AccountTools {
 
@@ -18,9 +18,9 @@ export class AccountTools {
     return user;
   }
 
-  static getDisplayName(param:string):string;
-  static getDisplayName(param:User):string;
-  static getDisplayName(param:any):string {
+  static getDisplayName(param: string):string;
+  static getDisplayName(param: IUser):string;
+  static getDisplayName(param: any):string {
     let user:any;
     if (param === undefined || typeof param === 'string') {
       user = AccountTools._user(param);
@@ -29,7 +29,7 @@ export class AccountTools {
     }
     return AccountTools.getDisplayNameNoLookup(user);
   }
-  static getDisplayNameNoLookup(user:User) {
+  static getDisplayNameNoLookup(user: IUser) {
     if (!user) {
       return 'Not Logged In';
     }

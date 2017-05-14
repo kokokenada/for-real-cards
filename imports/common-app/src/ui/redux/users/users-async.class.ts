@@ -6,11 +6,10 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/catch';
 import { IPayloadAction  } from 'redux-package';
 
-import { User } from "../../../../../common-app-api/src/api/models/user.model";
+import { IDocumentChange, IUser } from 'common-app';
 
 import { UsersService } from "./users.service";
 import { UsersActions } from "./users-actions.class";
-import { IDocumentChange } from "../../reactive-data/document-change.interface";
 
 
 @Injectable()
@@ -20,7 +19,7 @@ export class UsersAsync {
     return action$
       .filter(({ type }) => type === UsersActions.WATCH)
       .flatMap(({ payload }) => {
-        return UsersService.createUsersObserver().map( (change:IDocumentChange<User>)=>{
+        return UsersService.createUsersObserver().map( (change:IDocumentChange<IUser>)=>{
           return UsersActions.changeFactory(change);
         })
         .catch(error => Observable.of(error));

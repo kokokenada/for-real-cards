@@ -1,6 +1,6 @@
 import {ForRealCardsModule} from "../ui/redux/nav/for-real-cards.module";
 import {IPayloadAction} from 'redux-package';
-import {LoginActions} from "../../common-app/src/ui/redux/login/login-actions.class";
+import {LoginActions} from 'common-app';
 import {ForRealCardsActions} from "../ui/redux/nav/for-real-cards-actions.class";
 import {IForRealCardsActionPayload} from "../ui/redux/nav/for-real-cards.types";
 

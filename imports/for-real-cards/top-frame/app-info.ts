@@ -1,8 +1,13 @@
 
 import {Component} from '@angular/core';
 import {select} from '@angular-redux/store';
-import {IConnectState} from '../../common-app/src/ui/redux/connect/connect.types';
-import {ILoginState} from '../../common-app/src/ui/redux/login/login.types';
+import {
+  CONNECT_PACKAGE_NAME,
+  IConnectState,
+  ILoginState,
+  LOGIN_PACKAGE_NAME
+} from 'common-app';
+
 @Component({
   selector: 'app-info',
   template: `
@@ -42,8 +47,8 @@ import {ILoginState} from '../../common-app/src/ui/redux/login/login.types';
 `
 })
 export class AppInfo {
-  @select() loginReducer$;
-  @select() connectReducer$;
+  @select(LOGIN_PACKAGE_NAME) loginReducer$;
+  @select(CONNECT_PACKAGE_NAME) connectReducer$;
   loginState: ILoginState;
   connectionState: IConnectState;
 

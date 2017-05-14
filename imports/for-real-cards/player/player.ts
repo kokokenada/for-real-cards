@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { Subscription } from 'rxjs'
 import { select } from '@angular-redux/store';
 
-import { User } from '../../common-app-api/src/api/models/user.model';
+import { IUser, LoginFunctions } from 'common-app';
 import { Card, Hand } from  '../api/index';
 import { GameRenderingTools } from  '../ui';
 import {IUsersState} from "../../common-app/src/ui/redux/users/users.types";
@@ -84,8 +84,8 @@ export class Player {
 
   ngOnInit() {
     this.usersReducer.subscribe( (usersState:IUsersState)=>{
-      let user:User = usersState.users.get(this.hand.userId);
-      this._displayName= User.getDisplayName(user);
+      let user:IUser = usersState.users.get(this.hand.userId);
+      this._displayName= LoginFunctions.getDisplayName(user);
     } );
   }
   ngOnDestroy() {

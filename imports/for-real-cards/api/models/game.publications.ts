@@ -3,7 +3,7 @@ import * as log from 'loglevel';
 
 import { HandCollection, Hand } from './hand.model';
 import { GamePlayActionCollection } from "./action.model";
-import {AccountsAdminTools} from "../../../common-app-api/src/api/services/accounts-admin-tools";
+import {AccountsAdminTools} from "../../../common-app-meteor";
 
 export interface GameSubscriptionOptions {
   gameId:string

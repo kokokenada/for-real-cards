@@ -1,6 +1,5 @@
 import { IPayloadAction, ReduxPackageCombiner} from "redux-package";
-import {IDocumentChange} from "../../reactive-data/document-change.interface";
-import { User } from "../../../../../common-app-api/src/api/models/user.model";
+import {IDocumentChange, IUser} from 'common-app';
 
 export class UsersActions {
   private static prefix = 'CA_USERS_';
@@ -17,7 +16,7 @@ export class UsersActions {
     ReduxPackageCombiner.dispatch({type: UsersActions.WATCH});
   }
 
-  static changeFactory(documentChange:IDocumentChange<User>):IPayloadAction {
+  static changeFactory(documentChange:IDocumentChange<IUser>):IPayloadAction {
     return {type: UsersActions.CHANGE, payload: {documentChange:documentChange}};
   }
 }

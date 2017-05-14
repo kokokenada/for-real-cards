@@ -4,7 +4,7 @@ import * as log from 'loglevel';
 import { Card, CardSuit, CardRank, Deck, GameConfig, GamePlayActionType, GamePlayAction, Hand, HandInterface, VisibilityType } from "../../../api";
 import { IGamePlayState } from "./game-play.types";
 import {AccountTools} from "../../../../common-app/src/ui/services/account-tools";
-import {ReduxModuleUtil} from "../../../../common-app/src/ui/redux/redux-module-util";
+import {ReduxModuleUtil} from 'common-app';
 import {ReduxPackageCombiner} from "redux-package";
 import {DealSequence, DealLocation} from "../../../api/models/game-config";
 import {GamePlayFunctions} from './game-play.functions';

@@ -1,4 +1,4 @@
-import {ReduxModuleUtil} from "../../../../common-app/src/ui/redux/redux-module-util";
+import {ReduxModuleUtil} from 'common-app';
 import {ReduxPackageCombiner} from "redux-package";
 
 export class ForRealCardsActions {

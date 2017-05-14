@@ -18,7 +18,7 @@ import {
   PageView, Event, Exception
 } from 'redux-beacon/targets/google-analytics';
 
-import { UPDATE_LOCATION } from '@angular-redux/router';
+import {NgReduxRouter, UPDATE_LOCATION} from '@angular-redux/router';
 
 import {
   ForRealCardsModule,
@@ -27,15 +27,18 @@ import {
   IGamePlayActionPayload,
   GamePlayActions } from "../ui";
 import {
-  AccountsAdminModule,
+  CONNECT_PACKAGE_NAME,
   ConnectActions,
-  ConnectModule,
-  FeatureToggleModule,
+  ConnectPackage,
   FeatureToggleActions,
+  FeatureTogglePackage,
   LoginActions,
-  LoginModule,
+  LoginPackage
+} from 'common-app';
+
+import {
+  AccountsAdminModule,
   ModalModule,
-  ToggleRouter,
   UploaderActions,
   UploaderModule,
   UsersModule
@@ -44,25 +47,22 @@ import {featureToggleConfigs} from "./feature-toggle.config";
 import {GamePlayActionType, GamePlayActionInterface} from "../api/models/action.model";
 import {ForRealCardsAsync} from "../ui/redux/nav/for-real-cards-async.class";
 import {PlatformTools} from "../../common-app/src/ui-ng2/platform-tools/platform-tools";
+import {GamePlayAsync} from '../ui/redux/game-play/game-play-async.class';
+import {ConnectServiceMeteor} from '../../common-app-meteor/connect-service-meteor';
+import {LoginServiceMeteor} from '../../common-app-meteor/login-service-meteor';
 
 declare const cordova: any;
 
 @Injectable()
 export class ReduxModules {
   constructor(
-    private connectModule: ConnectModule,
-    private loginModule: LoginModule,
-    private modalModule: ModalModule,
-    private accountsAdminModule: AccountsAdminModule,
+    private ngReduxRouter: NgReduxRouter,
     private forRealCardsModule: ForRealCardsModule,
-    private featureTogglesModule: FeatureToggleModule,
-    private featureTogglesActions: FeatureToggleActions,
-    private toggleRouter: ToggleRouter,
+    private accountsAdminModule: AccountsAdminModule,
     private gamePlayModule: GamePlayModule,
-    private usersModule: UsersModule,
     private uploaderModule: UploaderModule,
-    private ngRedux: NgRedux<IAppState>,
-    private async:ForRealCardsAsync
+    private usersModule: UsersModule,
+    private ngRedux: NgRedux<IAppState>
   ) {}
   configure() {
     let options : ICombinerOptions = {
@@ -193,8 +193,8 @@ export class ReduxModules {
       const isConnected = state => {
         console.log('in isConnected')
         console.log(state)
-        console.log(state.connectReducer.get('connected'))
-        return state.connectReducer.get('connected')
+        console.log(state[CONNECT_PACKAGE_NAME].get('connected'))
+        return state[CONNECT_PACKAGE_NAME].get('connected')
       };
 
       const tagManager = cordova.require('com.jareddickson.cordova.tag-manager.TagManager');
@@ -239,18 +239,24 @@ export class ReduxModules {
       }
     }
 
-
+    const async = new ForRealCardsAsync();
     this.forRealCardsModule.middlewares.push(
-      this.async.gameNavigationMiddleware,
+      async.gameNavigationMiddleware,
       analyticsMiddleware
     );
 
+    const connectService = new ConnectServiceMeteor()
+    const connectModule = new ConnectPackage(connectService);
+    const loginService = new LoginServiceMeteor();
+    const loginModule = new LoginPackage(loginService);
+    const featureTogglePackage = new FeatureTogglePackage();
+
     ReduxPackageCombiner.configure([
-      this.connectModule,
-      this.loginModule,
-      this.modalModule,
+      connectModule,
+      loginModule,
+      new ModalModule(),
       this.accountsAdminModule,
-      this.featureTogglesModule,
+      featureTogglePackage,
       this.forRealCardsModule,
       this.gamePlayModule,
       this.uploaderModule,
@@ -259,6 +265,6 @@ export class ReduxModules {
       options
     );
     LoginActions.watchUser(); // for auto login
-    this.featureTogglesActions.initialize(featureToggleConfigs);
+    FeatureToggleActions.initialize(featureToggleConfigs);
   }
 }

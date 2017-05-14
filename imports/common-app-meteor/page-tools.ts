@@ -2,7 +2,6 @@
  * Created by kenono on 2016-05-02.
  */
 
-import { check, Match } from 'meteor/check'
 
 export interface FilterDefinition {
   filter: string,

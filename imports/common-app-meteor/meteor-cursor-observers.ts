@@ -1,7 +1,7 @@
-import {Observable, Subscriber} from 'rxjs';
-import {Meteor} from 'meteor/meteor';
+import { Observable, Subscriber } from 'rxjs';
+import { Mongo } from 'meteor/mongo';
 
-import {EDocumentChangeType, IDocumentChange} from './document-change.interface';
+import {EDocumentChangeType, IDocumentChange} from 'common-app';
 
 export interface BatchAndWatch<T> {
   batchObservable: Observable<T[]>;
