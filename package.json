@@ -27,7 +27,7 @@
     "bootstrap": "4.0.0-alpha.6",
     "chai": "^3.5.0",
     "chai-spies": "^0.7.1",
-    "common-app": "0.0.2",
+    "common-app": "0.0.3",
     "dragula": "3.7.2",
     "es6-shim": "0.35.3",
     "gm": "^1.23.0",

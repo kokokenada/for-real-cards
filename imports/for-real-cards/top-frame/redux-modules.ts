@@ -264,7 +264,6 @@ export class ReduxModules {
       this.ngRedux,
       options
     );
-    LoginActions.watchUser(); // for auto login
     FeatureToggleActions.initialize(featureToggleConfigs);
   }
 }

@@ -3,7 +3,7 @@
  */
 import { Component, Input, NgZone } from '@angular/core';
 import { select } from '@angular-redux/store';
-import { IUser } from 'common-app';
+import {ILoginState, IUser, LOGIN_PACKAGE_NAME, LoginFunctions} from 'common-app';
 import { IUsersState } from "../../ui/redux/users/users.types";
 
 @Component({
@@ -15,6 +15,8 @@ import { IUsersState } from "../../ui/redux/users/users.types";
 
 export class Avatar {
   @select() usersReducer;
+  @select(LOGIN_PACKAGE_NAME) loginState$;
+  loginState:ILoginState;
   @Input() private userId:string;
   @Input() private size:string = 'medium';
   @Input() private shape:string = 'round';
@@ -24,9 +26,14 @@ export class Avatar {
   private imageURL:string;
 
   ngOnInit() {
+    this.loginState$.subscribe ( (newLoginState: ILoginState) => {
+      this.loginState = newLoginState;
+    });
+
     this.usersReducer.subscribe( (usersState:IUsersState)=>{
       this.ngZone.run(()=>{
-        this.imageURL = usersState.users.get(this.userId)['avatar-thumb'];
+        let user = usersState.users.get(this.userId);
+        this.imageURL = LoginFunctions.getAvatarURL(user, this.loginState.defaultAvatar);
       });
     } );
   }

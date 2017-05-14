@@ -1,26 +1,27 @@
-
-import { Observable } from 'rxjs';
+import {Observable} from 'rxjs';
+import {Subject} from 'rxjs/Subject';
 
 import {
   Credentials,
-  IDocumentChange, ILoginActionPayload,
-  ILoginService,
+  ILoginActionPayload,
+  ILoginService, ILoginState,
   IUser,
+  LOGIN_PACKAGE_NAME,
   LoginActions,
   ReduxModuleUtil
 } from 'common-app';
-import {IPayloadAction, } from 'redux-package';
-import { MeteorCursorObservers } from '../common-app-meteor';
+import {IPayloadAction, ReduxPackageCombiner,} from 'redux-package';
+
 
 export class LoginServiceMeteor implements ILoginService {
 
-  login(credentials:Credentials):Promise<IPayloadAction> {
-    return new Promise((resolve, reject)=>{
+  login(credentials: Credentials): Promise<IPayloadAction> {
+    return new Promise((resolve, reject) => {
       credentials.saveCredentials();
       console.log(Meteor);
       Meteor.loginWithPassword(
         credentials.email ? credentials.email : credentials.username, credentials.password,
-        (error)=> {
+        (error) => {
           if (error) {
             console.info(error);
             reject(ReduxModuleUtil.errorFactory(LoginActions.LOGIN_ERROR, error));
@@ -28,7 +29,7 @@ export class LoginServiceMeteor implements ILoginService {
             console.info('Login successful.');
             resolve(
               LoginActions.loginSuccessFactory(
-                this.userFromMeteorUser(Meteor.user()), Meteor.userId()
+                this.userFromMeteorUser(Meteor.user()), Meteor.userId(), false
               )
             );
           }
@@ -37,12 +38,12 @@ export class LoginServiceMeteor implements ILoginService {
     })
   }
 
-  static defaultAvatarUrl() { // Move this
+  defaultAvatarUrl(): string { // Move this
     return Meteor.absoluteUrl('default-avatar.png');
   };
 
-  register(credentials:Credentials):Promise<IPayloadAction> {
-    return new Promise((resolve, reject)=>{
+  register(credentials: Credentials): Promise<IPayloadAction> {
+    return new Promise((resolve, reject) => {
       console.debug("Creating user:" + credentials.username + ", " + credentials.email);
       credentials.saveCredentials();
       Accounts.createUser({
@@ -52,28 +53,28 @@ export class LoginServiceMeteor implements ILoginService {
         profile: {
           createdOn: new Date()
         }
-      }, (error)=> {
+      }, (error) => {
         if (error) {
           console.error(error);
           reject(ReduxModuleUtil.errorFactory(LoginActions.LOGIN_ERROR, error));
         } else {
           console.info("Register successful.")
           resolve(LoginActions.loginSuccessFactory(
-            this.userFromMeteorUser(Meteor.user()), Meteor.userId()
+            this.userFromMeteorUser(Meteor.user()), Meteor.userId(), false
           ));
         }
       })
     });
   };
 
-  createTempUser():Promise<IPayloadAction> {
-    return new Promise((resolve, reject)=>{
-      Meteor.call('CommonGetNextSequence', 'temp_user', (error, result)=> {
+  createTempUser(): Promise<IPayloadAction> {
+    return new Promise((resolve, reject) => {
+      Meteor.call('CommonGetNextSequence', 'temp_user', (error, result) => {
         if (error) {
           reject(ReduxModuleUtil.errorFactory(LoginActions.LOGIN_ERROR, error));
         } else {
           let userId = 'tmp_' + result.toString();
-          let credentials:Credentials = new Credentials(
+          let credentials: Credentials = new Credentials(
             userId,
             "",
             Math.random().toString()
@@ -82,7 +83,7 @@ export class LoginServiceMeteor implements ILoginService {
             (action) => {
               console.info("Registering tmp user successful.")
               resolve(action);
-            }, (error)=> {  // Is this required or can I depend on rejection in AccountTools.register?
+            }, (error) => {  // Is this required or can I depend on rejection in AccountTools.register?
               reject(ReduxModuleUtil.errorFactory(LoginActions.LOGIN_ERROR, error));
             }
           );
@@ -91,12 +92,12 @@ export class LoginServiceMeteor implements ILoginService {
     });
   }
 
-  saveUser(edittedUserObject:IUser):Promise<IPayloadAction> {
-    return new Promise( (resolve, reject)=> {
+  saveUser(edittedUserObject: IUser): Promise<IPayloadAction> {
+    return new Promise((resolve, reject) => {
       console.log("in saveUser execution")
       Meteor.call('commonAppUpdateUser',
         edittedUserObject,
-        function (error, numberAffected:number) {
+        function (error, numberAffected: number) {
           if (error) {
             console.error(error);
             reject(ReduxModuleUtil.errorFactory(LoginActions.LOGIN_ERROR, error));
@@ -104,7 +105,7 @@ export class LoginServiceMeteor implements ILoginService {
             if (numberAffected === 1) {
               resolve(LoginActions.saveUserResponseFactory(edittedUserObject));
             } else {
-              let errorDescription:string = 'Unexpected number of records affected. (' + numberAffected + ')';
+              let errorDescription: string = 'Unexpected number of records affected. (' + numberAffected + ')';
               console.error(errorDescription);
               reject(ReduxModuleUtil.errorFactory(LoginActions.LOGIN_ERROR, error));
             }
@@ -114,9 +115,9 @@ export class LoginServiceMeteor implements ILoginService {
     });
   }
 
-  logOut():Promise<IPayloadAction> {
-    return new Promise((resolve, reject)=> {
-      Meteor.logout((error)=> {
+  logOut(): Promise<IPayloadAction> {
+    return new Promise((resolve, reject) => {
+      Meteor.logout((error) => {
         if (error) {
           console.error('Error logging out')
           console.error(error)
@@ -129,13 +130,58 @@ export class LoginServiceMeteor implements ILoginService {
   };
 
   watchForAutoLogin(): Observable<ILoginActionPayload> {
-    return Observable.never();
+    const isAuto = ( loginState: ILoginState ): boolean => {
+      if (loginState)
+        return loginState.userId === null;
+      return false;
+    };
+
+    let meteorUser = Meteor.user();
+    let lastLoginState = null;
+    ReduxPackageCombiner.getDispatcher()
+      .select(LOGIN_PACKAGE_NAME)
+      .subscribe((loginState: ILoginState) => {
+        lastLoginState = loginState;
+      });
+    if (meteorUser) {
+      return Observable.of(LoginActions.loginSuccessFactory(
+        this.userFromMeteorUser(meteorUser),
+        meteorUser._id,
+        isAuto(lastLoginState)
+      ));
+    }
+
+    let subject = new Subject();
+    let timer = Observable.timer(500, 1000);
+    let subscription = timer.subscribe(() => {
+      let meteorUser = Meteor.user();
+      if (meteorUser) {
+        subject.next( LoginActions.loginSuccessFactory(
+          this.userFromMeteorUser(meteorUser),
+          meteorUser._id,
+          isAuto(lastLoginState)
+        ));
+        subject.complete();
+        subscription.unsubscribe();
+      }
+    });
+    return subject;
   };
 
-  private userFromMeteorUser(userMeteor:Meteor.User):IUser {
+  watchCurrentUser(): Observable<ILoginActionPayload> {
+    let subject = new Subject();
+    Tracker.autorun( () => {
+      let user = Meteor.user();
+      console.log(user)
+      subject.next( LoginActions.currentUserChangeFactory(this.userFromMeteorUser(user)))
+    });
+    return subject;
+  }
+
+  private userFromMeteorUser(userMeteor: Meteor.User): IUser {
     if (!userMeteor)
       return null;
-    let user:IUser = {
+    let user: IUser = {
       _id: userMeteor._id,
       emails: userMeteor.emails,
       profile: userMeteor.profile,
