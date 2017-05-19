@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import * as log from 'loglevel';
 
 import { AccountsAdminTools } from '../common-app-meteor';
-import { getNextSequence } from '../common-app-api/src/api/models/counter.model';
+import { getNextSequence } from './counter.model';
 
 import { Game, GameCollection } from './game.model';
 import { HandCollection } from './hand.model';
