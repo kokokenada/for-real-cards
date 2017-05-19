@@ -1,17 +1,17 @@
 import { Component, Input, NgZone } from '@angular/core';
 import { select } from '@angular-redux/store';
 
-import { GamePlayAction, GamePlayActionType, Hand } from '../api/index'
-import { ActionFormatted, ForRealCardsActions, IGamePlayState } from "../ui";
+import { GameStartActions, IGamePlayState, GamePlayAction, GamePlayActionType, GamePlayFunctions, Hand } from '../../for-real-cards-lib'
+import { ActionFormatted,  } from "../ui";
 import { AccountTools } from "../../common-app/src/ui/services/account-tools";
-import {GamePlayFunctions} from "../ui/redux/game-play/game-play.functions";
+import {GAME_PLAY_PACKAGE_NAME} from '../../for-real-cards-lib';
 
 @Component({
   selector: 'game-action-list',
   template: `
     <form #displayGameForm="ngForm">
       <div class="form-group">
-        <label class="control-label" for="displayType">Include Script</label>
+        <label class="control-label" for="displayMode">Include Script</label>
         <div class="btn-group">
           <label class="btn btn-primary" name="displayType" [(ngModel)]="displayMode" btnRadio="noScript">No
             Script</label>
@@ -157,7 +157,7 @@ import {GamePlayFunctions} from "../ui/redux/game-play/game-play.functions";
   `
 })
 export class GameActionList {
-  @select() gamePlayReducer;
+  @select(GAME_PLAY_PACKAGE_NAME) gamePlayReducer;
   public displayMode:string = 'visual';
   gamePlayState:IGamePlayState;
   password: string;
@@ -174,7 +174,7 @@ export class GameActionList {
   }
 
   displayGame() {
-    ForRealCardsActions.loadGameRequest(this.gameId, this.password);
+    GameStartActions.loadGameRequest(this.gameId, this.password);
   }
 
   getActions():GamePlayAction[] {

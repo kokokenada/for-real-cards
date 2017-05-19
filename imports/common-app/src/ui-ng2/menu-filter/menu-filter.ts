@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { select } from '@angular-redux/store';
 
-import {MenuItem, ILoginState, LOGIN_INITIAL_STATE, IUser, LOGIN_PACKAGE_NAME} from 'common-app';
+import {MenuItem, ILoginState, IUser, LOGIN_PACKAGE_NAME} from 'common-app';
 
 @Pipe({
   name: 'menuFilter',
@@ -13,7 +13,6 @@ export class MenuFilterPipe implements PipeTransform {
   constructor() {
     console.log('MenuFilterPipe init');
     this.loginState.subscribe( (loginState:ILoginState)=>{
-      loginState = loginState || LOGIN_INITIAL_STATE;
       this.user = loginState.user;
     })
   }

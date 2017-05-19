@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import template from './edit-game-config.twbs.html';
-import {GameConfig, defaultGames, UserCommand, DeckLocation} from "../api/models/game-config";
-import {Deck} from "../api/models/deck.model";
+import {GameConfig, Deck, defaultGames, UserCommand, DeckLocation} from "../../for-real-cards-lib";
 
 @Component({
   selector: 'edit-game-config',

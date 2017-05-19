@@ -2,8 +2,7 @@ import {ModalBase} from '../../common-app/src/ui-ng2/modal/modal-base';
 import {IBetModalParams, IBetModalResult} from './bet-modal.types';
 import {Component} from '@angular/core';
 import template from './bet-modal.twbs.html';
-import {GamePlayActions} from '../ui/redux/game-play/game-play-actions.class';
-import {GamePlayFunctions} from '../ui/redux/game-play/game-play.functions';
+import {GamePlayActions, GamePlayFunctions} from '../../for-real-cards-lib';
 import {AccountTools} from '../../common-app/src/ui/services/account-tools';
 
 @Component({

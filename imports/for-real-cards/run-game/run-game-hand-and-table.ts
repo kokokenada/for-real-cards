@@ -1,7 +1,8 @@
 import { Component, NgZone } from '@angular/core';
 import { select } from '@angular-redux/store';
 
-import {IGamePlayRecord} from "../ui/redux/game-play/game-play.types";
+import {IGamePlayRecord} from "../../for-real-cards-lib";
+import {GAME_PLAY_PACKAGE_NAME} from '../../for-real-cards-lib/redux-packages/game-play/game-play-package';
 
 
 function template():string {
@@ -26,7 +27,7 @@ return `
 )
 export class RunGameHandAndTable {
   gameId:string;
-  @select() gamePlayReducer;
+  @select(GAME_PLAY_PACKAGE_NAME) gamePlayReducer;
 
   constructor(private ngZone:NgZone) {
   }

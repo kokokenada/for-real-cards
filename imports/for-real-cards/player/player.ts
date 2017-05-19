@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs'
 import { select } from '@angular-redux/store';
 
 import { IUser, LoginFunctions } from 'common-app';
-import { Card, Hand } from  '../api/index';
+import { Card, Hand } from  '../../for-real-cards-lib';
 import { GameRenderingTools } from  '../ui';
 import {IUsersState} from "../../common-app/src/ui/redux/users/users.types";
 

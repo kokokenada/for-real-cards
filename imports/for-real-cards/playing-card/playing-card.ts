@@ -1,7 +1,7 @@
 import {Meteor} from 'meteor/meteor';
 import { Component, Input } from '@angular/core';
-import {Card} from '../api/models/card.model'
-import {CardImageStyle} from "../api/interfaces/card-image-style.interface";
+import {Card} from '../../for-real-cards-lib'
+import {CardImageStyle} from "../../for-real-cards-web/card-image-style.interface";
 
 @Component(
   {

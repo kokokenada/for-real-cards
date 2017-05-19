@@ -1,5 +1,4 @@
-import {GameConfig} from "../api/models/game-config";
-import {IGamePlayState} from '../ui/redux/game-play/game-play.types';
+import { GameConfig, IGamePlayState } from '../../for-real-cards-lib';
 
 export interface DealModalParam {
   gameState:IGamePlayState;

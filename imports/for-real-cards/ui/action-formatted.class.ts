@@ -1,9 +1,7 @@
 import * as moment from 'moment';
 import {AccountTools} from '../../common-app/src/ui/services/account-tools';
 
-
-
-import {GamePlayAction, GamePlayActionType, VisibilityType} from "../api/models/action.model";
+import {GamePlayAction, GamePlayActionType, VisibilityType} from "../../for-real-cards-lib";
 
 export class ActionFormatted extends GamePlayAction {
 

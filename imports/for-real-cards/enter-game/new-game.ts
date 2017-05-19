@@ -1,6 +1,6 @@
 import * as log from 'loglevel';
 import {Component} from '@angular/core';
-import {ForRealCardsActions} from "../ui/redux/nav/for-real-cards-actions.class";
+import {GameStartActions} from "../../for-real-cards-lib";
 import {PlatformTools, TargetPlatformId} from "../../common-app/src/ui-ng2/platform-tools/platform-tools";
 
 function template():string {
@@ -58,7 +58,7 @@ function template():string {
 export class NewGame {
   password:string;
   newGame() {
-    ForRealCardsActions.newGame(this.password);
+    GameStartActions.newGame(this.password);
   }
 }
 

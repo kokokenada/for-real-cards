@@ -1,5 +1,5 @@
 //import { require } from 'meteor/modules'
-import {IGamePlayState} from '../ui/redux/game-play/game-play.types';
+import {IGamePlayState} from '../../for-real-cards-lib';
 
 import { Injectable } from '@angular/core';
 

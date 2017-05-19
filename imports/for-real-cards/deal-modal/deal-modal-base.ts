@@ -1,8 +1,7 @@
-import {GameConfig, defaultGames} from "../api/index";
+import {GameConfig, defaultGames, GamePlayFunctions, IGamePlayState} from "../../for-real-cards-lib";
 import {ModalBase, IModalState} from '../../common-app/src';
 import {DealModalParam, DealModalResult} from "./deal-modal-params-and-result";
-import {IGamePlayState} from '../ui/redux/game-play/game-play.types';
-import {GamePlayFunctions} from '../ui/redux/game-play/game-play.functions';
+
 
 export class DealModalBase extends ModalBase<DealModalParam, DealModalResult> {
   gameConfig: GameConfig;

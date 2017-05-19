@@ -5,21 +5,38 @@ import { select } from '@angular-redux/store';
 
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
 
-import { Card, CardCountAllowed, CardLocation, Deck, DeckLocation, GameConfig, Hand } from '../api';
-import { DragAndDrop, ForRealCardsActions, GameRenderingTools, INITIAL_STATE_GAME_PLAY, INITIAL_STATE_FOR_REAL_CARDS } from '../ui';
+import {
+  Card,
+  CardCountAllowed,
+  CardLocation,
+  DealLocation,
+  DealSequence,
+  Deck,
+  DeckLocation,
+  GameConfig,
+  Hand ,
+  GamePlayActions,
+  GamePlayFunctions,
+  IGameStartState, // Make this private?
+  INITIAL_STATE_GAME_PLAY, // Make this private?
+  INITIAL_STATE_GAME_START, // Make this private?
+  IGamePlayRecord,
+  GameStartActions
+} from '../../for-real-cards-lib';
+import { DragAndDrop, GameRenderingTools,  } from '../ui';
 
-import { CardImageStyle} from "../api/interfaces/card-image-style.interface";
-import { GamePlayActions, IForRealCardsState, IGamePlayRecord} from "../ui";
+import { CardImageStyle} from "../../for-real-cards-web/card-image-style.interface";
+import { } from "../ui";
 import {DealModalService} from "../deal-modal/deal-modal.service";
 import {CommonPopups} from "../../common-app/src/ui-ng2/common-popups/common-popups";
-import {DealLocation, DealSequence} from '../api/models/game-config';
-import {GamePlayFunctions} from '../ui/redux/game-play/game-play.functions';
+import {} from '../ui/redux/game-play/game-play.functions';
+import {GAME_START_PACKAGE_NAME, GAME_PLAY_PACKAGE_NAME} from '../../for-real-cards-lib';
 
 declare const window: any;
 
 export abstract class RunGame {
-  @select() gamePlayReducer$;
-  @select() forRealCardsReducer$;
+  @select(GAME_PLAY_PACKAGE_NAME) gamePlayReducer$;
+  @select(GAME_START_PACKAGE_NAME) forRealCardsReducer$;
   protected abstract dragulaService: DragulaService;
   protected abstract ngZone:NgZone;
   protected abstract dealModelService:DealModalService;
@@ -27,7 +44,7 @@ export abstract class RunGame {
 
   abstract childInit();
   gameState:IGamePlayRecord;
-  forRealCardsState:IForRealCardsState;
+  forRealCardsState:IGameStartState;
   protected static dragAndDropInitialized:boolean = false;
 
   constructor() {
@@ -42,17 +59,22 @@ export abstract class RunGame {
           this.gameState = INITIAL_STATE_GAME_PLAY;
       });
     } );
-    this.forRealCardsReducer$.subscribe( (forRealCardsState:IForRealCardsState)=>{
+    this.forRealCardsReducer$.subscribe( (forRealCardsState:IGameStartState)=>{
       this.ngZone.run(()=>{
-        forRealCardsState = forRealCardsState || INITIAL_STATE_FOR_REAL_CARDS;
+        console.log('run can state subscrpiption')
+        console.log(forRealCardsState)
+        forRealCardsState = forRealCardsState || INITIAL_STATE_GAME_START;
         this.forRealCardsState = forRealCardsState;
-        if (forRealCardsState.gameId===null && !forRealCardsState.loading) { // Check to make sure loading request not already issued
+        if (forRealCardsState.gameId===null && !(forRealCardsState.loading) ) { // Check to make sure loading request not already issued
           // We must have deep linked here or refreshed, so let's load the game
+
+          console.log('Looking like we are deep linking, so loading the game');
+
           let pathname:string[] = window.location.pathname.split('/');
           if (pathname.length>=3) {
             let subUrl:string = pathname[1];
             let gameId:string = pathname[2];
-            ForRealCardsActions.loadGameRequest(gameId, '');
+            GameStartActions.loadGameRequest(gameId, '');
           }
         }
       });
@@ -115,8 +137,9 @@ export abstract class RunGame {
   }
   
   getHands():Hand[] {
-    if (this.gameState)
+    if (this.gameState) {
       return this.gameState.hands.toArray();
+    }
   }
 
   getDecks() {

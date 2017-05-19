@@ -1,32 +1,34 @@
-import {ForRealCardsModule} from "../ui/redux/nav/for-real-cards.module";
+
 import {IPayloadAction} from 'redux-package';
 import {LoginActions} from 'common-app';
-import {ForRealCardsActions} from "../ui/redux/nav/for-real-cards-actions.class";
-import {IForRealCardsActionPayload} from "../ui/redux/nav/for-real-cards.types";
+import { GameStartActions, IGameStartActionPayload} from "../../for-real-cards-lib";
+import {GamePlayActions} from '../../for-real-cards-lib';
+
 
 export abstract class TopFrame {
 
-  addMiddlware(forRealCardsModule:ForRealCardsModule) {
     // Middleware put here so it can have access to 'this.'.  This is a temporary work around until navigation with redux is done
-    const navigatorMiddleware = store => next => (action:IPayloadAction) => {
+    navigatorMiddleware = store => next => (action:IPayloadAction) => {
       switch (action.type)  {
         case LoginActions.LOGGED_IN:
+        case LoginActions.CURRENT_USER_UPDATED:
+          GamePlayActions.setCurrentUserID(action.payload.user._id);
           if (!action.payload.autoLogin)
             this.navigateToEnter();
           break;
         case LoginActions.LOGGED_OUT:
           this.navigateToStart();
           break;
-        case ForRealCardsActions.ENTER_GAME_FAIL:
+        case GameStartActions.ENTER_GAME_FAIL:
           this.navigateToEnter();
           break;
-        case ForRealCardsActions.JOIN_GAME_SUCCESS: {
-          let forRealCardsPayload: IForRealCardsActionPayload = action.payload;
+        case GameStartActions.JOIN_GAME_SUCCESS: {
+          let forRealCardsPayload: IGameStartActionPayload = action.payload;
           this.navigateToGamePlayer(forRealCardsPayload.gameId);
           break;
         }
-        case ForRealCardsActions.VIEW_GAME_SUCCESS: {
-          let forRealCardsPayload: IForRealCardsActionPayload = action.payload;
+        case GameStartActions.VIEW_GAME_SUCCESS: {
+          let forRealCardsPayload: IGameStartActionPayload = action.payload;
           this.navigateToGameTable(forRealCardsPayload.gameId);
           break;
         }
@@ -34,10 +36,6 @@ export abstract class TopFrame {
       return next(action);
     };
 
-
-    forRealCardsModule.middlewares.push(navigatorMiddleware);
-
-  }
   abstract navigateToStart():void;
   abstract navigateToEnter():void;
   abstract navigateToGameTable(gameId:string):void;

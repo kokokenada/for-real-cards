@@ -26,15 +26,6 @@ import {
 } from 'common-app';
 
 
-import {
-  ForRealCardsModule,
-  ForRealCardsAsync,
-  GamePlayAsync,
-  GamePlayModule
-} from '../ui';
-
-
-
 import {DealModal} from "../deal-modal/deal-modal.twbs";
 import {EditUserProfileTWBS} from '../edit-user-profile/edit-user-profile.twbs';
 import {EnterGame} from '../enter-game/enter-game';
@@ -100,11 +91,10 @@ export class ForRealCardsTopFrame extends TopFrame implements OnInit {
   menuItems:MenuItem[];
   constructor(private router: Router,
               private ngZone: NgZone,
-              private reduxModules:ReduxModules,
-              forRealCardsModule:ForRealCardsModule) {
+              private reduxModules:ReduxModules
+              ) {
     super();
-    this.addMiddlware(forRealCardsModule)
-    reduxModules.configure();
+    reduxModules.configure(this.navigatorMiddleware);
     this.initMenus();
   }
 
@@ -253,10 +243,6 @@ export class ForRealCardsTopFrame extends TopFrame implements OnInit {
     ReduxModules,
     BetlModalService,
     DealModalService,
-    ForRealCardsModule,
-    ForRealCardsAsync,
-    GamePlayAsync,
-    GamePlayModule,
     NgReduxRouter,
     ...COMMON_APP_SINGLETONS]
 })

@@ -1,9 +1,9 @@
 import { Component, Input, NgZone } from '@angular/core';
 import { select } from '@angular-redux/store';
 
-import { GamePlayAction, GamePlayActionType, Hand } from '../api/index'
-import { ActionFormatted, IGamePlayState } from "../ui";
-import {GamePlayFunctions} from "../ui/redux/game-play/game-play.functions";
+import { GamePlayAction, GamePlayActionType, Hand, IGamePlayState, GamePlayFunctions } from '../../for-real-cards-lib'
+import { ActionFormatted } from "../ui";
+import {GAME_PLAY_PACKAGE_NAME} from '../../for-real-cards-lib';
 
 @Component({
   selector: 'bet-ledger',
@@ -40,7 +40,7 @@ import {GamePlayFunctions} from "../ui/redux/game-play/game-play.functions";
   `
 })
 export class BetLedger {
-  @select() gamePlayReducer;
+  @select(GAME_PLAY_PACKAGE_NAME) gamePlayReducer;
   gamePlayState:IGamePlayState;
   private actions:GamePlayAction[] = [];
   public displayMode:string = 'buyOnly';

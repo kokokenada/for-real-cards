@@ -1,9 +1,10 @@
 import { Component, NgZone, OnInit } from '@angular/core';
 import { select } from '@angular-redux/store';
 
-import { IForRealCardsState, INITIAL_STATE_FOR_REAL_CARDS } from "../ui";
 import {PlatformTools} from "../../common-app/src/ui-ng2/platform-tools/platform-tools";
-import {ILoginState, LOGIN_INITIAL_STATE, LOGIN_PACKAGE_NAME} from 'common-app';
+import {ILoginState, LOGIN_PACKAGE_NAME} from 'common-app';
+import { IGameStartState, INITIAL_STATE_GAME_START } from '../../for-real-cards-lib';
+import {GAME_START_PACKAGE_NAME} from '../../for-real-cards-lib/redux-packages/game-start/game-start.package';
 
 function template():string {
   if (PlatformTools.isIonic())
@@ -17,23 +18,25 @@ function template():string {
 })
 export class TopFrameHeader implements OnInit {
   @select(LOGIN_PACKAGE_NAME) loginReducer;
-  @select() forRealCardsReducer;
+  @select(GAME_START_PACKAGE_NAME) forRealCardsReducer;
   gameDescription:string;
   displayName:string;
 
   constructor(private ngZone:NgZone) {}
 
   ngOnInit() {
-    this.forRealCardsReducer.subscribe( (state:IForRealCardsState)=>{
-      state = state || INITIAL_STATE_FOR_REAL_CARDS;
+    this.forRealCardsReducer.subscribe( (state:IGameStartState)=>{
       this.ngZone.run( ()=>{
+        state = state || INITIAL_STATE_GAME_START;
         this.gameDescription = state.gameDescription;
       } );
     } );
     this.loginReducer.subscribe( (state:ILoginState)=>{
-      state = state || LOGIN_INITIAL_STATE;
       this.ngZone.run( ()=>{
-        this.displayName = state.displayName;
+        if (!state)
+          this.displayName = '';
+        else
+          this.displayName = state.displayName;
       } );
     } );
   }

@@ -1,5 +1,5 @@
 import {Meteor} from 'meteor/meteor';
-import { Coordinates } from "../../api/models/coordinates.class"
+import { Coordinates } from "../../../for-real-cards-lib/redux-packages/game-play/coordinates.class"
  
 export class GameRenderingTools {
   private static getPointOnEllipse(centerX:number, centerY:number, radius:number, degrees:number, xSquash:number=1, ySquash:number=1):Coordinates {

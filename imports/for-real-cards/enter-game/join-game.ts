@@ -1,5 +1,5 @@
 import {Component } from '@angular/core';
-import {ForRealCardsActions} from "../ui/redux/nav/for-real-cards-actions.class";
+import {GameStartActions} from '../../for-real-cards-lib';
 import {PlatformTools, TargetPlatformId} from "../../common-app/src/ui-ng2/platform-tools/platform-tools";
 
 function template(): string {
@@ -95,10 +95,10 @@ export class JoinGame {
   gameId: string;
 
   joinGame() {
-    ForRealCardsActions.joinGameRequest(this.gameId, this.password);
+    GameStartActions.joinGameRequest(this.gameId, this.password);
   };
 
   displayGame() {
-    ForRealCardsActions.viewGameRequest(this.gameId, this.password);
+    GameStartActions.viewGameRequest(this.gameId, this.password);
   };
 }

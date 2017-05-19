@@ -1,6 +1,6 @@
 import * as log from 'loglevel';
-
-import "/imports/for-real-cards/api/index.ts";
+import  "../imports/common-app-api/src";
+import "/imports/for-real-cards-meteor";
 import '../imports/common-app-meteor/user.model';
 
 declare var BrowserPolicy;

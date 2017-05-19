@@ -2,9 +2,7 @@ import { Component, Input, NgZone } from '@angular/core';
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
 
 import {RunGame} from './run-game';
-import {Card, Deck} from "../api/index";
-import {CardImageStyle} from "../api/interfaces/card-image-style.interface";
-import {GamePlayActions} from "../ui/redux/game-play/game-play-actions.class";
+import {Card, Deck, GamePlayActions} from "../../for-real-cards-lib";
 import {CommonPopups} from "../../common-app/src/ui-ng2/common-popups/common-popups";
 import {DealModalService} from "../deal-modal/deal-modal.service";
 

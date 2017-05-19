@@ -2,6 +2,7 @@ import { Component, NgZone, OnInit } from '@angular/core';
 import { select } from '@angular-redux/store';
 
 import { RunGameContainer } from "./run-game-container";
+import {GAME_PLAY_PACKAGE_NAME} from '../../for-real-cards-lib';
 
 @Component(
   {
@@ -30,7 +31,7 @@ import { RunGameContainer } from "./run-game-container";
 )
 
 export class RunGameTabs extends RunGameContainer implements OnInit {
-  @select() gamePlayReducer;
+  @select(GAME_PLAY_PACKAGE_NAME) gamePlayReducer;
   constructor(private ngZone:NgZone) {
     super(ngZone);
   }

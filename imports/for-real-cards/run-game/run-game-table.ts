@@ -2,15 +2,16 @@ import { Component, Input, OnInit, NgZone, ViewEncapsulation } from '@angular/co
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
 
 import { GameRenderingTools } from "../ui";
-import { Card, Coordinates, Deck, Hand} from "../api/index";
+import { Card, Coordinates, Deck, Hand} from "../../for-real-cards-lib";
 import { RunGame } from './run-game';
-import { CardImageStyle} from "../api/interfaces/card-image-style.interface";
+import { CardImageStyle} from "../../for-real-cards-web/card-image-style.interface";
 
 import template from "./run-game-table.html"
 import {PlatformTools} from "../../common-app/src/ui-ng2/platform-tools/platform-tools";
 import { Tools } from 'common-app';
 import {CommonPopups} from "../../common-app/src/ui-ng2/common-popups/common-popups";
 import {DealModalService} from "../deal-modal/deal-modal.service";
+import {AccountTools} from '../../common-app/src/ui/services/account-tools';
 
 const TABLE_ZONE_CENTER_RADIUS = 20;
 const TABLE_ZONE_OUTER_RADIUS = 30;
@@ -60,7 +61,7 @@ export class RunGameTable extends RunGame implements OnInit {
     let degrees = 360/numberOfPlayers*playerIndex;
     if (this.forPlayerBool()) {
       // Rotate so user is at bottom
-      let currentUserIndex = Hand.indexOfUser(hands);
+      let currentUserIndex = Hand.indexOfUser(hands, AccountTools.userId());
       if (currentUserIndex===-1) {
         // Couldn't find current user in hands.  Not an error because a user may have joined a game while it is in progress
         currentUserIndex=0;

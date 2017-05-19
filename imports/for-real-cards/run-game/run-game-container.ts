@@ -1,6 +1,6 @@
 import { NgZone } from '@angular/core';
 import { Observable } from 'rxjs';
-import {IGamePlayRecord} from "../ui/redux/game-play/game-play.types";
+import {IGamePlayRecord} from "../../for-real-cards-lib";
 
 
 export class RunGameContainer {

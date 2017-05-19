@@ -1,9 +1,15 @@
-import {Card, CardSuit, CardRank} from "../../api/models/card.model";
-import {GameConfig, CardLocation, CardCountAllowed} from "../../api/models/game-config";
-import {VisibilityType} from "../../api/models/action.model";
-import {GamePlayActions} from '../redux';
-import {IGamePlayState} from "../redux/game-play/game-play.types";
-  
+import {
+  Card,
+  CardCountAllowed,
+  CardLocation,
+  CardSuit,
+  CardRank,
+  GamePlayActions,
+  GameConfig,
+  IGamePlayState,
+  VisibilityType
+} from "../../../for-real-cards-lib";
+
 export class DragAndDrop {
   suit:CardSuit;
   rank:CardRank;

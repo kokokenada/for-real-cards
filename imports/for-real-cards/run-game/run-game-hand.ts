@@ -4,8 +4,9 @@ import {DragulaService} from 'ng2-dragula/ng2-dragula';
 
 import {RunGame} from './run-game';
 import {DealModalService} from "../deal-modal/deal-modal.service"
-import {Card, CardImageStyle, GameConfig, CardLocation, CardCountAllowed, Hand} from "../api";
-import {ActionFormatted, GamePlayActions} from "../ui";
+import {Card, GameConfig, GamePlayActions, CardLocation, CardCountAllowed, Hand} from "../../for-real-cards-lib";
+import { CardImageStyle } from '../../for-real-cards-web';
+import {ActionFormatted, } from "../ui";
 
 import template from "./run-game-hand.html"
 import {PlatformTools} from "../../common-app/src/ui-ng2/platform-tools/platform-tools";
