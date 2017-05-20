@@ -3,7 +3,7 @@ import {IGameStartService} from '../for-real-cards-lib';
 
 
 export class GamePlayStartMeteor implements IGameStartService {
-  newGame(password: string): Promise<string | IException> {
+  newGame(password: string): Promise<string> {
     return new Promise( (resolve, reject)=> {
 
       Meteor.call('ForRealCardsNewGame', password, (error, gameId)=> {
@@ -18,7 +18,7 @@ export class GamePlayStartMeteor implements IGameStartService {
     });
   }
 
-  joinGame(gameId: string, password: string): Promise <boolean | IException > {
+  joinGame(gameId: string, password: string): Promise <boolean> {
     return new Promise( (resolve, reject)=> {
       Meteor.call('ForRealCardsJoinGame', gameId, password, (error, result) => {
         if (error) {
@@ -32,7 +32,7 @@ export class GamePlayStartMeteor implements IGameStartService {
     });
   }
 
-  loadGame(gameId: string, password: string): Promise <boolean | IException > {
+  loadGame(gameId: string, password: string): Promise <boolean> {
     return new Promise( (resolve, reject)=> {
       Meteor.call('ForRealCardsViewGameCheck', gameId, password, (error, result) => {
         if (error) {

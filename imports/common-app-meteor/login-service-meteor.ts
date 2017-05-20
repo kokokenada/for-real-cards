@@ -138,7 +138,7 @@ export class LoginServiceMeteor implements ILoginService {
 
     let meteorUser = Meteor.user();
     let lastLoginState = null;
-    ReduxPackageCombiner.getDispatcher()
+    ReduxPackageCombiner
       .select(LOGIN_PACKAGE_NAME)
       .subscribe((loginState: ILoginState) => {
         lastLoginState = loginState;

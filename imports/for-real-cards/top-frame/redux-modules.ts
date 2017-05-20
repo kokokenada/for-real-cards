@@ -19,7 +19,6 @@ import {
 } from 'redux-beacon/targets/google-analytics';
 
 import {NgReduxRouter, UPDATE_LOCATION} from '@angular-redux/router';
-
 import {
   GameStartPackage,
   GameStartActions,
@@ -27,8 +26,6 @@ import {
   GamePlayActionType,
   GamePlayActionInterface,
   IGamePlayActionPayload,
-  GamePlayAsync,
-  GameStartAsync,
   GamePlayActions
 } from "../../for-real-cards-lib";
 import {
@@ -36,7 +33,7 @@ import {
   ConnectActions,
   ConnectPackage,
   FeatureToggleActions,
-  FeatureTogglePackage,
+  FeatureTogglePackage, IConnectService, ILoginService,
   LoginActions,
   LoginPackage
 } from 'common-app';
@@ -48,12 +45,21 @@ import {
   UploaderModule,
   UsersModule
 } from '../../common-app/src/ui';
-import {featureToggleConfigs} from "./feature-toggle.config";
+import {featureToggleConfigs, FEATURE_TOGGLE_USE_FIREBASE} from "./feature-toggle.config";
+
 import {PlatformTools} from "../../common-app/src/ui-ng2/platform-tools/platform-tools";
 import {ConnectServiceMeteor} from '../../common-app-meteor/connect-service-meteor';
 import {LoginServiceMeteor} from '../../common-app-meteor/login-service-meteor';
 import {GamePlayStartMeteor} from '../../for-real-cards-meteor/game-start-service';
 import {GamePlayServiceMeteor} from '../../for-real-cards-meteor/game-play-service';
+
+import { firebaseConfig } from '../../../env';
+
+import * as firebase from 'firebase';
+import {ConnectServiceFirebase} from '../../common-app-firebase/connect-service-firebase';
+import {LoginServiceFirebase} from '../../common-app-firebase/login-service-firebase';
+import {IGameStartService} from '../../for-real-cards-lib/redux-packages/game-start/game-play-service-interface';
+import {GamePlayStartFirebase} from '../../for-real-cards-firebase/game-start-service';
 
 declare const cordova: any;
 
@@ -73,16 +79,29 @@ export class ReduxModules {
       otherMiddlewares: [getAnalyticsMiddleware(), middleware]
     };
 
+    let connectService: IConnectService;
+    let loginService: ILoginService;
+    let startGameService: IGameStartService;
+    let gamePlayServiceMeteor;
 
-    const startGameService = new GamePlayStartMeteor();
+
+    if (featureToggleConfigs[FEATURE_TOGGLE_USE_FIREBASE].setting) {
+      const firebaseApp = firebase.initializeApp(firebaseConfig);
+      connectService = new ConnectServiceFirebase(firebaseApp);
+      loginService = new LoginServiceFirebase(firebaseApp);
+      startGameService = new GamePlayStartFirebase(firebaseApp);
+
+    } else {
+      connectService = new ConnectServiceMeteor();
+      loginService = new LoginServiceMeteor();
+      startGameService = new GamePlayStartMeteor();
+      gamePlayServiceMeteor = new GamePlayServiceMeteor();
+    }
     const gameStartPackage = new GameStartPackage(startGameService);
 
-    const gamePlayServiceMeteor = new GamePlayServiceMeteor();
     const gamePlayPackage = new GamePlayPackage(gamePlayServiceMeteor);
 
-    const connectService = new ConnectServiceMeteor();
     const connectModule = new ConnectPackage(connectService);
-    const loginService = new LoginServiceMeteor();
     const loginModule = new LoginPackage(loginService);
     const featureTogglePackage = new FeatureTogglePackage();
 

@@ -1,5 +1,6 @@
 import { IFeatureToggleConfigSet } from 'common-app';
 
+export const FEATURE_TOGGLE_USE_FIREBASE = 'firebase';
 
 // Beware that the initial settings might be overridden by redux state persistence
 export const featureToggleConfigs: IFeatureToggleConfigSet = {
@@ -25,5 +26,8 @@ export const featureToggleConfigs: IFeatureToggleConfigSet = {
   'analytics-logger': {
     setting: false,
     description: 'Analytics events to console'
+  },
+  [FEATURE_TOGGLE_USE_FIREBASE]: {
+    setting: true,
   }
 };
