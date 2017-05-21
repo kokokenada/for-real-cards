@@ -2,180 +2,148 @@ import App = firebase.app.App;
 
 import {Observable} from 'rxjs/Observable';
 
-import {GamePlayAction, GamePlayActions, HandInterface, IGamePlayActionPayload, IGamePlayService } from '../for-real-cards-lib';
+import {
+  GamePlayAction,
+  GamePlayActions,
+  HandInterface,
+  IGamePlayService
+} from '../for-real-cards-lib';
 
-import {GAME_SUBSCRIPTION_NAME, GameSubscriptionOptions } from './game.publications';
-import {EDocumentChangeType, IDocumentChange} from 'common-app';
-import {BatchAndWatch, MeteorCursorObservers} from '../common-app-meteor';
-import {GamePlayActionCollection} from './action.model';
-import {HandCollection} from './hand.model';
+import {GAME_SUBSCRIPTION_NAME, GameSubscriptionOptions} from './game.publications';
+import {BatchAndWatch, batchAndWatch, EDocumentChangeType, IDocumentChange, LoginPackage} from 'common-app';
+import {fromFireBaseOn} from '../common-app-firebase';
+import {TopLevelNames} from './top-level-names';
+import {Card, GameConfig} from '../for-real-cards-lib';
+import {CardEncoder} from '../for-real-cards-lib/redux-packages/game-play/card-encoder';
+import {GamePlayStartFirebase} from './game-start-service';
+import {GamePlayActionInterface} from '../for-real-cards-lib/redux-packages/game-play/action.class';
+import {undefinedPropsToNull} from '../common-app-firebase/conditionObjectForFirebase';
 
 export class GamePlayServiceFirebase implements IGamePlayService {
+  db: firebase.database.Database;
+
   constructor(private firebase: App) {
+    this.db = firebase.database();
   }
 
-  actionPush(action: IGamePlayActionPayload): Promise<boolean> {
+
+  private  checkUser(gameId: string, userId: string): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      GamePlayStartFirebase.getHandsRef(this.db, gameId).then(
+        ([snapshotHands, handRef]) => {
+          if (GamePlayStartFirebase.doesUserExist(snapshotHands, userId))
+            resolve(true);
+          else
+            reject('gameId "' + gameId + '" was not found for current user ' + userId + "'")
+        }
+      )
+    });
+  }
+
+  private _addAction(action: GamePlayAction): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const actionRef = this.db.ref(TopLevelNames.ACTION + '/' + action.gameId);
+      const newActionRef = actionRef.push();
+      this.checkUser(action.gameId, action.creatorId);
+      action.cardsEncoded = CardEncoder.encodeCards(action.cards);
+      if (action.gameConfig) {
+        action.gameConfig._deck_id = action.gameConfig.deck.id;
+      }
+      action.creatorId = LoginPackage.lastLoginState.userId;
+
+      let actionSave: any = undefinedPropsToNull(action);
+      actionSave.dateCreated = (new Date()).getTime();
+
+      newActionRef.set(actionSave)
+        .then(() => {
+          resolve(newActionRef.key)
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+
+  actionPush(action: GamePlayActionInterface): Promise<boolean> {
     console.log('actionPush')
     console.log(action)
     return new Promise((resolve, reject) => {
-
-      Meteor.call('fastcards.NewAction', action, (error)=> {
-        if (error) {
-          console.error(error);
-          reject(error);
-        } else {
+      this._addAction(action)
+        .then(() => {
           resolve(true)
-        }
-      });
-
-    });
-  }
-
-  actionArrayPush(actions: IGamePlayActionPayload[]): Promise<boolean> {
-    console.log('actionArrayPush')
-    console.log(actions)
-    return new Promise((resolve, reject) => {
-      Meteor.call('fastcards.NewActions', actions, (error)=> {
-        if (error) {
-          console.error(error);
-          reject(error);
-        } else {
-          resolve(true);
-        }
-      });
-
-    });
-  }
-
-  watchGamePlayActionsAndHand(gameId: string): void {
-    Tracker.autorun(()=> {
-      console.log('watchGamePlayActionsAndHand')
-      console.log(gameId)
-      let subscriptionHandle = runSubscription(gameId);
-
-      let isReady = subscriptionHandle.ready();
-      if (!isReady) {
-        console.log('not ready')
-      } else {
-        let knownHands: HandInterface[] = [];
-        let buffer: GamePlayAction[] = [];
-        let handsCursor: Mongo.Cursor<any> = HandCollection.find({gameId: gameId}, {sort: {dateCreated: 1}});
-        let hands$: Observable<IDocumentChange<HandInterface>> = MeteorCursorObservers.fromMeteorCursor<HandInterface>(handsCursor);
-        hands$.subscribe(
-          (handChange: IDocumentChange<HandInterface>) => {
-            switch (handChange.changeType) {
-              case EDocumentChangeType.NEW: {
-                 console.log('Hand Collection change. gameId=' + gameId)
-                GamePlayActions.newHand(gameId, handChange.newDocument);
-                knownHands.push(handChange.newDocument);
-                console.log(knownHands);
-                console.log(buffer);
-                if (isBufferReady(knownHands, buffer)) {
-                  GamePlayActions.receiveActions(buffer);
-                  buffer = [];
-                }
-                subscriptionHandle = runSubscription(gameId); // Rerun subscription so users gets refreshed (reactive join issue)
-                break;
-              }
-              default: // TODO: handle user leaving
-//              console.log('handChange - not sure if it matters');
-//              console.log(handChange);
-            }
-          }
-        );
-      console.log('execute action query. gameId:' + gameId);
-        let actionCursor: Mongo.Cursor<any> = GamePlayActionCollection.find({gameId: gameId}, {sort: {dateCreated: 1}});
-
-        let gameActions$: Observable<IDocumentChange<GamePlayAction>> = MeteorCursorObservers.fromMeteorCursor<GamePlayAction>(actionCursor);
-        let batchAndWatch: BatchAndWatch<IDocumentChange<GamePlayAction>> = MeteorCursorObservers.batchAndWatch(gameActions$);
-        batchAndWatch.batchObservable.subscribe((gamePlayActionChanges: IDocumentChange<GamePlayAction>[]) => {
-          gamePlayActionChanges.forEach((gamePlayActionChange: IDocumentChange<GamePlayAction>) => {
-            console.log('batchAndWACTH 1 ')
-            console.log(gamePlayActionChange)
-            switch (gamePlayActionChange.changeType) {
-              case EDocumentChangeType.NEW: {
-                buffer.push(gamePlayActionChange.newDocument);
-                break;
-              }
-              default:
-                GamePlayActions.error('only expecting new game state records')
-            }
-
-          });
-          if (isBufferReady(knownHands, buffer)) {
-            console.log('batchAndWatch 3 ')
-            console.log(knownHands)
-            console.log(buffer)
-            GamePlayActions.receiveActions(buffer);
-            buffer = [];
-          }
+        })
+        .catch((error) => {
+          reject(error)
         });
-        batchAndWatch.watchedObservable.subscribe(
-          (gamePlayActionChange: IDocumentChange<GamePlayAction>) => {
-            console.log('batchAndWACTH 2')
-            console.log(gamePlayActionChange)
-            switch (gamePlayActionChange.changeType) {
-              case EDocumentChangeType.NEW: {
-                let action: GamePlayAction = gamePlayActionChange.newDocument;
+    });
+  }
 
-                // If the hand is not read yet, defer.  There is probably a more streamy way (Observable.bufferWhen???)
-                if (isHandReady(knownHands, action)) {
-                  GamePlayActions.receiveAction(action);
-                } else {
-                  buffer.push(action);
-                }
-                break;
-              }
-              default:
-                GamePlayActions.error('only expecting new game state records')
-            }
+  actionArrayPush(actions: GamePlayActionInterface[]): Promise<boolean> {
+    console.log('actionArrayPush');
+    console.log(actions);
+    return new Promise((resolve, reject) => {
+
+      let action: GamePlayAction = actions[0];
+      this._addAction(action)
+        .then((groupId) => {
+          let error = false;
+          for (let i = 1; i < actions.length; i++) {
+            action = actions[i];
+            action.relatedActionId = groupId;
+            this._addAction(action)
+              .then()
+              .catch((error) => {
+                error = true;
+                reject(error);
+              });
+            if (error)
+              break;
           }
-        );
-      }
+          if (!error) {
+            resolve(true);
+          }
+        })
+        .catch((error) => {
+          reject(error)
+        });
+
     })
   }
 
-}
+  watchHands(gameId: string): Promise<Observable<IDocumentChange<HandInterface>>> {
+    return new Promise((resolve, reject) => {
+      GamePlayStartFirebase.getHandsRef(this.db, gameId)
+        .then(([snapshotHands, handRef]) => {
+          resolve(fromFireBaseOn(handRef))
+        })
+        .catch((error) => {
+          reject(error)
+        })
 
-/**
- * Check to see if action is ready, where ready means the hands it references are present
- * @param hands
- * @param action
- * @returns {boolean}
- */
-function isHandReady(hands:HandInterface[], action:GamePlayAction):boolean {
-  if (action.toPlayerId && hands.findIndex( hand => hand.userId===action.toPlayerId ) === -1)
-    return false;
-  if (action.fromPlayerId && hands.findIndex( hand => hand.userId===action.fromPlayerId ) === -1 )
-    return false;
-  return true;
-}
-
-function isBufferReady(knownHands:HandInterface[], buffer:GamePlayAction[]):boolean {
-  let wholeBufferReady = true;
-  for (let i = 0; i<buffer.length; i++) { // Flush the whole buffer only, to avoid order of processing glitches
-    let bufferedAction = buffer[i];
-    if (!isHandReady(knownHands, bufferedAction)) {
-      wholeBufferReady = false;
-      break;
-    }
+    });
   }
-  return wholeBufferReady;
-}
 
-function runSubscription(gameId:string) {
-  let options: GameSubscriptionOptions = {gameId: gameId};
-  return Meteor.subscribe(GAME_SUBSCRIPTION_NAME, options, {
-    onStop: (error) => {
-      if (error) {
-        log.error("Error returned from Meteor.subscribe");
-        log.error(error);
-        GamePlayActions.error(error);
-      }
-    },
-    onReady: ()=> {
+  watchGameActions(gameId: string): Promise<Observable<IDocumentChange<HandInterface>>> {
+    return new Promise((resolve, reject) => {
+      resolve(fromFireBaseOn(this.db.ref(TopLevelNames.ACTION + '/' + gameId)));
+    });
+  }
 
-    }
-  });
+/*  watchGameActions(gameId: string): Promise<Observable<IDocumentChange<GamePlayAction>>> {
+    return new Promise((resolve, reject) => {
+      GamePlayStartFirebase.getHandsRef(this.db, gameId)
+        .then(([snapshotHands, handRef]) => {
+          resolve(fromFireBaseOn(handRef))
+        })
+        .catch((error) => {
+          reject(error)
+        });
+
+    });
+  }
+*/
+
+  startSubscriptions(gameId) { // Not needed
+  }
 }
 

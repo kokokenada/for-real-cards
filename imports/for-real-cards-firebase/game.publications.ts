@@ -2,8 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import * as log from 'loglevel';
 
 import { Hand } from '../for-real-cards-lib';
-declare let HandCollection ;
-import { GamePlayActionCollection } from "./action.model";
+declare let HandCollection, GamePlayActionCollection ;
 import {AccountsAdminTools} from "../common-app-meteor";
 
 export interface GameSubscriptionOptions {

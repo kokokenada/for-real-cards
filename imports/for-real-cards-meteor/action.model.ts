@@ -4,9 +4,10 @@ import { Meteor } from 'meteor/meteor';
 
 import { HandCollection } from './hand.model';
 import { Card, IGamePlayState, GameConfig, GamePlayAction } from '../for-real-cards-lib'
+import {CardEncoder} from '../for-real-cards-lib/redux-packages/game-play/card-encoder';
 
 
-export let GamePlayActionCollection = new Mongo.Collection("actions", {transform: decode});
+export let GamePlayActionCollection = new Mongo.Collection("actions");
 
 let UserCommmandSchema = new SimpleSchema({
   from: {
@@ -151,35 +152,6 @@ GamePlayActionCollection.allow({
   }
 });
 
-function encodeCards(cards:Card[]):string {
-  let returnValue:string = '';
-  cards.forEach((card:Card)=>{
-    if (!card) {
-      console.error(cards);
-      console.trace();
-      throw new Meteor.Error('internal-error', 'Card in action is empty');
-    }
-    returnValue += new Card({rank: card.rank, suit: card.suit}).encode();
-  });
-  return returnValue;
-}
-
-function decode(action:GamePlayAction):GamePlayAction {
-  action.cards = [];
-  let cardsEncoded:string = action.cardsEncoded;
-  if (cardsEncoded) {
-    for (let i = 0; i < cardsEncoded.length; i = i + 2) {
-      let cardCode = cardsEncoded.substr(i, 2);
-      let card:Card = new Card({code: cardCode});
-      action.cards.push(card);
-    }
-  }
-  if (action.gameConfig) {
-    action.gameConfig = new GameConfig(action.gameConfig);
-  }
-  return action;
-}
-
 function checkUser(gameId:string, userId:string) {
   let hand = HandCollection.findOne({gameId: gameId, userId: userId});
   if (!hand) {
@@ -193,7 +165,7 @@ function addAction(action:GamePlayAction, userId:string):string {
   if (action.creatorId !== userId)
     throw new Meteor.Error('invalid-user', 'current userId does not match user ID of passed object');
   checkUser(action.gameId, action.creatorId);
-  action.cardsEncoded = encodeCards(action.cards);
+  action.cardsEncoded = CardEncoder.encodeCards(action.cards);
   if (action.gameConfig) {
     action.gameConfig._deck_id = action.gameConfig.deck.id;
   } else {

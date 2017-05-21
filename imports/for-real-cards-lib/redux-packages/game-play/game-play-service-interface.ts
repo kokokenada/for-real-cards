@@ -1,7 +1,12 @@
-import {IGamePlayActionPayload} from './game-play-payload-interface';
+import {GamePlayActionInterface} from './action.class';
+import {HandInterface} from './hand.class';
+import {IDocumentChange} from 'common-app';
+import {Observable} from 'rxjs/Observable';
 
 export interface IGamePlayService {
-  actionPush(action: IGamePlayActionPayload): Promise<boolean>;
-  actionArrayPush(actions: IGamePlayActionPayload[]): Promise<boolean>;
-  watchGamePlayActionsAndHand(gameId: string): void;
+  actionPush(action: GamePlayActionInterface): Promise<boolean>;
+  actionArrayPush(actions: GamePlayActionInterface[]): Promise<boolean>;
+  watchHands(gameId: string): Promise<Observable<IDocumentChange<HandInterface>>>;
+  watchGameActions(gameId: string): Promise<Observable<IDocumentChange<HandInterface>>>;
+  startSubscriptions(gameId);
 }

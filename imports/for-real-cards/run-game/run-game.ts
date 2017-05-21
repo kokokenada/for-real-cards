@@ -61,8 +61,6 @@ export abstract class RunGame {
     } );
     this.forRealCardsReducer$.subscribe( (forRealCardsState:IGameStartState)=>{
       this.ngZone.run(()=>{
-        console.log('run can state subscrpiption')
-        console.log(forRealCardsState)
         forRealCardsState = forRealCardsState || INITIAL_STATE_GAME_START;
         this.forRealCardsState = forRealCardsState;
         if (forRealCardsState.gameId===null && !(forRealCardsState.loading) ) { // Check to make sure loading request not already issued

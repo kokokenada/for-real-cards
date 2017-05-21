@@ -60,6 +60,7 @@ import {ConnectServiceFirebase} from '../../common-app-firebase/connect-service-
 import {LoginServiceFirebase} from '../../common-app-firebase/login-service-firebase';
 import {IGameStartService} from '../../for-real-cards-lib/redux-packages/game-start/game-play-service-interface';
 import {GamePlayStartFirebase} from '../../for-real-cards-firebase/game-start-service';
+import {GamePlayServiceFirebase} from '../../for-real-cards-firebase/game-play-service';
 
 declare const cordova: any;
 
@@ -90,6 +91,7 @@ export class ReduxModules {
       connectService = new ConnectServiceFirebase(firebaseApp);
       loginService = new LoginServiceFirebase(firebaseApp);
       startGameService = new GamePlayStartFirebase(firebaseApp);
+      gamePlayServiceMeteor = new GamePlayServiceFirebase(firebaseApp);
 
     } else {
       connectService = new ConnectServiceMeteor();
