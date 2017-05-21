@@ -1,8 +1,8 @@
 ///<reference path='../../../../../../node_modules/immutable/dist/immutable.d.ts'/>
 import Immutable = require('immutable');
 import { IPayloadAction } from 'redux-package';
-import { UsersActions } from './users-actions.class';
-import {IUsersActionPayload, IUsersState  } from './users.types'
+import { UsersActions } from './users-actions';
+import {IUsersActionPayload, IUsersState  } from './users-types'
 import { IUser, IDocumentChange, EDocumentChangeType, ReduxModuleUtil} from 'common-app';
 
 const INITIAL_STATE:IUsersState = {

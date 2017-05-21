@@ -4,3 +4,4 @@ export * from './login-service-meteor';
 export * from './meteor-cursor-observers';
 export * from './page-tools';
 export * from './user.model';
+export * from './users.service';

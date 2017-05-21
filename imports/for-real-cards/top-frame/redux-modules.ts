@@ -43,7 +43,7 @@ import {
   ModalModule,
   UploaderActions,
   UploaderModule,
-  UsersModule
+  UsersPackage
 } from '../../common-app/src/ui';
 import {featureToggleConfigs, FEATURE_TOGGLE_USE_FIREBASE} from "./feature-toggle.config";
 
@@ -61,6 +61,10 @@ import {LoginServiceFirebase} from '../../common-app-firebase/login-service-fire
 import {IGameStartService} from '../../for-real-cards-lib/redux-packages/game-start/game-play-service-interface';
 import {GamePlayStartFirebase} from '../../for-real-cards-firebase/game-start-service';
 import {GamePlayServiceFirebase} from '../../for-real-cards-firebase/game-play-service';
+import {IGamePlayService} from '../../for-real-cards-lib/redux-packages/game-play/game-play-service-interface';
+import {IUsersService} from '../../common-app/src/ui/redux/users/users-service-interface';
+import {UsersServiceFirebase} from '../../common-app-firebase/users.service';
+import {UsersServiceMeteor} from '../../common-app-meteor/users.service';
 
 declare const cordova: any;
 
@@ -70,7 +74,6 @@ export class ReduxModules {
     private ngReduxRouter: NgReduxRouter,
     private accountsAdminModule: AccountsAdminModule,
     private uploaderModule: UploaderModule,
-    private usersModule: UsersModule,
     private ngRedux: NgRedux<IAppState>
   ) {}
   configure(middleware) {
@@ -82,27 +85,27 @@ export class ReduxModules {
 
     let connectService: IConnectService;
     let loginService: ILoginService;
+    let usersService: IUsersService;
     let startGameService: IGameStartService;
-    let gamePlayServiceMeteor;
-
+    let gamePlayServiceMeteor: IGamePlayService;
 
     if (featureToggleConfigs[FEATURE_TOGGLE_USE_FIREBASE].setting) {
       const firebaseApp = firebase.initializeApp(firebaseConfig);
       connectService = new ConnectServiceFirebase(firebaseApp);
       loginService = new LoginServiceFirebase(firebaseApp);
+      usersService = new UsersServiceFirebase(firebaseApp);
       startGameService = new GamePlayStartFirebase(firebaseApp);
       gamePlayServiceMeteor = new GamePlayServiceFirebase(firebaseApp);
 
     } else {
       connectService = new ConnectServiceMeteor();
       loginService = new LoginServiceMeteor();
+      usersService = new UsersServiceMeteor();
       startGameService = new GamePlayStartMeteor();
       gamePlayServiceMeteor = new GamePlayServiceMeteor();
     }
     const gameStartPackage = new GameStartPackage(startGameService);
-
     const gamePlayPackage = new GamePlayPackage(gamePlayServiceMeteor);
-
     const connectModule = new ConnectPackage(connectService);
     const loginModule = new LoginPackage(loginService);
     const featureTogglePackage = new FeatureTogglePackage();
@@ -116,7 +119,7 @@ export class ReduxModules {
       gameStartPackage,
       gamePlayPackage,
       this.uploaderModule,
-      this.usersModule],
+      new UsersPackage(usersService)],
       this.ngRedux,
       options
     );

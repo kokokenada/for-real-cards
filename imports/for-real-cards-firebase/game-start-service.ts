@@ -49,6 +49,8 @@ export class GamePlayStartFirebase implements IGameStartService {
   }
 
   joinGame(gameId: string, password: string): Promise<boolean> {
+    console.log('join game')
+    console.log(LoginPackage.lastLoginState.userId)
     return this._joinGame(gameId, LoginPackage.lastLoginState.userId, password, false);
   }
 

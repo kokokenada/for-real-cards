@@ -123,7 +123,7 @@ export class ForRealCardsTopFrame extends TopFrame implements OnInit {
     menu.addSubMenuItem('topbar', {
       id: 'admin.game-debug',
       title: 'Debug Actions',
-      roles: ['admin'],
+//      roles: ['admin'],
       callback: ()=> {
         this.router.navigate(['/game-action-list']);
       }

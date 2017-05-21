@@ -5,7 +5,8 @@ import { select } from '@angular-redux/store';
 import { IUser, LoginFunctions } from 'common-app';
 import { Card, Hand } from  '../../for-real-cards-lib';
 import { GameRenderingTools } from  '../ui';
-import {IUsersState} from "../../common-app/src/ui/redux/users/users.types";
+import {IUsersState} from "../../common-app/src/ui/redux/users/users-types";
+import {USERS_PACKAGE_NAME} from '../../common-app/src/ui/redux/users/users-package';
 
 @Component(
   {
@@ -78,7 +79,7 @@ import {IUsersState} from "../../common-app/src/ui/redux/users/users.types";
 )
 export class Player {
   @Input() hand:Hand;
-  @select() usersReducer;
+  @select(USERS_PACKAGE_NAME) usersReducer;
   disposable:Subscription;  
   private _displayName:string;
 

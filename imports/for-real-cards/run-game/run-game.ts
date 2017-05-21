@@ -1,4 +1,3 @@
-import { Meteor } from 'meteor/meteor';
 import { NgZone } from '@angular/core';
 import { select } from '@angular-redux/store';
 
@@ -31,6 +30,7 @@ import {DealModalService} from "../deal-modal/deal-modal.service";
 import {CommonPopups} from "../../common-app/src/ui-ng2/common-popups/common-popups";
 import {} from '../ui/redux/game-play/game-play.functions';
 import {GAME_START_PACKAGE_NAME, GAME_PLAY_PACKAGE_NAME} from '../../for-real-cards-lib';
+import {LoginPackage} from 'common-app';
 
 declare const window: any;
 
@@ -144,20 +144,20 @@ export abstract class RunGame {
     return Deck.getDecks();
   }
 
-  getCardsInHand(userId:string = Meteor.userId()):Card[] {
-    let hand:Hand = this.getHand(userId);
+  getCardsInHand():Card[] {
+    let hand:Hand = this.getHand( LoginPackage.lastLoginState.userId );
     if (hand)
       return hand.cardsInHand;
   }
 
-  getHand(userId:string = Meteor.userId()):Hand {
+  getHand(userId:string):Hand {
     if (this.gameState) {
       let hand:Hand = GamePlayActions.getHandFromUserId(this.gameState.hands, userId);
       return hand;
     }
   }
 
-  getCardsInHandFaceUp(userId:string = Meteor.userId()):Card[] {
+  getCardsInHandFaceUp(userId:string):Card[] {
     if (this.gameState) {
       let hand:Hand = GamePlayActions.getHandFromUserId(this.gameState.hands, userId);
       if (hand)
@@ -175,7 +175,7 @@ export abstract class RunGame {
       return this.gameState.tablePile.toArray();
   }
 
-  getCardsFaceUp(userId:string = Meteor.userId()):Card[] {
+  getCardsFaceUp(userId:string):Card[] {
     if (this.gameState) {
       let hand:Hand = GamePlayActions.getHandFromUserId(this.gameState.hands, userId);
       if (hand)

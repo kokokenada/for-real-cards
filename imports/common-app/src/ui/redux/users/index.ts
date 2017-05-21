@@ -1,5 +1,5 @@
-export * from './users.types';
-export * from './users.module';
-export * from './users-async.class';
-export * from './users-actions.class';
+export * from './users-types';
+export * from './users-package';
+export * from './users-async';
+export * from './users-actions';
 
