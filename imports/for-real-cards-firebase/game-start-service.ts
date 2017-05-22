@@ -137,37 +137,6 @@ export class GamePlayStartFirebase implements IGameStartService {
     });
   }
 
-  static getHandsRefOLD(db: firebase.database.Database, gameId: string): Promise<[firebase.database.DataSnapshot, firebase.database.Reference]> {
-    return new Promise((resolve, reject) => {
-      GamePlayStartFirebase.gameKeyFromId(db, gameId)
-        .then((key: string) => {
-          db.ref(TopLevelNames.GAME + '/' + key).once('value')
-            .then((snapshotGame: firebase.database.DataSnapshot) => {
-              if (snapshotGame.numChildren() === 0) { // integrity check
-                reject('game id ' + gameId + ' key ' + key + ' not found')
-              } else {
-                let handRef = db.ref(TopLevelNames.HAND + '/' + gameId + '/');
-                handRef.once('value')
-                  .then((snapshotHands) => {
-                      resolve([snapshotHands, handRef]);
-                    }
-                  )
-                  .catch((error) => {
-                    reject(error);
-                  });
-              }
-            })
-            .catch((error) => {
-              reject(error);
-            })
-        })
-        .catch((error) => {
-          reject(error)
-        });
-
-    });
-  }
-
   static doesUserExist(snapshotHands: firebase.database.DataSnapshot, userId: string): boolean {
     let exists = false;
     snapshotHands.forEach((hand: any) => { // See if joining user already has a hand
