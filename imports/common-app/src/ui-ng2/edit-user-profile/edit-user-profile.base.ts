@@ -3,7 +3,6 @@ import { NgZone } from '@angular/core';
 
 
 import { IUser, LoginActions, ILoginState,  } from 'common-app';
-import { AvatarOriginalStore } from '../../../../common-app-meteor/avatar.model';
 import {PlatformTools} from "../platform-tools/platform-tools";
 import { UploaderActions } from "../../ui";
 import {IUploaderState} from "../../ui/redux/uploader/uploader-types";
@@ -62,7 +61,7 @@ export abstract class EditUserProfileBase {
     }
     this._preventAndStop(event);
     let file = event.dataTransfer.files[0];
-    UploaderActions.uploadStartRequest(file, AvatarOriginalStore)
+    UploaderActions.uploadStartRequest(file, 'avatar');
     this.hasBaseDropZoneOver = event;
   }
 
@@ -80,7 +79,7 @@ export abstract class EditUserProfileBase {
     console.log(e)
     console.log(e.srcElement.files[0]);
     let file = e.srcElement.files[0];
-    UploaderActions.uploadStartRequest(file, AvatarOriginalStore)
+    UploaderActions.uploadStartRequest(file, 'avatar')
   }
 
   avatarUrl():string {
@@ -96,7 +95,7 @@ export abstract class EditUserProfileBase {
   }
 
   getImageFromCamera():void {
-    UploaderActions.uploadCameraPicRequest(AvatarOriginalStore);
+    UploaderActions.uploadCameraPicRequest('avatar');
   }
 
 }

@@ -67,6 +67,8 @@ import {UsersServiceFirebase} from '../../common-app-firebase/users.service';
 import {UsersServiceMeteor} from '../../common-app-meteor/users.service';
 import {IUploaderService} from '../../common-app/src/ui/redux/uploader/uploader-service-interface';
 import {UploaderServiceMeteor} from '../../common-app-meteor/uploader-service';
+import {uploaderCollections} from '../../common-app/src/ui/redux/uploader/collections';
+import {AvatarOriginalStore} from '../../common-app-meteor/avatar.model';
 
 declare const cordova: any;
 
@@ -98,14 +100,18 @@ export class ReduxModules {
       usersService = new UsersServiceFirebase(firebaseApp);
       startGameService = new GamePlayStartFirebase(firebaseApp);
       gamePlayServiceMeteor = new GamePlayServiceFirebase(firebaseApp);
+      uploaderService = new UploaderServiceMeteor();
 
+      uploaderCollections['avatar'] = {name: 'avatar', reference: 'avatar'};
     } else {
       connectService = new ConnectServiceMeteor();
       loginService = new LoginServiceMeteor();
       usersService = new UsersServiceMeteor();
       startGameService = new GamePlayStartMeteor();
       gamePlayServiceMeteor = new GamePlayServiceMeteor();
-      uploaderService = new UploaderServiceMeteor()
+      uploaderService = new UploaderServiceMeteor();
+
+      uploaderCollections['avatar'] = {name: 'avatar', reference: AvatarOriginalStore};
     }
     const gameStartPackage = new GameStartPackage(startGameService);
     const gamePlayPackage = new GamePlayPackage(gamePlayServiceMeteor);

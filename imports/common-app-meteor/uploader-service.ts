@@ -8,6 +8,7 @@ declare let window: any; // Make TypeScript compiler stop complaining
 import * as log from 'loglevel';
 import {UploaderActions} from "../common-app/src/ui/redux/uploader/uploader-actions";
 import {IUploaderService} from '../common-app/src/ui/redux/uploader/uploader-service-interface';
+import {uploaderCollections} from '../common-app/src/ui/redux/uploader/collections';
 
 export interface UploadFileInfo {
   _id: string;
@@ -86,13 +87,13 @@ export class UploaderServiceMeteor implements IUploaderService {
     return uploader;
   }
 
-  uploadFile(currentFile, collection): void {
-    let uploader = UploaderServiceMeteor.makeUploader(currentFile, collection);
+  uploadFile(currentFile, collectionName:string): void {
+    let uploader = UploaderServiceMeteor.makeUploader(currentFile, uploaderCollections[collectionName].reference);
     UploaderActions.uploadStartResponse(uploader);
     uploader.start();
   }
 
-  uploadImageFromCamera(collection, options = {
+  uploadImageFromCamera(collectionName: string, options = {
     quality: 50,
     destinationType: Camera.DestinationType.FILE_URI,
     sourceType: Camera.PictureSourceType.CAMERA,
@@ -122,7 +123,7 @@ export class UploaderServiceMeteor implements IUploaderService {
         const uploader = new UploadFS.Uploader(UploaderServiceMeteor.addToCommonUploaderOptions({
           data: blob,
           file: file,
-          store: collection
+          store: uploaderCollections[collectionName].reference
         }));
 
         uploader.start();
