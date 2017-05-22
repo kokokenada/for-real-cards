@@ -3,7 +3,7 @@ import { NgZone } from '@angular/core';
 
 
 import { IUser, LoginActions, ILoginState,  } from 'common-app';
-import { AvatarOriginalStore } from '../../../../common-app-api/src/api/models/avatar.model';
+import { AvatarOriginalStore } from '../../../../common-app-meteor/avatar.model';
 import {PlatformTools} from "../platform-tools/platform-tools";
 import { UploaderActions } from "../../ui";
 import {IUploaderState} from "../../ui/redux/uploader/uploader-types";
