@@ -4,20 +4,17 @@ import {Observable} from 'rxjs/Observable';
 
 import {
   GamePlayAction,
-  GamePlayActions,
   HandInterface,
   IGamePlayService
 } from '../for-real-cards-lib';
 
-import {GAME_SUBSCRIPTION_NAME, GameSubscriptionOptions} from './game.publications';
-import {BatchAndWatch, batchAndWatch, EDocumentChangeType, IDocumentChange, LoginPackage} from 'common-app';
+import {IDocumentChange, LoginPackage} from 'common-app';
 import {fromFireBaseOn} from '../common-app-firebase';
 import {TopLevelNames} from './top-level-names';
-import {Card, GameConfig} from '../for-real-cards-lib';
 import {CardEncoder} from '../for-real-cards-lib/redux-packages/game-play/card-encoder';
 import {GamePlayStartFirebase} from './game-start-service';
 import {GamePlayActionInterface} from '../for-real-cards-lib/redux-packages/game-play/action.class';
-import {undefinedPropsToNull} from '../common-app-firebase/conditionObjectForFirebase';
+import {conditionObjectForFirebase} from '../common-app-firebase/conditionObjectForFirebase';
 
 export class GamePlayServiceFirebase implements IGamePlayService {
   db: firebase.database.Database;
@@ -29,8 +26,8 @@ export class GamePlayServiceFirebase implements IGamePlayService {
 
   private  checkUser(gameId: string, userId: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      GamePlayStartFirebase.getHandsRef(this.db, gameId).then(
-        ([snapshotHands, handRef]) => {
+      GamePlayStartFirebase.getHandsSnaphot(this.db, gameId).then(
+        (snapshotHands) => {
           if (GamePlayStartFirebase.doesUserExist(snapshotHands, userId))
             resolve(true);
           else
@@ -46,14 +43,16 @@ export class GamePlayServiceFirebase implements IGamePlayService {
       const newActionRef = actionRef.push();
       this.checkUser(action.gameId, action.creatorId);
       action.cardsEncoded = CardEncoder.encodeCards(action.cards);
+
       if (action.gameConfig) {
         action.gameConfig._deck_id = action.gameConfig.deck.id;
       }
       action.creatorId = LoginPackage.lastLoginState.userId;
-
-      let actionSave: any = undefinedPropsToNull(action);
+      action._id = newActionRef.key; // Makes it like Mongo & some parts of app read _id
+      let actionSave: any = conditionObjectForFirebase(action);
       actionSave.dateCreated = (new Date()).getTime();
-
+console.log('_addAction')
+      console.log(actionSave)
       newActionRef.set(actionSave)
         .then(() => {
           resolve(newActionRef.key)
@@ -112,36 +111,32 @@ export class GamePlayServiceFirebase implements IGamePlayService {
 
   watchHands(gameId: string): Promise<Observable<IDocumentChange<HandInterface>>> {
     return new Promise((resolve, reject) => {
-      GamePlayStartFirebase.getHandsRef(this.db, gameId)
-        .then(([snapshotHands, handRef]) => {
-          resolve(fromFireBaseOn(handRef))
-        })
-        .catch((error) => {
-          reject(error)
-        })
-
+      resolve(fromFireBaseOn(GamePlayStartFirebase.getHandsRef(this.db, gameId)))
     });
   }
 
   watchGameActions(gameId: string): Promise<Observable<IDocumentChange<HandInterface>>> {
     return new Promise((resolve, reject) => {
-      resolve(fromFireBaseOn(this.db.ref(TopLevelNames.ACTION + '/' + gameId)));
+      resolve(fromFireBaseOn(
+        this.db.ref(TopLevelNames.ACTION + '/' + gameId + '/')
+        )
+      );
     });
   }
 
-/*  watchGameActions(gameId: string): Promise<Observable<IDocumentChange<GamePlayAction>>> {
-    return new Promise((resolve, reject) => {
-      GamePlayStartFirebase.getHandsRef(this.db, gameId)
-        .then(([snapshotHands, handRef]) => {
-          resolve(fromFireBaseOn(handRef))
-        })
-        .catch((error) => {
-          reject(error)
-        });
+  /*  watchGameActions(gameId: string): Promise<Observable<IDocumentChange<GamePlayAction>>> {
+   return new Promise((resolve, reject) => {
+   GamePlayStartFirebase.getHandsRef(this.db, gameId)
+   .then(([snapshotHands, handRef]) => {
+   resolve(fromFireBaseOn(handRef))
+   })
+   .catch((error) => {
+   reject(error)
+   });
 
-    });
-  }
-*/
+   });
+   }
+   */
 
   startSubscriptions(gameId) { // Not needed
   }

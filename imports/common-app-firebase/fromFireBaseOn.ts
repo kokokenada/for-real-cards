@@ -5,22 +5,24 @@ import {Subscriber} from 'rxjs/Subscriber';
 
 export function fromFireBaseOn<T>(ref: firebase.database.Reference): Observable<IDocumentChange<T>> {
   return Observable.create((observer: Subscriber<IDocumentChange<T>>) => {
-    ref.on('value', (snapshot) => {
+/*    ref.orderByKey().on('value', (snapshot) => {
       let doc = snapshot.val();
       console.log('value')
       console.log(doc)
     });
-    ref.on('child_added', (snapshot: any) => {
+    */
+    ref.orderByKey().on('child_added', (snapshot: any, previous) => {
       let doc = snapshot.val();
       console.log('child_added')
       console.log(doc)
+      console.log(previous)
       observer.next({
         changeType: EDocumentChangeType.NEW,
         newDocument: doc
       });
 
     });
-    ref.on('child_removed', (snapshot: any) => {
+    ref.orderByKey().on('child_removed', (snapshot: any) => {
       let doc = snapshot.val();
       console.log('child_removed')
       console.log(doc)
@@ -31,7 +33,7 @@ export function fromFireBaseOn<T>(ref: firebase.database.Reference): Observable<
 
 
     });
-    ref.on('child_changed', (snapshot: any) => {
+    ref.orderByKey().on('child_changed', (snapshot: any) => {
       let doc = snapshot.val();
       console.log('child_changed')
       console.log(doc)
@@ -42,7 +44,7 @@ export function fromFireBaseOn<T>(ref: firebase.database.Reference): Observable<
       });
 
     });
-    ref.on('child_moved', (snapshot) => {
+    ref.orderByKey().on('child_moved', (snapshot) => {
       let doc = snapshot.val();
       console.log('child_moved')
       console.log(doc)

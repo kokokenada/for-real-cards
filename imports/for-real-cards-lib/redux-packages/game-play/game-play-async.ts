@@ -94,8 +94,10 @@ export class GamePlayAsync {
             console.log('batchAndWatch 3 ')
             console.log(knownHands)
             console.log(buffer)
-            GamePlayActions.receiveActions(buffer);
-            buffer = [];
+            if (buffer.length > 0) {
+              GamePlayActions.receiveActions(buffer);
+              buffer = [];
+            }
           }
         });
         watched.watchedObservable.subscribe(

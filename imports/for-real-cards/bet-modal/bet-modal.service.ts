@@ -1,4 +1,3 @@
-//import { require } from 'meteor/modules'
 import {IGamePlayState} from '../../for-real-cards-lib';
 
 import { Injectable } from '@angular/core';

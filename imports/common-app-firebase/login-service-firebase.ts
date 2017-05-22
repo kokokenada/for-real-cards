@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import {Observable} from 'rxjs';
 
 import {
   Credentials,
@@ -12,6 +12,9 @@ import {IActionError, IPayloadAction, ReduxPackageCombiner} from 'redux-package'
 import App = firebase.app.App;
 import {transformUser} from './transform-user';
 import {Subject} from 'rxjs/Subject';
+import {conditionObjectForFirebase} from './conditionObjectForFirebase';
+
+export let USERS_COLLECTION_NAME = 'user_profiles';
 
 export class LoginServiceFirebase implements ILoginService {
   constructor(private firebase: App) {
@@ -25,6 +28,8 @@ export class LoginServiceFirebase implements ILoginService {
         .then((fbUser: firebase.User) => {
             let user = transformUser(fbUser);
             console.info('Login successful.');
+            checkUserProfile(this.firebase.database(), user);
+
             resolve(
               LoginActions.loginSuccessFactory(user, user._id)
             );
@@ -60,10 +65,17 @@ export class LoginServiceFirebase implements ILoginService {
       }).then((fbUser: firebase.User) => {
         if (fbUser) {
           let user = transformUser(fbUser);
+          saveUserProfile(this.firebase.database(), user)
+            .then(() => {
+              resolve(
+                LoginActions.loginSuccessFactory(user, user._id)
+              );
+            })
+            .catch((error) => {
+              this.handleError(error);
+              reject(error);
+            });
           console.info('Create User successful.');
-          resolve(
-            LoginActions.loginSuccessFactory(user, user._id)
-          );
         }
       });
     });
@@ -74,7 +86,19 @@ export class LoginServiceFirebase implements ILoginService {
   }
 
   saveUser(edittedUserObject: IUser): Promise<IPayloadAction> {
-    throw 'update user not yet implemented';
+    return new Promise((resolve, reject) => {
+
+      saveUserProfile(this.firebase.database(), edittedUserObject)
+        .then(() => {
+          resolve(
+            LoginActions.saveUserResponseFactory(edittedUserObject)
+          );
+        })
+        .catch((error) => {
+          this.handleError(error);
+          reject(error);
+        });
+    });
   }
 
   logOut(): Promise<IPayloadAction> {
@@ -91,7 +115,7 @@ export class LoginServiceFirebase implements ILoginService {
   };
 
   watchForAutoLogin(): Observable<ILoginActionPayload> {
-    const isAuto = ( loginState: ILoginState ): boolean => {
+    const isAuto = (loginState: ILoginState): boolean => {
       if (loginState)
         return loginState.userId === null;
       return false;
@@ -106,12 +130,13 @@ export class LoginServiceFirebase implements ILoginService {
 
     let subject = new Subject();
 
-    this.firebase.auth().onAuthStateChanged( (fbuser) => {
+    this.firebase.auth().onAuthStateChanged((fbuser) => {
       console.log('Log in dectecyed');
       const user = transformUser(fbuser);
       console.log(user);
       if (user) {
-        subject.next( LoginActions.loginSuccessFactory(
+        checkUserProfile(this.firebase.database(), user);
+        subject.next(LoginActions.loginSuccessFactory(
           user,
           user._id,
           isAuto(lastLoginState)
@@ -128,4 +153,32 @@ export class LoginServiceFirebase implements ILoginService {
   defaultAvatarUrl(): string {
     return 'default-avatar.png';
   }
+}
+
+function saveUserProfile(db: firebase.database.Database, user: IUser): firebase.Promise<any> {
+  return db.ref(USERS_COLLECTION_NAME + '/' + user._id)
+    .set(
+      conditionObjectForFirebase(user)
+    );
+
+}
+
+function checkUserProfile(db: firebase.database.Database, user: IUser): firebase.Promise<any> {
+  return db.ref(USERS_COLLECTION_NAME + '/' + user._id)
+    .once('value', (check) => {
+      if (check.val() === null) {
+        // Profile does not exist, let's create one
+        saveUserProfile(db, user)
+          .then(() => {
+            console.log('profile created for user');
+            console.log(user);
+          })
+          .catch((error) => {
+            console.log('error creating profile')
+            console.log(error);
+            console.log(user);
+          });
+      }
+    });
+
 }

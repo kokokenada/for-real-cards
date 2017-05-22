@@ -58,7 +58,7 @@ import { firebaseConfig } from '../../../env';
 import * as firebase from 'firebase';
 import {ConnectServiceFirebase} from '../../common-app-firebase/connect-service-firebase';
 import {LoginServiceFirebase} from '../../common-app-firebase/login-service-firebase';
-import {IGameStartService} from '../../for-real-cards-lib/redux-packages/game-start/game-play-service-interface';
+import {IGameStartService} from '../../for-real-cards-lib/redux-packages/game-start/game-start-service-interface';
 import {GamePlayStartFirebase} from '../../for-real-cards-firebase/game-start-service';
 import {GamePlayServiceFirebase} from '../../for-real-cards-firebase/game-play-service';
 import {IGamePlayService} from '../../for-real-cards-lib/redux-packages/game-play/game-play-service-interface';

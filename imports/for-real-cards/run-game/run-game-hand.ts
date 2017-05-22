@@ -151,7 +151,7 @@ export class RunGameHand extends RunGame implements OnInit {
     let action: ActionFormatted = new ActionFormatted(GamePlayActions.actionToUndo(this.gameState));
 
     let prompt: string = "Undo " + action.actionDescription() + " done by "
-      + (action.creatorId === Meteor.userId() ? "yourself" : action.creator());
+      + (action.creatorId === LoginPackage.lastLoginState.userId ? "yourself" : action.creator());
     this.commonPopups.confirm(prompt).then(
       (result) => {
         if (result) {

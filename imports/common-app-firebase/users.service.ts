@@ -9,6 +9,6 @@ export class UsersServiceFirebase implements IUsersService {
   }
   createUsersObserver():Observable<IDocumentChange<IUser>>
   {
-    return undefined
+    return Observable.never(); // Depends on app calling UsersActions.dispatchChange()
   }
 }

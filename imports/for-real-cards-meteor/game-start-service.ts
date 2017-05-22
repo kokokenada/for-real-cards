@@ -1,5 +1,6 @@
-import { IException } from 'common-app';
+import {IDocumentChange, IException, IUser} from 'common-app';
 import {IGameStartService} from '../for-real-cards-lib';
+import {Observable} from 'rxjs/Observable';
 
 
 export class GamePlayStartMeteor implements IGameStartService {
@@ -46,4 +47,9 @@ export class GamePlayStartMeteor implements IGameStartService {
     });
   }
 
+  watchRelatedUsers(gameId: string): Promise<Observable<IDocumentChange<IUser>>> {
+    return new Promise((resolve, reject) => {
+      resolve(Observable.never()); // This happens with a server side publication.  No implementation needed
+    });
+  }
 }

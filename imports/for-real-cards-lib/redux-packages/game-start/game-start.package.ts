@@ -2,7 +2,7 @@
 import {gameStartReducer} from "./game-start.reducer";
 import {GameStartActions} from "./game-start-actions";
 import { ReduxPackage, IAppState, IPayloadAction} from 'redux-package';
-import {IGameStartService} from './game-play-service-interface';
+import {IGameStartService} from './game-start-service-interface';
 import {GameStartAsync} from './game-start-async';
 export let GAME_START_PACKAGE_NAME = 'game-start';
 

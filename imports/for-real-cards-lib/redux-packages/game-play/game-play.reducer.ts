@@ -61,15 +61,15 @@ function processGamePlayAction(transient: IGamePlayRecord, gamePlayAction: GameP
   if (!gamePlayAction._id) {
     let counter:number = readState.idCounter + 1;
     transient.set('idCounter', counter);
-    gamePlayAction._id = counter.toString();
+    gamePlayAction._id = counter.toString(); // side effect violation!
   }
   let id = gamePlayAction._id;
   if (readState.actions.get(id, undefined)) {
     // We've seen this action before, do not process
     return transient;
   }
-  gamePlayAction.sequencePosition = transient.actions.size;
-  gamePlayAction.previousState = transient.toJS();  // Temporary fix. TODO figure out a more performant way to copy the state and restore it in UNDO
+  gamePlayAction.sequencePosition = transient.actions.size; // side effect violation
+  gamePlayAction.previousState = transient.toJS();  // Temporary fix. TODO figure out a more performant way to copy the state and restore it in UNDO  // side effect violation
 /*  console.group(GamePlayActionType[gamePlayAction.actionType]);
   console.log('PROCESSING GAME PLAY ACTION: ' + GamePlayActionType[gamePlayAction.actionType]);
   console.log('gamePlayAction.previousState:');
@@ -126,9 +126,6 @@ function processGamePlayAction(transient: IGamePlayRecord, gamePlayAction: GameP
     case GamePlayActionType.NEW_HAND: {
       let newHand = new Hand(payload.newHand);
       let newHands: List<Hand> = readState.hands.push(newHand);
-      console.log('new hand in reducer', {color: 'purple'});
-      console.log(newHand)
-      console.log(newHands.toArray());
       transient.set('hands', newHands);
       break;
     }
@@ -386,7 +383,6 @@ function getIndexOfCard(cards: any, card): number {
     console.error('Could not find card');
     console.error(cards);
     console.error(card);
-    console.trace();
     return null;
   } else {
     return index;

@@ -1,4 +1,3 @@
-//import { require } from 'meteor/modules'
 import { GameConfig, IGamePlayState} from '../../for-real-cards-lib';
 declare var require:any;
 

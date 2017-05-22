@@ -1,6 +1,6 @@
 import {GamePlayActionInterface} from './action.class';
 import {HandInterface} from './hand.class';
-import {IDocumentChange} from 'common-app';
+import {IDocumentChange } from 'common-app';
 import {Observable} from 'rxjs/Observable';
 
 export interface IGamePlayService {

@@ -1,16 +1,34 @@
-import { IException } from 'common-app';
+import {IDocumentChange, IException, IUser} from 'common-app';
 import { IGameStartState } from "./game-start-state-interface";
 import { IGameStartActionPayload } from "./game-start-payload-interface";
 import { GameStartActions } from "./game-start-actions";
 import { GamePlayActions } from "../game-play";
 import { IPayloadAction } from 'redux-package';
-import { IGameStartService } from './game-play-service-interface';
+import { IGameStartService } from './game-start-service-interface';
+import {Observable} from 'rxjs/Observable';
+import {UsersActions} from '../../../common-app/src/ui/redux/users/users-actions';
 
 
 
 export class GameStartAsync {
   constructor(private service:IGameStartService) {
   }
+
+  private watchUsers(gameId: string) {
+    // Start watching users in the game
+    this.service.watchRelatedUsers(gameId)
+      .then( (userChanges$:Observable<IDocumentChange<IUser>>) => {
+          userChanges$.subscribe( (userChange: IDocumentChange<IUser>) => {
+            UsersActions.dispatchChange(userChange);
+          } );
+        }
+      )
+      .catch( (error) => {
+        GameStartActions.error(error);
+      });
+
+  }
+
   gameNavigationMiddleware = (state: IGameStartState) => next => (action: IPayloadAction) => {
     let payload: IGameStartActionPayload = action.payload;
     switch (action.type) {
@@ -18,6 +36,7 @@ export class GameStartAsync {
         this.service.newGame(payload.password).then( (gameId: string)=> {
           GamePlayActions.initialize(gameId);
           GameStartActions.joinGameSuccess(gameId);
+          this.watchUsers(gameId);
         }, (error)=>{
           GameStartActions.error(error);
         } );
@@ -27,6 +46,7 @@ export class GameStartAsync {
           (success)=>{
             GamePlayActions.initialize(payload.gameId);
             GameStartActions.joinGameSuccess(payload.gameId);
+            this.watchUsers(payload.gameId);
           },
           (error)=>{
             if (error.error === "gameId-not-found") {
