@@ -6,7 +6,8 @@ declare let UploadFS: any;
 declare let window: any; // Make TypeScript compiler stop complaining
 
 import * as log from 'loglevel';
-import {UploaderActions} from "./uploader-actions.class";
+import {UploaderActions} from "../common-app/src/ui/redux/uploader/uploader-actions";
+import {IUploaderService} from '../common-app/src/ui/redux/uploader/uploader-service-interface';
 
 export interface UploadFileInfo {
   _id: string;
@@ -14,7 +15,7 @@ export interface UploadFileInfo {
   width?: number
 }
 
-export class UploaderService {
+export class UploaderServiceMeteor implements IUploaderService {
 
   private static addToCommonUploaderOptions(options) {
     return Object.assign({},
@@ -71,7 +72,7 @@ export class UploaderService {
 
     // Create a new Uploader for this file
     let uploader = new UploadFS.Uploader(
-      UploaderService.addToCommonUploaderOptions(
+      UploaderServiceMeteor.addToCommonUploaderOptions(
         {
           // This is where the uploader will save the file
           store: collection,
@@ -85,13 +86,13 @@ export class UploaderService {
     return uploader;
   }
 
-  static uploadFileRequest(currentFile, collection): void {
-    let uploader = UploaderService.makeUploader(currentFile, collection);
+  uploadFile(currentFile, collection): void {
+    let uploader = UploaderServiceMeteor.makeUploader(currentFile, collection);
     UploaderActions.uploadStartResponse(uploader);
     uploader.start();
   }
 
-  static uploadImageFromCamera(collection, options = {
+  uploadImageFromCamera(collection, options = {
     quality: 50,
     destinationType: Camera.DestinationType.FILE_URI,
     sourceType: Camera.PictureSourceType.CAMERA,
@@ -118,7 +119,7 @@ export class UploaderService {
 
         //console.log('blob', blob, blob instanceof Blob);
 
-        const uploader = new UploadFS.Uploader(UploaderService.addToCommonUploaderOptions({
+        const uploader = new UploadFS.Uploader(UploaderServiceMeteor.addToCommonUploaderOptions({
           data: blob,
           file: file,
           store: collection

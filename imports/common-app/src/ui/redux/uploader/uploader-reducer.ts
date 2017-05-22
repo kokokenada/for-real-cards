@@ -1,6 +1,6 @@
 import { IPayloadAction } from 'redux-package';
-import { UploaderActions } from './uploader-actions.class';
-import {IUploaderActionPayload, IUploaderState} from './uploader.types'
+import { UploaderActions } from './uploader-actions';
+import {IUploaderActionPayload, IUploaderState} from './uploader-types'
 
 const INITIAL_STATE:IUploaderState = {
   uploadInProgress: false,

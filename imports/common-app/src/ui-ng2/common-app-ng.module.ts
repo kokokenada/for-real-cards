@@ -7,10 +7,6 @@ import { ConnectionStatus } from "./connect/connection-status.component";
 import { CommonAppButton } from "./button/common-app-button";
 import { MenuFilterPipe } from "./menu-filter/menu-filter";
 import {ModalService} from "../ui/redux/modal/modal.service";
-import {UsersAsync} from "../ui/redux/users/users-async";
-import {UsersPackage} from "../ui/redux/users/users-package";
-import {UploaderAsync} from "../ui/redux/uploader/uploader-async.class";
-import {UploaderModule} from "../ui/redux/uploader/uploader.module";
 import {ModalModule} from "../ui/redux/modal/modal.module";
 import {CommonPopups} from "./common-popups/common-popups";
 import {AccountsAdminModule} from "../ui/redux/accounts-admin/accounts-admin.module";
@@ -37,9 +33,7 @@ export const COMMON_APP_SINGLETONS = [
   AccountsAdminService,
   CommonPopups,
   ModalModule,
-  ModalService,
-  UploaderModule,
-  UploaderAsync,
+  ModalService
 ];
 
 @NgModule({

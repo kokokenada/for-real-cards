@@ -42,7 +42,7 @@ import {
   AccountsAdminModule,
   ModalModule,
   UploaderActions,
-  UploaderModule,
+  UploaderPackage,
   UsersPackage
 } from '../../common-app/src/ui';
 import {featureToggleConfigs, FEATURE_TOGGLE_USE_FIREBASE} from "./feature-toggle.config";
@@ -65,6 +65,8 @@ import {IGamePlayService} from '../../for-real-cards-lib/redux-packages/game-pla
 import {IUsersService} from '../../common-app/src/ui/redux/users/users-service-interface';
 import {UsersServiceFirebase} from '../../common-app-firebase/users.service';
 import {UsersServiceMeteor} from '../../common-app-meteor/users.service';
+import {IUploaderService} from '../../common-app/src/ui/redux/uploader/uploader-service-interface';
+import {UploaderServiceMeteor} from '../../common-app-meteor/uploader-service';
 
 declare const cordova: any;
 
@@ -73,7 +75,6 @@ export class ReduxModules {
   constructor(
     private ngReduxRouter: NgReduxRouter,
     private accountsAdminModule: AccountsAdminModule,
-    private uploaderModule: UploaderModule,
     private ngRedux: NgRedux<IAppState>
   ) {}
   configure(middleware) {
@@ -86,6 +87,7 @@ export class ReduxModules {
     let connectService: IConnectService;
     let loginService: ILoginService;
     let usersService: IUsersService;
+    let uploaderService: IUploaderService;
     let startGameService: IGameStartService;
     let gamePlayServiceMeteor: IGamePlayService;
 
@@ -103,12 +105,14 @@ export class ReduxModules {
       usersService = new UsersServiceMeteor();
       startGameService = new GamePlayStartMeteor();
       gamePlayServiceMeteor = new GamePlayServiceMeteor();
+      uploaderService = new UploaderServiceMeteor()
     }
     const gameStartPackage = new GameStartPackage(startGameService);
     const gamePlayPackage = new GamePlayPackage(gamePlayServiceMeteor);
     const connectModule = new ConnectPackage(connectService);
     const loginModule = new LoginPackage(loginService);
     const featureTogglePackage = new FeatureTogglePackage();
+    const uploaderPackage = new UploaderPackage(uploaderService);
 
     ReduxPackageCombiner.configure([
       connectModule,
@@ -118,7 +122,7 @@ export class ReduxModules {
       featureTogglePackage,
       gameStartPackage,
       gamePlayPackage,
-      this.uploaderModule,
+      uploaderPackage,
       new UsersPackage(usersService)],
       this.ngRedux,
       options

@@ -1,4 +1,3 @@
-import { Injectable } from '@angular/core';
 import { IPayloadAction  } from 'redux-package';
 import { Observable } from 'rxjs/Observable';
 
@@ -7,16 +6,17 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/catch';
 
-import { UploaderService } from "./uploader.service";
-import { UploaderActions } from "./uploader-actions.class";
+import { UploaderActions } from "./uploader-actions";
+import {IUploaderService} from './uploader-service-interface';
 
-@Injectable()
 export class UploaderAsync {
+  constructor(private service: IUploaderService) {
 
+  }
   startUpload = (action$: Observable<IPayloadAction>): Observable<IPayloadAction> => {
     return action$.filter(({ type }) => type === UploaderActions.UPLOAD_START_REQUEST)
       .do(({ payload }) => {
-        UploaderService.uploadFileRequest(payload.file, payload.store);
+        this.service.uploadFile(payload.file, payload.store);
       })
       .map( ()=> { return {type:'NOOP'}}); // Don't return self. If you do, race condition occrus
   };
@@ -24,7 +24,7 @@ export class UploaderAsync {
   cameraUpload = (action$: Observable<IPayloadAction>): Observable<IPayloadAction> => {
     return action$.filter(({ type }) => type === UploaderActions.UPLOAD_CAMERA_PIC_REQUEST)
       .do(({ payload }) => {
-        UploaderService.uploadImageFromCamera(payload.store);
+        this.service.uploadImageFromCamera(payload.store);
       })
       .map( ()=> { return {type:'NOOP'}}); // Don't return self. If you do, race condition occrus
   };
