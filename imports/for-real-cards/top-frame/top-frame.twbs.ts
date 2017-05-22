@@ -94,7 +94,7 @@ export class ForRealCardsTopFrame extends TopFrame implements OnInit {
               private reduxModules:ReduxModules
               ) {
     super();
-    reduxModules.configure(this.navigatorMiddleware);
+    reduxModules.configure([this.navigatorMiddleware]);
     this.initMenus();
   }
 

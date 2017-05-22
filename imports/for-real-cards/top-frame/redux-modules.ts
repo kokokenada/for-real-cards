@@ -69,6 +69,8 @@ import {IUploaderService} from '../../common-app/src/ui/redux/uploader/uploader-
 import {UploaderServiceMeteor} from '../../common-app-meteor/uploader-service';
 import {uploaderCollections} from '../../common-app/src/ui/redux/uploader/collections';
 import {AvatarOriginalStore} from '../../common-app-meteor/avatar.model';
+import {UploaderServiceFirebase} from '../../common-app-firebase/uploader-service';
+import {AvatarModel} from '../../common-app-firebase/avatar.model';
 
 declare const cordova: any;
 
@@ -80,11 +82,6 @@ export class ReduxModules {
     private ngRedux: NgRedux<IAppState>
   ) {}
   configure(middleware) {
-
-    let options : ICombinerOptions = {
-      consoleLogging: featureToggleConfigs['redux-console-logging'].setting,
-      otherMiddlewares: [getAnalyticsMiddleware(), middleware]
-    };
 
     let connectService: IConnectService;
     let loginService: ILoginService;
@@ -100,9 +97,11 @@ export class ReduxModules {
       usersService = new UsersServiceFirebase(firebaseApp);
       startGameService = new GamePlayStartFirebase(firebaseApp);
       gamePlayServiceMeteor = new GamePlayServiceFirebase(firebaseApp);
-      uploaderService = new UploaderServiceMeteor();
+      uploaderService = new UploaderServiceFirebase(firebaseApp);
 
       uploaderCollections['avatar'] = {name: 'avatar', reference: 'avatar'};
+      let avatar = new AvatarModel(firebaseApp);
+      middleware.push(avatar.watchForAvatarUploadMiddleWare);
     } else {
       connectService = new ConnectServiceMeteor();
       loginService = new LoginServiceMeteor();
@@ -119,6 +118,12 @@ export class ReduxModules {
     const loginModule = new LoginPackage(loginService);
     const featureTogglePackage = new FeatureTogglePackage();
     const uploaderPackage = new UploaderPackage(uploaderService);
+
+    middleware.push(getAnalyticsMiddleware());
+    let options : ICombinerOptions = {
+      consoleLogging: featureToggleConfigs['redux-console-logging'].setting,
+      otherMiddlewares: middleware
+    };
 
     ReduxPackageCombiner.configure([
       connectModule,

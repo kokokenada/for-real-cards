@@ -26,7 +26,7 @@ export function uploaderReducer(
     case UploaderActions.UPLOAD_SUCCESS:
       return Object.assign({}, state, {uploadInProgress: false, lastUploadSuccess: true, lastUpload_id:payload._idOfUploadedFile, lastUploadErrorMessage:''});
     case UploaderActions.UPLOAD_FAIL:
-      return Object.assign({}, state, {uploadInProgress: false, lastUploadSuccess: false, lastUploadErrorMessage:payload.error.message});
+      return Object.assign({}, state, {uploadInProgress: false, lastUploadSuccess: false, lastUploadErrorMessage:JSON.stringify(payload)});
     default:
       return state;
   }

@@ -28,6 +28,6 @@ export const featureToggleConfigs: IFeatureToggleConfigSet = {
     description: 'Analytics events to console'
   },
   [FEATURE_TOGGLE_USE_FIREBASE]: {
-    setting: false,
+    setting: true,
   }
 };

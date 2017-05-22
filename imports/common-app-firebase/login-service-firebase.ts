@@ -155,12 +155,11 @@ export class LoginServiceFirebase implements ILoginService {
   }
 }
 
-function saveUserProfile(db: firebase.database.Database, user: IUser): firebase.Promise<any> {
+export function saveUserProfile(db: firebase.database.Database, user: IUser): firebase.Promise<any> {
   return db.ref(USERS_COLLECTION_NAME + '/' + user._id)
     .set(
       conditionObjectForFirebase(user)
     );
-
 }
 
 function checkUserProfile(db: firebase.database.Database, user: IUser): firebase.Promise<any> {
