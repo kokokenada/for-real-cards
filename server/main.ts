@@ -19,7 +19,8 @@ Meteor.startup(function() {
   BrowserPolicy.content.allowOriginForAll('http://for-real-cards.fabrica.tech');
   BrowserPolicy.content.allowOriginForAll('https://www.googletagmanager.com');
   BrowserPolicy.content.allowOriginForAll('http://www.google-analytics.com');
-  BrowserPolicy.content.allowOriginForAll('https://*.firebaseio.com/');
+  BrowserPolicy.content.allowOriginForAll('https://*.firebaseio.com');
+  BrowserPolicy.content.allowOriginForAll('https://firebasestorage.googleapis.com');
 
   BrowserPolicy.content.allowEval();
   BrowserPolicy.framing.disallow();

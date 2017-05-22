@@ -131,7 +131,7 @@ export class LoginServiceFirebase implements ILoginService {
     let subject = new Subject();
 
     this.firebase.auth().onAuthStateChanged((fbuser) => {
-      console.log('Log in dectecyed');
+      console.log('Log in dectected  - autologin checker');
       const user = transformUser(fbuser);
       console.log(user);
       if (user) {
@@ -147,7 +147,23 @@ export class LoginServiceFirebase implements ILoginService {
   }
 
   watchCurrentUser(): Observable<ILoginActionPayload> {
-    return Observable.never();
+    let subject = new Subject();
+
+    this.firebase.auth().onAuthStateChanged((fbuser) => {
+      console.log('Log in dectected  - current user watcher');
+      const user = transformUser(fbuser);
+
+      getUserProfileRef(this.firebase.database(), user)
+        .on('value', (snapshot) => {
+          const savedProfile:IUser = snapshot.val();
+
+          const newUserInfo = transformUser(fbuser, savedProfile);
+          console.log(newUserInfo);
+          subject.next(LoginActions.currentUserChangeFactory(newUserInfo))
+        });
+
+    });
+    return subject;
   }
 
   defaultAvatarUrl(): string {
@@ -155,15 +171,19 @@ export class LoginServiceFirebase implements ILoginService {
   }
 }
 
+function getUserProfileRef(db: firebase.database.Database, user: IUser) : firebase.database.Reference {
+  return db.ref(USERS_COLLECTION_NAME + '/' + user._id);
+}
+
 export function saveUserProfile(db: firebase.database.Database, user: IUser): firebase.Promise<any> {
-  return db.ref(USERS_COLLECTION_NAME + '/' + user._id)
+  return getUserProfileRef(db, user)
     .set(
       conditionObjectForFirebase(user)
     );
 }
 
 function checkUserProfile(db: firebase.database.Database, user: IUser): firebase.Promise<any> {
-  return db.ref(USERS_COLLECTION_NAME + '/' + user._id)
+  return getUserProfileRef(db, user)
     .once('value', (check) => {
       if (check.val() === null) {
         // Profile does not exist, let's create one
