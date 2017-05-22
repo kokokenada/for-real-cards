@@ -3,7 +3,7 @@ import {IBetModalParams, IBetModalResult} from './bet-modal.types';
 import {Component} from '@angular/core';
 import template from './bet-modal.twbs.html';
 import {GamePlayActions, GamePlayFunctions} from '../../for-real-cards-lib';
-import {AccountTools} from '../../common-app/src/ui/services/account-tools';
+import {LoginPackage} from 'common-app';
 
 @Component({
   selector: 'bet-modal',
@@ -17,7 +17,7 @@ export class BetModal extends ModalBase<IBetModalParams, IBetModalResult> {
   error = "";
 
   ngAfterContentInit() {
-    this.available = GamePlayFunctions.moneyPlayerHas(this.params.gameState, AccountTools.userId());
+    this.available = GamePlayFunctions.moneyPlayerHas(this.params.gameState, LoginPackage.lastLoginState.userId);
   }
 
   add(amount:number) {

@@ -8,10 +8,9 @@ import { CardImageStyle} from "../../for-real-cards-web/card-image-style.interfa
 
 import template from "./run-game-table.html"
 import {PlatformTools} from "../../common-app/src/ui-ng2/platform-tools/platform-tools";
-import { Tools } from 'common-app';
+import {LoginPackage, Tools} from 'common-app';
 import {CommonPopups} from "../../common-app/src/ui-ng2/common-popups/common-popups";
 import {DealModalService} from "../deal-modal/deal-modal.service";
-import {AccountTools} from '../../common-app/src/ui/services/account-tools';
 
 const TABLE_ZONE_CENTER_RADIUS = 20;
 const TABLE_ZONE_OUTER_RADIUS = 30;
@@ -61,7 +60,7 @@ export class RunGameTable extends RunGame implements OnInit {
     let degrees = 360/numberOfPlayers*playerIndex;
     if (this.forPlayerBool()) {
       // Rotate so user is at bottom
-      let currentUserIndex = Hand.indexOfUser(hands, AccountTools.userId());
+      let currentUserIndex = Hand.indexOfUser(hands, LoginPackage.lastLoginState.userId);
       if (currentUserIndex===-1) {
         // Couldn't find current user in hands.  Not an error because a user may have joined a game while it is in progress
         currentUserIndex=0;

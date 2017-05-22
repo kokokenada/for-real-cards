@@ -83,7 +83,7 @@ export class LoginServiceMeteor implements ILoginService {
             (action) => {
               console.info("Registering tmp user successful.")
               resolve(action);
-            }, (error) => {  // Is this required or can I depend on rejection in AccountTools.register?
+            }, (error) => {
               reject(ReduxModuleUtil.errorFactory(LoginActions.LOGIN_ERROR, error));
             }
           );
