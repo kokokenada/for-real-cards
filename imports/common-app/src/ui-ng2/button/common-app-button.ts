@@ -1,6 +1,5 @@
 import { Component, ComponentFactory, Compiler, Directive, EventEmitter, Input, Output, Type, ViewContainerRef } from '@angular/core';
 import { PlatformTools } from "../platform-tools/platform-tools";
-//import { require } from 'meteor/modules'
 declare var require:any;
 
 export let CommonAppButton;

@@ -1,4 +1,3 @@
-import 'meteor/aldeed:simple-schema';
 
 import { Card} from './card.class'
 

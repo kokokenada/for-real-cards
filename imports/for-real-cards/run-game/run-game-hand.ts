@@ -1,5 +1,4 @@
 import {Component, Input, NgZone, OnInit, ViewEncapsulation} from '@angular/core';
-import {Meteor} from 'meteor/meteor';
 import {DragulaService} from 'ng2-dragula/ng2-dragula';
 
 import {RunGame} from './run-game';

@@ -2,8 +2,7 @@
 import {IConnectService} from 'common-app';
 import * as firebase from 'firebase/app';
 import App = firebase.app.App;
-// Make an abstract parent and children that implement specific backend
-// For now, this is Meteor specific
+
 export class ConnectServiceFirebase implements IConnectService {
 
   constructor(private firebase: App) {
@@ -39,7 +38,6 @@ export class ConnectServiceFirebase implements IConnectService {
   }
 
   disconnect() {
-    //Meteor.disconnect();
   }
 
 }

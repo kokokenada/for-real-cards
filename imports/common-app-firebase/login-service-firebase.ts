@@ -40,10 +40,6 @@ export class LoginServiceFirebase implements ILoginService {
     })
   }
 
-  static defaultAvatarUrl() { // Move this
-    return //Meteor.absoluteUrl('default-avatar.png');
-  };
-
   private handleError(error) {
     let emitError: IActionError = {
       error: error.code,

@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-//import { require } from 'meteor/modules'
 declare var require:any;
 import {PlatformTools} from "../platform-tools/platform-tools";
 import {ModalActions} from "../../ui/redux/modal/modal-actions.class";

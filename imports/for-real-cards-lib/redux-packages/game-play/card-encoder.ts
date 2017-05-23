@@ -25,7 +25,7 @@ export class CardEncoder {
       if (!card) {
         console.error(cards);
         console.trace();
-        throw new Meteor.Error('internal-error', 'Card in action is empty');
+        throw 'internal-error - Card in action is empty';
       }
       returnValue += new Card({rank: card.rank, suit: card.suit}).encode();
     });
