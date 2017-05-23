@@ -51,8 +51,6 @@ export class GamePlayServiceFirebase implements IGamePlayService {
       action._id = newActionRef.key; // Makes it like Mongo & some parts of app read _id
       let actionSave: any = conditionObjectForFirebase(action);
       actionSave.dateCreated = (new Date()).getTime();
-console.log('_addAction')
-      console.log(actionSave)
       newActionRef.set(actionSave)
         .then(() => {
           resolve(newActionRef.key)
@@ -64,8 +62,6 @@ console.log('_addAction')
   }
 
   actionPush(action: GamePlayActionInterface): Promise<boolean> {
-    console.log('actionPush')
-    console.log(action)
     return new Promise((resolve, reject) => {
       this._addAction(action)
         .then(() => {
@@ -78,8 +74,6 @@ console.log('_addAction')
   }
 
   actionArrayPush(actions: GamePlayActionInterface[]): Promise<boolean> {
-    console.log('actionArrayPush');
-    console.log(actions);
     return new Promise((resolve, reject) => {
 
       let action: GamePlayAction = actions[0];

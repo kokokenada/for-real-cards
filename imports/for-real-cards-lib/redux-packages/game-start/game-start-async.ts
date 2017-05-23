@@ -70,6 +70,7 @@ export class GameStartAsync {
               GameStartActions.viewGameSuccess(payload.gameId);
             else
               GameStartActions.loadGameSuccess(payload.gameId);
+            this.watchUsers(payload.gameId);
           },
           (error)=>{
             GameStartActions.error(error);

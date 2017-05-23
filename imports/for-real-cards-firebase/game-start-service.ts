@@ -6,11 +6,12 @@ import {getNextSequence} from './counter.model';
 import {TopLevelNames} from './top-level-names';
 import {USERS_COLLECTION_NAME} from '../common-app-firebase/login-service-firebase';
 import {fromFireBaseOn} from '../common-app-firebase/fromFireBaseOn';
-import {Subject} from 'rxjs/Subject';
 import {Observable} from 'rxjs/Observable';
+import {ReplaySubject} from 'rxjs/ReplaySubject';
 
 export class GamePlayStartFirebase implements IGameStartService {
   db: firebase.database.Database;
+  private watchedUsers = {};
 
   constructor(private firebase: App) {
     this.db = firebase.database();
@@ -123,8 +124,6 @@ export class GamePlayStartFirebase implements IGameStartService {
 
   static getHandsSnaphot(db: firebase.database.Database, gameId: string): Promise<firebase.database.DataSnapshot> {
     return new Promise((resolve, reject) => {
-      console.log('getHandsSnaphot')
-      console.log(gameId)
       let handRef = db.ref(TopLevelNames.HAND + '/' + gameId + '/');
       handRef.once('value')
         .then((snapshotHands) => {
@@ -150,8 +149,7 @@ export class GamePlayStartFirebase implements IGameStartService {
   watchRelatedUsers(gameId: string): Promise<Observable<IDocumentChange<IUser>>> {
     return new Promise((resolve, reject) => {
       let handRef = GamePlayStartFirebase.getHandsRef(this.db, gameId);
-      const subject = new Subject();
-      const watchedUsers = {};
+      const subject = new ReplaySubject();
 
       fromFireBaseOn(handRef)
         .subscribe((handChange: IDocumentChange<HandInterface>) => {
@@ -160,13 +158,11 @@ export class GamePlayStartFirebase implements IGameStartService {
             case EDocumentChangeType.NEW: {
               const userId = handChange.newDocument.userId;
               // Are we watching?
-              if (!watchedUsers[userId]) {
+              if (!this.watchedUsers[userId]) {
                 // Not watching, so start watching
                 const ref = this.db.ref(USERS_COLLECTION_NAME + '/' + userId);
                 ref.on('value', (snapshortUser) => {
                   const user: IUser = snapshortUser.val();
-                  console.log('emitting user change if truthy')
-                  console.log(user);
                   if (user) {
                     const userChange: IDocumentChange<IUser> = {
                       changeType: EDocumentChangeType.CHANGED,
@@ -175,7 +171,7 @@ export class GamePlayStartFirebase implements IGameStartService {
                     subject.next(userChange);
                   }
                 });
-                watchedUsers[userId] = ref;
+                this.watchedUsers[userId] = ref;
               }
             }
           }

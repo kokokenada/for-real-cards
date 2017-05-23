@@ -78,8 +78,8 @@ export class GamePlayAsync {
         let watched: BatchAndWatch<IDocumentChange<GamePlayAction>> = <any>batchAndWatch(gameActions$, window.setTimeout);
         watched.batchObservable.subscribe((gamePlayActionChanges: IDocumentChange<GamePlayAction>[]) => {
           gamePlayActionChanges.forEach((gamePlayActionChange: IDocumentChange<GamePlayAction>) => {
-            console.log('batchAndWACTH 1 ')
-            console.log(gamePlayActionChange)
+//            console.log('batchAndWACTH 1 ')
+//            console.log(gamePlayActionChange)
             switch (gamePlayActionChange.changeType) {
               case EDocumentChangeType.NEW: {
                 buffer.push(CardEncoder.decode(gamePlayActionChange.newDocument));
@@ -91,9 +91,9 @@ export class GamePlayAsync {
 
           });
           if (isBufferReady(knownHands, buffer)) {
-            console.log('batchAndWatch 3 ')
-            console.log(knownHands)
-            console.log(buffer)
+//            console.log('batchAndWatch 3 ')
+//            console.log(knownHands)
+//            console.log(buffer)
             if (buffer.length > 0) {
               GamePlayActions.receiveActions(buffer);
               buffer = [];
@@ -102,8 +102,8 @@ export class GamePlayAsync {
         });
         watched.watchedObservable.subscribe(
           (gamePlayActionChange: IDocumentChange<GamePlayAction>) => {
-            console.log('batchAndWACTH 2')
-            console.log(gamePlayActionChange)
+//            console.log('batchAndWACTH 2')
+//            console.log(gamePlayActionChange)
             switch (gamePlayActionChange.changeType) {
               case EDocumentChangeType.NEW: {
                 let action: GamePlayAction = gamePlayActionChange.newDocument;
