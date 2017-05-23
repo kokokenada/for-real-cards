@@ -35,15 +35,6 @@ export class RunGameHand extends RunGame implements OnInit {
     super();
   }
 
-  childInit() {
-    if (PlatformTools.isIonic()) {
-      let navParams = PlatformTools.getNavParams();
-      if (navParams) {
-        this.showTableProxy = navParams.data.showTableProxy;
-      }
-    }
-  }
-
   private showTableProxyBool(): boolean {
     return Tools.stringToBool(this.showTableProxy);
   }

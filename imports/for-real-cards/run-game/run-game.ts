@@ -30,7 +30,8 @@ import {DealModalService} from "../deal-modal/deal-modal.service";
 import {CommonPopups} from "../../common-app/src/ui-ng2/common-popups/common-popups";
 import {} from '../ui/redux/game-play/game-play.functions';
 import {GAME_START_PACKAGE_NAME, GAME_PLAY_PACKAGE_NAME} from '../../for-real-cards-lib';
-import {LoginPackage} from 'common-app';
+import {ILoginState, LOGIN_PACKAGE_NAME, LoginPackage} from 'common-app';
+import {ReduxPackageCombiner} from 'redux-package';
 
 declare const window: any;
 
@@ -42,11 +43,9 @@ export abstract class RunGame {
   protected abstract dealModelService:DealModalService;
   protected abstract commonPopups:CommonPopups;
 
-  abstract childInit();
   gameState:IGamePlayRecord;
-  forRealCardsState:IGameStartState;
-  protected static dragAndDropInitialized:boolean = false;
 
+  protected static dragAndDropInitialized:boolean = false;
   constructor() {
   }
 
@@ -58,25 +57,6 @@ export abstract class RunGame {
         else
           this.gameState = INITIAL_STATE_GAME_PLAY;
       });
-    } );
-    this.forRealCardsReducer$.subscribe( (forRealCardsState:IGameStartState)=>{
-      this.ngZone.run(()=>{
-        forRealCardsState = forRealCardsState || INITIAL_STATE_GAME_START;
-        this.forRealCardsState = forRealCardsState;
-        if (forRealCardsState.gameId===null && !(forRealCardsState.loading) ) { // Check to make sure loading request not already issued
-          // We must have deep linked here or refreshed, so let's load the game
-
-          console.log('Looking like we are deep linking, so loading the game');
-
-          let pathname:string[] = window.location.pathname.split('/');
-          if (pathname.length>=3) {
-            let subUrl:string = pathname[1];
-            let gameId:string = pathname[2];
-            GameStartActions.loadGameRequest(gameId, '');
-          }
-        }
-      });
-      this.childInit();
     } );
     this.dragAndDropInit();
   }

@@ -41,8 +41,6 @@ export class PileView extends RunGame {
   ) {
     super();
   }
-  childInit() {}
-
   numberOfCards():number {
     return this.getCardsInPile() ? this.getCardsInPile().length : 0;
   }

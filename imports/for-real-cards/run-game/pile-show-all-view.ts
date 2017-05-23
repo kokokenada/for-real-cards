@@ -30,7 +30,6 @@ export class PileViewShowAll extends RunGame {
   ) {
     super();
   }
-  childInit() {}
 
   cardStyle(index:number) {
     let cardWidth = 14.38;

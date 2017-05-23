@@ -36,16 +36,6 @@ export class RunGameTable extends RunGame implements OnInit {
     super();
   }
 
-  childInit() {
-    if (PlatformTools.isIonic())  {
-      let navParams = PlatformTools.getNavParams();
-      if (navParams) {
-        this.width = navParams.data.width;
-        this.height = navParams.data.height;
-      }
-    }
-  }
-
   private forPlayerBool():boolean {
     return Tools.stringToBool(this.forPlayer);
   }

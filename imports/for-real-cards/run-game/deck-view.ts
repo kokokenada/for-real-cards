@@ -55,8 +55,6 @@ export class DeckView extends RunGame {
     super();
   }
 
-  childInit(){};
-
   URL():string {
     return this.cardBackURL();
   }
