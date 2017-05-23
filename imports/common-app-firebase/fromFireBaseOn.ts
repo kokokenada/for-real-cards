@@ -24,8 +24,6 @@ export function fromFireBaseOn<T>(ref: firebase.database.Reference): Observable<
 
     ref.orderByKey().on('child_changed', (snapshot: any) => {
       let doc = snapshot.val();
-      console.log('child_changed')
-      console.log(doc)
       observer.next({
         changeType: EDocumentChangeType.CHANGED,
         newDocument: doc,
