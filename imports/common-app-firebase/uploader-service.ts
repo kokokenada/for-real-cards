@@ -5,8 +5,7 @@ import {Camera, File} from 'ionic-native';
 declare let window: any; // Make TypeScript compiler stop complaining
 declare let MeteorCameraUI;
 
-import {UploaderActions} from "../common-app/src/ui/redux/uploader/uploader-actions";
-import {IUploaderService} from '../common-app/src/ui/redux/uploader/uploader-service-interface';
+import { UploaderActions, IUploaderService } from 'common-app';
 
 export interface UploadFileInfo {
   _id: string;

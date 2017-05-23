@@ -33,17 +33,22 @@ import {
   ConnectActions,
   ConnectPackage,
   FeatureToggleActions,
-  FeatureTogglePackage, IConnectService, ILoginService,
+  FeatureTogglePackage,
+  IConnectService,
+  ILoginService,
+  IUploaderService,
+  IUsersService,
   LoginActions,
-  LoginPackage
+  LoginPackage,
+  UploaderActions,
+  UploaderPackage,
+  uploaderCollections,
+  UsersPackage
 } from 'common-app';
 
 import {
   AccountsAdminModule,
-  ModalModule,
-  UploaderActions,
-  UploaderPackage,
-  UsersPackage
+  ModalModule
 } from '../../common-app/src/ui';
 import {featureToggleConfigs, FEATURE_TOGGLE_USE_FIREBASE} from "./feature-toggle.config";
 
@@ -62,12 +67,9 @@ import {IGameStartService} from '../../for-real-cards-lib/redux-packages/game-st
 import {GamePlayStartFirebase} from '../../for-real-cards-firebase/game-start-service';
 import {GamePlayServiceFirebase} from '../../for-real-cards-firebase/game-play-service';
 import {IGamePlayService} from '../../for-real-cards-lib/redux-packages/game-play/game-play-service-interface';
-import {IUsersService} from '../../common-app/src/ui/redux/users/users-service-interface';
 import {UsersServiceFirebase} from '../../common-app-firebase/users.service';
 import {UsersServiceMeteor} from '../../common-app-meteor/users.service';
-import {IUploaderService} from '../../common-app/src/ui/redux/uploader/uploader-service-interface';
 import {UploaderServiceMeteor} from '../../common-app-meteor/uploader-service';
-import {uploaderCollections} from '../../common-app/src/ui/redux/uploader/collections';
 import {AvatarOriginalStore} from '../../common-app-meteor/avatar.model';
 import {UploaderServiceFirebase} from '../../common-app-firebase/uploader-service';
 import {AvatarModel} from '../../common-app-firebase/avatar.model';

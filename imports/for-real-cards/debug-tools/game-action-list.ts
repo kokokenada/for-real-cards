@@ -4,7 +4,7 @@ import { select } from '@angular-redux/store';
 import { GameStartActions, IGamePlayState, GamePlayAction, GamePlayActionType, GamePlayFunctions, Hand } from '../../for-real-cards-lib'
 import { ActionFormatted,  } from "../ui";
 import {GAME_PLAY_PACKAGE_NAME} from '../../for-real-cards-lib';
-import {UsersFunctions} from '../../common-app/src/ui/redux/users/users-functions';
+import {UsersFunctions} from 'common-app';
 
 @Component({
   selector: 'game-action-list',

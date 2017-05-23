@@ -5,10 +5,7 @@ import {Camera, File} from 'ionic-native';
 declare let UploadFS: any;
 declare let window: any; // Make TypeScript compiler stop complaining
 
-import * as log from 'loglevel';
-import {UploaderActions} from "../common-app/src/ui/redux/uploader/uploader-actions";
-import {IUploaderService} from '../common-app/src/ui/redux/uploader/uploader-service-interface';
-import {uploaderCollections} from '../common-app/src/ui/redux/uploader/collections';
+import {UploaderActions, IUploaderService, uploaderCollections} from 'common-app';
 
 export interface UploadFileInfo {
   _id: string;

@@ -3,9 +3,7 @@
  */
 import { Component, Input, NgZone } from '@angular/core';
 import { select } from '@angular-redux/store';
-import {ILoginState, IUser, LOGIN_PACKAGE_NAME, LoginFunctions} from 'common-app';
-import { IUsersState } from "../../ui/redux/users/users-types";
-import {USERS_PACKAGE_NAME} from '../../ui/redux/users/users-package';
+import {ILoginState, IUsersState, LOGIN_PACKAGE_NAME, LoginFunctions, USERS_PACKAGE_NAME} from 'common-app';
 import {StaticResources} from '../../../../for-real-cards-lib/services/static-resources';
 
 @Component({

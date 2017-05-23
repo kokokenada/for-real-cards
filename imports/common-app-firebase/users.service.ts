@@ -1,8 +1,7 @@
 import App = firebase.app.App;
 import { Observable } from 'rxjs';
 
-import { IUser, IDocumentChange } from 'common-app';
-import {IUsersService} from '../common-app/src/ui/redux/users/users-service-interface';
+import { IUser, IDocumentChange, IUsersService } from 'common-app';
 
 export class UsersServiceFirebase implements IUsersService {
   constructor(private firebase: App) {

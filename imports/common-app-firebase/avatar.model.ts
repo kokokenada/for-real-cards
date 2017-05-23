@@ -1,10 +1,15 @@
 import App = firebase.app.App;
 
 import { IPayloadAction } from 'redux-package';
-import {IUploaderActionPayload, IUploaderState} from '../common-app/src/ui/redux/uploader/uploader-types';
-import {UploaderActions} from '../common-app/src/ui/redux/uploader/uploader-actions';
 import {saveUserProfile} from './login-service-firebase';
-import {IUser, LoginPackage, Tools} from 'common-app';
+import {
+  IUser,
+  IUploaderActionPayload,
+  IUploaderState,
+  LoginPackage,
+  Tools,
+  UploaderActions
+} from 'common-app';
 
 export class AvatarModel {
 

@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { IUser, IDocumentChange } from 'common-app';
 import { MeteorCursorObservers } from './';
-import {IUsersService} from '../common-app/src/ui/redux/users/users-service-interface';
+import {IUsersService} from 'common-app';
 
 export class UsersServiceMeteor implements IUsersService {
   private static userCursor:Mongo.Cursor<IUser>;

@@ -1,14 +1,13 @@
-import {IDocumentChange, IException, IUser} from 'common-app';
+import { Observable } from 'rxjs/Observable';
+
+import {IDocumentChange, IException, IUser, UsersActions} from 'common-app';
+import { IPayloadAction } from 'redux-package';
+
 import { IGameStartState } from "./game-start-state-interface";
 import { IGameStartActionPayload } from "./game-start-payload-interface";
 import { GameStartActions } from "./game-start-actions";
 import { GamePlayActions } from "../game-play";
-import { IPayloadAction } from 'redux-package';
 import { IGameStartService } from './game-start-service-interface';
-import {Observable} from 'rxjs/Observable';
-import {UsersActions} from '../../../common-app/src/ui/redux/users/users-actions';
-
-
 
 export class GameStartAsync {
   constructor(private service:IGameStartService) {
@@ -26,7 +25,6 @@ export class GameStartAsync {
       .catch( (error) => {
         GameStartActions.error(error);
       });
-
   }
 
   gameNavigationMiddleware = (state: IGameStartState) => next => (action: IPayloadAction) => {
