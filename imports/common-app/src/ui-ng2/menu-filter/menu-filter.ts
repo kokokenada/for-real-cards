@@ -11,7 +11,6 @@ export class MenuFilterPipe implements PipeTransform {
   @select(LOGIN_PACKAGE_NAME) loginState;
   private user: IUser;
   constructor() {
-    console.log('MenuFilterPipe init');
     this.loginState.subscribe( (loginState:ILoginState)=>{
       this.user = loginState.user;
     })
