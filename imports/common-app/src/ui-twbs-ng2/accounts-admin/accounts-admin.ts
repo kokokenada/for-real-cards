@@ -1,7 +1,7 @@
 import { Component, NgZone } from '@angular/core';
 import { Session } from 'meteor/session';
 import { FilterDefinition, SortDefinitionSingle } from '../../../../common-app-meteor';
-import { IUser } from 'common-app';
+import {IUser, LoginPackage} from 'common-app';
 import { AccountsAdminTools, Field } from '../../../../common-app-meteor';
 
 import { UpdateAccountModal } from './update-account-modal';
@@ -10,7 +10,7 @@ import { Tracker } from 'meteor/tracker'
 import {InfoAccountModal} from './info-account-modal'
 import {ImpersonateAccountModal} from './impersonate-account-modal';
 import {UpdateRolesModal} from "./update-roles-modal";
-import {AccountTools, ModalActions} from "../../ui/index";
+import {ModalActions} from '../../ui/redux/modal/modal-actions.class';
 
 @Component({
   selector: 'accounts-admin',
@@ -71,7 +71,7 @@ export class AccountsAdmin {
       this.computation = computation;
       let subscriptionHandle =AccountsAdminTools.subscribeToPublication(this.currentFilter());
       if (subscriptionHandle.ready()) {
-        let cursor:any = AccountsAdminTools.filteredUserQuery(AccountTools.userId(), this.currentFilter()); // Cursor
+        let cursor:any = AccountsAdminTools.filteredUserQuery(LoginPackage.lastLoginState.userId, this.currentFilter()); // Cursor
         ngZone.run( ()=>{
           this.usersArray = cursor.fetch();
         } );

@@ -3,8 +3,8 @@ import { select } from '@angular-redux/store';
 
 import { GameStartActions, IGamePlayState, GamePlayAction, GamePlayActionType, GamePlayFunctions, Hand } from '../../for-real-cards-lib'
 import { ActionFormatted,  } from "../ui";
-import { AccountTools } from "../../common-app/src/ui/services/account-tools";
 import {GAME_PLAY_PACKAGE_NAME} from '../../for-real-cards-lib';
+import {UsersFunctions} from '../../common-app/src/ui/redux/users/users-functions';
 
 @Component({
   selector: 'game-action-list',
@@ -202,7 +202,7 @@ export class GameActionList {
   }
 
   handPlayer(hand:Hand):string {
-    return AccountTools.getDisplayName(hand.userId);
+    return UsersFunctions.displayName(hand.userId);
   }
 
   visibilityTypeDescription(action:GamePlayAction):string {

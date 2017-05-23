@@ -1,7 +1,7 @@
 import * as moment from 'moment';
-import {AccountTools} from '../../common-app/src/ui/services/account-tools';
 
 import {GamePlayAction, GamePlayActionType, VisibilityType} from "../../for-real-cards-lib";
+import {UsersFunctions} from '../../common-app/src/ui/redux/users/users-functions';
 
 export class ActionFormatted extends GamePlayAction {
 
@@ -14,15 +14,15 @@ export class ActionFormatted extends GamePlayAction {
     return moment(this.dateCreated).format("HH:mm:ss:SSS");
   }
   creator():string {
-    return AccountTools.getDisplayName(this.creatorId);
+    return UsersFunctions.displayName(this.creatorId);
   }
   toPlayer():string {
     if (this.toPlayerId)
-      return AccountTools.getDisplayName(this.toPlayerId);
+      return UsersFunctions.displayName(this.toPlayerId);
   }
   fromPlayer():string {
     if (this.fromPlayerId)
-      return AccountTools.getDisplayName(this.fromPlayerId);
+      return UsersFunctions.displayName(this.fromPlayerId);
   }
   visibilityTypeDescription():string {
     if (this.visibilityType)
