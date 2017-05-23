@@ -1,9 +1,4 @@
-import 'seedrandom';
-
-declare interface Math {
-  seedrandom(): any
-}
-
+import Prando from 'prando';
 import { List } from "immutable";
 import {Card, CardRank, CardSuit} from './card.class';
 
@@ -140,9 +135,9 @@ export class Deck{
     });
   }
   static shuffle(seed:string, cards:Card[]): void {
-    Math.seedrandom(seed); // Important for UNDO/rebuild, or cards get shuffled in different order
+    let rng = new Prando(seed); // Important for UNDO/rebuild, or cards get shuffled in different order
     for (let i=0; i<cards.length; i++) {
-      let random =  Math.random();
+      let random =  rng.next();
       let randomIndex: number = Math.floor(random * cards.length);
       let tmp: Card = cards[randomIndex];
       cards[randomIndex] = cards[i];
