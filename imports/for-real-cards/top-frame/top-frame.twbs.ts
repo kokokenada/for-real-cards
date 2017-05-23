@@ -22,7 +22,7 @@ import {COMMON_APP_SINGLETONS} from "../../common-app/src/ui-ng2/common-app-ng.m
 import {
   LoginActions,
   Menus,
-  MenuItem
+  MenuItem, ILoginState, LOGIN_PACKAGE_NAME, LoginPackage
 } from 'common-app';
 
 
@@ -54,6 +54,8 @@ import {BetlModalService} from '../bet-modal/bet-modal.service';
 import {BetModal} from '../bet-modal/bet-modal';
 import {BetLedger} from '../bet-ledger/bet-ledger';
 import {AppInfo} from './app-info';
+import {GameStartActions} from '../../for-real-cards-lib';
+import {ReduxPackageCombiner} from 'redux-package';
 
 const appRoutes: Routes = [
   {path: '', component: Start},
@@ -178,6 +180,24 @@ export class ForRealCardsTopFrame extends TopFrame implements OnInit {
   }
 
   ngOnInit() {
+      // Check for deep link
+      let pathname:string[] = window.location.pathname.split('/');
+      if (pathname.length>=3) {
+        let subUrl:string = pathname[1];
+        let gameId:string = pathname[2];
+        if (subUrl === 'game-hand' || subUrl ==='game-table') {
+          if (LoginPackage.lastLoginState.loggedIn)
+            GameStartActions.loadGameRequest(gameId, '');
+          else {
+            const subscription = ReduxPackageCombiner.select(LOGIN_PACKAGE_NAME).subscribe( (loginState: ILoginState) => {
+              if (loginState.loggedIn) {
+                GameStartActions.loadGameRequest(gameId, '');
+                subscription.unsubscribe();
+              }
+            } );
+          }
+        }
+      }
   }
 
   navigateToEnter() {
