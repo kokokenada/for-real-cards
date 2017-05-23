@@ -13,9 +13,11 @@ export function fromFireBaseOn<T>(ref: firebase.database.Reference): Observable<
     */
     ref.orderByKey().on('child_added', (snapshot: any, previous) => {
       let doc = snapshot.val();
+      /*
       console.log('child_added')
       console.log(doc)
       console.log(previous)
+      */
       observer.next({
         changeType: EDocumentChangeType.NEW,
         newDocument: doc
