@@ -1,5 +1,5 @@
-import {Meteor} from 'meteor/meteor';
-import { Coordinates } from "../../../for-real-cards-lib/redux-packages/game-play/coordinates.class"
+import { Coordinates } from "./coordinates.class"
+import {StaticResources} from '../../services/static-resources';
  
 export class GameRenderingTools {
   private static getPointOnEllipse(centerX:number, centerY:number, radius:number, degrees:number, xSquash:number=1, ySquash:number=1):Coordinates {
@@ -37,9 +37,9 @@ export class GameRenderingTools {
   
   static getCardBackURL(gameId:string, portrait:boolean=true) {
     if (portrait)
-      return Meteor.absoluteUrl() + "backs/standard-blue.jpg";
+      return StaticResources.instance.getURL("backs/standard-blue.jpg");
     else
-      return Meteor.absoluteUrl() + "backs/standard-blue-landscape.png";
+      return StaticResources.instance.getURL("backs/standard-blue-landscape.png");
   }
   
 }

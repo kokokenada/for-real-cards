@@ -1,7 +1,7 @@
-import {Meteor} from 'meteor/meteor';
 import { Component, Input } from '@angular/core';
 import {Card} from '../../for-real-cards-lib'
 import {CardImageStyle} from "../../for-real-cards-web/card-image-style.interface";
+import {StaticResources} from '../../for-real-cards-lib';
 
 @Component(
   {
@@ -32,7 +32,7 @@ export class PlayingCard {
     if (this.card) {
 //      return Meteor.absoluteUrl() + "decks/standard2/" + this.card.encode() + ".svg#svgView(preserveAspectRatio(none))";
 
-      return Meteor.absoluteUrl() + "decks/default/" + PlayingCard.encode(this.card) + ".jpg";
+      return StaticResources.instance.getURL("decks/default/" + PlayingCard.encode(this.card) + ".jpg");
     }
   }
   encodedCardId():string {

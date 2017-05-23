@@ -16,22 +16,17 @@ import {
   Hand ,
   GamePlayActions,
   GamePlayFunctions,
-  IGameStartState, // Make this private?
   INITIAL_STATE_GAME_PLAY, // Make this private?
-  INITIAL_STATE_GAME_START, // Make this private?
   IGamePlayRecord,
-  GameStartActions
 } from '../../for-real-cards-lib';
-import { DragAndDrop, GameRenderingTools,  } from '../ui';
+import { DragAndDrop } from '../ui';
+import { GameRenderingTools } from '../../for-real-cards-lib';
 
 import { CardImageStyle} from "../../for-real-cards-web/card-image-style.interface";
-import { } from "../ui";
 import {DealModalService} from "../deal-modal/deal-modal.service";
 import {CommonPopups} from "../../common-app/src/ui-ng2/common-popups/common-popups";
-import {} from '../ui/redux/game-play/game-play.functions';
 import {GAME_START_PACKAGE_NAME, GAME_PLAY_PACKAGE_NAME} from '../../for-real-cards-lib';
-import {ILoginState, LOGIN_PACKAGE_NAME, LoginPackage} from 'common-app';
-import {ReduxPackageCombiner} from 'redux-package';
+import { LoginPackage} from 'common-app';
 
 declare const window: any;
 

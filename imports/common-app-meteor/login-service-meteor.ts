@@ -38,10 +38,6 @@ export class LoginServiceMeteor implements ILoginService {
     })
   }
 
-  defaultAvatarUrl(): string { // Move this
-    return Meteor.absoluteUrl('default-avatar.png');
-  };
-
   register(credentials: Credentials): Promise<IPayloadAction> {
     return new Promise((resolve, reject) => {
       console.debug("Creating user:" + credentials.username + ", " + credentials.email);

@@ -11,6 +11,7 @@ export * from './game-play-async';
 export * from './game-play-payload-interface';
 export * from './game-play-service-interface';
 export * from './game-play.functions';
+export * from './game-rendering-tools';
 
 // make private
 export * from './game-play.reducer';

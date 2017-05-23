@@ -161,10 +161,6 @@ export class LoginServiceFirebase implements ILoginService {
     });
     return subject;
   }
-
-  defaultAvatarUrl(): string {
-    return 'default-avatar.png';
-  }
 }
 
 function getUserProfileRef(db: firebase.database.Database, user: IUser) : firebase.database.Reference {

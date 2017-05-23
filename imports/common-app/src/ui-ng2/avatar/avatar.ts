@@ -6,6 +6,7 @@ import { select } from '@angular-redux/store';
 import {ILoginState, IUser, LOGIN_PACKAGE_NAME, LoginFunctions} from 'common-app';
 import { IUsersState } from "../../ui/redux/users/users-types";
 import {USERS_PACKAGE_NAME} from '../../ui/redux/users/users-package';
+import {StaticResources} from '../../../../for-real-cards-lib/services/static-resources';
 
 @Component({
   selector: 'avatar',
@@ -34,7 +35,7 @@ export class Avatar {
     this.usersReducer.subscribe( (usersState:IUsersState)=>{
       this.ngZone.run(()=>{
         let user = usersState.users.get(this.userId);
-        this.imageURL = LoginFunctions.getAvatarURL(user, this.loginState.defaultAvatar);
+        this.imageURL = LoginFunctions.getAvatarURL(user, StaticResources.instance.getURL('default-avatar.png'));
       });
     } );
   }

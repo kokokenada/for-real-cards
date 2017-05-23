@@ -71,6 +71,7 @@ import {uploaderCollections} from '../../common-app/src/ui/redux/uploader/collec
 import {AvatarOriginalStore} from '../../common-app-meteor/avatar.model';
 import {UploaderServiceFirebase} from '../../common-app-firebase/uploader-service';
 import {AvatarModel} from '../../common-app-firebase/avatar.model';
+import {StaticResources} from '../../for-real-cards-lib';
 
 declare const cordova: any;
 
@@ -102,6 +103,9 @@ export class ReduxModules {
       uploaderCollections['avatar'] = {name: 'avatar', reference: 'avatar'};
       let avatar = new AvatarModel(firebaseApp);
       middleware.push(avatar.watchForAvatarUploadMiddleWare);
+
+      let staticResources = new StaticResources(Meteor.absoluteUrl); // until dev environment moves
+
     } else {
       connectService = new ConnectServiceMeteor();
       loginService = new LoginServiceMeteor();
@@ -111,6 +115,8 @@ export class ReduxModules {
       uploaderService = new UploaderServiceMeteor();
 
       uploaderCollections['avatar'] = {name: 'avatar', reference: AvatarOriginalStore};
+
+      let staticResources = new StaticResources(Meteor.absoluteUrl);
     }
     const gameStartPackage = new GameStartPackage(startGameService);
     const gamePlayPackage = new GamePlayPackage(gamePlayServiceMeteor);

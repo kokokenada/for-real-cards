@@ -1,13 +1,11 @@
 import { Component, Input, OnInit, NgZone, ViewEncapsulation } from '@angular/core';
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
 
-import { GameRenderingTools } from "../ui";
+import { GameRenderingTools } from "../../for-real-cards-lib";
 import { Card, Coordinates, Deck, Hand} from "../../for-real-cards-lib";
 import { RunGame } from './run-game';
-import { CardImageStyle} from "../../for-real-cards-web/card-image-style.interface";
 
 import template from "./run-game-table.html"
-import {PlatformTools} from "../../common-app/src/ui-ng2/platform-tools/platform-tools";
 import {LoginPackage, Tools} from 'common-app';
 import {CommonPopups} from "../../common-app/src/ui-ng2/common-popups/common-popups";
 import {DealModalService} from "../deal-modal/deal-modal.service";

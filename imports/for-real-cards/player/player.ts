@@ -4,7 +4,7 @@ import { select } from '@angular-redux/store';
 
 import { IUser, LoginFunctions } from 'common-app';
 import { Card, Hand } from  '../../for-real-cards-lib';
-import { GameRenderingTools } from  '../ui';
+import { GameRenderingTools } from  '../../for-real-cards-lib';
 import {IUsersState} from "../../common-app/src/ui/redux/users/users-types";
 import {USERS_PACKAGE_NAME} from '../../common-app/src/ui/redux/users/users-package';
 
