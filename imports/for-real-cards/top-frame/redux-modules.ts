@@ -71,7 +71,7 @@ import {UsersServiceFirebase} from '../../common-app-firebase/users.service';
 import {UsersServiceMeteor} from '../../common-app-meteor/users.service';
 import {UploaderServiceMeteor} from '../../common-app-meteor/uploader-service';
 import {AvatarOriginalStore} from '../../common-app-meteor/avatar.model';
-import {UploaderServiceFirebase} from '../../common-app-firebase/uploader-service';
+import {UploaderServiceFirebase} from '../../common-app-firebase-web';
 import {AvatarModel} from '../../common-app-firebase/avatar.model';
 import {StaticResources} from '../../for-real-cards-lib';
 
