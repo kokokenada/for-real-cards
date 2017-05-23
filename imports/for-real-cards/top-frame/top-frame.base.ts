@@ -1,6 +1,6 @@
 
 import {IPayloadAction} from 'redux-package';
-import {LoginActions} from 'common-app';
+import {LoginActions, LoginPackage} from 'common-app';
 import { GameStartActions, IGameStartActionPayload} from "../../for-real-cards-lib";
 import {GamePlayActions} from '../../for-real-cards-lib';
 
@@ -13,7 +13,7 @@ export abstract class TopFrame {
         case LoginActions.LOGGED_IN:
         case LoginActions.CURRENT_USER_UPDATED:
           GamePlayActions.setCurrentUserID(action.payload.user._id);
-          if (!action.payload.autoLogin)
+          if (!action.payload.autoLogin && !(LoginPackage.lastLoginState.loggedIn))
             this.navigateToEnter();
           break;
         case LoginActions.LOGGED_OUT:
